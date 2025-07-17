@@ -1,0 +1,35 @@
+{
+  "domains": {
+    "partner": {
+      "description": "Partner/Business Domain - Business relationships and organizational structure",
+      "entities": {
+        "core": ["partner", "referer", "intake", "center", "memberGroup"],
+        "admin": ["farUser", "farGroup", "farRole", "farPermission", "dmProfile"],
+        "programme": ["programme", "progRole", "activityDef", "media"]
+      }
+    },
+    "participant": {
+      "description": "Participant/User Experience Domain - User journeys and personal data",
+      "entities": {
+        "core": ["member", "memberGroup", "progMember"],
+        "tracking": ["journal", "tracker", "tracker01", "tracker02", "tracker03", "tracker04", "tracker05"],
+        "programme": ["programme", "progRole", "activityDef", "activity", "media", "guide"]
+      }
+    },
+    "programme": {
+      "description": "Programme/Content Domain - Content structure and flow",
+      "entities": {
+        "core": ["programme", "progRole", "activityDef"],
+        "content": ["media", "defaultMediaID", "aCuePointActivities", "aMediaIDs", "guide"],
+        "flow": ["onEndID", "aCuePointActivities", "aInteract1Activities", "aInteract2Activities", "aInteract3Activities", "aInteract4Activities", "aInteract5Activities"]
+      }
+    },
+    "site": {
+      "description": "Site/Website Domain - Website content and structure",
+      "entities": {
+        "core": ["dmNavigation", "dmHTML", "dmFacts", "dmNews", "dmInclude"],
+        "resources": ["dmImage", "dmFile"]
+      }
+    }
+  }
+} 

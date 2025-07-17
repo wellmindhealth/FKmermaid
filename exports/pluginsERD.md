@@ -1,0 +1,553 @@
+~~~mermaid
+erDiagram
+  activity {
+    objectID UUID
+  }
+  activityDef {
+    objectID UUID
+  }
+  address {
+    objectID UUID
+  }
+  api {
+    objectID UUID
+  }
+  apiAccessKey {
+    objectID UUID
+  }
+  Application {
+    objectID UUID
+  }
+  authStringBuilder {
+    objectID UUID
+  }
+  autoscaling {
+    objectID UUID
+  }
+  aws {
+    objectID UUID
+  }
+  base {
+    objectID UUID
+  }
+  bitbucket {
+    objectID UUID
+  }
+  bitly {
+    objectID UUID
+  }
+  center {
+    objectID UUID
+  }
+  cognitoIdentity {
+    objectID UUID
+  }
+  cognitoIdp {
+    objectID UUID
+  }
+  configAPI {
+    objectID UUID
+  }
+  configAWS {
+    objectID UUID
+  }
+  configLDAP {
+    objectID UUID
+  }
+  configMicrosoftUD {
+    objectID UUID
+  }
+  configSocial {
+    objectID UUID
+  }
+  connect {
+    objectID UUID
+  }
+  credentials {
+    objectID UUID
+  }
+  device {
+    objectID UUID
+  }
+  dmFacts {
+    objectID UUID
+  }
+  dmFile {
+    objectID UUID
+  }
+  dmHTML {
+    objectID UUID
+  }
+  dmImage {
+    objectID UUID
+  }
+  dmNavigation {
+    objectID UUID
+  }
+  dmNews {
+    objectID UUID
+  }
+  dmProfile {
+    objectID UUID
+  }
+  dont_use___member_aAddresses {
+    objectID UUID
+  }
+  dropbox {
+    objectID UUID
+  }
+  dynamodb {
+    objectID UUID
+  }
+  ec2 {
+    objectID UUID
+  }
+  elasticsearch {
+    objectID UUID
+  }
+  elastictranscoder {
+    objectID UUID
+  }
+  esri {
+    objectID UUID
+  }
+  facebook {
+    objectID UUID
+  }
+  farUser {
+    objectID UUID
+  }
+  freeagent {
+    objectID UUID
+  }
+  freshbooks {
+    objectID UUID
+  }
+  github {
+    objectID UUID
+  }
+  gitlab {
+    objectID UUID
+  }
+  google {
+    objectID UUID
+  }
+  guide {
+    objectID UUID
+  }
+  httpColdFusion {
+    objectID UUID
+  }
+  httpLucee {
+    objectID UUID
+  }
+  instagram {
+    objectID UUID
+  }
+  intake {
+    objectID UUID
+  }
+  jira {
+    objectID UUID
+  }
+  journal {
+    objectID UUID
+  }
+  journalDef {
+    objectID UUID
+  }
+  JWTapp {
+    objectID UUID
+  }
+  kms {
+    objectID UUID
+  }
+  ldapLogin {
+    objectID UUID
+  }
+  LDAPUD {
+    objectID UUID
+  }
+  library {
+    objectID UUID
+  }
+  linkedIn {
+    objectID UUID
+  }
+  manifest {
+    objectID UUID
+  }
+  media {
+    objectID UUID
+  }
+  member {
+    objectID UUID
+  }
+  memberGroup {
+    objectID UUID
+  }
+  memberType {
+    objectID UUID
+  }
+  microsoft {
+    objectID UUID
+  }
+  MicrosoftDirectory {
+    objectID UUID
+  }
+  module {
+    objectID UUID
+  }
+  ModuleConfig {
+    objectID UUID
+  }
+  moduleDef {
+    objectID UUID
+  }
+  monzo {
+    objectID UUID
+  }
+  mudGroup {
+    objectID UUID
+  }
+  mudLogin {
+    objectID UUID
+  }
+  mudUser {
+    objectID UUID
+  }
+  myRater {
+    objectID UUID
+  }
+  mySlider {
+    objectID UUID
+  }
+  nhs {
+    objectID UUID
+  }
+  oauth2 {
+    objectID UUID
+  }
+  oauth2AWSCognito {
+    objectID UUID
+  }
+  oAuth2service {
+    objectID UUID
+  }
+  oauth2Xealth {
+    objectID UUID
+  }
+  orderItem {
+    objectID UUID
+  }
+  orderMaster {
+    objectID UUID
+  }
+  participant {
+    objectID UUID
+  }
+  partner {
+    objectID UUID
+  }
+  personalize {
+    objectID UUID
+  }
+  personalizeEvents {
+    objectID UUID
+  }
+  personalizeruntime {
+    objectID UUID
+  }
+  pinpoint {
+    objectID UUID
+  }
+  polly {
+    objectID UUID
+  }
+  progMember {
+    objectID UUID
+  }
+  programme {
+    objectID UUID
+  }
+  progRole {
+    objectID UUID
+  }
+  promotion {
+    objectID UUID
+  }
+  quickbooks {
+    objectID UUID
+  }
+  referer {
+    objectID UUID
+  }
+  rekognition {
+    objectID UUID
+  }
+  report {
+    objectID UUID
+  }
+  ruleActivityDefListing {
+    objectID UUID
+  }
+  ruleDidYouKnowFact {
+    objectID UUID
+  }
+  ruleFacts {
+    objectID UUID
+  }
+  ruleFileListing {
+    objectID UUID
+  }
+  ruleImageGallerySlick {
+    objectID UUID
+  }
+  ruleLatesttestimonial {
+    objectID UUID
+  }
+  ruleRandomFact {
+    objectID UUID
+  }
+  ruleRelated {
+    objectID UUID
+  }
+  ruleReviewsAndRatingsSchemaFromTestimonials {
+    objectID UUID
+  }
+  ruleSelfRegistration {
+    objectID UUID
+  }
+  s3 {
+    objectID UUID
+  }
+  salesforce {
+    objectID UUID
+  }
+  secretsmanager {
+    objectID UUID
+  }
+  ses {
+    objectID UUID
+  }
+  shopItem {
+    objectID UUID
+  }
+  signature_v4 {
+    objectID UUID
+  }
+  slack {
+    objectID UUID
+  }
+  sns {
+    objectID UUID
+  }
+  social {
+    objectID UUID
+  }
+  soundcloud {
+    objectID UUID
+  }
+  spotify {
+    objectID UUID
+  }
+  sqs {
+    objectID UUID
+  }
+  ssm {
+    objectID UUID
+  }
+  SSQ_arthritis01 {
+    objectID UUID
+  }
+  SSQ_pain01 {
+    objectID UUID
+  }
+  SSQ_stress01 {
+    objectID UUID
+  }
+  strava {
+    objectID UUID
+  }
+  streamlabs {
+    objectID UUID
+  }
+  swagger {
+    objectID UUID
+  }
+  test {
+    objectID UUID
+  }
+  testimonial {
+    objectID UUID
+  }
+  token {
+    objectID UUID
+  }
+  tracker {
+    objectID UUID
+  }
+  trackerDef {
+    objectID UUID
+  }
+  translate {
+    objectID UUID
+  }
+  twitch {
+    objectID UUID
+  }
+  utils {
+    objectID UUID
+  }
+  v1 {
+    objectID UUID
+  }
+  vend {
+    objectID UUID
+  }
+  xealth {
+    objectID UUID
+  }
+  xealth_notification {
+    objectID UUID
+  }
+  xealth_order {
+    objectID UUID
+  }
+  xealth_patient {
+    objectID UUID
+  }
+  xero {
+    objectID UUID
+  }
+  SSQ_stress01 ||--o{ member : fk
+  xealth_patient ||--o{ member : fk
+  ruleActivityDefListing ||--o{ activityDef : fk
+  partner ||--o{ dmProfile : fk
+  member ||--o{ orderMaster : fk
+  library ||--o{ activity : fk
+  testimonial ||--o{ member : fk
+  intake ||--o{ center : fk
+  journal ||--o{ journalDef : fk
+  member ||--o{ address : fk
+  media ||--o{ partner : fk
+  progRole ||--o{ programme : fk
+  report ||--o{ member : fk
+  activityDef ||--o{ journalDef : fk
+  address ||--o{ member : fk
+  participant ||--o{ referer : fk
+  activity ||--o{ progMember : fk
+  guide ||--o{ partner : fk
+  partner ||--o{ center : fk
+  media ||--o{ progRole : fk
+  activityDef ||--o{ activityDef : fk
+  library ||--o{ progMember : fk
+  module ||--o{ progMember : fk
+  SSQ_pain01 ||--o{ programme : fk
+  activity ||--o{ activityDef : fk
+  activityDef ||--o{ guide : fk
+  member ||--o{ activityDef : fk
+  member ||--o{ progRole : fk
+  report ||--o{ memberGroup : fk
+  center ||--o{ dmImage : fk
+  guide ||--o{ dmImage : fk
+  report ||--o{ memberType : fk
+  ruleSelfRegistration ||--o{ partner : fk
+  memberGroup ||--o{ dmNavigation : fk
+  participant ||--o{ activity : fk
+  activityDef ||--o{ media : fk
+  participant ||--o{ memberType : fk
+  module ||--o{ dmFile : fk
+  progMember ||--o{ activity : fk
+  referer ||--o{ partner : fk
+  programme ||--o{ partner : fk
+  orderMaster ||--o{ shopItem : fk
+  guide ||--o{ center : fk
+  journal ||--o{ activity : fk
+  memberGroup ||--o{ dmFile : fk
+  SSQ_pain01 ||--o{ member : fk
+  ruleSelfRegistration ||--o{ memberType : fk
+  report ||--o{ programme : fk
+  memberGroup ||--o{ dmHTML : fk
+  SSQ_pain01 ||--o{ progMember : fk
+  member ||--o{ memberGroup : fk
+  memberGroup ||--o{ farUser : fk
+  referer ||--o{ memberGroup : fk
+  activityDef ||--o{ dmImage : fk
+  ruleSelfRegistration ||--o{ referer : fk
+  shopItem ||--o{ shopItem : fk
+  promotion ||--o{ partner : fk
+  participant ||--o{ partner : fk
+  library ||--o{ media : fk
+  center ||--o{ referer : fk
+  center ||--o{ partner : fk
+  participant ||--o{ memberGroup : fk
+  member ||--o{ partner : fk
+  moduleDef ||--o{ dmFile : fk
+  activityDef ||--o{ trackerDef : fk
+  programme ||--o{ trackerDef : fk
+  SSQ_arthritis01 ||--o{ programme : fk
+  moduleDef ||--o{ activityDef : fk
+  partner ||--o{ referer : fk
+  ruleFacts ||--o{ dmFacts : fk
+  module ||--o{ activity : fk
+  participant ||--o{ center : fk
+  activityDef ||--o{ progRole : fk
+  trackerDef ||--o{ programme : fk
+  participant ||--o{ programme : fk
+  ruleSelfRegistration ||--o{ memberGroup : fk
+  ruleRelated ||--o{ dmHTML : fk
+  module ||--o{ module : fk
+  referer ||--o{ dmImage : fk
+  SSQ_arthritis01 ||--o{ progMember : fk
+  partner ||--o{ dmImage : fk
+  ruleFacts ||--o{ dmHTML : fk
+  promotion ||--o{ programme : fk
+  ruleSelfRegistration ||--o{ center : fk
+  memberGroup ||--o{ partner : fk
+  programme ||--o{ activityDef : fk
+  progMember ||--o{ member : fk
+  module ||--o{ moduleDef : fk
+  intake ||--o{ memberGroup : fk
+  SSQ_arthritis01 ||--o{ member : fk
+  participant ||--o{ activityDef : fk
+  tracker ||--o{ trackerDef : fk
+  orderItem ||--o{ shopItem : fk
+  SSQ_stress01 ||--o{ progMember : fk
+  center ||--o{ dmProfile : fk
+  testimonial ||--o{ activityDef : fk
+  programme ||--o{ dmImage : fk
+  moduleDef ||--o{ activity : fk
+  oAuth2service ||--o{ JWTapp : fk
+  moduleDef ||--o{ member : fk
+  media ||--o{ programme : fk
+  tracker ||--o{ progMember : fk
+  member ||--o{ center : fk
+  ruleLatesttestimonial ||--o{ testimonial : fk
+  SSQ_stress01 ||--o{ programme : fk
+  programme ||--o{ dmFile : fk
+  memberGroup ||--o{ dmImage : fk
+  intake ||--o{ member : fk
+  referer ||--o{ center : fk
+  dmNavigation ||--o{ dmImage : fk
+  center ||--o{ memberGroup : fk
+  address ||--o{ dmProfile : fk
+  journalDef ||--o{ programme : fk
+  report ||--o{ partner : fk
+  tracker ||--o{ activity : fk
+  media ||--o{ guide : fk
+  ruleFileListing ||--o{ dmFile : fk
+  progMember ||--o{ programme : fk
+  ruleImageGallerySlick ||--o{ dmImage : fk
+  module ||--o{ member : fk
+  activityDef ||--o{ programme : fk
+  member ||--o{ memberType : fk
+  member ||--o{ referer : fk
+  journal ||--o{ progMember : fk
+  journalDef ||--o{ trackerDef : fk
+  referer ||--o{ dmProfile : fk
+  shopItem ||--o{ dmImage : fk
+  mudUser ||--o{ mudGroup : fk
+  moduleDef ||--o{ module : fk
+
+~~~

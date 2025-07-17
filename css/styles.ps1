@@ -1,0 +1,7 @@
+$defaultStyle = "fill:#222,stroke:#888,stroke-width:1px,color:#bbb"
+$focusStyle = "fill:#ff6b35,stroke:#fff,stroke-width:6px,color:#fff"
+$secondaryDomainStyle = "fill:#ffd600,stroke:#333,stroke-width:4px,color:#333"
+$adminStyle = "fill:#43a047,stroke:#fff,stroke-width:3px,color:#fff"
+$participantStyle = "fill:#0288d1,stroke:#fff,stroke-width:3px,color:#fff"
+$ssqStyle = "fill:#8e24aa,stroke:#fff,stroke-width:3px,color:#fff"
+$interactStyle = "fill:#009688,stroke:#fff,stroke-width:3px,color:#fff" 
