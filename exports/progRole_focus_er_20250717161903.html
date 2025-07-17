@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>progRole ER Diagram - Mermaid Live Editor</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: #f5f5f5;
+        }
+        .left-panel {
+            width: 15%;
+            min-width: 250px;
+            padding: 12px;
+            background: white;
+            font-size: 12px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        .code-block {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 8px 0;
+            font-size: 12px;
+            max-height: 60vh;
+            overflow-y: auto;
+            width: 100%;
+            box-sizing: border-box;
+            cursor: text;
+            user-select: text;
+        }
+        .code-block:hover {
+            border-color: #2196F3;
+        }
+        .button {
+            background: #2196F3;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 4px 0;
+            white-space: nowrap;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            box-sizing: border-box;
+        }
+        .button:hover {
+            background: #1976D2;
+        }
+        .success-message {
+            display: none;
+            color: #4CAF50;
+            margin: 4px 0;
+            font-size: 12px;
+            padding: 4px;
+            background: #E8F5E9;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .error-message {
+            display: none;
+            color: #FF9800;
+            margin: 4px 0;
+            font-size: 12px;
+            padding: 4px;
+            background: #FFF3E0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        h1 { 
+            margin: 0 0 8px 0; 
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        h2 {
+            margin: 8px 0;
+            font-size: 1.1em;
+            font-weight: normal;
+        }
+        h3 {
+            margin: 8px 0;
+            font-size: 1em;
+        }
+        h4 {
+            margin: 8px 0;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+        #paste-reminder {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #E3F2FD;
+            padding: 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 14px;
+            animation: fadeInOut 5s forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="left-panel">
+        <h1>progRole</h1>
+        <h2>progRole | programme, partner 'focus'</h2>
+        <h3>ER Diagram</h3>
+        <div class="instructions">
+            <h4>Quick Steps</h4>
+            <ol>
+                <li>Click "Open Editor & Copy"</li>
+                <li>Wait for editor to load</li>
+                <li>Press Ctrl+V to paste</li>
+            </ol>
+        </div>
+        <button class="button" onclick="openEditorAndCopy()">Open Editor & Copy</button>
+        <div id="copySuccess" class="success-message">✓ Code copied! Press Ctrl+V to paste</div>
+        <div id="copyError" class="error-message">Failed to copy code. Please select and copy manually.</div>
+        <button class="button" onclick="manualCopy()" style="background: #FF9800; margin-top: 8px;">📋 Manual Copy Only</button>
+        <button class="button" onclick="showDebugInfo()" style="background: #9C27B0; margin-top: 4px;">🐛 Debug Info</button>
+        <div class="code-block" id="mermaidSource">flowchart TB
+    %% Hub-and-spoke layout around focus entity
+    %% Focus entity in center, related entities around it
+    progRole["progRole"]
+    activityDef["activityDef"]
+    aCuePointActivities["aCuePointActivities"]
+    aInteract1Activities["aInteract1Activities"]
+    aInteract2Activities["aInteract2Activities"]
+    aInteract3Activities["aInteract3Activities"]
+    aInteract4Activities["aInteract4Activities"]
+    aInteract5Activities["aInteract5Activities"]
+    aMediaIDs["aMediaIDs"]
+    center["center"]
+    defaultMediaID["defaultMediaID"]
+    dmProfile["dmProfile"]
+    farGroup["farGroup"]
+    farPermission["farPermission"]
+    farRole["farRole"]
+    farUser["farUser"]
+    guide["guide"]
+    intake["intake"]
+    media["media"]
+    memberGroup["memberGroup"]
+    onEndID["onEndID"]
+    partner["partner"]
+    programme["programme"]
+    referer["referer"]
+
+    %% Hub-and-spoke relationships
+    progRole --> activityDef
+    progRole --> aCuePointActivities
+    progRole --> aInteract1Activities
+    progRole --> aInteract2Activities
+    progRole --> aInteract3Activities
+    progRole --> aInteract4Activities
+    progRole --> aInteract5Activities
+    progRole --> aMediaIDs
+    progRole --> center
+    progRole --> defaultMediaID
+    progRole --> dmProfile
+    progRole --> farGroup
+    progRole --> farPermission
+    progRole --> farRole
+    progRole --> farUser
+    progRole --> guide
+    progRole --> intake
+    progRole --> media
+    progRole --> memberGroup
+    progRole --> onEndID
+    progRole --> partner
+    progRole --> programme
+    progRole --> referer
+
+    %% Styling
+    style progRole fill:#ff6b35,stroke:#fff,stroke-width:6,color:#fff
+    style activityDef fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff
+    style guide fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff
+    style media fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff
+    style programme fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff</div>
+    </div>
+
+    <div id="paste-reminder">
+        Press Ctrl+V to paste your diagram code!
+    </div>
+
+    <script>
+    function showPasteReminder() {
+        const reminder = document.getElementById('paste-reminder');
+        reminder.style.display = 'block';
+        setTimeout(() => {
+            reminder.style.display = 'none';
+        }, 5000);
+    }
+
+    function openEditorAndCopy() {
+        // Get the code from the div instead of using a template string
+        const mermaidContent = document.getElementById('mermaidSource').textContent;
+        
+        console.log('Attempting to copy:', mermaidContent.substring(0, 100) + '...');
+        console.log('Full content length:', mermaidContent.length);
+        
+        // Try modern clipboard API first
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(mermaidContent).then(() => {
+                console.log('Clipboard API success');
+                // Show success message
+                const msg = document.getElementById('copySuccess');
+                msg.style.display = 'block';
+                setTimeout(() => msg.style.display = 'none', 3000);
+                
+                // Open Mermaid Live Editor in new tab
+                window.open('https://mermaid.live/edit', '_blank');
+                
+                // Show paste reminder
+                showPasteReminder();
+            }).catch(err => {
+                console.error('Clipboard API failed:', err);
+                showCopyError();
+            });
+        } else {
+            console.log('Using fallback copy method');
+            fallbackCopy();
+        }
+        
+        function fallbackCopy() {
+            try {
+                const textArea = document.createElement('textarea');
+                textArea.value = mermaidContent;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                if (successful) {
+                    console.log('execCommand success');
+                    const msg = document.getElementById('copySuccess');
+                    msg.style.display = 'block';
+                    msg.textContent = '✓ Code copied! Press Ctrl+V to paste';
+                    setTimeout(() => msg.style.display = 'none', 3000);
+                    
+                    // Open editor with URL parameters
+                    const editorUrl = 'https://mermaid.live/edit';
+                    
+                    // Open Mermaid Live Editor in new tab
+                    window.open(editorUrl, '_blank');
+                    
+                    setTimeout(showPasteReminder, 1000);
+                } else {
+                    console.log('execCommand failed');
+                    showCopyError();
+                }
+            } catch (err) {
+                console.error('execCommand error:', err);
+                showCopyError();
+            }
+        }
+
+        function showCopyError() {
+            const msg = document.getElementById('copyError');
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 5000);
+        }
+    }
+
+    function manualCopy() {
+        const mermaidContent = document.getElementById('mermaidSource').textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(mermaidContent).then(() => {
+                const msg = document.getElementById('copySuccess');
+                msg.style.display = 'block';
+                msg.textContent = '✓ Code copied! Press Ctrl+V to paste';
+                setTimeout(() => msg.style.display = 'none', 3000);
+                console.log('Manual copy successful via Clipboard API');
+            }).catch(err => {
+                const msg = document.getElementById('copyError');
+                msg.style.display = 'block';
+                msg.textContent = 'Failed to copy code. Please select and copy manually.';
+                setTimeout(() => msg.style.display = 'none', 5000);
+                console.error('Manual copy failed via Clipboard API:', err);
+            });
+        } else {
+            try {
+                const textArea = document.createElement('textarea');
+                textArea.value = mermaidContent;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                if (successful) {
+                    const msg = document.getElementById('copySuccess');
+                    msg.style.display = 'block';
+                    msg.textContent = '✓ Code copied! Press Ctrl+V to paste';
+                    setTimeout(() => msg.style.display = 'none', 3000);
+                    console.log('Manual copy successful via execCommand');
+                } else {
+                    const msg = document.getElementById('copyError');
+                    msg.style.display = 'block';
+                    msg.textContent = 'Failed to copy code. Please select and copy manually.';
+                    setTimeout(() => msg.style.display = 'none', 5000);
+                    console.log('Manual copy failed via execCommand');
+                }
+            } catch (err) {
+                const msg = document.getElementById('copyError');
+                msg.style.display = 'block';
+                msg.textContent = 'Failed to copy code. Please select and copy manually.';
+                setTimeout(() => msg.style.display = 'none', 5000);
+                console.error('Manual copy failed via execCommand:', err);
+            }
+        }
+    }
+
+    function showDebugInfo() {
+        const mermaidContent = document.getElementById('mermaidSource').textContent;
+        console.log('=== DEBUG INFO ===');
+        console.log('Content length:', mermaidContent.length);
+        console.log('First 200 chars:', mermaidContent.substring(0, 200));
+        console.log('Last 100 chars:', mermaidContent.substring(mermaidContent.length - 100));
+        console.log('Contains "erDiagram":', mermaidContent.includes('erDiagram'));
+        console.log('Contains "classDiagram":', mermaidContent.includes('classDiagram'));
+        console.log('Full content:');
+        console.log(mermaidContent);
+        
+        // Show in an alert for easy viewing
+        alert('Content length: ' + mermaidContent.length + '\n\nFirst 200 chars:\n' + mermaidContent.substring(0, 200) + '\n\nContains erDiagram: ' + mermaidContent.includes('erDiagram'));
+    }
+    </script>
+</body>
+</html>

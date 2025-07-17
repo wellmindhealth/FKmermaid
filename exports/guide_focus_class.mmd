@@ -1,0 +1,72 @@
+classDiagram
+    class guide {
+        +String id
+        +String name
+    }
+    class activityDef {
+        +String id
+        +String name
+    }
+    class aCuePointActivities {
+        +String id
+        +String name
+    }
+    class aInteract1Activities {
+        +String id
+        +String name
+    }
+    class aInteract2Activities {
+        +String id
+        +String name
+    }
+    class aInteract3Activities {
+        +String id
+        +String name
+    }
+    class aInteract4Activities {
+        +String id
+        +String name
+    }
+    class aInteract5Activities {
+        +String id
+        +String name
+    }
+    class aMediaIDs {
+        +String id
+        +String name
+    }
+    class defaultMediaID {
+        +String id
+        +String name
+    }
+    class media {
+        +String id
+        +String name
+    }
+    class onEndID {
+        +String id
+        +String name
+    }
+    class programme {
+        +String id
+        +String name
+    }
+    class progRole {
+        +String id
+        +String name
+    }
+
+    %% Relationships
+    guide --> activityDef : "related to"
+    guide --> aCuePointActivities : "related to"
+    guide --> aInteract1Activities : "related to"
+    guide --> aInteract2Activities : "related to"
+    guide --> aInteract3Activities : "related to"
+    guide --> aInteract4Activities : "related to"
+    guide --> aInteract5Activities : "related to"
+    guide --> aMediaIDs : "related to"
+    guide --> defaultMediaID : "related to"
+    guide --> media : "related to"
+    guide --> onEndID : "related to"
+    guide --> programme : "related to"
+    guide --> progRole : "related to"

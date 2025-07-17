@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>activityDef Class Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            er: {
+                layoutDirection: 'LR',
+                minEntityWidth: 80,
+                minEntityHeight: 30,
+                entitySpacing: 80,
+                relationshipSpacing: 50,
+                layoutPadding: 40,
+                useMaxWidth: false
+            },
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                direction: 'LR',
+                nodeSpacing: 200,
+                rankSpacing: 150,
+                curve: 'basis'
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>activityDef Class Diagram</h1>
+    <div class="mermaid">
+classDiagram
+    %% Sophisticated class diagram with hub-and-spoke layout
+    %% Focus entity with detailed relationships and styling
+    class activityDef
+    activityDef : <<Focus Entity>>
+    class aCuePointActivities
+    class aInteract1Activities
+    class aInteract2Activities
+    class aInteract3Activities
+    class aInteract4Activities
+    class aInteract5Activities
+    class aMediaIDs
+    aMediaIDs : <<Media>>
+    class defaultMediaID
+    defaultMediaID : <<Media>>
+    class guide
+    guide : <<Guide>>
+    class media
+    media : <<Media>>
+    class onEndID
+    class programme
+    programme : <<Programme>>
+    class progRole
+    class center
+    class dmProfile
+    class farGroup
+    class farPermission
+    class farRole
+    class farUser
+    class intake
+    class memberGroup
+    memberGroup : <<Member>>
+    class partner
+    partner : <<Partner>>
+    class referer
+    class activity
+    activity : <<Activity Instance>>
+    class address
+    class device
+    class journal
+    journal : <<Journal>>
+    class journalDef
+    journalDef : <<Journal>>
+    class JWTapp
+    class library
+    class member
+    member : <<Member>>
+    class memberType
+    memberType : <<Member>>
+    class oAuth2service
+    class progMember
+    progMember : <<Member>>
+    class promotion
+    class report
+    class SSQ_arthritis01
+    class SSQ_pain01
+    class SSQ_stress01
+    class token
+    class tracker
+    tracker : <<Tracker>>
+    class trackerDef
+    trackerDef : <<Tracker>>
+
+    %% Hub-and-spoke relationships
+    activityDef -- aCuePointActivities : "related to"
+    activityDef -- aInteract1Activities : "related to"
+    activityDef -- aInteract2Activities : "related to"
+    activityDef -- aInteract3Activities : "related to"
+    activityDef -- aInteract4Activities : "related to"
+    activityDef -- aInteract5Activities : "related to"
+    activityDef -- aMediaIDs : "defaultMediaID"
+    activityDef -- defaultMediaID : "defaultMediaID"
+    activityDef -- guide : "guideID"
+    activityDef -- media : "defaultMediaID"
+    activityDef -- onEndID : "related to"
+    activityDef -- programme : "programmeID"
+    activityDef -- progRole : "related to"
+    activityDef -- center : "related to"
+    activityDef -- dmProfile : "related to"
+    activityDef -- farGroup : "related to"
+    activityDef -- farPermission : "related to"
+    activityDef -- farRole : "related to"
+    activityDef -- farUser : "related to"
+    activityDef -- intake : "related to"
+    activityDef -- memberGroup : "related to"
+    activityDef -- partner : "related to"
+    activityDef -- referer : "related to"
+    activityDef -- activity : "related to"
+    activityDef -- address : "related to"
+    activityDef -- device : "related to"
+    activityDef -- journal : "journalID"
+    activityDef -- journalDef : "journalID"
+    activityDef -- JWTapp : "related to"
+    activityDef -- library : "related to"
+    activityDef -- member : "related to"
+    activityDef -- memberType : "related to"
+    activityDef -- oAuth2service : "related to"
+    activityDef -- progMember : "related to"
+    activityDef -- promotion : "related to"
+    activityDef -- report : "related to"
+    activityDef -- SSQ_arthritis01 : "related to"
+    activityDef -- SSQ_pain01 : "related to"
+    activityDef -- SSQ_stress01 : "related to"
+    activityDef -- token : "related to"
+    activityDef -- tracker : "trackerID"
+    activityDef -- trackerDef : "trackerID"
+
+    %% Sophisticated styling with color-coded emphasis levels
+    style activityDef fill:#ff6b35,stroke:#fff,stroke-width:6px,color:#fff
+    style programme fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style activity fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style journal fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style member fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style progMember fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style tracker fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style report fill:#388e3c,stroke:#fff,stroke-width:3px,color:#fff
+    style SSQ_arthritis01 fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222
+    style SSQ_pain01 fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222
+    style SSQ_stress01 fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222
+    style aCuePointActivities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract1Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract2Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract3Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract4Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract5Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aMediaIDs fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style defaultMediaID fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style guide fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style media fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style onEndID fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style progRole fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style center fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style dmProfile fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style farGroup fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style farPermission fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style farRole fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style farUser fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style intake fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style memberGroup fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style partner fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style referer fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style address fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style device fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style journalDef fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style JWTapp fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style library fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style memberType fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style oAuth2service fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style promotion fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style token fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style trackerDef fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    </div>
+</body>
+</html>

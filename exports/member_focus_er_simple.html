@@ -1,3 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>member ER Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            er: {
+                layoutDirection: 'LR',
+                minEntityWidth: 80,
+                minEntityHeight: 30,
+                entitySpacing: 80,
+                relationshipSpacing: 50,
+                layoutPadding: 40,
+                useMaxWidth: false
+            },
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                direction: 'LR',
+                nodeSpacing: 200,
+                rankSpacing: 150,
+                curve: 'basis'
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>member ER Diagram</h1>
+    <div class="mermaid">
 erDiagram
     %% ER diagram with hub-and-spoke layout around focus entity
     member {
@@ -219,3 +250,6 @@ erDiagram
 
     %% ER diagrams use layout and relationships for emphasis
     %% Focus entity is positioned centrally with connections to all others
+    </div>
+</body>
+</html>

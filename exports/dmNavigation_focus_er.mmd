@@ -1,37 +1,10 @@
 erDiagram
-    dmNavigation {
-        string id
-        string name
-    }
-    dmFacts {
-        string id
-        string name
-    }
-    dmFile {
-        string id
-        string name
-    }
-    dmHTML {
-        string id
-        string name
-    }
-    dmImage {
-        string id
-        string name
-    }
-    dmInclude {
-        string id
-        string name
-    }
-    dmNews {
+     {
         string id
         string name
     }
 
     %% Relationships
-    dmNavigation ||--o{ dmFacts : "related to"
-    dmNavigation ||--o{ dmFile : "related to"
-    dmNavigation ||--o{ dmHTML : "related to"
-    dmNavigation ||--o{ dmImage : "related to"
-    dmNavigation ||--o{ dmInclude : "related to"
-    dmNavigation ||--o{ dmNews : "related to"
+
+    %% Styling
+    style  fill:#ff6b35,stroke:#fff,stroke-width:6,color:#fff

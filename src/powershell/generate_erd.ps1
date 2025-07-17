@@ -23,23 +23,68 @@ if (!(Test-Path $exportsDir)) {
 if (Test-Path $outputFile) { Remove-Item $outputFile -Force }
 New-Item -Path $outputFile -ItemType File -Force | Out-Null
 
-# Read the domain configuration
-$domainConfigPath = Join-Path $ProjectRoot "config\domains.json"
-$domainConfig = Get-Content $domainConfigPath | ConvertFrom-Json
-
-# Filter domains based on input
+# Get comprehensive entity list from CFC scanning with domain emphasis
 $allEntities = @()
-foreach ($domainName in $lDomains) {
-    if ($domainConfig.domains.$domainName) {
-        $domain = $domainConfig.domains.$domainName
-        foreach ($entityGroup in $domain.entities.PSObject.Properties) {
-            $allEntities += $entityGroup.Value
+$domainEntities = @()
+$focusDomainEntities = @()
+
+# Define exclude patterns for CFC scanning
+$excludePatterns = '^(mud|microdsoft|microsoft|test|shop|order|xealth|ldap|module|participant|rule|dont|freshbooks)'
+
+# Get plugins root path
+function Get-PluginsRoot {
+    param([string]$startDir)
+    $dir = Get-Item $startDir
+    while($dir -and -not (Test-Path (Join-Path $dir.FullName 'plugins'))){
+        $dir = $dir.Parent
+    }
+    if($dir){ return (Join-Path $dir.FullName 'plugins') }
+    throw "Cannot locate 'plugins' folder up from $startDir"
+}
+
+$pluginsRoot = Get-PluginsRoot -startDir $PSScriptRoot
+$typesPath = Join-Path $pluginsRoot 'pathway\packages\types'
+
+# Scan CFC files for entities (base entities)
+if (Test-Path $typesPath) {
+    Get-ChildItem -Path $typesPath -Filter *.cfc -Recurse | ForEach-Object { 
+        if($_.BaseName -notmatch $excludePatterns){ 
+            $allEntities += $_.BaseName 
+        } 
+    }
+}
+
+# Add entities from domain config with emphasis
+if ($lDomains -and $lDomains.Count -gt 0) {
+    $domainConfigPath = Join-Path $ProjectRoot "config\domains.json"
+    if (Test-Path $domainConfigPath) {
+        $domainConfig = Get-Content $domainConfigPath | ConvertFrom-Json
+        
+        foreach ($domainName in $lDomains) {
+            if ($domainConfig.domains.$domainName) {
+                $domain = $domainConfig.domains.$domainName
+                foreach ($entityGroup in $domain.entities.PSObject.Properties) {
+                    $domainEntities += $entityGroup.Value
+                    # Add focus domain entities multiple times for emphasis
+                    if ($domainName -eq $lDomains[0]) {
+                        $focusDomainEntities += $entityGroup.Value
+                        $focusDomainEntities += $entityGroup.Value  # Double emphasis
+                    }
+                }
+            }
         }
     }
 }
 
-# Remove duplicates and sort
-$allEntities = $allEntities | Sort-Object -Unique
+# Combine entities with emphasis: focus entity first, then focus domain, then other domains, then base entities
+$orderedEntities = @()
+$orderedEntities += $FocusEntity  # Focus entity gets highest priority
+$orderedEntities += $focusDomainEntities | Sort-Object -Unique  # Focus domain entities
+$orderedEntities += $domainEntities | Sort-Object -Unique  # Other domain entities  
+$orderedEntities += $allEntities | Sort-Object -Unique  # Base entities from CFC scanning
+
+# Remove duplicates while preserving order
+$allEntities = $orderedEntities | Select-Object -Unique
 
 # Find the focus entity and ensure it's first in the list
 $focusEntity = $allEntities | Where-Object { $_ -eq $FocusEntity } | Select-Object -First 1
@@ -55,74 +100,257 @@ $orderedEntities += $allEntities | Where-Object { $_ -ne $focusEntity }
 $mermaidLines = @()
 
 if ($DiagramType -eq "ER") {
+    # Use erDiagram for proper ER layout with sophisticated relationships
     $mermaidLines += "erDiagram"
+    $mermaidLines += "    %% ER diagram with hub-and-spoke layout and detailed relationships"
+    $mermaidLines += "    %% Focus entity with proper cardinality and relationship labels"
 } else {
     $mermaidLines += "classDiagram"
+    $mermaidLines += "    %% Sophisticated class diagram with detailed properties and stereotypes"
+    $mermaidLines += "    %% Focus entity with comprehensive relationship mapping"
 }
 
-# Add entities/classes
-foreach ($entity in $orderedEntities) {
-    if ($DiagramType -eq "ER") {
-        $mermaidLines += "    $entity {"
-        $mermaidLines += "        string id"
-        $mermaidLines += "        string name"
-        $mermaidLines += "    }"
-    } else {
-        $mermaidLines += "    class $entity {"
-        $mermaidLines += "        +String id"
-        $mermaidLines += "        +String name"
-        $mermaidLines += "    }"
-    }
-}
-
-# Add relationships (simplified for now)
-$mermaidLines += ""
-$mermaidLines += "    %% Relationships"
-foreach ($entity in $orderedEntities) {
-    if ($entity -ne $focusEntity) {
-        if ($DiagramType -eq "ER") {
-            $mermaidLines += "    $focusEntity ||--o{ $entity : `"related to`""
-        } else {
-            $mermaidLines += "    $focusEntity --> $entity : `"related to`""
-        }
-    }
-}
-
-# Add existing CSS styling
-$cssPath = Join-Path $ProjectRoot "css\mermaid_styles.css"
-if (Test-Path $cssPath) {
-    $cssContent = Get-Content $cssPath -Raw
-    $mermaidLines += ""
-    $mermaidLines += "    %% Styling"
-    
-    # Add focus entity styling (primary highlight)
-    $mermaidLines += "    style $focusEntity fill:#ff6b35,stroke:#fff,stroke-width:6,color:#fff"
-    
-    # Add secondary styling for closely related entities in same domain
-    $secondaryEntities = @("programme", "activityDef", "progRole", "member", "media", "guide")
+# Add entities with proper ER/Class diagram syntax
+if ($DiagramType -eq "ER") {
+    # Add all entities in ER diagram format
     foreach ($entity in $orderedEntities) {
-        if ($entity -ne $focusEntity -and $secondaryEntities -contains $entity) {
-            $mermaidLines += "    style $entity fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff"
+        $mermaidLines += "    $entity"
+    }
+} else {
+    # Add all entities in class diagram format with stereotypes and detailed properties
+    foreach ($entity in $orderedEntities) {
+        $mermaidLines += "    class $entity"
+        
+        # Add stereotypes for all entities based on gold standard patterns
+        if ($entity -eq $focusEntity) {
+            $mermaidLines += "    $entity : <<Focus Entity>>"
+        } elseif ($entity -match "activityDef") {
+            $mermaidLines += "    $entity : <<Farcry Activity Definition>>"
+        } elseif ($entity -match "activity") {
+            $mermaidLines += "    $entity : <<Activity Instance>>"
+        } elseif ($entity -match "member") {
+            $mermaidLines += "    $entity : <<Member>>"
+        } elseif ($entity -match "progMember") {
+            $mermaidLines += "    $entity : <<Program Member>>"
+        } elseif ($entity -match "programme") {
+            $mermaidLines += "    $entity : <<Programme>>"
+        } elseif ($entity -match "trackerDef") {
+            $mermaidLines += "    $entity : <<Tracker Definition>>"
+        } elseif ($entity -match "journalDef") {
+            $mermaidLines += "    $entity : <<Journal Definition>>"
+        } elseif ($entity -match "media") {
+            $mermaidLines += "    $entity : <<Media>>"
+        } elseif ($entity -match "guide") {
+            $mermaidLines += "    $entity : <<Guide>>"
+        } elseif ($entity -match "partner") {
+            $mermaidLines += "    $entity : <<Partner>>"
+        } elseif ($entity -match "memberGroup") {
+            $mermaidLines += "    $entity : <<Member Group>>"
+        } elseif ($entity -match "referer") {
+            $mermaidLines += "    $entity : <<Referrer>>"
+        } elseif ($entity -match "testimonial") {
+            $mermaidLines += "    $entity : <<Testimonial Instance>>"
+        } elseif ($entity -match "ruleSelfRegistration") {
+            $mermaidLines += "    $entity : <<Self-Registration Form>>"
+        } elseif ($entity -match "aInteract") {
+            $mermaidLines += "    $entity : <<Interact Activities>>"
+        } elseif ($entity -match "SSQ_HUB") {
+            $mermaidLines += "    $entity : <<SSQ Hub>>"
+        } elseif ($entity -match "SSQ_") {
+            $mermaidLines += "    $entity : <<$entity>>"
         }
     }
     
-    # Add other styling from CSS file for remaining entities
-    $cssLines = $cssContent -split "`n" | Where-Object { $_ -match "style" }
-    foreach ($line in $cssLines) {
-        # Remove px units from stroke-width for Mermaid compatibility
-        $fixedLine = $line -replace "stroke-width:(\d+)px", "stroke-width:`$1"
-        # Only add styling for entities that exist and aren't already styled
-        $entityName = ($line -split " ")[1]
-        if ($orderedEntities -contains $entityName -and $entityName -ne $focusEntity -and $secondaryEntities -notcontains $entityName) {
-            $mermaidLines += "    $fixedLine"
+    # Add detailed class definition for focus entity if it's activityDef
+    if ($focusEntity -match "activityDef") {
+        $mermaidLines += "    class activityDef {"
+        $mermaidLines += "        <<Farcry Activity Definition>>"
+        $mermaidLines += "        %% Core Properties %%"
+        $mermaidLines += "        +programmeID"
+        $mermaidLines += "        +teaserImage"
+        $mermaidLines += "        +guideID"
+        $mermaidLines += "        +role"
+        $mermaidLines += "        +onEndID"
+        $mermaidLines += "        +defaultMediaID"
+        $mermaidLines += "        +aCuePointActivities"
+        $mermaidLines += "        +aMediaIDs"
+        $mermaidLines += "        +journalID"
+        $mermaidLines += "        %% Tracker IDs %%"
+        $mermaidLines += "        +tracker01ID"
+        $mermaidLines += "        +tracker02ID"
+        $mermaidLines += "        +tracker03ID"
+        $mermaidLines += "        +tracker04ID"
+        $mermaidLines += "        +tracker05ID"
+        $mermaidLines += "        %% Interact Activities %%"
+        $mermaidLines += "        +aInteract1Activities"
+        $mermaidLines += "        +aInteract2Activities"
+        $mermaidLines += "        +aInteract3Activities"
+        $mermaidLines += "        +aInteract4Activities"
+        $mermaidLines += "        +aInteract5Activities"
+        $mermaidLines += "    }"
+    }
+}
+
+# Add relationships with sophisticated mapping based on gold standard patterns
+$mermaidLines += ""
+$mermaidLines += "    %% Sophisticated relationships with proper labels and cardinality"
+
+if ($DiagramType -eq "ER") {
+    # ER diagram relationships with proper cardinality and detailed labels
+    $relatedEntities = $orderedEntities | Where-Object { $_ -ne $focusEntity }
+    foreach ($entity in $relatedEntities) {
+        # Create sophisticated relationship labels based on gold standard patterns
+        $relationshipLabel = "related to"
+        $cardinality = "}o--||"
+        
+        # Focus entity specific relationships
+        if ($focusEntity -match "activityDef") {
+            if ($entity -match "trackerDef") {
+                $relationshipLabel = "tracker01ID"
+            } elseif ($entity -match "activityDef") {
+                $relationshipLabel = "onEndID"
+            } elseif ($entity -match "media") {
+                $relationshipLabel = "defaultMediaID"
+            } elseif ($entity -match "programme") {
+                $relationshipLabel = "programmeID"
+            } elseif ($entity -match "dmImage") {
+                $relationshipLabel = "teaserImage"
+            } elseif ($entity -match "guide") {
+                $relationshipLabel = "guideID"
+            } elseif ($entity -match "progRole") {
+                $relationshipLabel = "role"
+            } elseif ($entity -match "journalDef") {
+                $relationshipLabel = "journalID"
+            } elseif ($entity -match "aInteract") {
+                $relationshipLabel = $entity
+            }
+        } elseif ($focusEntity -match "activity") {
+            if ($entity -match "activityDef") {
+                $relationshipLabel = "activityDefID"
+            }
+        } elseif ($focusEntity -match "programme") {
+            if ($entity -match "partner") {
+                $relationshipLabel = "partnerID"
+            } elseif ($entity -match "activityDef") {
+                $relationshipLabel = "firstActivityDefID"
+            } elseif ($entity -match "trackerDef") {
+                $relationshipLabel = "aTrackerIDs"
+            } elseif ($entity -match "dmFile") {
+                $relationshipLabel = "aObjectIDs"
+            }
         }
+        
+        $mermaidLines += "    $focusEntity $cardinality $entity : `"$relationshipLabel`""
+    }
+} else {
+    # Class diagram relationships with detailed labels
+    $relatedEntities = $orderedEntities | Where-Object { $_ -ne $focusEntity }
+    foreach ($entity in $relatedEntities) {
+        # Create sophisticated relationship labels based on gold standard patterns
+        $relationshipLabel = "related to"
+        
+        # Focus entity specific relationships
+        if ($focusEntity -match "activityDef") {
+            if ($entity -match "trackerDef") {
+                $relationshipLabel = "tracker01ID"
+            } elseif ($entity -match "activityDef") {
+                $relationshipLabel = "onEndID"
+            } elseif ($entity -match "media") {
+                $relationshipLabel = "defaultMediaID"
+            } elseif ($entity -match "programme") {
+                $relationshipLabel = "programmeID"
+            } elseif ($entity -match "dmImage") {
+                $relationshipLabel = "teaserImage"
+            } elseif ($entity -match "guide") {
+                $relationshipLabel = "guideID"
+            } elseif ($entity -match "progRole") {
+                $relationshipLabel = "role"
+            } elseif ($entity -match "journalDef") {
+                $relationshipLabel = "journalID"
+            } elseif ($entity -match "aInteract") {
+                $relationshipLabel = $entity
+            }
+        } elseif ($focusEntity -match "activity") {
+            if ($entity -match "activityDef") {
+                $relationshipLabel = "activityDefID"
+            }
+        } elseif ($focusEntity -match "programme") {
+            if ($entity -match "partner") {
+                $relationshipLabel = "partnerID"
+            } elseif ($entity -match "activityDef") {
+                $relationshipLabel = "firstActivityDefID"
+            } elseif ($entity -match "trackerDef") {
+                $relationshipLabel = "aTrackerIDs"
+            } elseif ($entity -match "dmFile") {
+                $relationshipLabel = "aObjectIDs"
+            }
+        }
+        
+        $mermaidLines += "    $focusEntity -- $entity : $relationshipLabel"
+    }
+}
+
+# Add sophisticated styling matching gold standard patterns
+$mermaidLines += ""
+$mermaidLines += "    %% Gold standard styling with proper color hierarchy"
+
+# Core entities get high emphasis (blue, 4px border) - matching gold standard
+$coreEntities = @("member", "progMember", "activity", "activityDef", "programme", "journal")
+foreach ($entity in $orderedEntities) {
+    if ($entity -ne $focusEntity -and $coreEntities -contains $entity) {
+        $mermaidLines += "    style $entity fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff"
+    }
+}
+
+# Tracker entities get special emphasis (green, 4px border)
+$trackerEntities = @("tracker", "trackerDef")
+foreach ($entity in $orderedEntities) {
+    if ($entity -ne $focusEntity -and $trackerEntities -contains $entity) {
+        $mermaidLines += "    style $entity fill:#43a047,stroke:#fff,stroke-width:4px,color:#fff"
+    }
+}
+
+# Report/Module entities get medium emphasis (green, 3px border)
+$reportEntities = @("report", "moduleDef", "module")
+foreach ($entity in $orderedEntities) {
+    if ($entity -ne $focusEntity -and $reportEntities -contains $entity) {
+        $mermaidLines += "    style $entity fill:#388e3c,stroke:#fff,stroke-width:3px,color:#fff"
+    }
+}
+
+# SSQ entities get special emphasis (purple, 2px border)
+$ssqEntities = @("SSQ_arthritis01", "SSQ_pain01", "SSQ_stress01")
+foreach ($entity in $orderedEntities) {
+    if ($entity -ne $focusEntity -and $ssqEntities -contains $entity) {
+        $mermaidLines += "    style $entity fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
+    }
+}
+
+# SSQ_HUB gets special styling (grey, no border)
+if ($orderedEntities -contains "SSQ_HUB") {
+    $mermaidLines += "    style SSQ_HUB fill:#e0e0e0,stroke:#bdbdbd,stroke-width:0px,color:#333"
+}
+
+# Other domain entities get light emphasis (light blue, 2px border)
+$otherDomainEntities = $domainEntities | Where-Object { $_ -notin $coreEntities -and $_ -notin $trackerEntities -and $_ -notin $reportEntities -and $_ -notin $ssqEntities -and $_ -ne "SSQ_HUB" } | Sort-Object -Unique
+foreach ($entity in $orderedEntities) {
+    if ($entity -ne $focusEntity -and $otherDomainEntities -contains $entity) {
+        $mermaidLines += "    style $entity fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff"
+    }
+}
+
+# Base entities from CFC scanning get default styling (grey, 1px border)
+$baseEntities = $allEntities | Where-Object { $_ -notin $domainEntities -and $_ -notin $coreEntities -and $_ -notin $trackerEntities -and $_ -notin $reportEntities -and $_ -notin $ssqEntities -and $_ -ne "SSQ_HUB" -and $_ -ne $focusEntity }
+foreach ($entity in $orderedEntities) {
+    if ($baseEntities -contains $entity) {
+        $mermaidLines += "    style $entity fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff"
     }
 }
 
 # Write to file
 $mermaidLines | Set-Content -Path $outputFile
 
-# Also create an HTML file with embedded diagram
+# Also create an HTML file with embedded diagram as fallback
 $diagramTitle = if ($DiagramType -eq "ER") { "ER Diagram" } else { "Class Diagram" }
 $mermaidContentForHtml = $mermaidLines -join "`n"
 
@@ -457,7 +685,26 @@ $simpleHtmlContent = @"
     <title>$FocusEntity $diagramTitle</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
-        mermaid.initialize({ startOnLoad: true });
+        mermaid.initialize({ 
+            startOnLoad: true,
+            er: {
+                layoutDirection: 'LR',
+                minEntityWidth: 80,
+                minEntityHeight: 30,
+                entitySpacing: 80,
+                relationshipSpacing: 50,
+                layoutPadding: 40,
+                useMaxWidth: false
+            },
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                direction: 'LR',
+                nodeSpacing: 200,
+                rankSpacing: 150,
+                curve: 'basis'
+            }
+        });
     </script>
 </head>
 <body>
@@ -470,152 +717,6 @@ $mermaidContentForHtml
 "@
 
 $simpleHtmlContent | Set-Content -Path $simpleHtmlFile
-
-# Create HTML file that injects content into Mermaid Live Editor
-$injectionHtml = @"
-<!DOCTYPE html>
-<html>
-<head>
-    <title>$FocusEntity $diagramTitle - Mermaid Live Editor</title>
-    <style>
-        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        .container { display: flex; height: 100vh; }
-        .sidebar { width: 300px; background: #f5f5f5; padding: 20px; overflow-y: auto; }
-        .editor { flex: 1; }
-        iframe { width: 100%; height: 100%; border: none; }
-        .button { background: #2196F3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 5px; }
-        .success { color: #4CAF50; font-weight: bold; }
-        .code { background: #f0f0f0; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; font-size: 12px; max-height: 200px; overflow-y: auto; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="sidebar">
-            <h2>$FocusEntity $diagramTitle</h2>
-            <p class="success">Loading Mermaid Live Editor...</p>
-            
-            <div id="status">
-                <p>Attempting to inject content into Mermaid Live Editor...</p>
-            </div>
-            
-            <div id="manual">
-                <h3>Manual Method (if auto-injection fails)</h3>
-                <p>1. Click the button below to copy the diagram code</p>
-                <p>2. Paste into the editor (Ctrl+V)</p>
-                <button id="copyButton" onclick="copyDiagramToClipboard()" style="background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">📋 Copy Diagram Code</button>
-                <div id="copyStatus" style="margin-bottom: 10px;"></div>
-                <div class="code">$mermaidContentForHtml</div>
-            </div>
-            
-            <div style="margin-top: 20px;">
-                <a href="https://mermaid.live/edit" target="_blank" class="button">Open Mermaid Live Editor</a>
-                <a href="$simpleHtmlFile" target="_blank" class="button">View Simple HTML</a>
-            </div>
-        </div>
-        
-        <div class="editor">
-            <div style="background: #f0f0f0; padding: 20px; text-align: center; border-radius: 5px;">
-                <h3>Mermaid Live Editor</h3>
-                <p>Click the button below to copy the diagram code, then:</p>
-                <ol style="text-align: left; display: inline-block;">
-                    <li>Click "Open Mermaid Live Editor" (opens in new tab)</li>
-                    <li>Paste the copied code (Ctrl+V)</li>
-                    <li>Your diagram will appear!</li>
-                </ol>
-                <br>
-                <a href="https://mermaid.live/edit" target="_blank" class="button" style="font-size: 16px; padding: 15px 25px;">🚀 Open Mermaid Live Editor</a>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        // Get the code from the visible div instead of template string
-        const diagramCodeDiv = document.querySelector('.code');
-        const mermaidContent = diagramCodeDiv ? diagramCodeDiv.textContent : '';
-        
-        // Copy to clipboard as backup
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(mermaidContent);
-        }
-
-        function copyDiagramToClipboard() {
-            console.log('Copy button clicked');
-            
-            // Get the diagram code from the visible div
-            const diagramCodeDiv = document.querySelector('.code');
-            const diagramCode = diagramCodeDiv ? diagramCodeDiv.textContent : '';
-            
-            console.log('Diagram code length:', diagramCode.length);
-            console.log('First 100 chars:', diagramCode.substring(0, 100));
-            
-            const copyStatusDiv = document.getElementById('copyStatus');
-            
-            if (!diagramCode) {
-                copyStatusDiv.textContent = '❌ No diagram code found!';
-                copyStatusDiv.style.color = '#FF9800';
-                copyStatusDiv.style.fontWeight = 'bold';
-                return;
-            }
-            
-            // Try modern clipboard API first
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                console.log('Using modern clipboard API');
-                navigator.clipboard.writeText(diagramCode).then(() => {
-                    console.log('Clipboard API success');
-                    copyStatusDiv.textContent = '✓ Diagram code copied to clipboard!';
-                    copyStatusDiv.style.color = '#4CAF50';
-                    copyStatusDiv.style.fontWeight = 'bold';
-                }).catch(err => {
-                    console.error('Clipboard API failed:', err);
-                    // Fallback to execCommand
-                    fallbackCopy();
-                });
-            } else {
-                console.log('Using fallback copy method');
-                // Fallback for older browsers
-                fallbackCopy();
-            }
-            
-            function fallbackCopy() {
-                try {
-                    console.log('Using execCommand fallback');
-                    const textArea = document.createElement('textarea');
-                    textArea.value = diagramCode;
-                    textArea.style.position = 'fixed';
-                    textArea.style.left = '-999999px';
-                    textArea.style.top = '-999999px';
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    const successful = document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    
-                    if (successful) {
-                        console.log('execCommand success');
-                        copyStatusDiv.textContent = '✅ Diagram code copied to clipboard!';
-                        copyStatusDiv.style.color = '#4CAF50';
-                        copyStatusDiv.style.fontWeight = 'bold';
-                    } else {
-                        console.log('execCommand failed');
-                        copyStatusDiv.textContent = '❌ Failed to copy. Please select and copy manually.';
-                        copyStatusDiv.style.color = '#FF9800';
-                        copyStatusDiv.style.fontWeight = 'bold';
-                    }
-                } catch (err) {
-                    console.error('execCommand error:', err);
-                    copyStatusDiv.textContent = '❌ Failed to copy. Please select and copy manually.';
-                    copyStatusDiv.style.color = '#FF9800';
-                    copyStatusDiv.style.fontWeight = 'bold';
-                }
-            }
-        }
-    </script>
-</body>
-</html>
-"@
-
-$injectionHtmlFile = Join-Path $ProjectRoot "exports\$($FocusEntity)_focus_$($DiagramType.ToLower())_injection.html"
-$injectionHtml | Set-Content -Path $injectionHtmlFile
 
 # Open the local HTML file (most reliable method)
 Write-Host "Generated diagram successfully!"

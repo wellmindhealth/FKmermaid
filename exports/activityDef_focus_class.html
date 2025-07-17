@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>dmNavigation ER Diagram - Mermaid Live Editor</title>
+    <title>activityDef Class Diagram - Mermaid Live Editor</title>
     <script>
         // Auto-open Mermaid Live Editor with clipboard content
         window.onload = function() {
@@ -52,7 +52,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>dmNavigation ER Diagram</h1>
+        <h1>activityDef Class Diagram</h1>
         <p class="success">Copying content to clipboard and opening Mermaid Live Editor...</p>
         
         <div id="clipboardMethod" class="info">
@@ -73,50 +73,85 @@
         
         <div class="info">
             <h3>Mermaid Content for Copy-Paste</h3>
-            <div class="code">erDiagram
-    dmNavigation {
-        string id
-        string name
+            <div class="code">classDiagram
+    class activityDef {
+        +String id
+        +String name
     }
-    dmFacts {
-        string id
-        string name
+    class aCuePointActivities {
+        +String id
+        +String name
     }
-    dmFile {
-        string id
-        string name
+    class aInteract1Activities {
+        +String id
+        +String name
     }
-    dmHTML {
-        string id
-        string name
+    class aInteract2Activities {
+        +String id
+        +String name
     }
-    dmImage {
-        string id
-        string name
+    class aInteract3Activities {
+        +String id
+        +String name
     }
-    dmInclude {
-        string id
-        string name
+    class aInteract4Activities {
+        +String id
+        +String name
     }
-    dmNews {
-        string id
-        string name
+    class aInteract5Activities {
+        +String id
+        +String name
+    }
+    class aMediaIDs {
+        +String id
+        +String name
+    }
+    class defaultMediaID {
+        +String id
+        +String name
+    }
+    class guide {
+        +String id
+        +String name
+    }
+    class media {
+        +String id
+        +String name
+    }
+    class onEndID {
+        +String id
+        +String name
+    }
+    class programme {
+        +String id
+        +String name
+    }
+    class progRole {
+        +String id
+        +String name
     }
 
     %% Relationships
-    dmNavigation ||--o{ dmFacts : "related to"
-    dmNavigation ||--o{ dmFile : "related to"
-    dmNavigation ||--o{ dmHTML : "related to"
-    dmNavigation ||--o{ dmImage : "related to"
-    dmNavigation ||--o{ dmInclude : "related to"
-    dmNavigation ||--o{ dmNews : "related to"</div>
+    activityDef --> aCuePointActivities : "related to"
+    activityDef --> aInteract1Activities : "related to"
+    activityDef --> aInteract2Activities : "related to"
+    activityDef --> aInteract3Activities : "related to"
+    activityDef --> aInteract4Activities : "related to"
+    activityDef --> aInteract5Activities : "related to"
+    activityDef --> aMediaIDs : "related to"
+    activityDef --> defaultMediaID : "related to"
+    activityDef --> guide : "related to"
+    activityDef --> media : "related to"
+    activityDef --> onEndID : "related to"
+    activityDef --> programme : "related to"
+    activityDef --> progRole : "related to"</div>
         </div>
         
         <div class="info">
             <h3>Generated Files</h3>
             <ul>
-                <li><strong>Mermaid Source:</strong> D:\GIT\farcry\Cursor\FKmermaid\exports\dmNavigation_focus_er.mmd</li>
-                <li><strong>HTML Launcher:</strong> D:\GIT\farcry\Cursor\FKmermaid\exports\dmNavigation_focus_er.html</li>
+                <li><strong>Mermaid Source:</strong> D:\GIT\farcry\Cursor\FKmermaid\exports\activityDef_focus_class.mmd</li>
+                <li><strong>HTML Launcher:</strong> D:\GIT\farcry\Cursor\FKmermaid\exports\activityDef_focus_class.html</li>
                 <li><strong>Simple HTML Viewer:</strong> </li>
             </ul>
         </div>
