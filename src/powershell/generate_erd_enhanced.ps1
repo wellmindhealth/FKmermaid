@@ -484,9 +484,8 @@ function Generate-MermaidERD {
         $entityDisplayName = "$pluginName - $entityName"
         $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName
         
-        # Sanitize entity name for style definition
+        # Use sanitized entity name for style definition (no spaces, hyphens, or quotes)
         $sanitizedEntityName = Get-SanitizedEntityName -entityName $entityDisplayName
-        
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
@@ -675,41 +674,13 @@ function Get-SanitizedEntityName {
 function Get-EntityStyle {
     param([string]$entityName, [string]$pluginName)
     
-    # Define styling rules based on entity importance and type
+    # Define styling rules - keeping only SSQ entities for now
     $stylingRules = @{
-        # Core entities - high importance
-        "member" = "fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff"
-        "progMember" = "fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff"
-        "activity" = "fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff"
-        "activityDef" = "fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff"
-        "programme" = "fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff"
-        "progRole" = "fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff"
-        
-        # Tracker entities - medium importance
-        "trackerDef" = "fill:#43a047,stroke:#fff,stroke-width:4px,color:#fff"
-        "journalDef" = "fill:#43a047,stroke:#fff,stroke-width:4px,color:#fff"
-        
-        # Module entities - medium importance
-        "module" = "fill:#388e3c,stroke:#fff,stroke-width:3px,color:#fff"
-        "moduleDef" = "fill:#388e3c,stroke:#fff,stroke-width:3px,color:#fff"
-        "report" = "fill:#388e3c,stroke:#fff,stroke-width:3px,color:#fff"
-        
-        # SSQ entities - special styling
+        # SSQ entities - special styling (keeping these as requested)
         "SSQ_arthritis01" = "fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
         "SSQ_pain01" = "fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
         "SSQ_stress01" = "fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
         "SSQ_HUB" = "fill:#e0e0e0,stroke:#bdbdbd,stroke-width:0px,color:#333"
-        
-        # Social entities - medium importance
-        "dmProfile" = "fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff"
-        "dmImage" = "fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff"
-        "dmFile" = "fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff"
-        "dmHTML" = "fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff"
-        "dmNavigation" = "fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff"
-        
-        # Microsoft UD entities - medium importance
-        "mudUser" = "fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff"
-        "mudGroup" = "fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff"
     }
     
     # Check for exact match first
@@ -723,7 +694,7 @@ function Get-EntityStyle {
         return $stylingRules[$pluginEntityKey]
     }
     
-    # Default styling for less important entities
+    # Default styling for all other entities
     return "fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff"
 }
 
