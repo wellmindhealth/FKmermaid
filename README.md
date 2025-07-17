@@ -33,19 +33,41 @@ Site-related entities for website content and location management.
 
 ### Basic Usage
 ```powershell
-.\generate_erd.ps1 -FocusEntity "progRole" -DiagramType "ER" -lDomains "programme"
+.\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "programme"
 ```
 
 ### Advanced Usage with Multiple Domains
 ```powershell
-.\generate_erd.ps1 -FocusEntity "activityDef" -DiagramType "ER" -lDomains "programme","participant"
+.\generate_erd_enhanced.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "programme","participant"
 ```
 
-### Parameters
+### Complete Parameter Reference
 
-- `-FocusEntity`: The primary entity to focus on (required)
-- `-DiagramType`: Choose between "ER" or "Class" diagrams (required)
-- `-lDomains`: Array of domains to filter relationships (required, e.g., "partner","participant","programme","site")
+**REQUIRED PARAMETERS:**
+- `-lFocus`: The primary entity to focus on (e.g., "activityDef", "progRole", "member")
+- `-DiagramType`: Choose between "ER" or "Class" diagrams
+- `-lDomains`: Array of domains to filter relationships (e.g., "partner","participant","programme","site")
+
+**OPTIONAL PARAMETERS:**
+- `-RefreshCFCs`: Switch to force fresh CFC scanning (bypasses cache)
+- `-ConfigFile`: Custom config file path (default: config/cfc_scan_config.json)
+- `-OutputFile`: Custom output file path (default: auto-generated timestamped file)
+
+### Parameter Examples
+
+```powershell
+# Basic ER diagram with focus entity
+.\generate_erd_enhanced.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "programme"
+
+# Class diagram with fresh scan
+.\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "Class" -lDomains "participant" -RefreshCFCs
+
+# Custom output file
+.\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "programme" -OutputFile "custom_diagram.mmd"
+
+# Multiple domains with custom config
+.\generate_erd_enhanced.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "programme","participant" -ConfigFile "custom_config.json"
+```
 
 ## Output
 

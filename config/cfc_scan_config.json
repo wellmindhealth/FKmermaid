@@ -3,7 +3,6 @@
     "pluginsPath": "D:\\GIT\\farcry",
     "scanDirectories": [
       "D:\\GIT\\farcry\\plugins",
-      "D:\\GIT\\farcry\\projects",
       "D:\\GIT\\farcry\\zfarcrycore"
     ],
     "excludeFolders": ["farcrycms"],
@@ -113,7 +112,8 @@
     "includeRelationships": true,
     "includeJoinTables": true,
     "validateEntityExistence": true,
-    "validatePropertyNames": true
+    "validatePropertyNames": true,
+    "includeStyling": true
   },
   "mermaidSettings": {
     "theme": "default",
