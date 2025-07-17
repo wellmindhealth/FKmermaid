@@ -223,6 +223,9 @@ $mermaidLiveHtml = @"
 <body>
     <div class="left-panel">
         <h1>$FocusEntity $diagramTitle</h1>
+        <div style="color: #666; font-size: 11px; margin-bottom: 8px;">
+            <strong>Domain:</strong> $($lDomains -join ', ')
+        </div>
         <div class="instructions">
             <h3>Quick Steps</h3>
             <ol>
@@ -268,27 +271,11 @@ $mermaidLiveHtml = @"
                 msg.style.display = 'block';
                 setTimeout(() => msg.style.display = 'none', 3000);
                 
-                // Calculate window position and size
-                const leftPanel = document.querySelector('.left-panel');
-                const leftWidth = Math.max(leftPanel.offsetWidth, 250);
-                const windowWidth = window.innerWidth - leftWidth;
-                const windowHeight = window.innerHeight;
+                // Open Mermaid Live Editor in new tab
+                window.open('https://mermaid.live/edit', '_blank');
                 
-                // Open editor in new window
-                const editorUrl = 'https://mermaid.live/edit';
-                const windowFeatures = 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + leftWidth + ',top=0,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes';
-                
-                console.log('Opening editor with features:', windowFeatures);
-                const editorWindow = window.open(editorUrl, '_blank', windowFeatures);
-                
-                if (editorWindow) {
-                    console.log('Editor window opened successfully');
-                    // Show paste reminder
-                    showPasteReminder();
-                } else {
-                    console.error('Failed to open editor window');
-                    alert('Failed to open editor window. Please check popup blocker settings.');
-                }
+                // Show paste reminder
+                showPasteReminder();
             }).catch(err => {
                 console.error('Clipboard API failed:', err);
                 showCopyError();
@@ -321,12 +308,8 @@ $mermaidLiveHtml = @"
                     // Open editor with URL parameters
                     const editorUrl = 'https://mermaid.live/edit';
                     
-                    const leftPanel = document.querySelector('.left-panel');
-                    const leftWidth = Math.max(leftPanel.offsetWidth, 250);
-                    const windowWidth = window.innerWidth - leftWidth;
-                    const windowHeight = window.innerHeight;
-                    
-                    const editorWindow = window.open(editorUrl, '_blank', 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + leftWidth + ',top=0,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes');
+                    // Open Mermaid Live Editor in new tab
+                    window.open(editorUrl, '_blank');
                     
                     setTimeout(showPasteReminder, 1000);
                 } else {
@@ -411,17 +394,6 @@ $mermaidLiveHtml = @"
         // Show in an alert for easy viewing
         alert('Content length: ' + mermaidContent.length + '\n\nFirst 200 chars:\n' + mermaidContent.substring(0, 200) + '\n\nContains erDiagram: ' + mermaidContent.includes('erDiagram'));
     }
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        const editorWindow = window.open('', 'mermaidEditor');
-        if (editorWindow && !editorWindow.closed) {
-            const leftPanel = document.querySelector('.left-panel');
-            const leftWidth = Math.max(leftPanel.offsetWidth, 250);
-            editorWindow.resizeTo(window.innerWidth - leftWidth, window.innerHeight);
-            editorWindow.moveTo(leftWidth, 0);
-        }
-    });
     </script>
 </body>
 </html>
