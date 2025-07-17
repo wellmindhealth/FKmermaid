@@ -442,7 +442,12 @@ function Generate-MermaidERD {
         if ($knownTables -contains $entityName -and $entityName -and $entityName.Length -gt 0) {
             $entityDisplayName = "$pluginName - $entityName"
             
-            $mermaidContent += "    `"$entityDisplayName`" {`n"
+            # Sanitize entity name for ER diagram (same as class diagram)
+            $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedEntityName = $sanitizedEntityName -replace '_+', '_'
+            $sanitizedEntityName = $sanitizedEntityName.Trim('_')
+            
+            $mermaidContent += "    `"$sanitizedEntityName`" {`n"
             $mermaidContent += "        UUID ObjectID`n"
             $mermaidContent += "        string name`n"
             $mermaidContent += "    }`n`n"
@@ -459,7 +464,17 @@ function Generate-MermaidERD {
             $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
             $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
             
-            $mermaidContent += "    `"$sourcePlugin - $sourceEntity`" }o--|| `"$targetPlugin - $targetEntity`" : $($fk.property)`n"
+            # Sanitize entity names for relationships
+            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+            $targetDisplayName = "$targetPlugin - $targetEntity"
+            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+            
+            $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($fk.property)`n"
         }
     }
 
@@ -472,17 +487,36 @@ function Generate-MermaidERD {
             $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
             $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
             
-            $mermaidContent += "    `"$sourcePlugin - $sourceEntity`" }o--|| `"$targetPlugin - $targetEntity`" : $($join.joinTable)`n"
+            # Sanitize entity names for relationships
+            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+            $targetDisplayName = "$targetPlugin - $targetEntity"
+            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+            
+            $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.joinTable)`n"
         }
     }
 
     # Add styling
     $mermaidContent += "`n    %% Entity Styling`n"
+    # Get related entities in same domain as focus entity
+    $relatedEntities = @()
+    if ($lFocus) {
+        $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $lFocus }).plugin
+        if ($focusPlugin) {
+            $relatedEntities = $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $lFocus } | ForEach-Object { $_.name }
+        }
+    }
+    
     foreach ($entity in $filteredEntities) {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         $entityDisplayName = "$pluginName - $entityName"
-        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName
+        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities
         
         # Use sanitized entity name for style definition (no spaces, hyphens, or quotes)
         $sanitizedEntityName = Get-SanitizedEntityName -entityName $entityDisplayName
@@ -611,11 +645,21 @@ function Generate-MermaidClassDiagram {
 
     # Add styling for class diagram (full color support)
     $mermaidContent += "`n    %% Entity Styling`n"
+    
+    # Get related entities in same domain as focus entity
+    $relatedEntities = @()
+    if ($lFocus) {
+        $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $lFocus }).plugin
+        if ($focusPlugin) {
+            $relatedEntities = $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $lFocus } | ForEach-Object { $_.name }
+        }
+    }
+    
     foreach ($entity in $filteredEntities) {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         $entityDisplayName = "$pluginName - $entityName"
-        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName
+        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities
         
         # Sanitize entity name for style definition (same as class names)
         $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
@@ -672,7 +716,7 @@ function Get-SanitizedEntityName {
 
 # Function to get entity styling based on importance and type
 function Get-EntityStyle {
-    param([string]$entityName, [string]$pluginName)
+    param([string]$entityName, [string]$pluginName, [string]$focusEntity, [string[]]$relatedEntities)
     
     # Define styling rules - keeping only SSQ entities for now
     $stylingRules = @{
@@ -683,7 +727,7 @@ function Get-EntityStyle {
         "SSQ_HUB" = "fill:#e0e0e0,stroke:#bdbdbd,stroke-width:0px,color:#333"
     }
     
-    # Check for exact match first
+    # Check for exact match first (SSQ entities)
     if ($stylingRules.ContainsKey($entityName)) {
         return $stylingRules[$entityName]
     }
@@ -694,7 +738,17 @@ function Get-EntityStyle {
         return $stylingRules[$pluginEntityKey]
     }
     
-    # Default styling for all other entities
+    # Focus entity styling (orange/amber)
+    if ($entityName -eq $focusEntity) {
+        return "fill:#ff9800,stroke:#e65100,stroke-width:2px,color:#fff"
+    }
+    
+    # Close relatives in same domain styling (blue)
+    if ($relatedEntities -and $relatedEntities.Contains($entityName)) {
+        return "fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff"
+    }
+    
+    # Default styling for all other entities (grey)
     return "fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff"
 }
 
