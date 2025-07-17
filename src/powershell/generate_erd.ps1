@@ -9,7 +9,9 @@ param(
 # Set up paths
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectRoot = Resolve-Path (Join-Path $ScriptDir "..\..")
+$timestamp = Get-Date -Format "yyyyMMddHHmmss"
 $outputFile = Join-Path $ProjectRoot "exports\$($FocusEntity)_focus_$($DiagramType.ToLower()).mmd"
+$htmlFile = Join-Path $ProjectRoot "exports\$($FocusEntity)_focus_$($DiagramType.ToLower())_$timestamp.html"
 
 # Create exports directory if it doesn't exist
 $exportsDir = Join-Path $ProjectRoot "exports"
@@ -90,7 +92,6 @@ foreach ($entity in $orderedEntities) {
 $mermaidLines | Set-Content -Path $outputFile
 
 # Also create an HTML file with embedded diagram
-$htmlFile = Join-Path $ProjectRoot "exports\$($FocusEntity)_focus_$($DiagramType.ToLower()).html"
 $diagramTitle = if ($DiagramType -eq "ER") { "ER Diagram" } else { "Class Diagram" }
 $mermaidContentForHtml = $mermaidLines -join "`n"
 
@@ -99,95 +100,340 @@ $mermaidLiveHtml = @"
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>$FocusEntity $diagramTitle - Mermaid Live Editor</title>
-    <script>
-        // Auto-open Mermaid Live Editor with clipboard content
-        window.onload = function() {
-            const mermaidContent = `$mermaidContentForHtml`;
-            
-            // Copy content to clipboard
-            function copyToClipboard(text) {
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        console.log('Content copied to clipboard');
-                        // Open Mermaid Live Editor after copying
-                        window.open('https://mermaid.live/edit', '_blank');
-                        document.getElementById('clipboardMethod').style.display = 'block';
-                    }).catch(err => {
-                        console.error('Failed to copy to clipboard:', err);
-                        // Fallback: show manual instructions
-                        document.getElementById('manualMethod').style.display = 'block';
-                    });
-                } else {
-                    // Fallback for older browsers
-                    const textArea = document.createElement('textarea');
-                    textArea.value = text;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    
-                    // Open Mermaid Live Editor
-                    window.open('https://mermaid.live/edit', '_blank');
-                    document.getElementById('clipboardMethod').style.display = 'block';
-                }
-            }
-            
-            // Copy content and open editor
-            copyToClipboard(mermaidContent);
-        };
-    </script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .success { color: #4CAF50; font-weight: bold; }
-        .warning { color: #FF9800; font-weight: bold; }
-        .info { background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        .code { background: #f5f5f5; padding: 15px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; }
-        #clipboardMethod, #manualMethod { display: none; }
-        .button { background: #2196F3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 5px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: #f5f5f5;
+        }
+        .left-panel {
+            width: 15%;
+            min-width: 250px;
+            padding: 12px;
+            background: white;
+            font-size: 12px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        .code-block {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 8px 0;
+            font-size: 12px;
+            max-height: 60vh;
+            overflow-y: auto;
+            width: 100%;
+            box-sizing: border-box;
+            cursor: text;
+            user-select: text;
+        }
+        .code-block:hover {
+            border-color: #2196F3;
+        }
+        .button {
+            background: #2196F3;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 4px 0;
+            white-space: nowrap;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            box-sizing: border-box;
+        }
+        .button:hover {
+            background: #1976D2;
+        }
+        .success-message {
+            display: none;
+            color: #4CAF50;
+            margin: 4px 0;
+            font-size: 12px;
+            padding: 4px;
+            background: #E8F5E9;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .error-message {
+            display: none;
+            color: #FF9800;
+            margin: 4px 0;
+            font-size: 12px;
+            padding: 4px;
+            background: #FFF3E0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        h1 { 
+            margin: 0 0 8px 0; 
+            font-size: 1.2em;
+        }
+        h3 {
+            margin: 8px 0;
+            font-size: 1em;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+        #paste-reminder {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #E3F2FD;
+            padding: 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 14px;
+            animation: fadeInOut 5s forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="left-panel">
         <h1>$FocusEntity $diagramTitle</h1>
-        <p class="success">Copying content to clipboard and opening Mermaid Live Editor...</p>
-        
-        <div id="clipboardMethod" class="info">
-            <h3>Successfully opened Mermaid Live Editor!</h3>
-            <p>The Mermaid content has been copied to your clipboard.</p>
-            <p>Simply paste (Ctrl+V) into the editor to see your diagram.</p>
-        </div>
-        
-        <div id="manualMethod" class="info">
-            <h3>Manual Copy-Paste Method</h3>
-            <p>Automatic clipboard copy failed. Please:</p>
+        <div class="instructions">
+            <h3>Quick Steps</h3>
             <ol>
-                <li>Copy the Mermaid content below</li>
-                <li>Go to <a href="https://mermaid.live/edit" target="_blank" class="button">Mermaid Live Editor</a></li>
-                <li>Paste the content into the editor</li>
+                <li>Click "Open Editor & Copy"</li>
+                <li>Wait for editor to load</li>
+                <li>Press Ctrl+V to paste</li>
             </ol>
         </div>
-        
-        <div class="info">
-            <h3>Mermaid Content for Copy-Paste</h3>
-            <div class="code">$mermaidContentForHtml</div>
-        </div>
-        
-        <div class="info">
-            <h3>Generated Files</h3>
-            <ul>
-                <li><strong>Mermaid Source:</strong> $outputFile</li>
-                <li><strong>HTML Launcher:</strong> $htmlFile</li>
-                <li><strong>Simple HTML Viewer:</strong> $simpleHtmlFile</li>
-            </ul>
-        </div>
+        <button class="button" onclick="openEditorAndCopy()">Open Editor & Copy</button>
+        <div id="copySuccess" class="success-message">✓ Code copied! Press Ctrl+V to paste</div>
+        <div id="copyError" class="error-message">Failed to copy code. Please select and copy manually.</div>
+        <button class="button" onclick="manualCopy()" style="background: #FF9800; margin-top: 8px;">📋 Manual Copy Only</button>
+        <button class="button" onclick="showDebugInfo()" style="background: #9C27B0; margin-top: 4px;">🐛 Debug Info</button>
+        <div class="code-block" id="mermaidSource">$mermaidContentForHtml</div>
     </div>
+
+    <div id="paste-reminder">
+        Press Ctrl+V to paste your diagram code!
+    </div>
+
+    <script>
+    function showPasteReminder() {
+        const reminder = document.getElementById('paste-reminder');
+        reminder.style.display = 'block';
+        setTimeout(() => {
+            reminder.style.display = 'none';
+        }, 5000);
+    }
+
+    function openEditorAndCopy() {
+        // Get the code from the div instead of using a template string
+        const mermaidContent = document.getElementById('mermaidSource').textContent;
+        
+        console.log('Attempting to copy:', mermaidContent.substring(0, 100) + '...');
+        console.log('Full content length:', mermaidContent.length);
+        
+        // Try modern clipboard API first
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(mermaidContent).then(() => {
+                console.log('Clipboard API success');
+                // Show success message
+                const msg = document.getElementById('copySuccess');
+                msg.style.display = 'block';
+                setTimeout(() => msg.style.display = 'none', 3000);
+                
+                // Calculate window position and size
+                const leftPanel = document.querySelector('.left-panel');
+                const leftWidth = Math.max(leftPanel.offsetWidth, 250);
+                const windowWidth = window.innerWidth - leftWidth;
+                const windowHeight = window.innerHeight;
+                
+                // Open editor in new window
+                const editorUrl = 'https://mermaid.live/edit';
+                const windowFeatures = 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + leftWidth + ',top=0,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes';
+                
+                console.log('Opening editor with features:', windowFeatures);
+                const editorWindow = window.open(editorUrl, '_blank', windowFeatures);
+                
+                if (editorWindow) {
+                    console.log('Editor window opened successfully');
+                    // Show paste reminder
+                    showPasteReminder();
+                } else {
+                    console.error('Failed to open editor window');
+                    alert('Failed to open editor window. Please check popup blocker settings.');
+                }
+            }).catch(err => {
+                console.error('Clipboard API failed:', err);
+                showCopyError();
+            });
+        } else {
+            console.log('Using fallback copy method');
+            fallbackCopy();
+        }
+        
+        function fallbackCopy() {
+            try {
+                const textArea = document.createElement('textarea');
+                textArea.value = mermaidContent;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                if (successful) {
+                    console.log('execCommand success');
+                    const msg = document.getElementById('copySuccess');
+                    msg.style.display = 'block';
+                    msg.textContent = '✓ Code copied! Press Ctrl+V to paste';
+                    setTimeout(() => msg.style.display = 'none', 3000);
+                    
+                    // Open editor with URL parameters
+                    const editorUrl = 'https://mermaid.live/edit';
+                    
+                    const leftPanel = document.querySelector('.left-panel');
+                    const leftWidth = Math.max(leftPanel.offsetWidth, 250);
+                    const windowWidth = window.innerWidth - leftWidth;
+                    const windowHeight = window.innerHeight;
+                    
+                    const editorWindow = window.open(editorUrl, '_blank', 'width=' + windowWidth + ',height=' + windowHeight + ',left=' + leftWidth + ',top=0,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes');
+                    
+                    setTimeout(showPasteReminder, 1000);
+                } else {
+                    console.log('execCommand failed');
+                    showCopyError();
+                }
+            } catch (err) {
+                console.error('execCommand error:', err);
+                showCopyError();
+            }
+        }
+
+        function showCopyError() {
+            const msg = document.getElementById('copyError');
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 5000);
+        }
+    }
+
+    function manualCopy() {
+        const mermaidContent = document.getElementById('mermaidSource').textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(mermaidContent).then(() => {
+                const msg = document.getElementById('copySuccess');
+                msg.style.display = 'block';
+                msg.textContent = '✓ Code copied! Press Ctrl+V to paste';
+                setTimeout(() => msg.style.display = 'none', 3000);
+                console.log('Manual copy successful via Clipboard API');
+            }).catch(err => {
+                const msg = document.getElementById('copyError');
+                msg.style.display = 'block';
+                msg.textContent = 'Failed to copy code. Please select and copy manually.';
+                setTimeout(() => msg.style.display = 'none', 5000);
+                console.error('Manual copy failed via Clipboard API:', err);
+            });
+        } else {
+            try {
+                const textArea = document.createElement('textarea');
+                textArea.value = mermaidContent;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                if (successful) {
+                    const msg = document.getElementById('copySuccess');
+                    msg.style.display = 'block';
+                    msg.textContent = '✓ Code copied! Press Ctrl+V to paste';
+                    setTimeout(() => msg.style.display = 'none', 3000);
+                    console.log('Manual copy successful via execCommand');
+                } else {
+                    const msg = document.getElementById('copyError');
+                    msg.style.display = 'block';
+                    msg.textContent = 'Failed to copy code. Please select and copy manually.';
+                    setTimeout(() => msg.style.display = 'none', 5000);
+                    console.log('Manual copy failed via execCommand');
+                }
+            } catch (err) {
+                const msg = document.getElementById('copyError');
+                msg.style.display = 'block';
+                msg.textContent = 'Failed to copy code. Please select and copy manually.';
+                setTimeout(() => msg.style.display = 'none', 5000);
+                console.error('Manual copy failed via execCommand:', err);
+            }
+        }
+    }
+
+    function showDebugInfo() {
+        const mermaidContent = document.getElementById('mermaidSource').textContent;
+        console.log('=== DEBUG INFO ===');
+        console.log('Content length:', mermaidContent.length);
+        console.log('First 200 chars:', mermaidContent.substring(0, 200));
+        console.log('Last 100 chars:', mermaidContent.substring(mermaidContent.length - 100));
+        console.log('Contains "erDiagram":', mermaidContent.includes('erDiagram'));
+        console.log('Contains "classDiagram":', mermaidContent.includes('classDiagram'));
+        console.log('Full content:');
+        console.log(mermaidContent);
+        
+        // Show in an alert for easy viewing
+        alert('Content length: ' + mermaidContent.length + '\n\nFirst 200 chars:\n' + mermaidContent.substring(0, 200) + '\n\nContains erDiagram: ' + mermaidContent.includes('erDiagram'));
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        const editorWindow = window.open('', 'mermaidEditor');
+        if (editorWindow && !editorWindow.closed) {
+            const leftPanel = document.querySelector('.left-panel');
+            const leftWidth = Math.max(leftPanel.offsetWidth, 250);
+            editorWindow.resizeTo(window.innerWidth - leftWidth, window.innerHeight);
+            editorWindow.moveTo(leftWidth, 0);
+        }
+    });
+    </script>
 </body>
 </html>
 "@
 
 $mermaidLiveHtml | Set-Content -Path $htmlFile
+
+# Clean up old HTML files
+Get-ChildItem -Path (Join-Path $ProjectRoot "exports") -Filter "*_focus_*_*.html" | 
+    Where-Object { $_.Name -ne (Split-Path $htmlFile -Leaf) } |
+    Where-Object { $_.LastWriteTime -lt (Get-Date).AddHours(-1) } |
+    Remove-Item -Force
 
 # Also create a simple HTML file with embedded diagram as fallback
 $simpleHtmlFile = Join-Path $ProjectRoot "exports\$($FocusEntity)_focus_$($DiagramType.ToLower())_simple.html"
@@ -255,34 +501,24 @@ $injectionHtml = @"
         </div>
         
         <div class="editor">
-            <iframe id="mermaidEditor" src="https://mermaid.live/edit"></iframe>
+            <div style="background: #f0f0f0; padding: 20px; text-align: center; border-radius: 5px;">
+                <h3>Mermaid Live Editor</h3>
+                <p>Click the button below to copy the diagram code, then:</p>
+                <ol style="text-align: left; display: inline-block;">
+                    <li>Click "Open Mermaid Live Editor" (opens in new tab)</li>
+                    <li>Paste the copied code (Ctrl+V)</li>
+                    <li>Your diagram will appear!</li>
+                </ol>
+                <br>
+                <a href="https://mermaid.live/edit" target="_blank" class="button" style="font-size: 16px; padding: 15px 25px;">🚀 Open Mermaid Live Editor</a>
+            </div>
         </div>
     </div>
     
     <script>
-        const mermaidContent = `$mermaidContentForHtml`;
-        const iframe = document.getElementById('mermaidEditor');
-        const status = document.getElementById('status');
-        
-        // Wait for iframe to load
-        iframe.onload = function() {
-            try {
-                // Try to inject content into the iframe
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                
-                // Look for the code editor
-                const codeEditor = iframeDoc.querySelector('textarea, .monaco-editor, #editor');
-                if (codeEditor) {
-                    codeEditor.value = mermaidContent;
-                    codeEditor.dispatchEvent(new Event('input', { bubbles: true }));
-                    status.innerHTML = '<p class="success">Content injected successfully!</p>';
-                } else {
-                    status.innerHTML = '<p>Could not find editor. Please use manual method.</p>';
-                }
-            } catch (error) {
-                status.innerHTML = '<p>Cross-origin restriction. Please use manual method.</p>';
-            }
-        };
+        // Get the code from the visible div instead of template string
+        const diagramCodeDiv = document.querySelector('.code');
+        const mermaidContent = diagramCodeDiv ? diagramCodeDiv.textContent : '';
         
         // Copy to clipboard as backup
         if (navigator.clipboard) {
@@ -292,7 +528,7 @@ $injectionHtml = @"
         function copyDiagramToClipboard() {
             console.log('Copy button clicked');
             
-            // Get the diagram code from the visible div instead of template string
+            // Get the diagram code from the visible div
             const diagramCodeDiv = document.querySelector('.code');
             const diagramCode = diagramCodeDiv ? diagramCodeDiv.textContent : '';
             
@@ -313,7 +549,7 @@ $injectionHtml = @"
                 console.log('Using modern clipboard API');
                 navigator.clipboard.writeText(diagramCode).then(() => {
                     console.log('Clipboard API success');
-                    copyStatusDiv.textContent = '✅ Diagram code copied to clipboard!';
+                    copyStatusDiv.textContent = '✓ Diagram code copied to clipboard!';
                     copyStatusDiv.style.color = '#4CAF50';
                     copyStatusDiv.style.fontWeight = 'bold';
                 }).catch(err => {
@@ -370,66 +606,12 @@ $injectionHtml | Set-Content -Path $injectionHtmlFile
 
 # Open the local HTML file (most reliable method)
 Write-Host "Generated diagram successfully!"
-Write-Host ""
-Write-Host "Files created:"
+Write-Host "`nFiles created:"
 Write-Host "   - Mermaid source: $outputFile"
-Write-Host "   - Mermaid Live Editor launcher: $htmlFile"
-Write-Host "   - Simple HTML viewer: $simpleHtmlFile"
-Write-Host "   - Mermaid Live Editor Injection: $injectionHtmlFile"
-Write-Host ""
+Write-Host "`nOpening local HTML viewer..."
 
-# Copy Mermaid content to clipboard and open Mermaid Live Editor
-$mermaidContent = $mermaidLines -join "`n"
+# Use Invoke-Item to open with system default browser
+Invoke-Item $htmlFile
 
-# Generate base64 Mermaid Live Editor URL
-$base64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($mermaidContentForHtml))
-$mermaidUrl = "https://mermaid.live/edit#base64:$base64"
-
-# Also try data URL approach
-$dataUrl = "data:text/plain;base64,$base64"
-$mermaidDataUrl = "https://mermaid.live/edit#data:$dataUrl"
-
-# Function to shorten URL using v.gd (alternative to is.gd)
-function Get-ShortUrl {
-    param([string]$LongUrl)
-    try {
-        $encodedUrl = [System.Web.HttpUtility]::UrlEncode($LongUrl)
-        $shortenerUrl = "https://v.gd/create.php?format=json&url=$encodedUrl"
-        $response = Invoke-RestMethod -Uri $shortenerUrl -Method Get
-        return $response.shorturl
-    } catch {
-        Write-Host "v.gd shortener failed, trying is.gd..."
-        try {
-            $encodedUrl = [System.Web.HttpUtility]::UrlEncode($LongUrl)
-            $shortenerUrl = "https://is.gd/create.php?format=json&url=$encodedUrl"
-            $response = Invoke-RestMethod -Uri $shortenerUrl -Method Get
-            return $response.shorturl
-        } catch {
-            Write-Host "Both URL shorteners failed: $($_.Exception.Message)"
-            return $null
-        }
-    }
-}
-
-# Try to open Mermaid Live Editor with different approaches
-$opened = $false
-
-# Skip URL methods entirely - they're unreliable due to interstitial pages
-# Go straight to the injection HTML method
-Write-Host "Using local injection HTML method (most reliable)..."
-try {
-    Start-Process "chrome.exe" -ArgumentList $injectionHtmlFile -ErrorAction Stop
-    Write-Host "Opened Mermaid Live Editor with content injection: $injectionHtmlFile"
-    Write-Host "This will attempt to automatically inject the content into Mermaid Live Editor."
-    $opened = $true
-} catch {
-    Write-Host "Failed to open injection HTML. Falling back to clipboard method..."
-    try {
-        $mermaidContent | Set-Clipboard
-        Write-Host "Copied Mermaid content to clipboard!"
-        Start-Process "chrome.exe" -ArgumentList "https://mermaid.live/edit" -ErrorAction Stop
-        Write-Host "Opened Mermaid Live Editor! Paste (Ctrl+V) your diagram."
-    } catch {
-        Write-Host "Failed to open browser. Please open manually: $injectionHtmlFile"
-    }
-} 
+Write-Host "Opened diagram viewer: $htmlFile"
+Write-Host "Use the copy button to copy the diagram code, then paste into Mermaid Live Editor." 
