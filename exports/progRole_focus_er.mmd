@@ -1,0 +1,72 @@
+erDiagram
+    progRole {
+        string id
+        string name
+    }
+    activityDef {
+        string id
+        string name
+    }
+    aCuePointActivities {
+        string id
+        string name
+    }
+    aInteract1Activities {
+        string id
+        string name
+    }
+    aInteract2Activities {
+        string id
+        string name
+    }
+    aInteract3Activities {
+        string id
+        string name
+    }
+    aInteract4Activities {
+        string id
+        string name
+    }
+    aInteract5Activities {
+        string id
+        string name
+    }
+    aMediaIDs {
+        string id
+        string name
+    }
+    defaultMediaID {
+        string id
+        string name
+    }
+    guide {
+        string id
+        string name
+    }
+    media {
+        string id
+        string name
+    }
+    onEndID {
+        string id
+        string name
+    }
+    programme {
+        string id
+        string name
+    }
+
+    %% Relationships
+    progRole ||--o{ activityDef : "related to"
+    progRole ||--o{ aCuePointActivities : "related to"
+    progRole ||--o{ aInteract1Activities : "related to"
+    progRole ||--o{ aInteract2Activities : "related to"
+    progRole ||--o{ aInteract3Activities : "related to"
+    progRole ||--o{ aInteract4Activities : "related to"
+    progRole ||--o{ aInteract5Activities : "related to"
+    progRole ||--o{ aMediaIDs : "related to"
+    progRole ||--o{ defaultMediaID : "related to"
+    progRole ||--o{ guide : "related to"
+    progRole ||--o{ media : "related to"
+    progRole ||--o{ onEndID : "related to"
+    progRole ||--o{ programme : "related to"

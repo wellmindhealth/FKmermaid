@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>programme ER Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+<body>
+    <h1>programme ER Diagram</h1>
+    <div class="mermaid">
+erDiagram
+    programme {
+        string id
+        string name
+    }
+    activityDef {
+        string id
+        string name
+    }
+    aCuePointActivities {
+        string id
+        string name
+    }
+    aInteract1Activities {
+        string id
+        string name
+    }
+    aInteract2Activities {
+        string id
+        string name
+    }
+    aInteract3Activities {
+        string id
+        string name
+    }
+    aInteract4Activities {
+        string id
+        string name
+    }
+    aInteract5Activities {
+        string id
+        string name
+    }
+    aMediaIDs {
+        string id
+        string name
+    }
+    center {
+        string id
+        string name
+    }
+    defaultMediaID {
+        string id
+        string name
+    }
+    dmProfile {
+        string id
+        string name
+    }
+    farGroup {
+        string id
+        string name
+    }
+    farPermission {
+        string id
+        string name
+    }
+    farRole {
+        string id
+        string name
+    }
+    farUser {
+        string id
+        string name
+    }
+    guide {
+        string id
+        string name
+    }
+    intake {
+        string id
+        string name
+    }
+    media {
+        string id
+        string name
+    }
+    memberGroup {
+        string id
+        string name
+    }
+    onEndID {
+        string id
+        string name
+    }
+    partner {
+        string id
+        string name
+    }
+    progRole {
+        string id
+        string name
+    }
+    referer {
+        string id
+        string name
+    }
+
+    %% Relationships
+    programme ||--o{ activityDef : "related to"
+    programme ||--o{ aCuePointActivities : "related to"
+    programme ||--o{ aInteract1Activities : "related to"
+    programme ||--o{ aInteract2Activities : "related to"
+    programme ||--o{ aInteract3Activities : "related to"
+    programme ||--o{ aInteract4Activities : "related to"
+    programme ||--o{ aInteract5Activities : "related to"
+    programme ||--o{ aMediaIDs : "related to"
+    programme ||--o{ center : "related to"
+    programme ||--o{ defaultMediaID : "related to"
+    programme ||--o{ dmProfile : "related to"
+    programme ||--o{ farGroup : "related to"
+    programme ||--o{ farPermission : "related to"
+    programme ||--o{ farRole : "related to"
+    programme ||--o{ farUser : "related to"
+    programme ||--o{ guide : "related to"
+    programme ||--o{ intake : "related to"
+    programme ||--o{ media : "related to"
+    programme ||--o{ memberGroup : "related to"
+    programme ||--o{ onEndID : "related to"
+    programme ||--o{ partner : "related to"
+    programme ||--o{ progRole : "related to"
+    programme ||--o{ referer : "related to"
+    </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>dmImage Class Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+<body>
+    <h1>dmImage Class Diagram</h1>
+    <div class="mermaid">
+classDiagram
+    class dmImage {
+        +String id
+        +String name
+    }
+    class dmFacts {
+        +String id
+        +String name
+    }
+    class dmFile {
+        +String id
+        +String name
+    }
+    class dmHTML {
+        +String id
+        +String name
+    }
+    class dmInclude {
+        +String id
+        +String name
+    }
+    class dmNavigation {
+        +String id
+        +String name
+    }
+    class dmNews {
+        +String id
+        +String name
+    }
+
+    %% Relationships
+    dmImage --> dmFacts : "related to"
+    dmImage --> dmFile : "related to"
+    dmImage --> dmHTML : "related to"
+    dmImage --> dmInclude : "related to"
+    dmImage --> dmNavigation : "related to"
+    dmImage --> dmNews : "related to"
+    </div>
+</body>
+</html>

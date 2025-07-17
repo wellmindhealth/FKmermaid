@@ -1,0 +1,82 @@
+classDiagram
+    class member {
+        +String id
+        +String name
+    }
+    class activity {
+        +String id
+        +String name
+    }
+    class activityDef {
+        +String id
+        +String name
+    }
+    class guide {
+        +String id
+        +String name
+    }
+    class journal {
+        +String id
+        +String name
+    }
+    class media {
+        +String id
+        +String name
+    }
+    class memberGroup {
+        +String id
+        +String name
+    }
+    class progMember {
+        +String id
+        +String name
+    }
+    class programme {
+        +String id
+        +String name
+    }
+    class progRole {
+        +String id
+        +String name
+    }
+    class tracker {
+        +String id
+        +String name
+    }
+    class tracker01 {
+        +String id
+        +String name
+    }
+    class tracker02 {
+        +String id
+        +String name
+    }
+    class tracker03 {
+        +String id
+        +String name
+    }
+    class tracker04 {
+        +String id
+        +String name
+    }
+    class tracker05 {
+        +String id
+        +String name
+    }
+
+    %% Relationships
+    member --> activity : "related to"
+    member --> activityDef : "related to"
+    member --> guide : "related to"
+    member --> journal : "related to"
+    member --> media : "related to"
+    member --> memberGroup : "related to"
+    member --> progMember : "related to"
+    member --> programme : "related to"
+    member --> progRole : "related to"
+    member --> tracker : "related to"
+    member --> tracker01 : "related to"
+    member --> tracker02 : "related to"
+    member --> tracker03 : "related to"
+    member --> tracker04 : "related to"
+    member --> tracker05 : "related to"

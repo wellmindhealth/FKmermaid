@@ -1,0 +1,37 @@
+classDiagram
+    class dmImage {
+        +String id
+        +String name
+    }
+    class dmFacts {
+        +String id
+        +String name
+    }
+    class dmFile {
+        +String id
+        +String name
+    }
+    class dmHTML {
+        +String id
+        +String name
+    }
+    class dmInclude {
+        +String id
+        +String name
+    }
+    class dmNavigation {
+        +String id
+        +String name
+    }
+    class dmNews {
+        +String id
+        +String name
+    }
+
+    %% Relationships
+    dmImage --> dmFacts : "related to"
+    dmImage --> dmFile : "related to"
+    dmImage --> dmHTML : "related to"
+    dmImage --> dmInclude : "related to"
+    dmImage --> dmNavigation : "related to"
+    dmImage --> dmNews : "related to"
