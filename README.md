@@ -1,15 +1,15 @@
 # FKmermaid ER Diagram Generator
 
-A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagrams from ColdFusion CFC files, visualized in Mermaid Live Editor.
+A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagrams from domain configurations, visualized with Mermaid diagrams.
 
 ## Features
 
 - **Dual Diagram Types**: Generate ER diagrams or Class diagrams
-- **Focus Entity Highlighting**: Primary focus entity gets distinct visual styling
+- **Focus Entity Prioritization**: Primary focus entity appears first in the diagram
 - **Domain Filtering**: Filter relationships by specific domains
-- **Smart Styling**: Automatic entity categorization and visual styling
-- **Browser Integration**: Automatic browser launch with Mermaid Live Editor
-- **ColdFusion Integration**: Scans CFC files and extracts `ftJoin` relationships
+- **Reliable Viewing**: Local HTML files with embedded Mermaid diagrams
+- **Multiple Viewing Options**: HTML files, manual copy-paste, and content display
+- **Clean Output**: User-friendly interface with clear instructions
 
 ## Domain Definitions
 
@@ -33,56 +33,96 @@ Site-related entities for website content and location management.
 
 ### Basic Usage
 ```powershell
-.\generate_erd.ps1 -FocusEntity "progRole" -DiagramType "ER"
+.\generate_erd.ps1 -FocusEntity "progRole" -DiagramType "ER" -lDomains "programme"
 ```
 
-### Advanced Usage with Domain Filtering
+### Advanced Usage with Multiple Domains
 ```powershell
-.\generate_erd.ps1 -FocusEntity "progRole" -DiagramType "ER" -BroadenSpread $true -lDomains "partner","participant"
+.\generate_erd.ps1 -FocusEntity "activityDef" -DiagramType "ER" -lDomains "programme","participant"
 ```
 
 ### Parameters
 
-- `-FocusEntity`: The primary entity to focus on (default: "progRole")
-- `-DiagramType`: Choose between "ER" or "Class" diagrams (default: "ER")
-- `-BroadenSpread`: Include more related entities beyond direct relationships
-- `-lDomains`: Array of domains to filter relationships (e.g., "partner","participant","programme","site")
-
-## Visual Styling
-
-- **Focus Entity**: Orange (#ff6b35) with thick white border - highly distinct
-- **Partner Entities**: Green (#43a047) with white border
-- **Participant Entities**: Blue (#0288d1) with white border
-- **SSQ Entities**: Purple (#8e24aa) with white border
-- **Interact Entities**: Teal (#009688) with white border
-- **Default**: Dark gray (#222) with thin border
-
-## Examples
-
-### Generate ER diagram for progRole with all domains
-```powershell
-.\generate_erd.ps1 -FocusEntity "progRole" -DiagramType "ER"
-```
-
-### Generate Class diagram for member with participant domain only
-```powershell
-.\generate_erd.ps1 -FocusEntity "member" -DiagramType "Class" -lDomains "participant"
-```
-
-### Generate ER diagram for activityDef with programme and participant domains
-```powershell
-.\generate_erd.ps1 -FocusEntity "activityDef" -DiagramType "ER" -BroadenSpread $true -lDomains "programme","participant"
-```
+- `-FocusEntity`: The primary entity to focus on (required)
+- `-DiagramType`: Choose between "ER" or "Class" diagrams (required)
+- `-lDomains`: Array of domains to filter relationships (required, e.g., "partner","participant","programme","site")
 
 ## Output
 
 The tool generates:
-1. A `.mmd` file with the Mermaid diagram code
-2. A `.md` file with the diagram in markdown format
-3. Automatically opens the browser with the diagram in Mermaid Live Editor
+1. **`.mmd` file** - Mermaid diagram source code
+2. **`.html` file** - Local HTML viewer with embedded diagram
+3. **Automatic browser opening** - Opens the HTML file directly
+4. **Content display** - Shows the generated Mermaid syntax
+5. **Manual copy-paste instructions** - For use with Mermaid Live Editor
+
+## Examples
+
+### Generate ER diagram for progRole with programme domain
+```powershell
+.\generate_erd.ps1 -FocusEntity "progRole" -DiagramType "ER" -lDomains "programme"
+```
+
+### Generate Class diagram for member with participant domain
+```powershell
+.\generate_erd.ps1 -FocusEntity "member" -DiagramType "Class" -lDomains "participant"
+```
+
+### Generate ER diagram for activityDef with multiple domains
+```powershell
+.\generate_erd.ps1 -FocusEntity "activityDef" -DiagramType "ER" -lDomains "programme","participant"
+```
+
+### Generate ER diagram for partner with partner domain
+```powershell
+.\generate_erd.ps1 -FocusEntity "partner" -DiagramType "ER" -lDomains "partner"
+```
+
+### Generate Class diagram for dmImage with site domain
+```powershell
+.\generate_erd.ps1 -FocusEntity "dmImage" -DiagramType "Class" -lDomains "site"
+```
+
+## Viewing Options
+
+### 1. Local HTML File (Recommended)
+- Automatically opens in your browser
+- Most reliable viewing method
+- Works offline
+- No URL encoding issues
+
+### 2. Manual Copy-Paste
+- Copy content from the `.mmd` file
+- Go to https://mermaid.live/edit
+- Paste the content into the editor
+
+### 3. Content Display
+- The script shows the generated Mermaid syntax
+- Useful for verification and debugging
 
 ## Requirements
 
 - PowerShell 5.1 or higher
-- Node.js (for URL compression)
-- ColdFusion CFC files with `ftJoin` attributes 
+- Web browser (Chrome recommended)
+- Domain configuration file (`config/domains.json`)
+
+## File Structure
+
+```
+FKmermaid/
+├── config/
+│   └── domains.json          # Domain and entity definitions
+├── src/powershell/
+│   └── generate_erd.ps1      # Main generation script
+├── exports/                  # Generated diagram files
+│   ├── *.mmd                # Mermaid source files
+│   └── *.html               # HTML viewer files
+└── README.md                # This file
+```
+
+## Troubleshooting
+
+- **No diagram displayed**: Check the generated `.mmd` file for syntax errors
+- **Missing entities**: Verify the entity exists in the specified domains
+- **Browser issues**: Try opening the `.html` file manually
+- **Copy-paste issues**: Ensure you copy the entire content from the `.mmd` file 
