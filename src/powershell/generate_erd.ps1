@@ -88,6 +88,37 @@ foreach ($entity in $orderedEntities) {
     }
 }
 
+# Add existing CSS styling
+$cssPath = Join-Path $ProjectRoot "css\mermaid_styles.css"
+if (Test-Path $cssPath) {
+    $cssContent = Get-Content $cssPath -Raw
+    $mermaidLines += ""
+    $mermaidLines += "    %% Styling"
+    
+    # Add focus entity styling (primary highlight)
+    $mermaidLines += "    style $focusEntity fill:#ff6b35,stroke:#fff,stroke-width:6,color:#fff"
+    
+    # Add secondary styling for closely related entities in same domain
+    $secondaryEntities = @("programme", "activityDef", "progRole", "member", "media", "guide")
+    foreach ($entity in $orderedEntities) {
+        if ($entity -ne $focusEntity -and $secondaryEntities -contains $entity) {
+            $mermaidLines += "    style $entity fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff"
+        }
+    }
+    
+    # Add other styling from CSS file for remaining entities
+    $cssLines = $cssContent -split "`n" | Where-Object { $_ -match "style" }
+    foreach ($line in $cssLines) {
+        # Remove px units from stroke-width for Mermaid compatibility
+        $fixedLine = $line -replace "stroke-width:(\d+)px", "stroke-width:`$1"
+        # Only add styling for entities that exist and aren't already styled
+        $entityName = ($line -split " ")[1]
+        if ($orderedEntities -contains $entityName -and $entityName -ne $focusEntity -and $secondaryEntities -notcontains $entityName) {
+            $mermaidLines += "    $fixedLine"
+        }
+    }
+}
+
 # Write to file
 $mermaidLines | Set-Content -Path $outputFile
 
@@ -186,11 +217,22 @@ $mermaidLiveHtml = @"
         }
         h1 { 
             margin: 0 0 8px 0; 
-            font-size: 1.2em;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        h2 {
+            margin: 8px 0;
+            font-size: 1.1em;
+            font-weight: normal;
         }
         h3 {
             margin: 8px 0;
             font-size: 1em;
+        }
+        h4 {
+            margin: 8px 0;
+            font-size: 0.9em;
+            font-weight: bold;
         }
         .instructions {
             background: #e3f2fd;
@@ -222,12 +264,11 @@ $mermaidLiveHtml = @"
 </head>
 <body>
     <div class="left-panel">
-        <h1>$FocusEntity $diagramTitle</h1>
-        <div style="color: #666; font-size: 11px; margin-bottom: 8px;">
-            <strong>Domain:</strong> $($lDomains -join ', ')
-        </div>
+        <h1>$FocusEntity</h1>
+        <h2>$FocusEntity | $($lDomains -join ', ') 'focus'</h2>
+        <h3>$DiagramType Diagram</h3>
         <div class="instructions">
-            <h3>Quick Steps</h3>
+            <h4>Quick Steps</h4>
             <ol>
                 <li>Click "Open Editor & Copy"</li>
                 <li>Wait for editor to load</li>
