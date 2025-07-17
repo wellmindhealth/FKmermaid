@@ -1,0 +1,82 @@
+erDiagram
+    progMember {
+        string id
+        string name
+    }
+    activity {
+        string id
+        string name
+    }
+    activityDef {
+        string id
+        string name
+    }
+    guide {
+        string id
+        string name
+    }
+    journal {
+        string id
+        string name
+    }
+    media {
+        string id
+        string name
+    }
+    member {
+        string id
+        string name
+    }
+    memberGroup {
+        string id
+        string name
+    }
+    programme {
+        string id
+        string name
+    }
+    progRole {
+        string id
+        string name
+    }
+    tracker {
+        string id
+        string name
+    }
+    tracker01 {
+        string id
+        string name
+    }
+    tracker02 {
+        string id
+        string name
+    }
+    tracker03 {
+        string id
+        string name
+    }
+    tracker04 {
+        string id
+        string name
+    }
+    tracker05 {
+        string id
+        string name
+    }
+
+    %% Relationships
+    progMember ||--o{ activity : "related to"
+    progMember ||--o{ activityDef : "related to"
+    progMember ||--o{ guide : "related to"
+    progMember ||--o{ journal : "related to"
+    progMember ||--o{ media : "related to"
+    progMember ||--o{ member : "related to"
+    progMember ||--o{ memberGroup : "related to"
+    progMember ||--o{ programme : "related to"
+    progMember ||--o{ progRole : "related to"
+    progMember ||--o{ tracker : "related to"
+    progMember ||--o{ tracker01 : "related to"
+    progMember ||--o{ tracker02 : "related to"
+    progMember ||--o{ tracker03 : "related to"
+    progMember ||--o{ tracker04 : "related to"
+    progMember ||--o{ tracker05 : "related to"

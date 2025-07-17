@@ -1,16 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>dmNavigation ER Diagram</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <title>dmNavigation ER Diagram - Mermaid Live Editor</title>
     <script>
-        mermaid.initialize({ startOnLoad: true });
+        // Auto-open Mermaid Live Editor with content
+        window.onload = function() {
+            const mermaidContent = $mermaidContentForHtml;
+            
+            // Function to open Mermaid Live Editor with content
+            function openMermaidLiveEditor() {
+                // Try to create a shorter URL using URL compression
+                const base64 = btoa(unescape(encodeURIComponent(mermaidContent)));
+                const fullUrl = https://mermaid.live/edit#base64: + base64;
+                
+                // Check if URL is too long (browsers have limits)
+                if (fullUrl.length > 2000) {
+                    // URL too long, use clipboard approach
+                    copyToClipboard(mermaidContent);
+                    window.open('https://mermaid.live/edit', '_blank');
+                    document.getElementById('clipboardMethod').style.display = 'block';
+                } else {
+                    // Try direct URL approach
+                    try {
+                        window.open(fullUrl, '_blank');
+                        document.getElementById('directMethod').style.display = 'block';
+                        document.getElementById('mermaidUrl').textContent = fullUrl;
+                    } catch (error) {
+                        // Fallback to clipboard method
+                        copyToClipboard(mermaidContent);
+                        window.open('https://mermaid.live/edit', '_blank');
+                        document.getElementById('clipboardMethod').style.display = 'block';
+                    }
+                }
+            }
+            
+            // Function to copy content to clipboard
+            function copyToClipboard(text) {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        console.log('Content copied to clipboard');
+                    });
+                } else {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                }
+            }
+            
+            // Open Mermaid Live Editor
+            openMermaidLiveEditor();
+        };
     </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .success { color: #4CAF50; font-weight: bold; }
+        .warning { color: #FF9800; font-weight: bold; }
+        .info { background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .code { background: #f5f5f5; padding: 15px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; }
+        #directMethod, #clipboardMethod { display: none; }
+        .button { background: #2196F3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 5px; }
+        .url { word-break: break-all; font-family: monospace; background: #f0f0f0; padding: 5px; }
+    </style>
 </head>
 <body>
-    <h1>dmNavigation ER Diagram</h1>
-    <div class="mermaid">
-erDiagram
+    <div class="container">
+        <h1>dmNavigation ER Diagram</h1>
+        <p class="success">Opening Mermaid Live Editor...</p>
+        
+        <div id="directMethod" class="info">
+            <h3>Successfully opened Mermaid Live Editor!</h3>
+            <p>URL: <span id="mermaidUrl" class="url"></span></p>
+        </div>
+        
+        <div id="clipboardMethod" class="info">
+            <h3>Mermaid Live Editor opened with clipboard content!</h3>
+            <p>The Mermaid content has been copied to your clipboard.</p>
+            <p>Simply paste (Ctrl+V) into the editor to see your diagram.</p>
+        </div>
+        
+        <div class="info">
+            <h3>Manual Copy-Paste Method</h3>
+            <p>If Mermaid Live Editor doesn't open automatically:</p>
+            <ol>
+                <li>Copy the Mermaid content below</li>
+                <li>Go to <a href="https://mermaid.live/edit" target="_blank" class="button">Mermaid Live Editor</a></li>
+                <li>Paste the content into the editor</li>
+            </ol>
+        </div>
+        
+        <div class="info">
+            <h3>Mermaid Content for Copy-Paste</h3>
+            <div class="code">erDiagram
     dmNavigation {
         string id
         string name
@@ -46,7 +131,16 @@ erDiagram
     dmNavigation ||--o{ dmHTML : "related to"
     dmNavigation ||--o{ dmImage : "related to"
     dmNavigation ||--o{ dmInclude : "related to"
-    dmNavigation ||--o{ dmNews : "related to"
+    dmNavigation ||--o{ dmNews : "related to"</div>
+        </div>
+        
+        <div class="info">
+            <h3>Generated Files</h3>
+            <ul>
+                <li><strong>Mermaid Source:</strong> D:\GIT\farcry\Cursor\FKmermaid\exports\dmNavigation_focus_er.mmd</li>
+                <li><strong>HTML Launcher:</strong> D:\GIT\farcry\Cursor\FKmermaid\exports\dmNavigation_focus_er.html</li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>
