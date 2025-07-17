@@ -5,7 +5,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>progRole ER Diagram - Mermaid Live Editor</title>
+    <title>Plugins Full ER Diagram - Mermaid Live Editor</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -134,8 +134,8 @@
 </head>
 <body>
     <div class="left-panel">
-        <h1>progRole</h1>
-        <h2>progRole | programme, partner 'focus'</h2>
+        <h1>Plugins Full ER</h1>
+        <h2>Complete plugins ER diagram with all relationships</h2>
         <h3>ER Diagram</h3>
         <div class="instructions">
             <h4>Quick Steps</h4>
@@ -150,65 +150,344 @@
         <div id="copyError" class="error-message">Failed to copy code. Please select and copy manually.</div>
         <button class="button" onclick="manualCopy()" style="background: #FF9800; margin-top: 8px;">📋 Manual Copy Only</button>
         <button class="button" onclick="showDebugInfo()" style="background: #9C27B0; margin-top: 4px;">🐛 Debug Info</button>
-        <div class="code-block" id="mermaidSource">flowchart LR
-    %% Hub-and-spoke layout around focus entity
-    %% Focus entity in center, related entities around it
-    progRole["progRole"]
-    activityDef["activityDef"]
-    aCuePointActivities["aCuePointActivities"]
-    aInteract1Activities["aInteract1Activities"]
-    aInteract2Activities["aInteract2Activities"]
-    aInteract3Activities["aInteract3Activities"]
-    aInteract4Activities["aInteract4Activities"]
-    aInteract5Activities["aInteract5Activities"]
-    aMediaIDs["aMediaIDs"]
-    center["center"]
-    defaultMediaID["defaultMediaID"]
-    dmProfile["dmProfile"]
-    farGroup["farGroup"]
-    farPermission["farPermission"]
-    farRole["farRole"]
-    farUser["farUser"]
-    guide["guide"]
-    intake["intake"]
-    media["media"]
-    memberGroup["memberGroup"]
-    onEndID["onEndID"]
-    partner["partner"]
-    programme["programme"]
-    referer["referer"]
+        <div class="code-block" id="mermaidSource">erDiagram
+    "api - apiAccessKey" {
+        UUID ObjectID
+    }
 
-    %% Relationships
-    progRole --> activityDef
-    progRole --> aCuePointActivities
-    progRole --> aInteract1Activities
-    progRole --> aInteract2Activities
-    progRole --> aInteract3Activities
-    progRole --> aInteract4Activities
-    progRole --> aInteract5Activities
-    progRole --> aMediaIDs
-    progRole --> center
-    progRole --> defaultMediaID
-    progRole --> dmProfile
-    progRole --> farGroup
-    progRole --> farPermission
-    progRole --> farRole
-    progRole --> farUser
-    progRole --> guide
-    progRole --> intake
-    progRole --> media
-    progRole --> memberGroup
-    progRole --> onEndID
-    progRole --> partner
-    progRole --> programme
-    progRole --> referer
+    "microsoftud - mudGroup" {
+        UUID ObjectID
+    }
 
-    %% Styling
-    style progRole fill:#ff6b35,stroke:#fff,stroke-width:6,color:#fff
-    style activityDef fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff
-    style guide fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff
-    style media fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff
-    style programme fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff</div>
+    "microsoftud - mudUser" {
+        UUID ObjectID
+        array Microsoft UD User
+        UUID lGroups
+    }
+
+    "pathway - activity" {
+        UUID ObjectID
+        UUID Activity Instance
+        UUID activityDefID
+    }
+
+    "pathway - activityDef" {
+        UUID ObjectID
+        UUID Farcry Activity Definition
+        UUID title
+        UUID stepNum
+        UUID role
+        UUID onEndID
+        UUID description
+        UUID aCuePointActivities
+        UUID aMediaIDs
+        UUID releaseMedia
+        UUID includeFieldsInteract1
+        UUID includeFieldsInteract2
+        UUID includeFieldsInteract3
+        UUID includeFieldsInteract4
+        UUID includeFieldsInteract5
+        UUID jReviewHTML
+        UUID tracker02ID
+        UUID tracker03ID
+        UUID tracker04ID
+        UUID tracker05ID
+    }
+
+    "pathway - address" {
+        UUID ObjectID
+        UUID Addresses
+        UUID dmProfileID
+    }
+
+    "pathway - center" {
+        UUID ObjectID
+        UUID Center
+        UUID center
+        UUID dmProfileID
+        UUID partnerID
+        UUID memberGroupID
+        UUID aReferers
+    }
+
+    "pathway - guide" {
+        UUID ObjectID
+        UUID Guide
+        UUID guide
+        UUID centerID
+    }
+
+    "pathway - intake" {
+        UUID ObjectID
+        UUID Intake
+        UUID centerID
+        UUID pipeOrgID
+    }
+
+    "pathway - journalDef" {
+        UUID ObjectID
+        UUID Journal Definition
+        UUID tracker02Title
+        UUID programmeID
+    }
+
+    "pathway - media" {
+        UUID ObjectID
+        UUID Media
+        UUID partnerID
+        UUID programmeID
+        UUID roleID
+    }
+
+    "pathway - member" {
+        UUID ObjectID
+        UUID Member
+        UUID memberGroupID
+        UUID member
+        UUID member
+        UUID member
+        UUID member
+        UUID aAddresses
+        UUID ssoID
+        UUID caseness
+    }
+
+    "pathway - memberGroup" {
+        UUID ObjectID
+        array Member Group
+        array UtmSourceID
+        UUID bDefault
+        UUID memberGroup
+        UUID resourceHandoutID
+        UUID supportPage
+        UUID bAftercare
+        UUID selfRegQrFileID
+    }
+
+    "pathway - memberType" {
+        UUID ObjectID
+    }
+
+    "pathway - module" {
+        UUID ObjectID
+        array Farcry Module Instance
+        array title
+        UUID completionDate
+        UUID referenceID
+        UUID currPos
+        UUID currActivityDefID
+        UUID aModule
+        UUID aActivity
+        UUID aQuestionnaire
+        UUID aTracker
+    }
+
+    "pathway - moduleDef" {
+        UUID ObjectID
+        UUID Farcry Activity Definition
+        UUID lTypenames
+        UUID currPos
+        UUID currActivityDefID
+        UUID aModule
+        UUID aActivity
+        UUID aQuestionnaire
+        UUID aTracker
+    }
+
+    "pathway - orderItem" {
+        UUID ObjectID
+    }
+
+    "pathway - orderMaster" {
+        UUID ObjectID
+        UUID Order
+    }
+
+    "pathway - partner" {
+        UUID ObjectID
+        UUID Partner
+        UUID partner
+        UUID seniorSupportID
+        UUID aCenters
+        UUID aReferers
+    }
+
+    "pathway - progMember" {
+        UUID ObjectID
+        UUID Program Member
+        UUID memberID
+        UUID DOW
+    }
+
+    "pathway - programme" {
+        UUID ObjectID
+        UUID Programme
+        UUID Title
+        UUID programme
+        UUID lastActivityDefID
+        UUID lSSQpoints
+        UUID aTrackerIDs
+        UUID aObjectIDs
+    }
+
+    "pathway - progRole" {
+        UUID ObjectID
+        UUID ProgRole
+    }
+
+    "pathway - referer" {
+        UUID ObjectID
+        UUID Referrer
+        UUID guide
+        UUID partnerID
+        UUID memberGroupID
+        UUID centerID
+    }
+
+    "pathway - report" {
+        UUID ObjectID
+        UUID Report
+        UUID partnerID
+        UUID memberID
+        UUID memberTypeID
+        UUID aMemberGroupID
+    }
+
+    "pathway - shopItem" {
+        UUID ObjectID
+        UUID Shop Item
+    }
+
+    "pathway - testimonial" {
+        UUID ObjectID
+        UUID Testimonial Instance
+        UUID activityDefID
+    }
+
+    "pathway - trackerDef" {
+        UUID ObjectID
+        UUID Tracker Definition
+    }
+
+    "social - dmProfile" {
+        UUID ObjectID
+    }
+
+    "microsoftud - mudUser" }o--|| "mudGroup" : lGroups
+    "pathway - activity" }o--|| "progMember" : Activity Instance
+    "pathway - activity" }o--|| "activityDef" : activityDefID
+    "pathway - activityDef" }o--|| "programme" : Farcry Activity Definition
+    "pathway - activityDef" }o--|| "dmImage" : title
+    "pathway - activityDef" }o--|| "guide" : stepNum
+    "pathway - activityDef" }o--|| "progRole" : role
+    "pathway - activityDef" }o--|| "activityDef" : onEndID
+    "pathway - activityDef" }o--|| "media" : description
+    "pathway - activityDef" }o--|| "activityDef" : aCuePointActivities
+    "pathway - activityDef" }o--|| "media" : aMediaIDs
+    "pathway - activityDef" }o--|| "activityDef" : releaseMedia
+    "pathway - activityDef" }o--|| "activityDef" : includeFieldsInteract1
+    "pathway - activityDef" }o--|| "activityDef" : includeFieldsInteract2
+    "pathway - activityDef" }o--|| "activityDef" : includeFieldsInteract3
+    "pathway - activityDef" }o--|| "activityDef" : includeFieldsInteract4
+    "pathway - activityDef" }o--|| "journalDef" : includeFieldsInteract5
+    "pathway - activityDef" }o--|| "trackerDef" : jReviewHTML
+    "pathway - activityDef" }o--|| "trackerDef" : tracker02ID
+    "pathway - activityDef" }o--|| "trackerDef" : tracker03ID
+    "pathway - activityDef" }o--|| "trackerDef" : tracker04ID
+    "pathway - activityDef" }o--|| "trackerDef" : tracker05ID
+    "pathway - address" }o--|| "member" : Addresses
+    "pathway - address" }o--|| "dmProfile" : dmProfileID
+    "pathway - center" }o--|| "dmImage" : Center
+    "pathway - center" }o--|| "dmProfile" : center
+    "pathway - center" }o--|| "dmProfile" : dmProfileID
+    "pathway - center" }o--|| "partner" : partnerID
+    "pathway - center" }o--|| "memberGroup" : memberGroupID
+    "pathway - center" }o--|| "referer" : aReferers
+    "pathway - guide" }o--|| "dmImage" : Guide
+    "pathway - guide" }o--|| "partner" : guide
+    "pathway - guide" }o--|| "center" : centerID
+    "pathway - intake" }o--|| "memberGroup" : Intake
+    "pathway - intake" }o--|| "center" : centerID
+    "pathway - intake" }o--|| "member" : pipeOrgID
+    "pathway - journalDef" }o--|| "trackerDef" : Journal Definition
+    "pathway - journalDef" }o--|| "trackerDef" : tracker02Title
+    "pathway - journalDef" }o--|| "programme" : programmeID
+    "pathway - media" }o--|| "guide" : Media
+    "pathway - media" }o--|| "partner" : partnerID
+    "pathway - media" }o--|| "programme" : programmeID
+    "pathway - media" }o--|| "progRole" : roleID
+    "pathway - member" }o--|| "memberType" : Member
+    "pathway - member" }o--|| "memberGroup" : memberGroupID
+    "pathway - member" }o--|| "partner" : member
+    "pathway - member" }o--|| "center" : member
+    "pathway - member" }o--|| "referer" : member
+    "pathway - member" }o--|| "orderMaster" : member
+    "pathway - member" }o--|| "address" : aAddresses
+    "pathway - member" }o--|| "activityDef" : ssoID
+    "pathway - member" }o--|| "progRole" : caseness
+    "pathway - memberGroup" }o--|| "dmImage" : bDefault
+    "pathway - memberGroup" }o--|| "dmFile" : memberGroup
+    "pathway - memberGroup" }o--|| "dmFile" : resourceHandoutID
+    "pathway - memberGroup" }o--|| "dmHTML" : supportPage
+    "pathway - memberGroup" }o--|| "dmNavigation" : bAftercare
+    "pathway - memberGroup" }o--|| "dmFile" : selfRegQrFileID
+    "pathway - module" }o--|| "moduleDef" : completionDate
+    "pathway - module" }o--|| "member" : referenceID
+    "pathway - module" }o--|| "module" : currPos
+    "pathway - module" }o--|| "activity" : currActivityDefID
+    "pathway - module" }o--|| "dmFile" : aModule
+    "pathway - module" }o--|| "dmFile" : aActivity
+    "pathway - module" }o--|| "dmFile" : aQuestionnaire
+    "pathway - module" }o--|| "dmFile" : aTracker
+    "pathway - moduleDef" }o--|| "activityDef" : Farcry Activity Definition
+    "pathway - moduleDef" }o--|| "member" : lTypenames
+    "pathway - moduleDef" }o--|| "module" : currPos
+    "pathway - moduleDef" }o--|| "activity" : currActivityDefID
+    "pathway - moduleDef" }o--|| "dmFile" : aModule
+    "pathway - moduleDef" }o--|| "dmFile" : aActivity
+    "pathway - moduleDef" }o--|| "dmFile" : aQuestionnaire
+    "pathway - moduleDef" }o--|| "dmFile" : aTracker
+    "pathway - orderMaster" }o--|| "shopItem" : Order
+    "pathway - partner" }o--|| "dmImage" : Partner
+    "pathway - partner" }o--|| "dmProfile" : partner
+    "pathway - partner" }o--|| "dmProfile" : seniorSupportID
+    "pathway - partner" }o--|| "center" : aCenters
+    "pathway - partner" }o--|| "referer" : aReferers
+    "pathway - progMember" }o--|| "programme" : Program Member
+    "pathway - progMember" }o--|| "member" : memberID
+    "pathway - progMember" }o--|| "activity" : DOW
+    "pathway - programme" }o--|| "partner" : Programme
+    "pathway - programme" }o--|| "dmImage" : Title
+    "pathway - programme" }o--|| "activityDef" : programme
+    "pathway - programme" }o--|| "activityDef" : lastActivityDefID
+    "pathway - programme" }o--|| "activityDef" : lSSQpoints
+    "pathway - programme" }o--|| "trackerDef" : aTrackerIDs
+    "pathway - programme" }o--|| "dmFile" : aObjectIDs
+    "pathway - progRole" }o--|| "programme" : ProgRole
+    "pathway - referer" }o--|| "dmImage" : Referrer
+    "pathway - referer" }o--|| "dmProfile" : guide
+    "pathway - referer" }o--|| "partner" : partnerID
+    "pathway - referer" }o--|| "memberGroup" : memberGroupID
+    "pathway - referer" }o--|| "center" : centerID
+    "pathway - report" }o--|| "programme" : Report
+    "pathway - report" }o--|| "partner" : partnerID
+    "pathway - report" }o--|| "member" : memberID
+    "pathway - report" }o--|| "memberType" : memberTypeID
+    "pathway - report" }o--|| "memberGroup" : aMemberGroupID
+    "pathway - shopItem" }o--|| "shopItem" : Shop Item
+    "pathway - testimonial" }o--|| "member" : Testimonial Instance
+    "pathway - testimonial" }o--|| "activityDef" : activityDefID
+    "pathway - trackerDef" }o--|| "programme" : Tracker Definition
+    "microsoftud - mudUser_amudGroup" }o--|| "microsoftud - mudUser" : parentid
+    "microsoftud - mudUser_amudGroup" }o--|| "mudGroup" : data
+    "pathway - memberGroup_apartner" }o--|| "pathway - memberGroup" : parentid
+    "pathway - memberGroup_apartner" }o--|| "partner" : data
+    "pathway - memberGroup_afarUser" }o--|| "pathway - memberGroup" : parentid
+    "pathway - memberGroup_afarUser" }o--|| "farUser" : data
+    "pathway - module_aprogMember" }o--|| "pathway - module" : parentid
+    "pathway - module_aprogMember" }o--|| "progMember" : data
+    "pathway - module_aactivity" }o--|| "pathway - module" : parentid
+    "pathway - module_aactivity" }o--|| "activity" : data</div>
     </div>
 
     <div id="paste-reminder">

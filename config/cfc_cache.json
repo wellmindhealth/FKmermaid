@@ -1,0 +1,1585 @@
+{
+  "entities": [
+    {
+      "name": "apiAccessKey",
+      "file": "D:\\GIT\\farcry\\plugins\\api\\packages\\types\\apiAccessKey.cfc",
+      "plugin": "api"
+    },
+    {
+      "name": "mudGroup",
+      "file": "D:\\GIT\\farcry\\plugins\\microsoftud\\packages\\types\\mudGroup.cfc",
+      "plugin": "microsoftud"
+    },
+    {
+      "name": "mudUser",
+      "file": "D:\\GIT\\farcry\\plugins\\microsoftud\\packages\\types\\mudUser.cfc",
+      "plugin": "microsoftud"
+    },
+    {
+      "name": "activity",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\activity.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "activityDef",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\activityDef.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "address",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\address.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "center",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\center.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "guide",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\guide.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "intake",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\intake.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "journalDef",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\journalDef.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "media",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\media.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "member",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\member.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "memberGroup",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\memberGroup.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "memberType",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\memberType.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "module",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\module.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "moduleDef",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\moduleDef.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "orderItem",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\orderItem.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "orderMaster",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\orderMaster.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "partner",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\partner.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "progMember",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\progMember.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "programme",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\programme.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "progRole",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\progRole.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "referer",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\referer.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "report",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\report.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "shopItem",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\shopItem.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "testimonial",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\testimonial.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "trackerDef",
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\trackerDef.cfc",
+      "plugin": "pathway"
+    },
+    {
+      "name": "dmProfile",
+      "file": "D:\\GIT\\farcry\\plugins\\social\\packages\\types\\dmProfile.cfc",
+      "plugin": "social"
+    }
+  ],
+  "properties": [
+    {
+      "plugin": "microsoftud",
+      "target": "mudGroup",
+      "entity": "mudUser",
+      "isArray": true,
+      "property": "Microsoft UD User"
+    },
+    {
+      "plugin": "microsoftud",
+      "target": "mudGroup",
+      "entity": "mudUser",
+      "isArray": false,
+      "property": "lGroups"
+    },
+    {
+      "plugin": "pathway",
+      "target": "progMember",
+      "entity": "activity",
+      "isArray": false,
+      "property": "Activity Instance"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "activity",
+      "isArray": false,
+      "property": "activityDefID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "programme",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "Farcry Activity Definition"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmImage",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "title"
+    },
+    {
+      "plugin": "pathway",
+      "target": "guide",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "stepNum"
+    },
+    {
+      "plugin": "pathway",
+      "target": "progRole",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "role"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "onEndID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "media",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "description"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "aCuePointActivities"
+    },
+    {
+      "plugin": "pathway",
+      "target": "media",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "aMediaIDs"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "releaseMedia"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "includeFieldsInteract1"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "includeFieldsInteract2"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "includeFieldsInteract3"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "includeFieldsInteract4"
+    },
+    {
+      "plugin": "pathway",
+      "target": "journalDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "includeFieldsInteract5"
+    },
+    {
+      "plugin": "pathway",
+      "target": "trackerDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "jReviewHTML"
+    },
+    {
+      "plugin": "pathway",
+      "target": "trackerDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "tracker02ID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "trackerDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "tracker03ID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "trackerDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "tracker04ID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "trackerDef",
+      "entity": "activityDef",
+      "isArray": false,
+      "property": "tracker05ID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "member",
+      "entity": "address",
+      "isArray": false,
+      "property": "Addresses"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmProfile",
+      "entity": "address",
+      "isArray": false,
+      "property": "dmProfileID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmImage",
+      "entity": "center",
+      "isArray": false,
+      "property": "Center"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmProfile",
+      "entity": "center",
+      "isArray": false,
+      "property": "center"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmProfile",
+      "entity": "center",
+      "isArray": false,
+      "property": "dmProfileID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "partner",
+      "entity": "center",
+      "isArray": false,
+      "property": "partnerID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "memberGroup",
+      "entity": "center",
+      "isArray": false,
+      "property": "memberGroupID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "referer",
+      "entity": "center",
+      "isArray": false,
+      "property": "aReferers"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmImage",
+      "entity": "guide",
+      "isArray": false,
+      "property": "Guide"
+    },
+    {
+      "plugin": "pathway",
+      "target": "partner",
+      "entity": "guide",
+      "isArray": false,
+      "property": "guide"
+    },
+    {
+      "plugin": "pathway",
+      "target": "center",
+      "entity": "guide",
+      "isArray": false,
+      "property": "centerID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "memberGroup",
+      "entity": "intake",
+      "isArray": false,
+      "property": "Intake"
+    },
+    {
+      "plugin": "pathway",
+      "target": "center",
+      "entity": "intake",
+      "isArray": false,
+      "property": "centerID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "member",
+      "entity": "intake",
+      "isArray": false,
+      "property": "pipeOrgID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "trackerDef",
+      "entity": "journalDef",
+      "isArray": false,
+      "property": "Journal Definition"
+    },
+    {
+      "plugin": "pathway",
+      "target": "trackerDef",
+      "entity": "journalDef",
+      "isArray": false,
+      "property": "tracker02Title"
+    },
+    {
+      "plugin": "pathway",
+      "target": "programme",
+      "entity": "journalDef",
+      "isArray": false,
+      "property": "programmeID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "guide",
+      "entity": "media",
+      "isArray": false,
+      "property": "Media"
+    },
+    {
+      "plugin": "pathway",
+      "target": "partner",
+      "entity": "media",
+      "isArray": false,
+      "property": "partnerID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "programme",
+      "entity": "media",
+      "isArray": false,
+      "property": "programmeID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "progRole",
+      "entity": "media",
+      "isArray": false,
+      "property": "roleID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "memberType",
+      "entity": "member",
+      "isArray": false,
+      "property": "Member"
+    },
+    {
+      "plugin": "pathway",
+      "target": "memberGroup",
+      "entity": "member",
+      "isArray": false,
+      "property": "memberGroupID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "partner",
+      "entity": "member",
+      "isArray": false,
+      "property": "member"
+    },
+    {
+      "plugin": "pathway",
+      "target": "center",
+      "entity": "member",
+      "isArray": false,
+      "property": "member"
+    },
+    {
+      "plugin": "pathway",
+      "target": "referer",
+      "entity": "member",
+      "isArray": false,
+      "property": "member"
+    },
+    {
+      "plugin": "pathway",
+      "target": "orderMaster",
+      "entity": "member",
+      "isArray": false,
+      "property": "member"
+    },
+    {
+      "plugin": "pathway",
+      "target": "address",
+      "entity": "member",
+      "isArray": false,
+      "property": "aAddresses"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "member",
+      "isArray": false,
+      "property": "ssoID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "progRole",
+      "entity": "member",
+      "isArray": false,
+      "property": "caseness"
+    },
+    {
+      "plugin": "pathway",
+      "target": "partner",
+      "entity": "memberGroup",
+      "isArray": true,
+      "property": "Member Group"
+    },
+    {
+      "plugin": "pathway",
+      "target": "farUser",
+      "entity": "memberGroup",
+      "isArray": true,
+      "property": "UtmSourceID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmImage",
+      "entity": "memberGroup",
+      "isArray": false,
+      "property": "bDefault"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "memberGroup",
+      "isArray": false,
+      "property": "memberGroup"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "memberGroup",
+      "isArray": false,
+      "property": "resourceHandoutID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmHTML",
+      "entity": "memberGroup",
+      "isArray": false,
+      "property": "supportPage"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmNavigation",
+      "entity": "memberGroup",
+      "isArray": false,
+      "property": "bAftercare"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "memberGroup",
+      "isArray": false,
+      "property": "selfRegQrFileID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "progMember",
+      "entity": "module",
+      "isArray": true,
+      "property": "Farcry Module Instance"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activity",
+      "entity": "module",
+      "isArray": true,
+      "property": "title"
+    },
+    {
+      "plugin": "pathway",
+      "target": "moduleDef",
+      "entity": "module",
+      "isArray": false,
+      "property": "completionDate"
+    },
+    {
+      "plugin": "pathway",
+      "target": "member",
+      "entity": "module",
+      "isArray": false,
+      "property": "referenceID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "module",
+      "entity": "module",
+      "isArray": false,
+      "property": "currPos"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activity",
+      "entity": "module",
+      "isArray": false,
+      "property": "currActivityDefID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "module",
+      "isArray": false,
+      "property": "aModule"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "module",
+      "isArray": false,
+      "property": "aActivity"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "module",
+      "isArray": false,
+      "property": "aQuestionnaire"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "module",
+      "isArray": false,
+      "property": "aTracker"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "moduleDef",
+      "isArray": false,
+      "property": "Farcry Activity Definition"
+    },
+    {
+      "plugin": "pathway",
+      "target": "member",
+      "entity": "moduleDef",
+      "isArray": false,
+      "property": "lTypenames"
+    },
+    {
+      "plugin": "pathway",
+      "target": "module",
+      "entity": "moduleDef",
+      "isArray": false,
+      "property": "currPos"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activity",
+      "entity": "moduleDef",
+      "isArray": false,
+      "property": "currActivityDefID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "moduleDef",
+      "isArray": false,
+      "property": "aModule"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "moduleDef",
+      "isArray": false,
+      "property": "aActivity"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "moduleDef",
+      "isArray": false,
+      "property": "aQuestionnaire"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "moduleDef",
+      "isArray": false,
+      "property": "aTracker"
+    },
+    {
+      "plugin": "pathway",
+      "target": "shopItem",
+      "entity": "orderMaster",
+      "isArray": false,
+      "property": "Order"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmImage",
+      "entity": "partner",
+      "isArray": false,
+      "property": "Partner"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmProfile",
+      "entity": "partner",
+      "isArray": false,
+      "property": "partner"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmProfile",
+      "entity": "partner",
+      "isArray": false,
+      "property": "seniorSupportID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "center",
+      "entity": "partner",
+      "isArray": false,
+      "property": "aCenters"
+    },
+    {
+      "plugin": "pathway",
+      "target": "referer",
+      "entity": "partner",
+      "isArray": false,
+      "property": "aReferers"
+    },
+    {
+      "plugin": "pathway",
+      "target": "programme",
+      "entity": "progMember",
+      "isArray": false,
+      "property": "Program Member"
+    },
+    {
+      "plugin": "pathway",
+      "target": "member",
+      "entity": "progMember",
+      "isArray": false,
+      "property": "memberID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activity",
+      "entity": "progMember",
+      "isArray": false,
+      "property": "DOW"
+    },
+    {
+      "plugin": "pathway",
+      "target": "partner",
+      "entity": "programme",
+      "isArray": false,
+      "property": "Programme"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmImage",
+      "entity": "programme",
+      "isArray": false,
+      "property": "Title"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "programme",
+      "isArray": false,
+      "property": "programme"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "programme",
+      "isArray": false,
+      "property": "lastActivityDefID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "programme",
+      "isArray": false,
+      "property": "lSSQpoints"
+    },
+    {
+      "plugin": "pathway",
+      "target": "trackerDef",
+      "entity": "programme",
+      "isArray": false,
+      "property": "aTrackerIDs"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmFile",
+      "entity": "programme",
+      "isArray": false,
+      "property": "aObjectIDs"
+    },
+    {
+      "plugin": "pathway",
+      "target": "programme",
+      "entity": "progRole",
+      "isArray": false,
+      "property": "ProgRole"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmImage",
+      "entity": "referer",
+      "isArray": false,
+      "property": "Referrer"
+    },
+    {
+      "plugin": "pathway",
+      "target": "dmProfile",
+      "entity": "referer",
+      "isArray": false,
+      "property": "guide"
+    },
+    {
+      "plugin": "pathway",
+      "target": "partner",
+      "entity": "referer",
+      "isArray": false,
+      "property": "partnerID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "memberGroup",
+      "entity": "referer",
+      "isArray": false,
+      "property": "memberGroupID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "center",
+      "entity": "referer",
+      "isArray": false,
+      "property": "centerID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "programme",
+      "entity": "report",
+      "isArray": false,
+      "property": "Report"
+    },
+    {
+      "plugin": "pathway",
+      "target": "partner",
+      "entity": "report",
+      "isArray": false,
+      "property": "partnerID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "member",
+      "entity": "report",
+      "isArray": false,
+      "property": "memberID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "memberType",
+      "entity": "report",
+      "isArray": false,
+      "property": "memberTypeID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "memberGroup",
+      "entity": "report",
+      "isArray": false,
+      "property": "aMemberGroupID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "shopItem",
+      "entity": "shopItem",
+      "isArray": false,
+      "property": "Shop Item"
+    },
+    {
+      "plugin": "pathway",
+      "target": "member",
+      "entity": "testimonial",
+      "isArray": false,
+      "property": "Testimonial Instance"
+    },
+    {
+      "plugin": "pathway",
+      "target": "activityDef",
+      "entity": "testimonial",
+      "isArray": false,
+      "property": "activityDefID"
+    },
+    {
+      "plugin": "pathway",
+      "target": "programme",
+      "entity": "trackerDef",
+      "isArray": false,
+      "property": "Tracker Definition"
+    }
+  ],
+  "directFK": [
+    {
+      "source": "mudUser",
+      "target": "mudGroup",
+      "sourcePlugin": "microsoftud",
+      "property": "lGroups"
+    },
+    {
+      "source": "activity",
+      "target": "progMember",
+      "sourcePlugin": "pathway",
+      "property": "Activity Instance"
+    },
+    {
+      "source": "activity",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "activityDefID"
+    },
+    {
+      "source": "activityDef",
+      "target": "programme",
+      "sourcePlugin": "pathway",
+      "property": "Farcry Activity Definition"
+    },
+    {
+      "source": "activityDef",
+      "target": "dmImage",
+      "sourcePlugin": "pathway",
+      "property": "title"
+    },
+    {
+      "source": "activityDef",
+      "target": "guide",
+      "sourcePlugin": "pathway",
+      "property": "stepNum"
+    },
+    {
+      "source": "activityDef",
+      "target": "progRole",
+      "sourcePlugin": "pathway",
+      "property": "role"
+    },
+    {
+      "source": "activityDef",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "onEndID"
+    },
+    {
+      "source": "activityDef",
+      "target": "media",
+      "sourcePlugin": "pathway",
+      "property": "description"
+    },
+    {
+      "source": "activityDef",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "aCuePointActivities"
+    },
+    {
+      "source": "activityDef",
+      "target": "media",
+      "sourcePlugin": "pathway",
+      "property": "aMediaIDs"
+    },
+    {
+      "source": "activityDef",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "releaseMedia"
+    },
+    {
+      "source": "activityDef",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "includeFieldsInteract1"
+    },
+    {
+      "source": "activityDef",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "includeFieldsInteract2"
+    },
+    {
+      "source": "activityDef",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "includeFieldsInteract3"
+    },
+    {
+      "source": "activityDef",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "includeFieldsInteract4"
+    },
+    {
+      "source": "activityDef",
+      "target": "journalDef",
+      "sourcePlugin": "pathway",
+      "property": "includeFieldsInteract5"
+    },
+    {
+      "source": "activityDef",
+      "target": "trackerDef",
+      "sourcePlugin": "pathway",
+      "property": "jReviewHTML"
+    },
+    {
+      "source": "activityDef",
+      "target": "trackerDef",
+      "sourcePlugin": "pathway",
+      "property": "tracker02ID"
+    },
+    {
+      "source": "activityDef",
+      "target": "trackerDef",
+      "sourcePlugin": "pathway",
+      "property": "tracker03ID"
+    },
+    {
+      "source": "activityDef",
+      "target": "trackerDef",
+      "sourcePlugin": "pathway",
+      "property": "tracker04ID"
+    },
+    {
+      "source": "activityDef",
+      "target": "trackerDef",
+      "sourcePlugin": "pathway",
+      "property": "tracker05ID"
+    },
+    {
+      "source": "address",
+      "target": "member",
+      "sourcePlugin": "pathway",
+      "property": "Addresses"
+    },
+    {
+      "source": "address",
+      "target": "dmProfile",
+      "sourcePlugin": "pathway",
+      "property": "dmProfileID"
+    },
+    {
+      "source": "center",
+      "target": "dmImage",
+      "sourcePlugin": "pathway",
+      "property": "Center"
+    },
+    {
+      "source": "center",
+      "target": "dmProfile",
+      "sourcePlugin": "pathway",
+      "property": "center"
+    },
+    {
+      "source": "center",
+      "target": "dmProfile",
+      "sourcePlugin": "pathway",
+      "property": "dmProfileID"
+    },
+    {
+      "source": "center",
+      "target": "partner",
+      "sourcePlugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "source": "center",
+      "target": "memberGroup",
+      "sourcePlugin": "pathway",
+      "property": "memberGroupID"
+    },
+    {
+      "source": "center",
+      "target": "referer",
+      "sourcePlugin": "pathway",
+      "property": "aReferers"
+    },
+    {
+      "source": "guide",
+      "target": "dmImage",
+      "sourcePlugin": "pathway",
+      "property": "Guide"
+    },
+    {
+      "source": "guide",
+      "target": "partner",
+      "sourcePlugin": "pathway",
+      "property": "guide"
+    },
+    {
+      "source": "guide",
+      "target": "center",
+      "sourcePlugin": "pathway",
+      "property": "centerID"
+    },
+    {
+      "source": "intake",
+      "target": "memberGroup",
+      "sourcePlugin": "pathway",
+      "property": "Intake"
+    },
+    {
+      "source": "intake",
+      "target": "center",
+      "sourcePlugin": "pathway",
+      "property": "centerID"
+    },
+    {
+      "source": "intake",
+      "target": "member",
+      "sourcePlugin": "pathway",
+      "property": "pipeOrgID"
+    },
+    {
+      "source": "journalDef",
+      "target": "trackerDef",
+      "sourcePlugin": "pathway",
+      "property": "Journal Definition"
+    },
+    {
+      "source": "journalDef",
+      "target": "trackerDef",
+      "sourcePlugin": "pathway",
+      "property": "tracker02Title"
+    },
+    {
+      "source": "journalDef",
+      "target": "programme",
+      "sourcePlugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "source": "media",
+      "target": "guide",
+      "sourcePlugin": "pathway",
+      "property": "Media"
+    },
+    {
+      "source": "media",
+      "target": "partner",
+      "sourcePlugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "source": "media",
+      "target": "programme",
+      "sourcePlugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "source": "media",
+      "target": "progRole",
+      "sourcePlugin": "pathway",
+      "property": "roleID"
+    },
+    {
+      "source": "member",
+      "target": "memberType",
+      "sourcePlugin": "pathway",
+      "property": "Member"
+    },
+    {
+      "source": "member",
+      "target": "memberGroup",
+      "sourcePlugin": "pathway",
+      "property": "memberGroupID"
+    },
+    {
+      "source": "member",
+      "target": "partner",
+      "sourcePlugin": "pathway",
+      "property": "member"
+    },
+    {
+      "source": "member",
+      "target": "center",
+      "sourcePlugin": "pathway",
+      "property": "member"
+    },
+    {
+      "source": "member",
+      "target": "referer",
+      "sourcePlugin": "pathway",
+      "property": "member"
+    },
+    {
+      "source": "member",
+      "target": "orderMaster",
+      "sourcePlugin": "pathway",
+      "property": "member"
+    },
+    {
+      "source": "member",
+      "target": "address",
+      "sourcePlugin": "pathway",
+      "property": "aAddresses"
+    },
+    {
+      "source": "member",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "ssoID"
+    },
+    {
+      "source": "member",
+      "target": "progRole",
+      "sourcePlugin": "pathway",
+      "property": "caseness"
+    },
+    {
+      "source": "memberGroup",
+      "target": "dmImage",
+      "sourcePlugin": "pathway",
+      "property": "bDefault"
+    },
+    {
+      "source": "memberGroup",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "memberGroup"
+    },
+    {
+      "source": "memberGroup",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "resourceHandoutID"
+    },
+    {
+      "source": "memberGroup",
+      "target": "dmHTML",
+      "sourcePlugin": "pathway",
+      "property": "supportPage"
+    },
+    {
+      "source": "memberGroup",
+      "target": "dmNavigation",
+      "sourcePlugin": "pathway",
+      "property": "bAftercare"
+    },
+    {
+      "source": "memberGroup",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "selfRegQrFileID"
+    },
+    {
+      "source": "module",
+      "target": "moduleDef",
+      "sourcePlugin": "pathway",
+      "property": "completionDate"
+    },
+    {
+      "source": "module",
+      "target": "member",
+      "sourcePlugin": "pathway",
+      "property": "referenceID"
+    },
+    {
+      "source": "module",
+      "target": "module",
+      "sourcePlugin": "pathway",
+      "property": "currPos"
+    },
+    {
+      "source": "module",
+      "target": "activity",
+      "sourcePlugin": "pathway",
+      "property": "currActivityDefID"
+    },
+    {
+      "source": "module",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "aModule"
+    },
+    {
+      "source": "module",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "aActivity"
+    },
+    {
+      "source": "module",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "aQuestionnaire"
+    },
+    {
+      "source": "module",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "aTracker"
+    },
+    {
+      "source": "moduleDef",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "Farcry Activity Definition"
+    },
+    {
+      "source": "moduleDef",
+      "target": "member",
+      "sourcePlugin": "pathway",
+      "property": "lTypenames"
+    },
+    {
+      "source": "moduleDef",
+      "target": "module",
+      "sourcePlugin": "pathway",
+      "property": "currPos"
+    },
+    {
+      "source": "moduleDef",
+      "target": "activity",
+      "sourcePlugin": "pathway",
+      "property": "currActivityDefID"
+    },
+    {
+      "source": "moduleDef",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "aModule"
+    },
+    {
+      "source": "moduleDef",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "aActivity"
+    },
+    {
+      "source": "moduleDef",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "aQuestionnaire"
+    },
+    {
+      "source": "moduleDef",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "aTracker"
+    },
+    {
+      "source": "orderMaster",
+      "target": "shopItem",
+      "sourcePlugin": "pathway",
+      "property": "Order"
+    },
+    {
+      "source": "partner",
+      "target": "dmImage",
+      "sourcePlugin": "pathway",
+      "property": "Partner"
+    },
+    {
+      "source": "partner",
+      "target": "dmProfile",
+      "sourcePlugin": "pathway",
+      "property": "partner"
+    },
+    {
+      "source": "partner",
+      "target": "dmProfile",
+      "sourcePlugin": "pathway",
+      "property": "seniorSupportID"
+    },
+    {
+      "source": "partner",
+      "target": "center",
+      "sourcePlugin": "pathway",
+      "property": "aCenters"
+    },
+    {
+      "source": "partner",
+      "target": "referer",
+      "sourcePlugin": "pathway",
+      "property": "aReferers"
+    },
+    {
+      "source": "progMember",
+      "target": "programme",
+      "sourcePlugin": "pathway",
+      "property": "Program Member"
+    },
+    {
+      "source": "progMember",
+      "target": "member",
+      "sourcePlugin": "pathway",
+      "property": "memberID"
+    },
+    {
+      "source": "progMember",
+      "target": "activity",
+      "sourcePlugin": "pathway",
+      "property": "DOW"
+    },
+    {
+      "source": "programme",
+      "target": "partner",
+      "sourcePlugin": "pathway",
+      "property": "Programme"
+    },
+    {
+      "source": "programme",
+      "target": "dmImage",
+      "sourcePlugin": "pathway",
+      "property": "Title"
+    },
+    {
+      "source": "programme",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "programme"
+    },
+    {
+      "source": "programme",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "lastActivityDefID"
+    },
+    {
+      "source": "programme",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "lSSQpoints"
+    },
+    {
+      "source": "programme",
+      "target": "trackerDef",
+      "sourcePlugin": "pathway",
+      "property": "aTrackerIDs"
+    },
+    {
+      "source": "programme",
+      "target": "dmFile",
+      "sourcePlugin": "pathway",
+      "property": "aObjectIDs"
+    },
+    {
+      "source": "progRole",
+      "target": "programme",
+      "sourcePlugin": "pathway",
+      "property": "ProgRole"
+    },
+    {
+      "source": "referer",
+      "target": "dmImage",
+      "sourcePlugin": "pathway",
+      "property": "Referrer"
+    },
+    {
+      "source": "referer",
+      "target": "dmProfile",
+      "sourcePlugin": "pathway",
+      "property": "guide"
+    },
+    {
+      "source": "referer",
+      "target": "partner",
+      "sourcePlugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "source": "referer",
+      "target": "memberGroup",
+      "sourcePlugin": "pathway",
+      "property": "memberGroupID"
+    },
+    {
+      "source": "referer",
+      "target": "center",
+      "sourcePlugin": "pathway",
+      "property": "centerID"
+    },
+    {
+      "source": "report",
+      "target": "programme",
+      "sourcePlugin": "pathway",
+      "property": "Report"
+    },
+    {
+      "source": "report",
+      "target": "partner",
+      "sourcePlugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "source": "report",
+      "target": "member",
+      "sourcePlugin": "pathway",
+      "property": "memberID"
+    },
+    {
+      "source": "report",
+      "target": "memberType",
+      "sourcePlugin": "pathway",
+      "property": "memberTypeID"
+    },
+    {
+      "source": "report",
+      "target": "memberGroup",
+      "sourcePlugin": "pathway",
+      "property": "aMemberGroupID"
+    },
+    {
+      "source": "shopItem",
+      "target": "shopItem",
+      "sourcePlugin": "pathway",
+      "property": "Shop Item"
+    },
+    {
+      "source": "testimonial",
+      "target": "member",
+      "sourcePlugin": "pathway",
+      "property": "Testimonial Instance"
+    },
+    {
+      "source": "testimonial",
+      "target": "activityDef",
+      "sourcePlugin": "pathway",
+      "property": "activityDefID"
+    },
+    {
+      "source": "trackerDef",
+      "target": "programme",
+      "sourcePlugin": "pathway",
+      "property": "Tracker Definition"
+    }
+  ],
+  "joinTables": [
+    {
+      "source": "mudUser",
+      "target": "mudGroup",
+      "sourcePlugin": "microsoftud",
+      "joinTable": "mudUser_amudGroup",
+      "property": "Microsoft UD User"
+    },
+    {
+      "source": "memberGroup",
+      "target": "partner",
+      "sourcePlugin": "pathway",
+      "joinTable": "memberGroup_apartner",
+      "property": "Member Group"
+    },
+    {
+      "source": "memberGroup",
+      "target": "farUser",
+      "sourcePlugin": "pathway",
+      "joinTable": "memberGroup_afarUser",
+      "property": "UtmSourceID"
+    },
+    {
+      "source": "module",
+      "target": "progMember",
+      "sourcePlugin": "pathway",
+      "joinTable": "module_aprogMember",
+      "property": "Farcry Module Instance"
+    },
+    {
+      "source": "module",
+      "target": "activity",
+      "sourcePlugin": "pathway",
+      "joinTable": "module_aactivity",
+      "property": "title"
+    }
+  ]
+}

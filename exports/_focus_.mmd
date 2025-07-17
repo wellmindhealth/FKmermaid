@@ -1,0 +1,123 @@
+classDiagram
+    %% Sophisticated class diagram with detailed properties and stereotypes
+    %% Focus entity with comprehensive relationship mapping
+    subgraph Other
+        direction TB
+        class 
+         : <<Focus Entity>>
+        class activity
+        activity : <<Activity Instance>>
+        class activityDef
+        activityDef : <<Farcry Activity Definition>>
+        class address
+        class center
+        class device
+        class guide
+        guide : <<Guide>>
+        class intake
+        class journal
+        class journalDef
+        journalDef : <<Journal Definition>>
+        class JWTapp
+        class library
+        class media
+        media : <<Media>>
+        class member
+        member : <<Member>>
+        class memberGroup
+        memberGroup : <<Member>>
+        class memberType
+        memberType : <<Member>>
+        class oAuth2service
+        class partner
+        partner : <<Partner>>
+        class progMember
+        progMember : <<Member>>
+        class programme
+        programme : <<Programme>>
+        class progRole
+        class promotion
+        class referer
+        referer : <<Referrer>>
+        class report
+        class SSQ_arthritis01
+        class SSQ_pain01
+        class SSQ_stress01
+        class token
+        class tracker
+        class trackerDef
+    end
+
+
+    %% Sophisticated relationships with proper labels and cardinality
+    %% Core Relationships %%
+     -- activity : related to
+     -- activityDef : related to
+     -- center : related to
+     -- guide : related to
+     -- journalDef : related to
+     -- media : related to
+     -- partner : related to
+     -- programme : related to
+     -- report : related to
+
+    %% Tracker Relationships %%
+     -- trackerDef : related to
+
+    %% SSQ Relationships %%
+     -- SSQ_arthritis01 : related to
+     -- SSQ_pain01 : related to
+     -- SSQ_stress01 : related to
+
+    %% Member Relationships %%
+     -- member : related to
+     -- memberGroup : related to
+     -- memberType : related to
+     -- progMember : related to
+
+    %% Other Relationships %%
+     -- address : related to
+     -- device : related to
+     -- intake : related to
+     -- journal : related to
+     -- JWTapp : related to
+     -- library : related to
+     -- oAuth2service : related to
+     -- progRole : related to
+     -- promotion : related to
+     -- referer : related to
+     -- token : related to
+     -- tracker : related to
+
+
+    %% Gold standard styling with proper color hierarchy
+    style activity fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style activityDef fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style center fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style guide fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style journalDef fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style media fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style member fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style partner fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style progMember fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style programme fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style progRole fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style report fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style tracker fill:#43a047,stroke:#fff,stroke-width:4px,color:#fff
+    style trackerDef fill:#43a047,stroke:#fff,stroke-width:4px,color:#fff
+    style report fill:#388e3c,stroke:#fff,stroke-width:3px,color:#fff
+    style SSQ_arthritis01 fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222
+    style SSQ_pain01 fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222
+    style SSQ_stress01 fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222
+    style address fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style device fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style intake fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style journal fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style JWTapp fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style library fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style memberGroup fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style memberType fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style oAuth2service fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style promotion fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style referer fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff
+    style token fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff

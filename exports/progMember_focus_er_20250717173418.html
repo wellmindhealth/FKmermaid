@@ -5,7 +5,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>activityDef ER Diagram - Mermaid Live Editor</title>
+    <title>progMember ER Diagram - Mermaid Live Editor</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -134,8 +134,8 @@
 </head>
 <body>
     <div class="left-panel">
-        <h1>activityDef</h1>
-        <h2>activityDef | programme, partner 'focus'</h2>
+        <h1>progMember</h1>
+        <h2>progMember | partner, participant, programme, site 'focus'</h2>
         <h3>ER Diagram</h3>
         <div class="instructions">
             <h4>Quick Steps</h4>
@@ -151,7 +151,24 @@
         <button class="button" onclick="manualCopy()" style="background: #FF9800; margin-top: 8px;">📋 Manual Copy Only</button>
         <button class="button" onclick="showDebugInfo()" style="background: #9C27B0; margin-top: 4px;">🐛 Debug Info</button>
         <div class="code-block" id="mermaidSource">erDiagram
+    %% ER diagram with hub-and-spoke layout and detailed relationships
+    %% Focus entity with proper cardinality and relationship labels
+    progMember
     activityDef
+    center
+    dmProfile
+    farGroup
+    farPermission
+    farRole
+    farUser
+    intake
+    media
+    memberGroup
+    partner
+    programme
+    progRole
+    referer
+    activity
     aCuePointActivities
     aInteract1Activities
     aInteract2Activities
@@ -159,54 +176,140 @@
     aInteract4Activities
     aInteract5Activities
     aMediaIDs
-    center
     defaultMediaID
-    dmProfile
-    farGroup
-    farPermission
-    farRole
-    farUser
+    dmFacts
+    dmFile
+    dmHTML
+    dmImage
+    dmInclude
+    dmNavigation
+    dmNews
     guide
-    intake
-    media
-    memberGroup
+    journal
+    member
     onEndID
-    partner
-    programme
-    progRole
-    referer
+    tracker
+    tracker01
+    tracker02
+    tracker03
+    tracker04
+    tracker05
+    journalDef
+    report
+    SSQ_arthritis01
+    SSQ_pain01
+    SSQ_stress01
+    trackerDef
 
-    %% Hub-and-spoke relationships
-    activityDef ||--o{ aCuePointActivities : "related to"
-    activityDef ||--o{ aInteract1Activities : "related to"
-    activityDef ||--o{ aInteract2Activities : "related to"
-    activityDef ||--o{ aInteract3Activities : "related to"
-    activityDef ||--o{ aInteract4Activities : "related to"
-    activityDef ||--o{ aInteract5Activities : "related to"
-    activityDef ||--o{ aMediaIDs : "related to"
-    activityDef ||--o{ center : "related to"
-    activityDef ||--o{ defaultMediaID : "related to"
-    activityDef ||--o{ dmProfile : "related to"
-    activityDef ||--o{ farGroup : "related to"
-    activityDef ||--o{ farPermission : "related to"
-    activityDef ||--o{ farRole : "related to"
-    activityDef ||--o{ farUser : "related to"
-    activityDef ||--o{ guide : "related to"
-    activityDef ||--o{ intake : "related to"
-    activityDef ||--o{ media : "related to"
-    activityDef ||--o{ memberGroup : "related to"
-    activityDef ||--o{ onEndID : "related to"
-    activityDef ||--o{ partner : "related to"
-    activityDef ||--o{ programme : "related to"
-    activityDef ||--o{ progRole : "related to"
-    activityDef ||--o{ referer : "related to"
 
-    %% Styling
-    style activityDef fill:#ff6b35,stroke:#fff,stroke-width:6,color:#fff
-    style guide fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff
-    style media fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff
-    style programme fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff
-    style progRole fill:#1976d2,stroke:#fff,stroke-width:4,color:#fff</div>
+    %% Sophisticated relationships with proper labels and cardinality
+    %% Core Relationships %%
+    progMember }o--|| activityDef : "related to"
+    progMember }o--|| center : "related to"
+    progMember }o--|| media : "related to"
+    progMember }o--|| partner : "related to"
+    progMember }o--|| programme : "related to"
+    progMember }o--|| activity : "related to"
+    progMember }o--|| aMediaIDs : "related to"
+    progMember }o--|| defaultMediaID : "related to"
+    progMember }o--|| dmFile : "related to"
+    progMember }o--|| guide : "related to"
+    progMember }o--|| journalDef : "related to"
+    progMember }o--|| report : "related to"
+
+    %% Tracker Relationships %%
+    progMember }o--|| trackerDef : "related to"
+
+    %% Interact Relationships %%
+    progMember }o--|| aInteract1Activities : "related to"
+    progMember }o--|| aInteract2Activities : "related to"
+    progMember }o--|| aInteract3Activities : "related to"
+    progMember }o--|| aInteract4Activities : "related to"
+    progMember }o--|| aInteract5Activities : "related to"
+
+    %% SSQ Relationships %%
+    progMember }o--|| SSQ_arthritis01 : "related to"
+    progMember }o--|| SSQ_pain01 : "related to"
+    progMember }o--|| SSQ_stress01 : "related to"
+
+    %% Member Relationships %%
+    progMember }o--|| memberGroup : "related to"
+    progMember }o--|| member : "related to"
+
+    %% Other Relationships %%
+    progMember }o--|| dmProfile : "related to"
+    progMember }o--|| farGroup : "related to"
+    progMember }o--|| farPermission : "related to"
+    progMember }o--|| farRole : "related to"
+    progMember }o--|| farUser : "related to"
+    progMember }o--|| intake : "related to"
+    progMember }o--|| progRole : "related to"
+    progMember }o--|| referer : "related to"
+    progMember }o--|| aCuePointActivities : "related to"
+    progMember }o--|| dmFacts : "related to"
+    progMember }o--|| dmHTML : "related to"
+    progMember }o--|| dmImage : "related to"
+    progMember }o--|| dmInclude : "related to"
+    progMember }o--|| dmNavigation : "related to"
+    progMember }o--|| dmNews : "related to"
+    progMember }o--|| journal : "related to"
+    progMember }o--|| onEndID : "related to"
+    progMember }o--|| tracker : "related to"
+    progMember }o--|| tracker01 : "related to"
+    progMember }o--|| tracker02 : "related to"
+    progMember }o--|| tracker03 : "related to"
+    progMember }o--|| tracker04 : "related to"
+    progMember }o--|| tracker05 : "related to"
+
+
+    %% Gold standard styling with proper color hierarchy
+    style activityDef fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style center fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style media fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style partner fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style programme fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style progRole fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style activity fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style dmFile fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style guide fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style member fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style journalDef fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style report fill:#1976d2,stroke:#fff,stroke-width:4px,color:#fff
+    style tracker fill:#43a047,stroke:#fff,stroke-width:4px,color:#fff
+    style trackerDef fill:#43a047,stroke:#fff,stroke-width:4px,color:#fff
+    style report fill:#388e3c,stroke:#fff,stroke-width:3px,color:#fff
+    style SSQ_arthritis01 fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222
+    style SSQ_pain01 fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222
+    style SSQ_stress01 fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222
+    style dmProfile fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style farGroup fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style farPermission fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style farRole fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style farUser fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style intake fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style memberGroup fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style referer fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aCuePointActivities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract1Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract2Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract3Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract4Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aInteract5Activities fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style aMediaIDs fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style defaultMediaID fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style dmFacts fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style dmHTML fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style dmImage fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style dmInclude fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style dmNavigation fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style dmNews fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style journal fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style onEndID fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style tracker01 fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style tracker02 fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style tracker03 fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style tracker04 fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff
+    style tracker05 fill:#42a5f5,stroke:#fff,stroke-width:2px,color:#fff</div>
     </div>
 
     <div id="paste-reminder">

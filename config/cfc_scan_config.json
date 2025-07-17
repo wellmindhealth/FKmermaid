@@ -1,0 +1,130 @@
+{
+  "scanSettings": {
+    "pluginsPath": "D:\\GIT\\farcry",
+    "scanDirectories": [
+      "D:\\GIT\\farcry\\plugins",
+      "D:\\GIT\\farcry\\projects",
+      "D:\\GIT\\farcry\\zfarcrycore"
+    ],
+    "excludeFolders": ["farcrycms"],
+    "excludeFiles": ["participant.cfc"],
+    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
+    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd"
+  },
+  "entityConstraints": {
+    "knownTables": [
+      "farUser", "farGroup", "farRole", "farPermission", "farUser_aGroups", "farRole_aPermissions", "farRole_aGroups",
+      "dmProfile", "dmImage", "dmFile", "dmHTML", "dmNavigation", "media", "journalDef", "trackerDef",
+      "activityDef", "activity", "member", "progMember", "programme", "partner", "center", "guide", "progRole",
+      "referer", "memberGroup", "memberType", "intake", "orderMaster", "orderItem", "shopItem", "testimonial",
+      "report", "address", "module", "moduleDef", "apiAccessKey", "mudUser", "mudGroup", "mudUser_amudGroup",
+      "memberGroup_apartner", "memberGroup_afarUser", "module_aprogMember", "module_aactivity",
+      "dmFacts", "dmInclude", "dmNews", "dmProfile", "dmImage", "dmFile", "dmHTML", "dmNavigation",
+      "farUser", "farGroup", "farRole", "farPermission", "farUser_aGroups", "farRole_aPermissions", "farRole_aGroups"
+    ],
+    "entityPluginMapping": {
+      "activityDef": "pathway",
+      "activity": "pathway",
+      "member": "pathway",
+      "progMember": "pathway",
+      "programme": "pathway",
+      "partner": "pathway",
+      "center": "pathway",
+      "guide": "pathway",
+      "progRole": "pathway",
+      "referer": "pathway",
+      "memberGroup": "pathway",
+      "memberType": "pathway",
+      "intake": "pathway",
+      "orderMaster": "pathway",
+      "orderItem": "pathway",
+      "shopItem": "pathway",
+      "testimonial": "pathway",
+      "report": "pathway",
+      "address": "pathway",
+      "module": "pathway",
+      "moduleDef": "pathway",
+      "media": "pathway",
+      "journalDef": "pathway",
+      "trackerDef": "pathway",
+      "apiAccessKey": "api",
+      "mudUser": "microsoftud",
+      "mudGroup": "microsoftud",
+      "mudUser_amudGroup": "microsoftud",
+      "dmProfile": "social",
+      "dmImage": "social",
+      "dmFile": "social",
+      "dmHTML": "social",
+      "dmNavigation": "social",
+      "dmFacts": "social",
+      "dmInclude": "social",
+      "dmNews": "social",
+      "farUser": "farcrycms",
+      "farGroup": "farcrycms",
+      "farRole": "farcrycms",
+      "farPermission": "farcrycms",
+      "farUser_aGroups": "farcrycms",
+      "farRole_aPermissions": "farcrycms",
+      "farRole_aGroups": "farcrycms",
+      "memberGroup_apartner": "pathway",
+      "memberGroup_afarUser": "pathway",
+      "module_aprogMember": "pathway",
+      "module_aactivity": "pathway"
+    }
+  },
+  "relationshipPatterns": {
+    "directFK": {
+      "description": "Direct foreign key relationships using ftJoin property",
+      "pattern": "name=[\"']([^\"']+)[\"'].*?ftJoin=[\"']([^\"']+)[\"']",
+      "arrayPattern": "name=[\"']([^\"']+)[\"'].*?ftType=[\"']array[\"']",
+      "cardinality": "||--||"
+    },
+    "joinTables": {
+      "description": "Many-to-many relationships using join tables",
+      "namingPattern": "{entity}_a{target}",
+      "structure": {
+        "parentid": "UUID",
+        "data": "UUID", 
+        "seq": "int",
+        "typename": "string"
+      }
+    }
+  },
+  "propertyExtraction": {
+    "dataTypes": {
+      "string": "string",
+      "array": "array", 
+      "boolean": "boolean",
+      "numeric": "int",
+      "date": "date",
+      "time": "time",
+      "datetime": "datetime",
+      "UUID": "UUID",
+      "default": "string"
+    },
+    "maxPropertiesPerEntity": 3,
+    "excludeProperties": ["ObjectID", "typename", "seq"],
+    "propertyPattern": "name=[\"']([^\"']+)[\"'].*?type=[\"']([^\"']+)[\"']",
+    "ftTypePattern": "ftType=[\"']([^\"']+)[\"']"
+  },
+  "outputSettings": {
+    "includePluginPrefix": true,
+    "includeAttributes": true,
+    "includeRelationships": true,
+    "includeJoinTables": true,
+    "validateEntityExistence": true,
+    "validatePropertyNames": true
+  },
+  "mermaidSettings": {
+    "theme": "default",
+    "layoutDirection": "LR",
+    "entitySpacing": "compact",
+    "relationshipLabels": true,
+    "colorCoding": {
+      "core": "#1976d2",
+      "tracker": "#43a047", 
+      "ssq": "#b39ddb",
+      "interact": "#42a5f5"
+    }
+  }
+} 
