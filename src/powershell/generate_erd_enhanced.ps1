@@ -296,8 +296,8 @@ function Get-CFCRelationships {
                     $totalFiles += ($cfcFiles | Where-Object { $knownTables -contains [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }).Count
                 }
             } else {
-                $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
-                foreach ($pluginFolder in $pluginFolders) {
+            $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
+            foreach ($pluginFolder in $pluginFolders) {
                     $packagesPath = Join-Path $pluginFolder.FullName "packages"
                     if (Test-Path $packagesPath) {
                         $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
@@ -377,7 +377,7 @@ function Get-CFCRelationships {
                                 # Extract entity info
                                 $relationships.entities += @{
                                     name = $entityName
-                                    plugin = $pluginName
+                                        plugin = $pluginName
                                     file = $cfcFile.FullName
                                 }
                                 
@@ -482,21 +482,21 @@ function Generate-MermaidERD {
             if ($focusEntities -contains $entityName) {
                 $includeEntity = $true
             } else {
-                # Also include entities that have relationships with any focus entity
-                $hasRelationship = $false
-                $hasJoinRelationship = $false
-                
-                foreach ($focusEntity in $focusEntities) {
-                    $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
-                        ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                        ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
-                    })
-                    $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
-                        ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                        ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
-                        ($_.joinTable -eq $entityName)
-                    })
-                }
+            # Also include entities that have relationships with any focus entity
+            $hasRelationship = $false
+            $hasJoinRelationship = $false
+            
+            foreach ($focusEntity in $focusEntities) {
+                $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
+                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
+                })
+                $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
+                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
+                    ($_.joinTable -eq $entityName)
+                })
+            }
                 $includeEntity = ($hasRelationship -or $hasJoinRelationship)
             }
         }
@@ -689,7 +689,7 @@ function Generate-MermaidERD {
     # Process join table relationships for self-referencing
     $selfRefGroups = @{}
     $otherJoinRelationships = @()
-    
+
     foreach ($join in $relationships.joinTables) {
         $sourceEntity = $join.source
         $targetEntity = $join.target
@@ -1201,14 +1201,13 @@ function Get-EntityStyle {
     
     # Check if entity is in the same domain as the focus entity (but not directly related)
     $isInSameDomainAsFocus = $false
-    if ($validatedDomains -and $domainsConfig -and $domainsConfig.domains) {
-
+    if ($validatedDomains -and $domainsConfig) {
         # Find which domain the focus entity belongs to
         $focusDomain = $null
         foreach ($domain in $validatedDomains) {
-            if ($domainsConfig.domains.ContainsKey($domain)) {
+            if ($domainsConfig.PSObject.Properties.Name -contains $domain) {
                 $domainEntities = @()
-                foreach ($category in $domainsConfig.domains[$domain].entities.PSObject.Properties) {
+                foreach ($category in $domainsConfig.$domain.entities.PSObject.Properties) {
                     $domainEntities += $category.Value
                 }
                 
@@ -1226,9 +1225,9 @@ function Get-EntityStyle {
         }
         
         # Check if current entity is in the same domain as focus
-        if ($focusDomain -and $domainsConfig.domains.ContainsKey($focusDomain)) {
+        if ($focusDomain -and $domainsConfig.PSObject.Properties.Name -contains $focusDomain) {
             $focusDomainEntities = @()
-            foreach ($category in $domainsConfig.domains[$focusDomain].entities.PSObject.Properties) {
+            foreach ($category in $domainsConfig.$focusDomain.entities.PSObject.Properties) {
                 $focusDomainEntities += $category.Value
             }
             
@@ -1236,11 +1235,6 @@ function Get-EntityStyle {
             $baseEntityName = $entityName
             if ($entityName -match '^[^_]+_(.+)$') {
                 $baseEntityName = $matches[1]
-            }
-            
-            # Debug: Check specific entities
-            if ($entityName -eq "zfarcrycore_farRole" -or $entityName -eq "zfarcrycore_farPermission") {
-                Write-Host "DEBUG: $entityName -> $baseEntityName, focusDomain=$focusDomain, contains=$($focusDomainEntities -contains $baseEntityName)" -ForegroundColor Yellow
             }
             
             if ($focusDomainEntities -contains $baseEntityName) {
@@ -1658,9 +1652,16 @@ $nodeScriptPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "src\node\ge
 $mermaidLiveUrl = $mermaidContent | node $nodeScriptPath
 
 Write-Host "✅ Generated compressed Mermaid.live URL" -ForegroundColor Green
-Start-Process $mermaidLiveUrl
+
+# Non-blocking browser launch to prevent hanging
+try {
+    Start-Process $mermaidLiveUrl -WindowStyle Hidden -ErrorAction Stop
+    Write-Host "🌐 Opened Mermaid.live directly with content" -ForegroundColor Green
+} catch {
+    Write-Host "⚠️  Could not open browser automatically. Please copy this URL:" -ForegroundColor Yellow
+    Write-Host $mermaidLiveUrl -ForegroundColor Cyan
+}
 
 Write-Host "✅ Enhanced ERD generation complete!"
 Write-Host "📁 MMD file: $outputFile"
-Write-Host "🌐 Opened Mermaid.live directly with content" -ForegroundColor Green
-Write-Host "🔗 Browser should have opened automatically" 
+Write-Host "🔗 Browser should have opened automatically"
