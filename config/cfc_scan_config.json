@@ -92,7 +92,7 @@
     "exclusions": {
       "description": "Properties that should be excluded from relationship detection",
       "patterns": [
-        "ftwizardStep=[\"']Filter Fields[\"']"
+        "Filter Fields"
       ]
     }
   },
