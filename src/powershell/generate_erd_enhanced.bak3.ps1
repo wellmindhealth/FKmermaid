@@ -381,7 +381,7 @@ function Get-EntityPluginPrefix {
 
 # Function to generate Mermaid ER diagram
 function Generate-MermaidERD {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{})
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{})
     
     $mermaidContent = "erDiagram`n"
     
@@ -646,37 +646,37 @@ function Generate-MermaidERD {
         $group = $selfRefGroups[$entityName]
         $mermaidContent += "    %% Self-Referencing Relationships for $entityName`n"
         
-        # Collect all self-referencing relationships for this entity
-        $allSelfRefRelationships = @()
-        
         # Add self-referencing direct FK relationships for this entity
         foreach ($fk in $selfRefDirectFK) {
             if ($fk.source -eq $entityName) {
-                $allSelfRefRelationships += $fk.property
+                $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $fk.source }).plugin
+                $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $fk.target }).plugin
+                $sourceDisplayName = "$sourcePlugin - $($fk.source)"
+                $targetDisplayName = "$targetPlugin - $($fk.target)"
+                $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+                $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+                $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+                $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+                $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+                $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+                $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
             }
         }
         
         # Add self-referencing join table relationships for this entity
         foreach ($join in $group) {
-            $allSelfRefRelationships += $join.property
+            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $join.source }).plugin
+            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $join.target }).plugin
+            $sourceDisplayName = "$sourcePlugin - $($join.source)"
+            $targetDisplayName = "$targetPlugin - $($join.target)"
+            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+            $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
         }
-        
-        # Add comment listing all the self-referencing relationships
-        $relationshipList = $allSelfRefRelationships -join ', '
-        $mermaidContent += "    %% Self-refs include: $relationshipList`n"
-        
-        # Create a short placeholder label for consolidated self-referencing relationships
-        $consolidatedLabel = "self_refs"
-        
-        # Get entity display names
-        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $entityName }).plugin
-        $sourceDisplayName = "$sourcePlugin - $entityName"
-        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-        
-        # Add single consolidated relationship line
-        $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedSourceName`" : $consolidatedLabel`n"
         
         $mermaidContent += "    %% End Self-Referencing Relationships for $entityName`n`n"
     }
@@ -749,7 +749,7 @@ function Generate-MermaidERD {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         $entityDisplayName = "$pluginName - $entityName"
-        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities -cssStyles $cssStyles
+        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities
         
         # Use sanitized entity name for style definition (no spaces, hyphens, or quotes)
         $sanitizedEntityName = Get-SanitizedEntityName -entityName $entityDisplayName
@@ -761,7 +761,7 @@ function Generate-MermaidERD {
 
 # Function to generate Mermaid Class diagram with full styling
 function Generate-MermaidClassDiagram {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{})
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{})
     
     $mermaidContent = "classDiagram`n"
     
@@ -929,7 +929,7 @@ function Generate-MermaidClassDiagram {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         $entityDisplayName = "$pluginName - $entityName"
-        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities -cssStyles $cssStyles
+        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities
         
         # Sanitize entity name for style definition (same as class names)
         $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
@@ -1029,90 +1029,50 @@ function Get-SanitizedEntityName {
     return $sanitized
 }
 
-# Function to parse Mermaid styles file and extract styles
-function Get-MermaidStyles {
-    param(
-        [string]$stylesPath
-    )
-    
-    $styles = @{}
-    
-    if (Test-Path $stylesPath) {
-        $stylesContent = Get-Content $stylesPath -Raw
-        
-        # Parse Mermaid style rules using regex
-        $stylePattern = 'style\s+(\w+)\s+([^\r\n]+)'
-        $matches = [regex]::Matches($stylesContent, $stylePattern)
-        
-        foreach ($match in $matches) {
-            $entityName = $match.Groups[1].Value
-            $styleDefinition = $match.Groups[2].Value.Trim()
-            $styles[$entityName] = $styleDefinition
-        }
-        
-        Write-Host "📋 Loaded $($styles.Count) styles from Mermaid styles file" -ForegroundColor Green
-    } else {
-        Write-Host "⚠️  Mermaid styles file not found: $stylesPath" -ForegroundColor Yellow
-    }
-    
-    return $styles
-}
-
 # Function to get entity styling based on importance and type
 function Get-EntityStyle {
-    param([string]$entityName, [string]$pluginName, [string]$focusEntity, [string[]]$relatedEntities, [hashtable]$cssStyles)
+    param([string]$entityName, [string]$pluginName, [string]$focusEntity, [string[]]$relatedEntities)
+    
+    # Define styling rules - keeping only SSQ entities for now
+    $stylingRules = @{
+        # SSQ entities - special styling (keeping these as requested)
+        "SSQ_arthritis01" = "fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
+        "SSQ_pain01" = "fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
+        "SSQ_stress01" = "fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
+        "SSQ_HUB" = "fill:#e0e0e0,stroke:#bdbdbd,stroke-width:0px,color:#333"
+    }
     
     # Check for exact match first (SSQ entities)
-    if ($cssStyles.ContainsKey($entityName)) {
-        return $cssStyles[$entityName]
+    if ($stylingRules.ContainsKey($entityName)) {
+        return $stylingRules[$entityName]
     }
     
     # Check for plugin-specific styling
     $pluginEntityKey = "$pluginName - $entityName"
-    if ($cssStyles.ContainsKey($pluginEntityKey)) {
-        return $cssStyles[$pluginEntityKey]
+    if ($stylingRules.ContainsKey($pluginEntityKey)) {
+        return $stylingRules[$pluginEntityKey]
     }
     
     # Split focus entities if comma-separated
     $focusEntities = $focusEntity -split ',' | ForEach-Object { $_.Trim() }
     
-    # Focus entity styling - use CSS if available, otherwise fallback
+    # Focus entity styling (orange/amber) - check if this entity is any of the focus entities
     if ($focusEntities -contains $entityName) {
-        if ($cssStyles.ContainsKey("focus")) {
-            return $cssStyles["focus"]
-        }
-        return "fill:#e65100,stroke:#bf360c,stroke-width:2px,color:#fff"
+        return "fill:#ff9800,stroke:#e65100,stroke-width:2px,color:#fff"
     }
     
-    # Check for SSQ entities FIRST (before related entities)
-    if ($entityName -like "SSQ_*") {
-        if ($cssStyles.ContainsKey("ssq_group")) {
-            return $cssStyles["ssq_group"]
-        }
-    }
-    
-    # Close relatives in same domain styling - use CSS if available, otherwise fallback
+    # Close relatives in same domain styling (blue)
     if ($relatedEntities -and $relatedEntities.Contains($entityName)) {
-        if ($cssStyles.ContainsKey("related")) {
-            return $cssStyles["related"]
-        }
-        return "fill:#1565c0,stroke:#0d47a1,stroke-width:1px,color:#fff"
+        return "fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff"
     }
     
-    # Default styling for all other entities - use CSS if available, otherwise fallback
-    if ($cssStyles.ContainsKey("secondary")) {
-        return $cssStyles["secondary"]
-    }
-    return "fill:#424242,stroke:#212121,stroke-width:1px,color:#fff"
+    # Default styling for all other entities (grey)
+    return "fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff"
 }
 
 # Main execution
 Write-Host "FarCry ERD Generator (Enhanced)"
 Write-Host "==============================="
-
-# Load Mermaid styles once
-$stylesPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "css\mermaid_styles.mmd"
-$cssStyles = Get-MermaidStyles -stylesPath $stylesPath
 
 # Echo chosen parameters
 Write-Host "📋 PARAMETERS:" -ForegroundColor Cyan
@@ -1145,9 +1105,9 @@ Write-Host "Found $($relationships.joinTables.Count) join table relationships"
 
 # Generate Mermaid diagrams based on type
 if ($DiagramType -eq "ER") {
-    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig -cssStyles $cssStyles
+    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig
 } else {
-    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig -cssStyles $cssStyles
+    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig
 }
 
 # Ensure exports directory exists
@@ -1190,7 +1150,7 @@ $mermaidLiveHtml = @"
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>$fullTitle - Mermaid Live Editor</title>
-    <link rel="stylesheet" href="css/mermaid_styles.mmd">
+    <link rel="stylesheet" href="css/mermaid_styles.css">
     <style>
         body { 
             font-family: Arial, sans-serif; 
