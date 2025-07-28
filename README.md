@@ -29,9 +29,30 @@ Site-related entities for website content and location management.
 
 > **Note**: The complete list of entities for each domain is maintained in `config/domains.json`. This file can be updated as new entities are discovered or domains evolve.
 
-## Usage
+## Configuration
 
-### Basic Usage
+### Generating Configuration from Database
+
+The `generate_cfc_scan_config.ps1` script automatically generates the `cfc_scan_config.json` file by:
+
+1. **Analyzing the database structure** from `config/dbdump.sql`
+2. **Scanning folder locations** to find CFC files in:
+   - `zfarcrycore/packages/types/` (core entities)
+   - `plugins/*/packages/types/` (plugin entities)
+3. **Creating accurate entity-plugin mappings** based on actual folder locations
+4. **Filtering knownTables** to only include entities that exist in both database and CFC files
+
+This ensures:
+- ✅ **Accurate `knownTables`** based on actual database structure
+- ✅ **Correct `entityPluginMapping`** based on folder locations (not hardcoded)
+- ✅ **Automatic updates** when database or folder structure changes
+
+```powershell
+# Generate configuration from database and folder structure
+.\generate_cfc_scan_config.ps1
+```
+
+## Usage
 ```powershell
 .\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "programme"
 ```
@@ -133,9 +154,12 @@ The tool generates:
 ```
 FKmermaid/
 ├── config/
-│   └── domains.json          # Domain and entity definitions
+│   ├── domains.json          # Domain and entity definitions
+│   ├── cfc_scan_config.json  # CFC scanning configuration
+│   └── dbdump.sql           # Database structure reference
 ├── src/powershell/
-│   └── generate_erd.ps1      # Main generation script
+│   ├── generate_erd_enhanced.ps1     # Main ER diagram generator
+│   └── generate_cfc_scan_config.ps1  # Configuration generator from DB
 ├── exports/                  # Generated diagram files
 │   ├── *.mmd                # Mermaid source files
 │   └── *.html               # HTML viewer files

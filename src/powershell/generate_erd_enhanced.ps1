@@ -60,81 +60,7 @@ if (Test-Path $modulePath) {
     Write-Host "❌ Relationship detection module not found: $modulePath" -ForegroundColor Red
 }
 
-# Debug function to check scan directories
-function Debug-ScanDirectories {
-    param([object]$config)
-    
-    Write-Host "🔍 DEBUG: Checking scan directories..." -ForegroundColor Yellow
-    Write-Host "📁 Scan directories from config:" -ForegroundColor Cyan
-    foreach ($dir in $config.scanSettings.scanDirectories) {
-        Write-Host "   $dir" -ForegroundColor White
-        if (Test-Path $dir) {
-            Write-Host "     ✅ EXISTS" -ForegroundColor Green
-            
-            # For plugins directory, check each plugin folder
-            if ($dir -like "*plugins*") {
-                $pluginFolders = Get-ChildItem -Path $dir -Directory | Where-Object { $config.scanSettings.excludeFolders -notcontains $_.Name }
-                Write-Host "     📦 Found $($pluginFolders.Count) plugin folders" -ForegroundColor Blue
-                
-                foreach ($pluginFolder in $pluginFolders | Select-Object -First 3) {
-                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
-                    if (Test-Path $packagesPath) {
-                        $allCfcFiles = @()
-                        $packageFolders = Get-ChildItem -Path $packagesPath -Directory
-                        
-                        foreach ($pkgFolder in $packageFolders) {
-                            $cfcFiles = Get-ChildItem -Path $pkgFolder.FullName -Filter "*.cfc" -Recurse -ErrorAction SilentlyContinue
-                            $allCfcFiles += $cfcFiles
-                        }
-                        
-                        Write-Host "       📄 $($pluginFolder.Name): $($allCfcFiles.Count) CFC files total" -ForegroundColor Green
-                        
-                        # Show breakdown by package type
-                        foreach ($pkgFolder in $packageFolders) {
-                            $cfcFiles = Get-ChildItem -Path $pkgFolder.FullName -Filter "*.cfc" -Recurse -ErrorAction SilentlyContinue
-                            if ($cfcFiles.Count -gt 0) {
-                                Write-Host "         📦 $($pkgFolder.Name): $($cfcFiles.Count) CFC files" -ForegroundColor Blue
-                                foreach ($file in $cfcFiles | Select-Object -First 2) {
-                                    Write-Host "           - $($file.Name)" -ForegroundColor Gray
-                                }
-                                if ($cfcFiles.Count -gt 2) {
-                                    Write-Host "           ... and $($cfcFiles.Count - 2) more" -ForegroundColor Gray
-                                }
-                            }
-                        }
-                    } else {
-                        Write-Host "       ❌ $($pluginFolder.Name): No packages folder" -ForegroundColor Red
-                    }
-                }
-                if ($pluginFolders.Count -gt 3) {
-                    Write-Host "       ... and $($pluginFolders.Count - 3) more plugin folders" -ForegroundColor Gray
-                }
-            } else {
-                # For other directories (like zfarcrycore), check directly
-                $typesPath = Join-Path $dir "packages\types"
-                if (Test-Path $typesPath) {
-                    $cfcFiles = Get-ChildItem -Path $typesPath -Filter "*.cfc" -ErrorAction SilentlyContinue
-                    Write-Host "     📄 Found $($cfcFiles.Count) CFC files in types" -ForegroundColor Blue
-                    foreach ($file in $cfcFiles | Select-Object -First 5) {
-                        Write-Host "       - $($file.Name)" -ForegroundColor Gray
-                    }
-                    if ($cfcFiles.Count -gt 5) {
-                        Write-Host "       ... and $($cfcFiles.Count - 5) more" -ForegroundColor Gray
-                    }
-                } else {
-                    Write-Host "     ❌ No packages\types folder found" -ForegroundColor Red
-                }
-            }
-        } else {
-            Write-Host "     ❌ NOT FOUND" -ForegroundColor Red
-        }
-    }
-    
-    Write-Host "🚫 Exclude folders:" -ForegroundColor Cyan
-    foreach ($folder in $config.scanSettings.excludeFolders) {
-        Write-Host "   $folder" -ForegroundColor Gray
-    }
-}
+
 
 # Load configuration
 function Load-Config {
@@ -195,6 +121,8 @@ function Entity-BelongsToDomain {
             $allEntities += $categoryEntities
         }
     }
+    
+
     
     return $allEntities -contains $entityName
 }
@@ -281,16 +209,7 @@ function Validate-Parameters {
 }
 
 # Debug mode - just check directories (bypass validation)
-if ($DebugScan) {
-    $config = Load-Config -configFile $ConfigFile
-    if ($null -eq $config) {
-        Write-Host "Failed to load configuration. Exiting."
-        exit 1
-    }
-    Debug-ScanDirectories -config $config
-    Write-Host "🔍 Debug scan complete. Use -RefreshCFCs for full scan." -ForegroundColor Yellow
-    exit 0
-}
+
 
 # Validate parameters before proceeding
 Validate-Parameters
@@ -302,12 +221,7 @@ if ($null -eq $config) {
     exit 1
 }
 
-# Debug mode - just check directories
-if ($DebugScan) {
-    Debug-ScanDirectories -config $config
-    Write-Host "🔍 Debug scan complete. Use -RefreshCFCs for full scan." -ForegroundColor Yellow
-    exit 0
-}
+
 
 # Load and validate domains
 $domainsConfig = Load-DomainsConfig
@@ -335,37 +249,7 @@ function Get-CFCRelationships {
     # Get scan directories from config
     $scanDirectories = $config.scanSettings.scanDirectories
     
-    # Count total files for progress bar
-    $totalFiles = 0
-    $processedFiles = 0
-    
-    # First pass: count total files
-    foreach ($scanDir in $scanDirectories) {
-        if (Test-Path $scanDir) {
-            # Handle zfarcrycore differently (it's not a plugin)
-            if ($scanDir -like "*zfarcrycore*") {
-                $packagesPath = Join-Path $scanDir "packages"
-                if (Test-Path $packagesPath) {
-                    $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
-                    $totalFiles += $cfcFiles.Count
-                }
-            } else {
-                # Count plugin folders
-                $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
-                foreach ($pluginFolder in $pluginFolders) {
-                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
-                    if (Test-Path $packagesPath) {
-                        $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
-                        $totalFiles += $cfcFiles.Count
-                    }
-                }
-            }
-        }
-    }
-    
-    Write-Host "📁 Found $totalFiles CFC files to scan..." -ForegroundColor Cyan
-    
-    # Second pass: process files with progress bar
+    # Second pass: process files
     foreach ($scanDir in $scanDirectories) {
         if (Test-Path $scanDir) {
             # Handle zfarcrycore differently (it's not a plugin)
@@ -378,15 +262,6 @@ function Get-CFCRelationships {
                     $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
                     
                     foreach ($cfcFile in $cfcFiles) {
-                        $processedFiles++
-                        $progressPercent = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
-                        
-                        # Create progress bar
-                        $progressBar = "█" * [math]::Floor($progressPercent / 2) + "░" * (50 - [math]::Floor($progressPercent / 2))
-                        $currentFile = Split-Path $cfcFile.Name -Leaf
-                        
-                        Write-Host "`r🔍 Scanning: [$progressBar] $progressPercent% - $currentFile" -NoNewline -ForegroundColor Green
-                        
                         # Extract entity name from filename first (before reading file)
                         $entityName = [System.IO.Path]::GetFileNameWithoutExtension($cfcFile.Name)
                         
@@ -399,8 +274,6 @@ function Get-CFCRelationships {
                                 plugin = $pluginName
                                 file = $cfcFile.FullName
                             }
-                            
-                            Write-Host "  ✅ Added entity: $entityName from $pluginName" -ForegroundColor Green
                             
                             # Use the optimized relationship detection from the module
                             $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
@@ -425,15 +298,6 @@ function Get-CFCRelationships {
                         $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
                         
                         foreach ($cfcFile in $cfcFiles) {
-                            $processedFiles++
-                            $progressPercent = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
-                            
-                            # Create progress bar
-                            $progressBar = "█" * [math]::Floor($progressPercent / 2) + "░" * (50 - [math]::Floor($progressPercent / 2))
-                            $currentFile = Split-Path $cfcFile.Name -Leaf
-                            
-                            Write-Host "`r🔍 Scanning: [$progressBar] $progressPercent% - $currentFile" -NoNewline -ForegroundColor Green
-                            
                             # Extract entity name from filename first (before reading file)
                             $entityName = [System.IO.Path]::GetFileNameWithoutExtension($cfcFile.Name)
                             
@@ -447,7 +311,7 @@ function Get-CFCRelationships {
                                     file = $cfcFile.FullName
                                 }
                                 
-                                Write-Host "  ✅ Added entity: $entityName from $pluginName" -ForegroundColor Green
+
                                 
                                 # Use the optimized relationship detection from the module
                                 $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
@@ -464,9 +328,7 @@ function Get-CFCRelationships {
         }
     }
     
-    # Clear the progress line and show completion
-    Write-Host "`r✅ Scan complete! Processed $processedFiles files" -ForegroundColor Green
-    Write-Host ""
+
     
     return $relationships
 }
@@ -532,61 +394,73 @@ function Generate-MermaidERD {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         
-        # If focus entity is specified, only include it and its related entities
+        $includeEntity = $false
+        
+        # If focus entity is specified, check if this entity is focus or related
         if ($lFocus -and $lFocus -ne "") {
             # Split focus entities if comma-separated
             $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
             
             # Check if this entity is one of the focus entities
             if ($focusEntities -contains $entityName) {
-                return $true
+                $includeEntity = $true
+            } else {
+                # Also include entities that have relationships with any focus entity
+                $hasRelationship = $false
+                $hasJoinRelationship = $false
+                
+                foreach ($focusEntity in $focusEntities) {
+                    $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
+                        ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                        ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
+                    })
+                    $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
+                        ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                        ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
+                        ($_.joinTable -eq $entityName)
+                    })
+                }
+                $includeEntity = ($hasRelationship -or $hasJoinRelationship)
             }
-            
-            # Also include entities that have relationships with any focus entity
-            $hasRelationship = $false
-            $hasJoinRelationship = $false
-            
-            foreach ($focusEntity in $focusEntities) {
-                $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
-                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
-                })
-                $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
-                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
-                    ($_.joinTable -eq $entityName)
-                })
-            }
-            return ($hasRelationship -or $hasJoinRelationship)
         }
         
-        # If domains are specified, only include entities from those domains
+        # If domains are specified, also check domain membership
         if ($domainList.Count -gt 0) {
+            $domainMatch = $false
             foreach ($domain in $domainList) {
                 if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
-                    return $true
+                    $domainMatch = $true
+                    break
                 }
             }
-            return $false
+            
+            # If both focus and domains are specified, entity must match EITHER focus OR domain criteria
+            if ($lFocus -and $lFocus -ne "") {
+                $includeEntity = $includeEntity -or $domainMatch
+            } else {
+                # If only domains specified, just check domain membership
+                $includeEntity = $domainMatch
+            }
         }
         
         # If no filters, include all entities
-        return $true
+        if (-not $lFocus -and $domainList.Count -eq 0) {
+            $includeEntity = $true
+        }
+        
+        return $includeEntity
     }
     
     # Get list of filtered entities that exist
     $existingEntities = $filteredEntities | ForEach-Object { $_.name }
     
-    # DEBUG: Show what entities are being filtered
-    Write-Host "🔍 DEBUG: All available entities:" -ForegroundColor Magenta
-    $allEntities | ForEach-Object { Write-Host "   $($_.plugin) - $($_.name)" -ForegroundColor Gray }
-    
-    Write-Host "🔍 DEBUG: Filtered entities:" -ForegroundColor Magenta
-    $filteredEntities | ForEach-Object { Write-Host "   $($_.plugin) - $($_.name)" -ForegroundColor Green }
+
     
     Write-Host "📊 Filtered to $($filteredEntities.Count) entities based on parameters:" -ForegroundColor Cyan
     if ($lFocus) { Write-Host "   Focus: $lFocus" -ForegroundColor Yellow }
     if ($domainList.Count -gt 0) { Write-Host "   Domains: $($domainList -join ', ')" -ForegroundColor Yellow }
+    
+
     
     # Add entities with proper attributes
     foreach ($entity in $filteredEntities) {
@@ -789,20 +663,45 @@ function Generate-MermaidERD {
 
     # Add styling
     $mermaidContent += "`n    %% Entity Styling`n"
-    # Get related entities in same domain as focus entities
+    # Get related entities based on actual relationships with focus entities
     $relatedEntities = @()
     if ($lFocus) {
         # Split focus entities if comma-separated
         $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
         
         foreach ($focusEntity in $focusEntities) {
-            $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $focusEntity }).plugin
-            if ($focusPlugin) {
-                $relatedEntities += $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $focusEntity -and $focusEntities -notcontains $_.name } | ForEach-Object { $_.name }
+            # Find entities that have direct FK relationships with the focus entity
+            $directRelated = $relationships.directFK | Where-Object { 
+                $_.source -eq $focusEntity -or $_.target -eq $focusEntity 
+            } | ForEach-Object { 
+                if ($_.source -eq $focusEntity) { $_.target } else { $_.source }
             }
+            
+            # Find entities that have join table relationships with the focus entity
+            $joinRelated = $relationships.joinTables | Where-Object {
+                $_.source -eq $focusEntity -or $_.target -eq $focusEntity -or $_.joinTable -eq $focusEntity
+            } | ForEach-Object { 
+                if ($_.source -eq $focusEntity) { $_.target } 
+                elseif ($_.target -eq $focusEntity) { $_.source }
+                else { $_.joinTable }
+            }
+            
+            # Add all related entities to the list
+            $relatedEntities += $directRelated
+            $relatedEntities += $joinRelated
         }
-        # Remove duplicates
-        $relatedEntities = $relatedEntities | Sort-Object -Unique
+        
+        # Add special join relationships
+        # farUser <-> dmProfile special join
+        if ($focusEntities -contains "dmProfile") {
+            $relatedEntities += "farUser"
+        }
+        if ($focusEntities -contains "farUser") {
+            $relatedEntities += "dmProfile"
+        }
+        
+        # Remove duplicates and focus entities themselves
+        $relatedEntities = $relatedEntities | Where-Object { $focusEntities -notcontains $_ } | Sort-Object -Unique
     }
     
     foreach ($entity in $filteredEntities) {
@@ -954,20 +853,35 @@ function Generate-MermaidClassDiagram {
     # Add styling for class diagram (full color support)
     $mermaidContent += "`n    %% Entity Styling`n"
     
-    # Get related entities in same domain as focus entities
+    # Get related entities based on actual relationships with focus entities
     $relatedEntities = @()
     if ($lFocus) {
         # Split focus entities if comma-separated
         $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
         
         foreach ($focusEntity in $focusEntities) {
-            $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $focusEntity }).plugin
-            if ($focusPlugin) {
-                $relatedEntities += $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $focusEntity -and $focusEntities -notcontains $_.name } | ForEach-Object { $_.name }
+            # Find entities that have direct FK relationships with the focus entity
+            $directRelated = $relationships.directFK | Where-Object { 
+                $_.source -eq $focusEntity -or $_.target -eq $focusEntity 
+            } | ForEach-Object { 
+                if ($_.source -eq $focusEntity) { $_.target } else { $_.source }
             }
+            
+            # Find entities that have join table relationships with the focus entity
+            $joinRelated = $relationships.joinTables | Where-Object {
+                $_.source -eq $focusEntity -or $_.target -eq $focusEntity -or $_.joinTable -eq $focusEntity
+            } | ForEach-Object { 
+                if ($_.source -eq $focusEntity) { $_.target } 
+                elseif ($_.target -eq $focusEntity) { $_.source }
+                else { $_.joinTable }
+            }
+            
+            # Add all related entities to the list
+            $relatedEntities += $directRelated
+            $relatedEntities += $joinRelated
         }
-        # Remove duplicates
-        $relatedEntities = $relatedEntities | Sort-Object -Unique
+        # Remove duplicates and focus entities themselves
+        $relatedEntities = $relatedEntities | Where-Object { $focusEntities -notcontains $_ } | Sort-Object -Unique
     }
     
     foreach ($entity in $filteredEntities) {
@@ -984,13 +898,48 @@ function Generate-MermaidClassDiagram {
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
-    # Add styling for missing entities that are referenced in special joins
+    # Add styling for special join entities (both existing and placeholder)
     if ($farUserExists -or $dmProfileExists) {
+        # Check if the focused entity is in the same domain as farUser/dmProfile (partner domain)
+        $focusedEntityInPartnerDomain = $false
+        if ($focusEntity) {
+            $focusEntities = $focusEntity -split ',' | ForEach-Object { $_.Trim() }
+            foreach ($focused in $focusEntities) {
+                if (Entity-BelongsToDomain -entityName $focused -domainName "partner" -domainsConfig $domainsConfig) {
+                    $focusedEntityInPartnerDomain = $true
+                    break
+                }
+            }
+        }
+        
+        # Style special join entities based on domain relationship
         if (-not $farUserExists) {
-            $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            if ($focusedEntityInPartnerDomain) {
+                # Same domain - style blue (related entity)
+                $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            } else {
+                # Different domain - style grey (unrelated entity)
+                $mermaidContent += "    style zfarcrycore_farUser fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
+            }
+        } else {
+            # farUser exists in filtered entities - ensure it gets blue styling if in same domain
+            if ($focusedEntityInPartnerDomain) {
+                $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            }
         }
         if (-not $dmProfileExists) {
-            $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            if ($focusedEntityInPartnerDomain) {
+                # Same domain - style blue (related entity)
+                $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            } else {
+                # Different domain - style grey (unrelated entity)
+                $mermaidContent += "    style zfarcrycore_dmProfile fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
+            }
+        } else {
+            # dmProfile exists in filtered entities - ensure it gets blue styling if in same domain
+            if ($focusedEntityInPartnerDomain) {
+                $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            }
         }
     }
     
@@ -1481,4 +1430,5 @@ Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' 
 Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Green
 Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
 
+Write-Host "`n📖 For complete documentation, see: README.md" -ForegroundColor Yellow 
 Write-Host "`n📖 For complete documentation, see: README.md" -ForegroundColor Yellow 

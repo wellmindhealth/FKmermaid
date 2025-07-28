@@ -46,6 +46,7 @@ param(
     [string]$lFocus = "",
     [string]$DiagramType = "ER",
     [switch]$RefreshCFCs = $false,
+    [switch]$DebugScan = $false,
     [string]$ConfigFile = "D:\GIT\farcry\Cursor\FKmermaid\config\cfc_scan_config.json",
     [string]$OutputFile = ""
 )
@@ -58,6 +59,8 @@ if (Test-Path $modulePath) {
 } else {
     Write-Host "❌ Relationship detection module not found: $modulePath" -ForegroundColor Red
 }
+
+
 
 # Load configuration
 function Load-Config {
@@ -84,20 +87,51 @@ function Load-DomainsConfig {
     if (Test-Path $domainsFile) {
         try {
             $domainsConfig = Get-Content $domainsFile -Raw | ConvertFrom-Json
-            return $domainsConfig.domains.PSObject.Properties.Name
+            return $domainsConfig.domains
         } catch {
             Write-Host "Error loading domains config: $($_.Exception.Message)"
-            return @()
+            return @{}
         }
     } else {
         Write-Host "Domains config file not found: $domainsFile"
-        return @()
+        return @{}
     }
+}
+
+# Check if an entity belongs to a domain
+function Entity-BelongsToDomain {
+    param([string]$entityName, [string]$domainName, [object]$domainsConfig)
+    
+    if (-not $domainsConfig -or -not $domainsConfig.$domainName) {
+        return $false
+    }
+    
+    $domain = $domainsConfig.$domainName
+    $allEntities = @()
+    
+    # Collect all entities from all categories in the domain
+    foreach ($category in $domain.entities.PSObject.Properties.Name) {
+        # Handle entities as arrays (not space-separated strings)
+        $categoryEntities = $domain.entities.$category
+        if ($categoryEntities -is [array]) {
+            $allEntities += $categoryEntities
+        } else {
+            # Fallback for string format
+            $categoryEntities = $categoryEntities -split '\s+'
+            $allEntities += $categoryEntities
+        }
+    }
+    
+
+    
+    return $allEntities -contains $entityName
 }
 
 # Validate domains and return valid ones
 function Validate-Domains {
-    param([string]$lDomains, [array]$validDomains)
+    param([string]$lDomains, [object]$domainsConfig)
+    
+    $validDomains = $domainsConfig.PSObject.Properties.Name
     
     if ([string]::IsNullOrWhiteSpace($lDomains)) {
         Write-Host "📋 No domains specified - using ALL domains: $($validDomains -join ', ')" -ForegroundColor Cyan
@@ -174,6 +208,9 @@ function Validate-Parameters {
     }
 }
 
+# Debug mode - just check directories (bypass validation)
+
+
 # Validate parameters before proceeding
 Validate-Parameters
 
@@ -184,9 +221,11 @@ if ($null -eq $config) {
     exit 1
 }
 
+
+
 # Load and validate domains
-$validDomains = Load-DomainsConfig
-$validatedDomains = Validate-Domains -lDomains $lDomains -validDomains $validDomains
+$domainsConfig = Load-DomainsConfig
+$validatedDomains = Validate-Domains -lDomains $lDomains -domainsConfig $domainsConfig
 
 # Extract settings from config
 $pluginsPath = $config.scanSettings.pluginsPath
@@ -210,57 +249,25 @@ function Get-CFCRelationships {
     # Get scan directories from config
     $scanDirectories = $config.scanSettings.scanDirectories
     
-    # Count total files for progress bar
-    $totalFiles = 0
-    $processedFiles = 0
-    
-    # First pass: count total files
+    # Second pass: process files
     foreach ($scanDir in $scanDirectories) {
         if (Test-Path $scanDir) {
-            $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
-            foreach ($pluginFolder in $pluginFolders) {
-                $typesPath = Join-Path $pluginFolder.FullName "packages\types"
-                if (Test-Path $typesPath) {
-                    $cfcFiles = Get-ChildItem -Path $typesPath -Filter "*.cfc" | Where-Object { $excludeFiles -notcontains $_.Name }
-                    $totalFiles += $cfcFiles.Count
-                }
-            }
-        }
-    }
-    
-    Write-Host "📁 Found $totalFiles CFC files to scan..." -ForegroundColor Cyan
-    
-    # Second pass: process files with progress bar
-    foreach ($scanDir in $scanDirectories) {
-        if (Test-Path $scanDir) {
-            # Scan all plugin folders except excluded ones
-            $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
-            
-            foreach ($pluginFolder in $pluginFolders) {
-                $pluginName = $pluginFolder.Name
+            # Handle zfarcrycore differently (it's not a plugin)
+            if ($scanDir -like "*zfarcrycore*") {
+                $pluginName = "zfarcrycore"
                 
-                # Scan for CFC files in packages/types directory
-                $typesPath = Join-Path $pluginFolder.FullName "packages\types"
-                if (Test-Path $typesPath) {
-                    $cfcFiles = Get-ChildItem -Path $typesPath -Filter "*.cfc" | Where-Object { $excludeFiles -notcontains $_.Name }
+                # Scan for CFC files in packages subdirectories
+                $packagesPath = Join-Path $scanDir "packages"
+                if (Test-Path $packagesPath) {
+                    $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
                     
                     foreach ($cfcFile in $cfcFiles) {
-                        $processedFiles++
-                        $progressPercent = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
-                        
-                        # Create progress bar
-                        $progressBar = "█" * [math]::Floor($progressPercent / 2) + "░" * (50 - [math]::Floor($progressPercent / 2))
-                        $currentFile = Split-Path $cfcFile.Name -Leaf
-                        
-                        Write-Host "`r🔍 Scanning: [$progressBar] $progressPercent% - $currentFile" -NoNewline -ForegroundColor Green
-                        
-                        $content = Get-Content $cfcFile.FullName -Raw
-                        
-                        # Extract entity name from filename
+                        # Extract entity name from filename first (before reading file)
                         $entityName = [System.IO.Path]::GetFileNameWithoutExtension($cfcFile.Name)
                         
-                        # Only process if entity is in known tables
+                        # Only process if entity is in known tables (skip reading file if not needed)
                         if ($knownTables -contains $entityName) {
+                            $content = Get-Content $cfcFile.FullName -Raw
                             # Extract entity info
                             $relationships.entities += @{
                                 name = $entityName
@@ -268,183 +275,51 @@ function Get-CFCRelationships {
                                 file = $cfcFile.FullName
                             }
                             
-                            # Parse cfproperty attributes for relationship detection
-                            $cfPropertyMatches = [regex]::Matches($content, '<cfproperty[^>]*>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                            # Use the optimized relationship detection from the module
+                            $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
                             
-                            foreach ($match in $cfPropertyMatches) {
-                                $cfPropertyTag = $match.Value
-                                
-                                # Parse attributes from the opening tag
-                                $attributes = @{}
-                                $attributeMatches = [regex]::Matches($cfPropertyTag, '(\w+)="([^"]*)"')
-                                foreach ($attrMatch in $attributeMatches) {
-                                    $attributeName = $attrMatch.Groups[1].Value
-                                    $attributeValue = $attrMatch.Groups[2].Value
-                                    $attributes[$attributeName] = $attributeValue
-                                }
-                                
-                                # Skip if no name attribute
-                                if (-not $attributes.ContainsKey("name")) { continue }
-                                
-                                $propertyName = $attributes["name"]
-                                
-                                # Check for exclusions
-                                $shouldExclude = $false
-                                if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
-                                    foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
-                                        foreach ($attrName in $attributes.Keys) {
-                                            $attrValue = $attributes[$attrName]
-                                            if ($attrValue -match $exclusionPattern) {
-                                                $shouldExclude = $true
-                                                break
-                                            }
-                                        }
-                                        if ($shouldExclude) { break }
-                                    }
-                                }
-                                
-                                # Skip excluded properties
-                                if ($shouldExclude) {
-                                    continue
-                                }
-                                
-                                # Check if this is an array relationship (must have both type="array" AND ftJoin)
-                                if ($attributes.ContainsKey("type") -and $attributes["type"] -eq "array" -and $attributes.ContainsKey("ftJoin")) {
-                                    $targetEntity = $attributes["ftJoin"]
-                                    
-                                    # Join table relationship
-                                    $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
-                                    $relationships.joinTables += @{
-                                        source = $entityName
-                                        sourcePlugin = $pluginName
-                                        target = $targetEntity
-                                        property = $propertyName
-                                        joinTable = $joinTableName
-                                    }
-                                    
-                                    # Store property info
-                                    $relationships.properties += @{
-                                        entity = $entityName
-                                        plugin = $pluginName
-                                        property = $propertyName
-                                        target = $targetEntity
-                                        isArray = $true
-                                    }
-                                }
-                                
-                                # Check if this is a direct FK relationship
-                                if ($attributes.ContainsKey("ftJoin") -and -not ($attributes.ContainsKey("type") -and $attributes["type"] -eq "array")) {
-                                    $targetEntity = $attributes["ftJoin"]
-                                    
-                                    # Direct FK relationship
-                                    $relationships.directFK += @{
-                                        source = $entityName
-                                        property = $propertyName
-                                        target = $targetEntity
-                                        plugin = $pluginName
-                                    }
-                                    
-                                    # Store property info
-                                    $relationships.properties += @{
-                                        entity = $entityName
-                                        plugin = $pluginName
-                                        property = $propertyName
-                                        target = $targetEntity
-                                        isArray = $false
-                                    }
-                                }
-                            }
+                            # Merge relationships
+                            $relationships.directFK += $entityRelationships.directFK
+                            $relationships.joinTables += $entityRelationships.joinTables
+                            $relationships.properties += $entityRelationships.properties
+                        }
+                    }
+                }
+            } else {
+                # Scan all plugin folders except excluded ones
+                $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
+                
+                foreach ($pluginFolder in $pluginFolders) {
+                    $pluginName = $pluginFolder.Name
+                    
+                    # Scan for CFC files in all packages subdirectories
+                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
+                    if (Test-Path $packagesPath) {
+                        $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
+                        
+                        foreach ($cfcFile in $cfcFiles) {
+                            # Extract entity name from filename first (before reading file)
+                            $entityName = [System.IO.Path]::GetFileNameWithoutExtension($cfcFile.Name)
                             
-                            # Process multi-line matches (skip if already processed as array or single-line)
-                            $multiLineMatches = [regex]::Matches($content, $multiLinePattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                            foreach ($match in $multiLineMatches) {
-                                if ($match.Groups[1].Success -and $match.Groups[2].Success) {
-                                    $propertyName = $match.Groups[1].Value
-                                    
-                                    # Skip if already processed as array relationship or single-line
-                                    if ($processedArrayProperties -contains $propertyName -or $processedDirectFKProperties -contains $propertyName) {
-                                        continue
-                                    }
-                                    
-                                    $targetEntity = $match.Groups[2].Value
-                                    
-                                    # Check if this property is an array (type="array")
-                                    $isArrayProperty = [regex]::IsMatch($content, "name=`"$propertyName`".*?type=`"array`"", [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                                    
-                                    # Check if this property should be excluded
-                                    $shouldExclude = $false
-                                    if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
-                                        foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
-                                            # Check if the property definition contains any exclusion patterns (handle multi-line properties)
-                                            # Use a more robust pattern that captures the entire property definition
-                                            $propertyDefinition = [regex]::Match($content, "<cfproperty[^>]*name=`"$propertyName`"[^>]*>.*?/>", [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                                            if ($propertyDefinition.Success -and [regex]::IsMatch($propertyDefinition.Value, $exclusionPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)) {
-                                                $shouldExclude = $true
-                                                break
-                                            }
-                                        }
-                                    }
-                                    
-                                    # Skip excluded properties
-                                    if ($shouldExclude) {
-                                        continue
-                                    }
-                                    
-                                    # Process as array relationship if it's an array
-                                    if ($isArrayProperty) {
-                                        # Join table relationship using config naming pattern
-                                        $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
-                                        $relationships.joinTables += @{
-                                            source = $entityName
-                                            sourcePlugin = $pluginName
-                                            target = $targetEntity
-                                            property = $propertyName
-                                            joinTable = $joinTableName
-                                        }
-                                        
-                                        # Store property info
-                                        $relationships.properties += @{
-                                            entity = $entityName
-                                            plugin = $pluginName
-                                            property = $propertyName
-                                            target = $targetEntity
-                                            isArray = $true
-                                        }
-                                    } else {
-                                        # Add to direct FK relationships if not excluded
-                                        $relationships.directFK += @{
-                                            source = $entityName
-                                            property = $propertyName
-                                            target = $targetEntity
-                                            plugin = $pluginName
-                                        }
-                                    }
+                            # Only process if entity is in known tables (skip reading file if not needed)
+                            if ($knownTables -contains $entityName) {
+                                $content = Get-Content $cfcFile.FullName -Raw
+                                # Extract entity info
+                                $relationships.entities += @{
+                                    name = $entityName
+                                    plugin = $pluginName
+                                    file = $cfcFile.FullName
                                 }
-                            }
-                            
-                            # Extract all properties for attributes (not just relationships)
-                            $propertyPattern = $config.propertyExtraction.propertyPattern
-                            $ftTypePattern = $config.propertyExtraction.ftTypePattern
-                            $allPropertyMatches = [regex]::Matches($content, $propertyPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                            foreach ($match in $allPropertyMatches) {
-                                $propertyName = $match.Groups[1].Value
-                                $propertyType = $match.Groups[2].Value
                                 
-                                # Get ftType if available
-                                $ftTypeMatch = [regex]::Match($content, "name=`"$propertyName`".*?$ftTypePattern", [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                                $ftType = if ($ftTypeMatch.Success) { $ftTypeMatch.Groups[1].Value } else { $propertyType }
+
                                 
-                                # Only add if not already added as a relationship property
-                                $existingProperty = $relationships.properties | Where-Object { $_.entity -eq $entityName -and $_.property -eq $propertyName }
-                                if (-not $existingProperty) {
-                                    $relationships.properties += @{
-                                        entity = $entityName
-                                        plugin = $pluginName
-                                        property = $propertyName
-                                        ftType = $ftType
-                                        isArray = $false
-                                    }
-                                }
+                                # Use the optimized relationship detection from the module
+                                $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
+                                
+                                # Merge relationships
+                                $relationships.directFK += $entityRelationships.directFK
+                                $relationships.joinTables += $entityRelationships.joinTables
+                                $relationships.properties += $entityRelationships.properties
                             }
                         }
                     }
@@ -453,9 +328,7 @@ function Get-CFCRelationships {
         }
     }
     
-    # Clear the progress line and show completion
-    Write-Host "`r✅ Scan complete! Processed $processedFiles files" -ForegroundColor Green
-    Write-Host ""
+
     
     return $relationships
 }
@@ -508,7 +381,7 @@ function Get-EntityPluginPrefix {
 
 # Function to generate Mermaid ER diagram
 function Generate-MermaidERD {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @())
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{})
     
     $mermaidContent = "erDiagram`n"
     
@@ -521,49 +394,73 @@ function Generate-MermaidERD {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         
-        # If focus entity is specified, only include it and its related entities
+        $includeEntity = $false
+        
+        # If focus entity is specified, check if this entity is focus or related
         if ($lFocus -and $lFocus -ne "") {
             # Split focus entities if comma-separated
             $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
             
             # Check if this entity is one of the focus entities
             if ($focusEntities -contains $entityName) {
-                return $true
+                $includeEntity = $true
+            } else {
+                # Also include entities that have relationships with any focus entity
+                $hasRelationship = $false
+                $hasJoinRelationship = $false
+                
+                foreach ($focusEntity in $focusEntities) {
+                    $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
+                        ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                        ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
+                    })
+                    $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
+                        ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                        ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
+                        ($_.joinTable -eq $entityName)
+                    })
+                }
+                $includeEntity = ($hasRelationship -or $hasJoinRelationship)
             }
-            
-            # Also include entities that have relationships with any focus entity
-            $hasRelationship = $false
-            $hasJoinRelationship = $false
-            
-            foreach ($focusEntity in $focusEntities) {
-                $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
-                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
-                })
-                $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
-                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
-                    ($_.joinTable -eq $entityName)
-                })
-            }
-            return ($hasRelationship -or $hasJoinRelationship)
         }
         
-        # If domains are specified, only include entities from those domains
+        # If domains are specified, also check domain membership
         if ($domainList.Count -gt 0) {
-            return $domainList -contains $pluginName
+            $domainMatch = $false
+            foreach ($domain in $domainList) {
+                if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
+                    $domainMatch = $true
+                    break
+                }
+            }
+            
+            # If both focus and domains are specified, entity must match EITHER focus OR domain criteria
+            if ($lFocus -and $lFocus -ne "") {
+                $includeEntity = $includeEntity -or $domainMatch
+            } else {
+                # If only domains specified, just check domain membership
+                $includeEntity = $domainMatch
+            }
         }
         
         # If no filters, include all entities
-        return $true
+        if (-not $lFocus -and $domainList.Count -eq 0) {
+            $includeEntity = $true
+        }
+        
+        return $includeEntity
     }
     
     # Get list of filtered entities that exist
     $existingEntities = $filteredEntities | ForEach-Object { $_.name }
     
+
+    
     Write-Host "📊 Filtered to $($filteredEntities.Count) entities based on parameters:" -ForegroundColor Cyan
     if ($lFocus) { Write-Host "   Focus: $lFocus" -ForegroundColor Yellow }
     if ($domainList.Count -gt 0) { Write-Host "   Domains: $($domainList -join ', ')" -ForegroundColor Yellow }
+    
+
     
     # Add entities with proper attributes
     foreach ($entity in $filteredEntities) {
@@ -628,6 +525,56 @@ function Generate-MermaidERD {
             $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
         }
         $mermaidContent += "    %% End Direct FK Relationships`n`n"
+    }
+
+    # Add special joins (complex relationships not detected by cfproperty parsing)
+    $mermaidContent += "    %% Special Joins`n"
+    
+    # farUser > dmProfile special join via userID = userName + '_' + userDirectory
+    $farUserExists = $existingEntities -contains "farUser"
+    $dmProfileExists = $existingEntities -contains "dmProfile"
+    if ($farUserExists -or $dmProfileExists) {
+        # Get plugin info for existing entities, use proper names for missing ones
+        if ($farUserExists) {
+            $farUserPlugin = ($filteredEntities | Where-Object { $_.name -eq "farUser" }).plugin
+            $farUserDisplayName = "$farUserPlugin - farUser"
+        } else {
+            $farUserDisplayName = "zfarcrycore - farUser"
+        }
+        
+        if ($dmProfileExists) {
+            $dmProfilePlugin = ($filteredEntities | Where-Object { $_.name -eq "dmProfile" }).plugin
+            $dmProfileDisplayName = "$dmProfilePlugin - dmProfile"
+        } else {
+            $dmProfileDisplayName = "zfarcrycore - dmProfile"
+        }
+        
+        $sanitizedFarUser = $farUserDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedFarUser = $sanitizedFarUser -replace '_+', '_'
+        $sanitizedFarUser = $sanitizedFarUser.Trim('_')
+        $sanitizedDmProfile = $dmProfileDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedDmProfile = $sanitizedDmProfile -replace '_+', '_'
+        $sanitizedDmProfile = $sanitizedDmProfile.Trim('_')
+        
+        $mermaidContent += "    `"$sanitizedFarUser`" ||--|| `"$sanitizedDmProfile`" : userID_to_userName_userDirectory`n"
+    }
+    
+    $mermaidContent += "    %% End Special Joins`n`n"
+    
+    # Add missing entities that are referenced in special joins but not in filtered entities
+    if ($farUserExists -or $dmProfileExists) {
+        if (-not $farUserExists) {
+            $mermaidContent += "    `"zfarcrycore_farUser`" {`n"
+            $mermaidContent += "        UUID ObjectID`n"
+            $mermaidContent += "        string name`n"
+            $mermaidContent += "    }`n`n"
+        }
+        if (-not $dmProfileExists) {
+            $mermaidContent += "    `"zfarcrycore_dmProfile`" {`n"
+            $mermaidContent += "        UUID ObjectID`n"
+            $mermaidContent += "        string name`n"
+            $mermaidContent += "    }`n`n"
+        }
     }
 
     # Process join table relationships for self-referencing
@@ -716,20 +663,45 @@ function Generate-MermaidERD {
 
     # Add styling
     $mermaidContent += "`n    %% Entity Styling`n"
-    # Get related entities in same domain as focus entities
+    # Get related entities based on actual relationships with focus entities
     $relatedEntities = @()
     if ($lFocus) {
         # Split focus entities if comma-separated
         $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
         
         foreach ($focusEntity in $focusEntities) {
-            $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $focusEntity }).plugin
-            if ($focusPlugin) {
-                $relatedEntities += $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $focusEntity -and $focusEntities -notcontains $_.name } | ForEach-Object { $_.name }
+            # Find entities that have direct FK relationships with the focus entity
+            $directRelated = $relationships.directFK | Where-Object { 
+                $_.source -eq $focusEntity -or $_.target -eq $focusEntity 
+            } | ForEach-Object { 
+                if ($_.source -eq $focusEntity) { $_.target } else { $_.source }
             }
+            
+            # Find entities that have join table relationships with the focus entity
+            $joinRelated = $relationships.joinTables | Where-Object {
+                $_.source -eq $focusEntity -or $_.target -eq $focusEntity -or $_.joinTable -eq $focusEntity
+            } | ForEach-Object { 
+                if ($_.source -eq $focusEntity) { $_.target } 
+                elseif ($_.target -eq $focusEntity) { $_.source }
+                else { $_.joinTable }
+            }
+            
+            # Add all related entities to the list
+            $relatedEntities += $directRelated
+            $relatedEntities += $joinRelated
         }
-        # Remove duplicates
-        $relatedEntities = $relatedEntities | Sort-Object -Unique
+        
+        # Add special join relationships
+        # farUser <-> dmProfile special join
+        if ($focusEntities -contains "dmProfile") {
+            $relatedEntities += "farUser"
+        }
+        if ($focusEntities -contains "farUser") {
+            $relatedEntities += "dmProfile"
+        }
+        
+        # Remove duplicates and focus entities themselves
+        $relatedEntities = $relatedEntities | Where-Object { $focusEntities -notcontains $_ } | Sort-Object -Unique
     }
     
     foreach ($entity in $filteredEntities) {
@@ -748,7 +720,7 @@ function Generate-MermaidERD {
 
 # Function to generate Mermaid Class diagram with full styling
 function Generate-MermaidClassDiagram {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @())
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{})
     
     $mermaidContent = "classDiagram`n"
     
@@ -791,7 +763,12 @@ function Generate-MermaidClassDiagram {
         
         # If domains are specified, only include entities from those domains
         if ($domainList.Count -gt 0) {
-            return $domainList -contains $pluginName
+            foreach ($domain in $domainList) {
+                if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
+                    return $true
+                }
+            }
+            return $false
         }
         
         # If no filters, include all entities
@@ -876,20 +853,35 @@ function Generate-MermaidClassDiagram {
     # Add styling for class diagram (full color support)
     $mermaidContent += "`n    %% Entity Styling`n"
     
-    # Get related entities in same domain as focus entities
+    # Get related entities based on actual relationships with focus entities
     $relatedEntities = @()
     if ($lFocus) {
         # Split focus entities if comma-separated
         $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
         
         foreach ($focusEntity in $focusEntities) {
-            $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $focusEntity }).plugin
-            if ($focusPlugin) {
-                $relatedEntities += $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $focusEntity -and $focusEntities -notcontains $_.name } | ForEach-Object { $_.name }
+            # Find entities that have direct FK relationships with the focus entity
+            $directRelated = $relationships.directFK | Where-Object { 
+                $_.source -eq $focusEntity -or $_.target -eq $focusEntity 
+            } | ForEach-Object { 
+                if ($_.source -eq $focusEntity) { $_.target } else { $_.source }
             }
+            
+            # Find entities that have join table relationships with the focus entity
+            $joinRelated = $relationships.joinTables | Where-Object {
+                $_.source -eq $focusEntity -or $_.target -eq $focusEntity -or $_.joinTable -eq $focusEntity
+            } | ForEach-Object { 
+                if ($_.source -eq $focusEntity) { $_.target } 
+                elseif ($_.target -eq $focusEntity) { $_.source }
+                else { $_.joinTable }
+            }
+            
+            # Add all related entities to the list
+            $relatedEntities += $directRelated
+            $relatedEntities += $joinRelated
         }
-        # Remove duplicates
-        $relatedEntities = $relatedEntities | Sort-Object -Unique
+        # Remove duplicates and focus entities themselves
+        $relatedEntities = $relatedEntities | Where-Object { $focusEntities -notcontains $_ } | Sort-Object -Unique
     }
     
     foreach ($entity in $filteredEntities) {
@@ -904,6 +896,51 @@ function Generate-MermaidClassDiagram {
         $sanitizedEntityName = $sanitizedEntityName.Trim('_')
         
         $mermaidContent += "    style $sanitizedEntityName $style`n"
+    }
+    
+    # Add styling for special join entities (both existing and placeholder)
+    if ($farUserExists -or $dmProfileExists) {
+        # Check if the focused entity is in the same domain as farUser/dmProfile (partner domain)
+        $focusedEntityInPartnerDomain = $false
+        if ($focusEntity) {
+            $focusEntities = $focusEntity -split ',' | ForEach-Object { $_.Trim() }
+            foreach ($focused in $focusEntities) {
+                if (Entity-BelongsToDomain -entityName $focused -domainName "partner" -domainsConfig $domainsConfig) {
+                    $focusedEntityInPartnerDomain = $true
+                    break
+                }
+            }
+        }
+        
+        # Style special join entities based on domain relationship
+        if (-not $farUserExists) {
+            if ($focusedEntityInPartnerDomain) {
+                # Same domain - style blue (related entity)
+                $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            } else {
+                # Different domain - style grey (unrelated entity)
+                $mermaidContent += "    style zfarcrycore_farUser fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
+            }
+        } else {
+            # farUser exists in filtered entities - ensure it gets blue styling if in same domain
+            if ($focusedEntityInPartnerDomain) {
+                $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            }
+        }
+        if (-not $dmProfileExists) {
+            if ($focusedEntityInPartnerDomain) {
+                # Same domain - style blue (related entity)
+                $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            } else {
+                # Different domain - style grey (unrelated entity)
+                $mermaidContent += "    style zfarcrycore_dmProfile fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
+            }
+        } else {
+            # dmProfile exists in filtered entities - ensure it gets blue styling if in same domain
+            if ($focusedEntityInPartnerDomain) {
+                $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            }
+        }
     }
     
     return $mermaidContent
@@ -1027,9 +1064,9 @@ Write-Host "Found $($relationships.joinTables.Count) join table relationships"
 
 # Generate Mermaid diagrams based on type
 if ($DiagramType -eq "ER") {
-    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains
+    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig
 } else {
-    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains
+    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig
 }
 
 # Ensure exports directory exists
@@ -1393,4 +1430,5 @@ Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' 
 Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Green
 Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
 
+Write-Host "`n📖 For complete documentation, see: README.md" -ForegroundColor Yellow 
 Write-Host "`n📖 For complete documentation, see: README.md" -ForegroundColor Yellow 
