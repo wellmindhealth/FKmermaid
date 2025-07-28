@@ -268,67 +268,90 @@ function Get-CFCRelationships {
                                 file = $cfcFile.FullName
                             }
                             
-                            # Use relationship detection module if available
-                            if (Get-Command Get-RelationshipsFromContent -ErrorAction SilentlyContinue) {
-                                $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
+                            # Parse cfproperty attributes for relationship detection
+                            $cfPropertyMatches = [regex]::Matches($content, '<cfproperty[^>]*>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                            
+                            foreach ($match in $cfPropertyMatches) {
+                                $cfPropertyTag = $match.Value
                                 
-                                # Merge relationships from module
-                                $relationships.directFK += $entityRelationships.directFK
-                                $relationships.joinTables += $entityRelationships.joinTables
-                                $relationships.properties += $entityRelationships.properties
-                            } else {
-                                Write-Host "⚠️  Relationship detection module not available, using fallback logic" -ForegroundColor Yellow
-                                # Fallback to old logic if module not available
-                                # ... (old logic would go here)
-                            }
-                                        foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
-                                            # Check if the property definition contains any exclusion patterns (handle multi-line properties)
-                                            # Use a more robust pattern that captures the entire property definition
-                                            $propertyDefinition = [regex]::Match($content, "<cfproperty[^>]*name=`"$propertyName`"[^>]*>.*?/>", [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                                            if ($propertyDefinition.Success -and [regex]::IsMatch($propertyDefinition.Value, $exclusionPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)) {
+                                # Parse attributes from the opening tag
+                                $attributes = @{}
+                                $attributeMatches = [regex]::Matches($cfPropertyTag, '(\w+)="([^"]*)"')
+                                foreach ($attrMatch in $attributeMatches) {
+                                    $attributeName = $attrMatch.Groups[1].Value
+                                    $attributeValue = $attrMatch.Groups[2].Value
+                                    $attributes[$attributeName] = $attributeValue
+                                }
+                                
+                                # Skip if no name attribute
+                                if (-not $attributes.ContainsKey("name")) { continue }
+                                
+                                $propertyName = $attributes["name"]
+                                
+                                # Check for exclusions
+                                $shouldExclude = $false
+                                if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
+                                    foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
+                                        foreach ($attrName in $attributes.Keys) {
+                                            $attrValue = $attributes[$attrName]
+                                            if ($attrValue -match $exclusionPattern) {
                                                 $shouldExclude = $true
                                                 break
                                             }
                                         }
+                                        if ($shouldExclude) { break }
+                                    }
+                                }
+                                
+                                # Skip excluded properties
+                                if ($shouldExclude) {
+                                    continue
+                                }
+                                
+                                # Check if this is an array relationship (must have both type="array" AND ftJoin)
+                                if ($attributes.ContainsKey("type") -and $attributes["type"] -eq "array" -and $attributes.ContainsKey("ftJoin")) {
+                                    $targetEntity = $attributes["ftJoin"]
+                                    
+                                    # Join table relationship
+                                    $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
+                                    $relationships.joinTables += @{
+                                        source = $entityName
+                                        sourcePlugin = $pluginName
+                                        target = $targetEntity
+                                        property = $propertyName
+                                        joinTable = $joinTableName
                                     }
                                     
-                                    # Skip excluded properties
-                                    if ($shouldExclude) {
-                                        continue
+                                    # Store property info
+                                    $relationships.properties += @{
+                                        entity = $entityName
+                                        plugin = $pluginName
+                                        property = $propertyName
+                                        target = $targetEntity
+                                        isArray = $true
+                                    }
+                                }
+                                
+                                # Check if this is a direct FK relationship
+                                if ($attributes.ContainsKey("ftJoin") -and -not ($attributes.ContainsKey("type") -and $attributes["type"] -eq "array")) {
+                                    $targetEntity = $attributes["ftJoin"]
+                                    
+                                    # Direct FK relationship
+                                    $relationships.directFK += @{
+                                        source = $entityName
+                                        property = $propertyName
+                                        target = $targetEntity
+                                        plugin = $pluginName
                                     }
                                     
-                                    # Process as array relationship if it's an array
-                                    if ($isArrayProperty) {
-                                        # Join table relationship using config naming pattern
-                                        $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
-                                        $relationships.joinTables += @{
-                                            source = $entityName
-                                            sourcePlugin = $pluginName
-                                            target = $targetEntity
-                                            property = $propertyName
-                                            joinTable = $joinTableName
-                                        }
-                                        
-                                        # Store property info
-                                        $relationships.properties += @{
-                                            entity = $entityName
-                                            plugin = $pluginName
-                                            property = $propertyName
-                                            target = $targetEntity
-                                            isArray = $true
-                                        }
-                                    } else {
-                                        # Add to direct FK relationships if not excluded
-                                        $relationships.directFK += @{
-                                            source = $entityName
-                                            property = $propertyName
-                                            target = $targetEntity
-                                            plugin = $pluginName
-                                        }
+                                    # Store property info
+                                    $relationships.properties += @{
+                                        entity = $entityName
+                                        plugin = $pluginName
+                                        property = $propertyName
+                                        target = $targetEntity
+                                        isArray = $false
                                     }
-                                    
-                                    # Mark as processed to avoid duplication in multi-line processing
-                                    $processedDirectFKProperties += $propertyName
                                 }
                             }
                             
@@ -563,36 +586,50 @@ function Generate-MermaidERD {
         }
     }
     
-    # Add relationships
+    # Process direct FK relationships for self-referencing
+    $selfRefDirectFK = @()
+    $otherDirectFK = @()
+    
     foreach ($fk in $relationships.directFK) {
         $sourceEntity = $fk.source
         $targetEntity = $fk.target
         
         # Only include if both entities are in our filtered list
         if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-            
-            # Sanitize entity names for relationships
-            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-            $targetDisplayName = "$targetPlugin - $targetEntity"
-            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-            
-            $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
+            if ($sourceEntity -eq $targetEntity) {
+                # Self-referencing direct FK relationship
+                $selfRefDirectFK += $fk
+            } else {
+                # Cross-entity direct FK relationship
+                $otherDirectFK += $fk
+            }
         }
     }
+    
+    # Add non-self-referencing direct FK relationships
+    foreach ($fk in $otherDirectFK) {
+        $sourceEntity = $fk.source
+        $targetEntity = $fk.target
+        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+        
+        # Sanitize entity names for relationships
+        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+        $targetDisplayName = "$targetPlugin - $targetEntity"
+        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+        
+        $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
+    }
 
-    # Process self-referencing relationships (both arrays and direct FK)
+    # Process join table relationships for self-referencing
     $selfRefGroups = @{}
     $otherJoinRelationships = @()
-    $otherDirectFKRelationships = @()
     
-    # Process join table relationships (arrays)
     foreach ($join in $relationships.joinTables) {
         $sourceEntity = $join.source
         $targetEntity = $join.target
@@ -612,64 +649,34 @@ function Generate-MermaidERD {
         }
     }
     
-    # Process direct FK relationships for self-referencing
-    foreach ($fk in $relationships.directFK) {
-        $sourceEntity = $fk.source
-        $targetEntity = $fk.target
-        
-        # Only include if both entities are in our filtered list
-        if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
-            if ($sourceEntity -eq $targetEntity) {
-                # Self-referencing direct FK relationship
-                if (-not $selfRefGroups.ContainsKey($sourceEntity)) {
-                    $selfRefGroups[$sourceEntity] = @()
-                }
-                $selfRefGroups[$sourceEntity] += $fk
-            } else {
-                # Cross-entity direct FK relationship
-                $otherDirectFKRelationships += $fk
-            }
-        }
-    }
-    
-    # Output self-referencing groups per entity
+    # Output self-referencing groups per entity (including both direct FK and join table relationships)
     foreach ($entityName in $selfRefGroups.Keys) {
         $group = $selfRefGroups[$entityName]
         $mermaidContent += "    %% Self-Referencing Relationships for $entityName`n"
-        foreach ($relationship in $group) {
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $relationship.source }).plugin
-            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $relationship.target }).plugin
-            $sourceDisplayName = "$sourcePlugin - $($relationship.source)"
-            $targetDisplayName = "$targetPlugin - $($relationship.target)"
-            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-            
-            # Use appropriate cardinality based on relationship type
-            if ($relationship.PSObject.Properties.Name -contains "joinTable") {
-                # Array relationship (join table)
-                $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($relationship.property)`n"
-            } else {
-                # Direct FK relationship
-                $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($relationship.property)`n"
+        
+        # Add self-referencing direct FK relationships for this entity
+        foreach ($fk in $selfRefDirectFK) {
+            if ($fk.source -eq $entityName) {
+                $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $fk.source }).plugin
+                $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $fk.target }).plugin
+                $sourceDisplayName = "$sourcePlugin - $($fk.source)"
+                $targetDisplayName = "$targetPlugin - $($fk.target)"
+                $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+                $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+                $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+                $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+                $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+                $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+                $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
             }
         }
-        $mermaidContent += "    %% End Self-Referencing Relationships for $entityName`n`n"
-    }
-    
-    # Add other join table relationships (non-self-referencing)
-    if ($otherJoinRelationships.Count -gt 0) {
-        $mermaidContent += "    %% Other Join Table Relationships`n"
-        foreach ($join in $otherJoinRelationships) {
-            $sourceEntity = $join.source
-            $targetEntity = $join.target
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-            $targetDisplayName = "$targetPlugin - $targetEntity"
+        
+        # Add self-referencing join table relationships for this entity
+        foreach ($join in $group) {
+            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $join.source }).plugin
+            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $join.target }).plugin
+            $sourceDisplayName = "$sourcePlugin - $($join.source)"
+            $targetDisplayName = "$targetPlugin - $($join.target)"
             $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
             $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
             $sanitizedSourceName = $sanitizedSourceName.Trim('_')
@@ -678,28 +685,25 @@ function Generate-MermaidERD {
             $sanitizedTargetName = $sanitizedTargetName.Trim('_')
             $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
         }
-        $mermaidContent += "    %% End Other Join Table Relationships`n`n"
+        
+        $mermaidContent += "    %% End Self-Referencing Relationships for $entityName`n`n"
     }
-    
-    # Add other direct FK relationships (non-self-referencing)
-    if ($otherDirectFKRelationships.Count -gt 0) {
-        $mermaidContent += "    %% Other Direct FK Relationships`n"
-        foreach ($fk in $otherDirectFKRelationships) {
-            $sourceEntity = $fk.source
-            $targetEntity = $fk.target
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-            $targetDisplayName = "$targetPlugin - $targetEntity"
-            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-            $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
-        }
-        $mermaidContent += "    %% End Other Direct FK Relationships`n`n"
+
+    # Add other join table relationships
+    foreach ($join in $otherJoinRelationships) {
+        $sourceEntity = $join.source
+        $targetEntity = $join.target
+        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+        $targetDisplayName = "$targetPlugin - $targetEntity"
+        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+        $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
     }
 
     # Add styling

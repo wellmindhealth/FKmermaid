@@ -77,7 +77,7 @@ function Get-RelationshipsFromContent {
             continue
         }
         
-        # Check if this is an array relationship
+        # Check if this is an array relationship (must have both type="array" AND ftJoin)
         if ($attributes -and $attributes.ContainsKey("type") -and $attributes["type"] -eq "array" -and $attributes.ContainsKey("ftJoin")) {
             $targetEntity = $attributes["ftJoin"]
             
