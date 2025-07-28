@@ -1,31 +1,4 @@
 {
-  "scanSettings": {
-    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
-    "scanDirectories": [
-      "D:\\GIT\\farcry\\plugins",
-      "D:\\GIT\\farcry\\zfarcrycore"
-    ],
-    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd",
-    "farcryPath": "D:\\GIT\\farcry",
-    "excludeFiles": [
-      "participant.cfc",
-      "module.cfc",
-      "moduleDef.cfc",
-      "address.cfc",
-      "farFilter.cfc",
-      "farTask.cfc"
-    ],
-    "excludeFolders": [
-      "farcrycms",
-      "social",
-      "aws",
-      "Cursor",
-      "farcryldap",
-      "microsoftud",
-      "social",
-      "testmxunit"
-    ]
-  },
   "entityConstraints": {
     "knownTables": [
       "activity",
@@ -209,29 +182,28 @@
       "zzRemote"
     ]
   },
-  "relationshipPatterns": {
-    "directFK": {
-      "description": "Direct foreign key relationships using ftJoin property",
-      "pattern": "<cfproperty[^>]*name=[\"']([^\"']+)[\"'][^>]*ftJoin=[\"']([^\"']+)[\"'][^>]*>",
-      "multiLinePattern": "<cfproperty[^>]*name=[\"']([^\"']+)[\"'][^>]*ftJoin=[\"']([^\"']+)[\"'][^>]*[^>]*\/>",
-      "arrayPattern": "name=[\"']([^\"']+)[\"'].*?type=[\"']array[\"']",
-      "cardinality": "||--||"
-    },
-    "joinTables": {
-      "description": "Many-to-many relationships using join tables",
-      "namingPattern": "{entity}_a{target}",
-      "structure": {
-        "parentid": "UUID",
-        "data": "UUID", 
-        "seq": "int",
-        "typename": "string"
-      }
-    },
-    "exclusions": {
-      "description": "Properties that should be excluded from relationship detection",
-      "patterns": [
-        "Filter Fields"
-      ]
-    }
+  "scanSettings": {
+    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
+    "excludeFiles": [
+      "participant.cfc",
+      "module.cfc",
+      "moduleDef.cfc",
+      "ruleActivityDefListing.cfc"
+    ],
+    "farcryPath": "D:\\GIT\\farcry",
+    "scanDirectories": [
+      "D:\\GIT\\farcry\\plugins",
+      "D:\\GIT\\farcry\\zfarcrycore"
+    ],
+    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd",
+    "excludeFolders": [
+      "farcrycms",
+      "social",
+      "aws",
+      "farcryldap",
+      "microsoftud",
+      "social",
+      "testmxunit"
+    ]
   }
 }

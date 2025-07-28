@@ -385,6 +385,10 @@ function Generate-MermaidERD {
     
     $mermaidContent = "erDiagram`n"
     
+        # Add parameters as a comment since ER diagrams may not support notes properly
+    $paramComment = "%% Parameters: Focus=$lFocus Domains=$($validatedDomains -join ',') ChartType=ER"
+    $mermaidContent += "    $paramComment`n"
+    
     # Use validated domains
     $domainList = $validatedDomains
     
@@ -1110,6 +1114,18 @@ if (!(Test-Path $exportsDir)) {
 # Save to file in exports directory
 $mermaidContent | Set-Content $outputFile
 Write-Host "$DiagramType diagram saved to: $outputFile"
+
+# Clean up exports folder - keep only last 3 files
+$exportsPath = Split-Path $outputFile
+$allFiles = Get-ChildItem -Path $exportsPath -File | Sort-Object LastWriteTime -Descending
+if ($allFiles.Count -gt 3) {
+    $filesToDelete = $allFiles | Select-Object -Skip 3
+    foreach ($file in $filesToDelete) {
+        Remove-Item $file.FullName -Force
+        Write-Host "🗑️  Cleaned up: $($file.Name)" -ForegroundColor Yellow
+    }
+    Write-Host "🧹 Kept last 3 files in exports folder" -ForegroundColor Green
+}
 
 # Generate HTML file with embedded browser opening functionality
 $ProjectRoot = "D:\GIT\farcry\Cursor\FKmermaid"
