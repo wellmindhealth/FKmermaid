@@ -266,6 +266,24 @@ function Get-CFCRelationships {
                                 $propertyName = $match.Groups[1].Value
                                 $targetEntity = $match.Groups[2].Value
                                 
+                                # Check if this property should be excluded
+                                $shouldExclude = $false
+                                if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
+                                    foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
+                                        # Check if the property definition contains any exclusion patterns
+                                        $propertyDefinition = [regex]::Match($content, "name=`"$propertyName`".*?/>", [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                        if ($propertyDefinition.Success -and [regex]::IsMatch($propertyDefinition.Value, $exclusionPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)) {
+                                            $shouldExclude = $true
+                                            break
+                                        }
+                                    }
+                                }
+                                
+                                # Skip excluded properties
+                                if ($shouldExclude) {
+                                    continue
+                                }
+                                
                                 # Check if it's an array using config pattern
                                 $arrayPattern = $config.relationshipPatterns.directFK.arrayPattern
                                 $isArray = [regex]::IsMatch($content, "name=`"$propertyName`".*?$arrayPattern", [System.Text.RegularExpressions.RegexOptions]::Singleline)
@@ -401,18 +419,28 @@ function Generate-MermaidERD {
         
         # If focus entity is specified, only include it and its related entities
         if ($lFocus -and $lFocus -ne "") {
-            if ($entityName -eq $lFocus) {
+            # Split focus entities if comma-separated
+            $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
+            
+            # Check if this entity is one of the focus entities
+            if ($focusEntities -contains $entityName) {
                 return $true
             }
-            # Also include entities that have relationships with the focus entity
-            $hasRelationship = $relationships.directFK | Where-Object { 
-                ($_.source -eq $lFocus -and $_.target -eq $entityName) -or 
-                ($_.target -eq $lFocus -and $_.source -eq $entityName) 
-            }
-            $hasJoinRelationship = $relationships.joinTables | Where-Object {
-                ($_.source -eq $lFocus -and $_.target -eq $entityName) -or 
-                ($_.target -eq $lFocus -and $_.source -eq $entityName) -or
-                ($_.joinTable -eq $entityName)
+            
+            # Also include entities that have relationships with any focus entity
+            $hasRelationship = $false
+            $hasJoinRelationship = $false
+            
+            foreach ($focusEntity in $focusEntities) {
+                $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
+                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
+                })
+                $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
+                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
+                    ($_.joinTable -eq $entityName)
+                })
             }
             return ($hasRelationship -or $hasJoinRelationship)
         }
@@ -478,38 +506,83 @@ function Generate-MermaidERD {
         }
     }
 
+    # Group aInteractXActivities relationships together for better visibility
+    $interactRelationships = @()
+    $otherJoinRelationships = @()
+    
     foreach ($join in $relationships.joinTables) {
         $sourceEntity = $join.source
         $targetEntity = $join.target
         
         # Only include if both entities are in our filtered list
         if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-            
-            # Sanitize entity names for relationships
-            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-            $targetDisplayName = "$targetPlugin - $targetEntity"
-            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-            
-            $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.joinTable)`n"
+            # Check if this is an aInteractXActivities relationship
+            if ($join.property -match '^aInteract[1-5]Activities$') {
+                $interactRelationships += $join
+            } else {
+                $otherJoinRelationships += $join
+            }
         }
+    }
+    
+    # Add aInteractXActivities relationships first (grouped together)
+    foreach ($join in $interactRelationships) {
+        $sourceEntity = $join.source
+        $targetEntity = $join.target
+        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+        
+        # Sanitize entity names for relationships
+        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+        $targetDisplayName = "$targetPlugin - $targetEntity"
+        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+        
+        # Add special styling comment for aInteractXActivities
+        $mermaidContent += "    %% aInteractXActivities Group`n"
+        $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
+    }
+    
+    # Add other join table relationships
+    foreach ($join in $otherJoinRelationships) {
+        $sourceEntity = $join.source
+        $targetEntity = $join.target
+        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+        
+        # Sanitize entity names for relationships
+        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+        $targetDisplayName = "$targetPlugin - $targetEntity"
+        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+        
+        $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
     }
 
     # Add styling
     $mermaidContent += "`n    %% Entity Styling`n"
-    # Get related entities in same domain as focus entity
+    # Get related entities in same domain as focus entities
     $relatedEntities = @()
     if ($lFocus) {
-        $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $lFocus }).plugin
-        if ($focusPlugin) {
-            $relatedEntities = $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $lFocus } | ForEach-Object { $_.name }
+        # Split focus entities if comma-separated
+        $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
+        
+        foreach ($focusEntity in $focusEntities) {
+            $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $focusEntity }).plugin
+            if ($focusPlugin) {
+                $relatedEntities += $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $focusEntity -and $focusEntities -notcontains $_.name } | ForEach-Object { $_.name }
+            }
         }
+        # Remove duplicates
+        $relatedEntities = $relatedEntities | Sort-Object -Unique
     }
     
     foreach ($entity in $filteredEntities) {
@@ -543,18 +616,28 @@ function Generate-MermaidClassDiagram {
         
         # If focus entity is specified, only include it and its related entities
         if ($lFocus -and $lFocus -ne "") {
-            if ($entityName -eq $lFocus) {
+            # Split focus entities if comma-separated
+            $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
+            
+            # Check if this entity is one of the focus entities
+            if ($focusEntities -contains $entityName) {
                 return $true
             }
-            # Also include entities that have relationships with the focus entity
-            $hasRelationship = $relationships.directFK | Where-Object { 
-                ($_.source -eq $lFocus -and $_.target -eq $entityName) -or 
-                ($_.target -eq $lFocus -and $_.source -eq $entityName) 
-            }
-            $hasJoinRelationship = $relationships.joinTables | Where-Object {
-                ($_.source -eq $lFocus -and $_.target -eq $entityName) -or 
-                ($_.target -eq $lFocus -and $_.source -eq $entityName) -or
-                ($_.joinTable -eq $entityName)
+            
+            # Also include entities that have relationships with any focus entity
+            $hasRelationship = $false
+            $hasJoinRelationship = $false
+            
+            foreach ($focusEntity in $focusEntities) {
+                $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
+                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
+                })
+                $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
+                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
+                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
+                    ($_.joinTable -eq $entityName)
+                })
             }
             return ($hasRelationship -or $hasJoinRelationship)
         }
@@ -639,20 +722,27 @@ function Generate-MermaidClassDiagram {
             $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
             $sanitizedTargetName = $sanitizedTargetName.Trim('_')
             
-            $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($join.joinTable)`n"
+            $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($join.property)`n"
         }
     }
 
     # Add styling for class diagram (full color support)
     $mermaidContent += "`n    %% Entity Styling`n"
     
-    # Get related entities in same domain as focus entity
+    # Get related entities in same domain as focus entities
     $relatedEntities = @()
     if ($lFocus) {
-        $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $lFocus }).plugin
-        if ($focusPlugin) {
-            $relatedEntities = $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $lFocus } | ForEach-Object { $_.name }
+        # Split focus entities if comma-separated
+        $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
+        
+        foreach ($focusEntity in $focusEntities) {
+            $focusPlugin = ($filteredEntities | Where-Object { $_.name -eq $focusEntity }).plugin
+            if ($focusPlugin) {
+                $relatedEntities += $filteredEntities | Where-Object { $_.plugin -eq $focusPlugin -and $_.name -ne $focusEntity -and $focusEntities -notcontains $_.name } | ForEach-Object { $_.name }
+            }
         }
+        # Remove duplicates
+        $relatedEntities = $relatedEntities | Sort-Object -Unique
     }
     
     foreach ($entity in $filteredEntities) {
@@ -738,8 +828,11 @@ function Get-EntityStyle {
         return $stylingRules[$pluginEntityKey]
     }
     
-    # Focus entity styling (orange/amber)
-    if ($entityName -eq $focusEntity) {
+    # Split focus entities if comma-separated
+    $focusEntities = $focusEntity -split ',' | ForEach-Object { $_.Trim() }
+    
+    # Focus entity styling (orange/amber) - check if this entity is any of the focus entities
+    if ($focusEntities -contains $entityName) {
         return "fill:#ff9800,stroke:#e65100,stroke-width:2px,color:#fff"
     }
     
@@ -820,6 +913,7 @@ $mermaidLiveHtml = @"
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>$fullTitle - Mermaid Live Editor</title>
+    <link rel="stylesheet" href="css/mermaid_styles.css">
     <style>
         body { 
             font-family: Arial, sans-serif; 

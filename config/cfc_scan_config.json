@@ -5,7 +5,7 @@
       "D:\\GIT\\farcry\\plugins",
       "D:\\GIT\\farcry\\zfarcrycore"
     ],
-    "excludeFolders": ["farcrycms"],
+    "excludeFolders": ["farcrycms", "social"],
     "excludeFiles": ["participant.cfc"],
     "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
     "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd"
@@ -74,8 +74,8 @@
   "relationshipPatterns": {
     "directFK": {
       "description": "Direct foreign key relationships using ftJoin property",
-      "pattern": "name=[\"']([^\"']+)[\"'].*?ftJoin=[\"']([^\"']+)[\"']",
-      "arrayPattern": "name=[\"']([^\"']+)[\"'].*?ftType=[\"']array[\"']",
+      "pattern": "<cfproperty[^>]*name=[\"']([^\"']+)[\"'][^>]*ftJoin=[\"']([^\"']+)[\"'][^>]*>",
+      "arrayPattern": "name=[\"']([^\"']+)[\"'].*?type=[\"']array[\"']",
       "cardinality": "||--||"
     },
     "joinTables": {
@@ -87,6 +87,12 @@
         "seq": "int",
         "typename": "string"
       }
+    },
+    "exclusions": {
+      "description": "Properties that should be excluded from relationship detection",
+      "patterns": [
+        "ftwizardStep=[\"']Filter Fields[\"']"
+      ]
     }
   },
   "propertyExtraction": {
