@@ -46,6 +46,7 @@ param(
     [string]$lFocus = "",
     [string]$DiagramType = "ER",
     [switch]$RefreshCFCs = $false,
+    [switch]$DebugScan = $false,
     [string]$ConfigFile = "D:\GIT\farcry\Cursor\FKmermaid\config\cfc_scan_config.json",
     [string]$OutputFile = ""
 )
@@ -57,6 +58,82 @@ if (Test-Path $modulePath) {
     Write-Host "✅ Loaded relationship detection module" -ForegroundColor Green
 } else {
     Write-Host "❌ Relationship detection module not found: $modulePath" -ForegroundColor Red
+}
+
+# Debug function to check scan directories
+function Debug-ScanDirectories {
+    param([object]$config)
+    
+    Write-Host "🔍 DEBUG: Checking scan directories..." -ForegroundColor Yellow
+    Write-Host "📁 Scan directories from config:" -ForegroundColor Cyan
+    foreach ($dir in $config.scanSettings.scanDirectories) {
+        Write-Host "   $dir" -ForegroundColor White
+        if (Test-Path $dir) {
+            Write-Host "     ✅ EXISTS" -ForegroundColor Green
+            
+            # For plugins directory, check each plugin folder
+            if ($dir -like "*plugins*") {
+                $pluginFolders = Get-ChildItem -Path $dir -Directory | Where-Object { $config.scanSettings.excludeFolders -notcontains $_.Name }
+                Write-Host "     📦 Found $($pluginFolders.Count) plugin folders" -ForegroundColor Blue
+                
+                foreach ($pluginFolder in $pluginFolders | Select-Object -First 3) {
+                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
+                    if (Test-Path $packagesPath) {
+                        $allCfcFiles = @()
+                        $packageFolders = Get-ChildItem -Path $packagesPath -Directory
+                        
+                        foreach ($pkgFolder in $packageFolders) {
+                            $cfcFiles = Get-ChildItem -Path $pkgFolder.FullName -Filter "*.cfc" -Recurse -ErrorAction SilentlyContinue
+                            $allCfcFiles += $cfcFiles
+                        }
+                        
+                        Write-Host "       📄 $($pluginFolder.Name): $($allCfcFiles.Count) CFC files total" -ForegroundColor Green
+                        
+                        # Show breakdown by package type
+                        foreach ($pkgFolder in $packageFolders) {
+                            $cfcFiles = Get-ChildItem -Path $pkgFolder.FullName -Filter "*.cfc" -Recurse -ErrorAction SilentlyContinue
+                            if ($cfcFiles.Count -gt 0) {
+                                Write-Host "         📦 $($pkgFolder.Name): $($cfcFiles.Count) CFC files" -ForegroundColor Blue
+                                foreach ($file in $cfcFiles | Select-Object -First 2) {
+                                    Write-Host "           - $($file.Name)" -ForegroundColor Gray
+                                }
+                                if ($cfcFiles.Count -gt 2) {
+                                    Write-Host "           ... and $($cfcFiles.Count - 2) more" -ForegroundColor Gray
+                                }
+                            }
+                        }
+                    } else {
+                        Write-Host "       ❌ $($pluginFolder.Name): No packages folder" -ForegroundColor Red
+                    }
+                }
+                if ($pluginFolders.Count -gt 3) {
+                    Write-Host "       ... and $($pluginFolders.Count - 3) more plugin folders" -ForegroundColor Gray
+                }
+            } else {
+                # For other directories (like zfarcrycore), check directly
+                $typesPath = Join-Path $dir "packages\types"
+                if (Test-Path $typesPath) {
+                    $cfcFiles = Get-ChildItem -Path $typesPath -Filter "*.cfc" -ErrorAction SilentlyContinue
+                    Write-Host "     📄 Found $($cfcFiles.Count) CFC files in types" -ForegroundColor Blue
+                    foreach ($file in $cfcFiles | Select-Object -First 5) {
+                        Write-Host "       - $($file.Name)" -ForegroundColor Gray
+                    }
+                    if ($cfcFiles.Count -gt 5) {
+                        Write-Host "       ... and $($cfcFiles.Count - 5) more" -ForegroundColor Gray
+                    }
+                } else {
+                    Write-Host "     ❌ No packages\types folder found" -ForegroundColor Red
+                }
+            }
+        } else {
+            Write-Host "     ❌ NOT FOUND" -ForegroundColor Red
+        }
+    }
+    
+    Write-Host "🚫 Exclude folders:" -ForegroundColor Cyan
+    foreach ($folder in $config.scanSettings.excludeFolders) {
+        Write-Host "   $folder" -ForegroundColor Gray
+    }
 }
 
 # Load configuration
@@ -84,20 +161,49 @@ function Load-DomainsConfig {
     if (Test-Path $domainsFile) {
         try {
             $domainsConfig = Get-Content $domainsFile -Raw | ConvertFrom-Json
-            return $domainsConfig.domains.PSObject.Properties.Name
+            return $domainsConfig.domains
         } catch {
             Write-Host "Error loading domains config: $($_.Exception.Message)"
-            return @()
+            return @{}
         }
     } else {
         Write-Host "Domains config file not found: $domainsFile"
-        return @()
+        return @{}
     }
+}
+
+# Check if an entity belongs to a domain
+function Entity-BelongsToDomain {
+    param([string]$entityName, [string]$domainName, [object]$domainsConfig)
+    
+    if (-not $domainsConfig -or -not $domainsConfig.$domainName) {
+        return $false
+    }
+    
+    $domain = $domainsConfig.$domainName
+    $allEntities = @()
+    
+    # Collect all entities from all categories in the domain
+    foreach ($category in $domain.entities.PSObject.Properties.Name) {
+        # Handle entities as arrays (not space-separated strings)
+        $categoryEntities = $domain.entities.$category
+        if ($categoryEntities -is [array]) {
+            $allEntities += $categoryEntities
+        } else {
+            # Fallback for string format
+            $categoryEntities = $categoryEntities -split '\s+'
+            $allEntities += $categoryEntities
+        }
+    }
+    
+    return $allEntities -contains $entityName
 }
 
 # Validate domains and return valid ones
 function Validate-Domains {
-    param([string]$lDomains, [array]$validDomains)
+    param([string]$lDomains, [object]$domainsConfig)
+    
+    $validDomains = $domainsConfig.PSObject.Properties.Name
     
     if ([string]::IsNullOrWhiteSpace($lDomains)) {
         Write-Host "📋 No domains specified - using ALL domains: $($validDomains -join ', ')" -ForegroundColor Cyan
@@ -174,6 +280,18 @@ function Validate-Parameters {
     }
 }
 
+# Debug mode - just check directories (bypass validation)
+if ($DebugScan) {
+    $config = Load-Config -configFile $ConfigFile
+    if ($null -eq $config) {
+        Write-Host "Failed to load configuration. Exiting."
+        exit 1
+    }
+    Debug-ScanDirectories -config $config
+    Write-Host "🔍 Debug scan complete. Use -RefreshCFCs for full scan." -ForegroundColor Yellow
+    exit 0
+}
+
 # Validate parameters before proceeding
 Validate-Parameters
 
@@ -184,9 +302,16 @@ if ($null -eq $config) {
     exit 1
 }
 
+# Debug mode - just check directories
+if ($DebugScan) {
+    Debug-ScanDirectories -config $config
+    Write-Host "🔍 Debug scan complete. Use -RefreshCFCs for full scan." -ForegroundColor Yellow
+    exit 0
+}
+
 # Load and validate domains
-$validDomains = Load-DomainsConfig
-$validatedDomains = Validate-Domains -lDomains $lDomains -validDomains $validDomains
+$domainsConfig = Load-DomainsConfig
+$validatedDomains = Validate-Domains -lDomains $lDomains -domainsConfig $domainsConfig
 
 # Extract settings from config
 $pluginsPath = $config.scanSettings.pluginsPath
@@ -217,12 +342,22 @@ function Get-CFCRelationships {
     # First pass: count total files
     foreach ($scanDir in $scanDirectories) {
         if (Test-Path $scanDir) {
-            $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
-            foreach ($pluginFolder in $pluginFolders) {
-                $typesPath = Join-Path $pluginFolder.FullName "packages\types"
-                if (Test-Path $typesPath) {
-                    $cfcFiles = Get-ChildItem -Path $typesPath -Filter "*.cfc" | Where-Object { $excludeFiles -notcontains $_.Name }
+            # Handle zfarcrycore differently (it's not a plugin)
+            if ($scanDir -like "*zfarcrycore*") {
+                $packagesPath = Join-Path $scanDir "packages"
+                if (Test-Path $packagesPath) {
+                    $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
                     $totalFiles += $cfcFiles.Count
+                }
+            } else {
+                # Count plugin folders
+                $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
+                foreach ($pluginFolder in $pluginFolders) {
+                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
+                    if (Test-Path $packagesPath) {
+                        $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
+                        $totalFiles += $cfcFiles.Count
+                    }
                 }
             }
         }
@@ -233,16 +368,14 @@ function Get-CFCRelationships {
     # Second pass: process files with progress bar
     foreach ($scanDir in $scanDirectories) {
         if (Test-Path $scanDir) {
-            # Scan all plugin folders except excluded ones
-            $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
-            
-            foreach ($pluginFolder in $pluginFolders) {
-                $pluginName = $pluginFolder.Name
+            # Handle zfarcrycore differently (it's not a plugin)
+            if ($scanDir -like "*zfarcrycore*") {
+                $pluginName = "zfarcrycore"
                 
-                # Scan for CFC files in packages/types directory
-                $typesPath = Join-Path $pluginFolder.FullName "packages\types"
-                if (Test-Path $typesPath) {
-                    $cfcFiles = Get-ChildItem -Path $typesPath -Filter "*.cfc" | Where-Object { $excludeFiles -notcontains $_.Name }
+                # Scan for CFC files in packages subdirectories
+                $packagesPath = Join-Path $scanDir "packages"
+                if (Test-Path $packagesPath) {
+                    $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
                     
                     foreach ($cfcFile in $cfcFiles) {
                         $processedFiles++
@@ -254,13 +387,12 @@ function Get-CFCRelationships {
                         
                         Write-Host "`r🔍 Scanning: [$progressBar] $progressPercent% - $currentFile" -NoNewline -ForegroundColor Green
                         
-                        $content = Get-Content $cfcFile.FullName -Raw
-                        
-                        # Extract entity name from filename
+                        # Extract entity name from filename first (before reading file)
                         $entityName = [System.IO.Path]::GetFileNameWithoutExtension($cfcFile.Name)
                         
-                        # Only process if entity is in known tables
+                        # Only process if entity is in known tables (skip reading file if not needed)
                         if ($knownTables -contains $entityName) {
+                            $content = Get-Content $cfcFile.FullName -Raw
                             # Extract entity info
                             $relationships.entities += @{
                                 name = $entityName
@@ -268,183 +400,62 @@ function Get-CFCRelationships {
                                 file = $cfcFile.FullName
                             }
                             
-                            # Parse cfproperty attributes for relationship detection
-                            $cfPropertyMatches = [regex]::Matches($content, '<cfproperty[^>]*>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                            Write-Host "  ✅ Added entity: $entityName from $pluginName" -ForegroundColor Green
                             
-                            foreach ($match in $cfPropertyMatches) {
-                                $cfPropertyTag = $match.Value
-                                
-                                # Parse attributes from the opening tag
-                                $attributes = @{}
-                                $attributeMatches = [regex]::Matches($cfPropertyTag, '(\w+)="([^"]*)"')
-                                foreach ($attrMatch in $attributeMatches) {
-                                    $attributeName = $attrMatch.Groups[1].Value
-                                    $attributeValue = $attrMatch.Groups[2].Value
-                                    $attributes[$attributeName] = $attributeValue
-                                }
-                                
-                                # Skip if no name attribute
-                                if (-not $attributes.ContainsKey("name")) { continue }
-                                
-                                $propertyName = $attributes["name"]
-                                
-                                # Check for exclusions
-                                $shouldExclude = $false
-                                if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
-                                    foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
-                                        foreach ($attrName in $attributes.Keys) {
-                                            $attrValue = $attributes[$attrName]
-                                            if ($attrValue -match $exclusionPattern) {
-                                                $shouldExclude = $true
-                                                break
-                                            }
-                                        }
-                                        if ($shouldExclude) { break }
-                                    }
-                                }
-                                
-                                # Skip excluded properties
-                                if ($shouldExclude) {
-                                    continue
-                                }
-                                
-                                # Check if this is an array relationship (must have both type="array" AND ftJoin)
-                                if ($attributes.ContainsKey("type") -and $attributes["type"] -eq "array" -and $attributes.ContainsKey("ftJoin")) {
-                                    $targetEntity = $attributes["ftJoin"]
-                                    
-                                    # Join table relationship
-                                    $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
-                                    $relationships.joinTables += @{
-                                        source = $entityName
-                                        sourcePlugin = $pluginName
-                                        target = $targetEntity
-                                        property = $propertyName
-                                        joinTable = $joinTableName
-                                    }
-                                    
-                                    # Store property info
-                                    $relationships.properties += @{
-                                        entity = $entityName
-                                        plugin = $pluginName
-                                        property = $propertyName
-                                        target = $targetEntity
-                                        isArray = $true
-                                    }
-                                }
-                                
-                                # Check if this is a direct FK relationship
-                                if ($attributes.ContainsKey("ftJoin") -and -not ($attributes.ContainsKey("type") -and $attributes["type"] -eq "array")) {
-                                    $targetEntity = $attributes["ftJoin"]
-                                    
-                                    # Direct FK relationship
-                                    $relationships.directFK += @{
-                                        source = $entityName
-                                        property = $propertyName
-                                        target = $targetEntity
-                                        plugin = $pluginName
-                                    }
-                                    
-                                    # Store property info
-                                    $relationships.properties += @{
-                                        entity = $entityName
-                                        plugin = $pluginName
-                                        property = $propertyName
-                                        target = $targetEntity
-                                        isArray = $false
-                                    }
-                                }
-                            }
+                            # Use the optimized relationship detection from the module
+                            $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
                             
-                            # Process multi-line matches (skip if already processed as array or single-line)
-                            $multiLineMatches = [regex]::Matches($content, $multiLinePattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                            foreach ($match in $multiLineMatches) {
-                                if ($match.Groups[1].Success -and $match.Groups[2].Success) {
-                                    $propertyName = $match.Groups[1].Value
-                                    
-                                    # Skip if already processed as array relationship or single-line
-                                    if ($processedArrayProperties -contains $propertyName -or $processedDirectFKProperties -contains $propertyName) {
-                                        continue
-                                    }
-                                    
-                                    $targetEntity = $match.Groups[2].Value
-                                    
-                                    # Check if this property is an array (type="array")
-                                    $isArrayProperty = [regex]::IsMatch($content, "name=`"$propertyName`".*?type=`"array`"", [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                                    
-                                    # Check if this property should be excluded
-                                    $shouldExclude = $false
-                                    if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
-                                        foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
-                                            # Check if the property definition contains any exclusion patterns (handle multi-line properties)
-                                            # Use a more robust pattern that captures the entire property definition
-                                            $propertyDefinition = [regex]::Match($content, "<cfproperty[^>]*name=`"$propertyName`"[^>]*>.*?/>", [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                                            if ($propertyDefinition.Success -and [regex]::IsMatch($propertyDefinition.Value, $exclusionPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)) {
-                                                $shouldExclude = $true
-                                                break
-                                            }
-                                        }
-                                    }
-                                    
-                                    # Skip excluded properties
-                                    if ($shouldExclude) {
-                                        continue
-                                    }
-                                    
-                                    # Process as array relationship if it's an array
-                                    if ($isArrayProperty) {
-                                        # Join table relationship using config naming pattern
-                                        $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
-                                        $relationships.joinTables += @{
-                                            source = $entityName
-                                            sourcePlugin = $pluginName
-                                            target = $targetEntity
-                                            property = $propertyName
-                                            joinTable = $joinTableName
-                                        }
-                                        
-                                        # Store property info
-                                        $relationships.properties += @{
-                                            entity = $entityName
-                                            plugin = $pluginName
-                                            property = $propertyName
-                                            target = $targetEntity
-                                            isArray = $true
-                                        }
-                                    } else {
-                                        # Add to direct FK relationships if not excluded
-                                        $relationships.directFK += @{
-                                            source = $entityName
-                                            property = $propertyName
-                                            target = $targetEntity
-                                            plugin = $pluginName
-                                        }
-                                    }
-                                }
-                            }
+                            # Merge relationships
+                            $relationships.directFK += $entityRelationships.directFK
+                            $relationships.joinTables += $entityRelationships.joinTables
+                            $relationships.properties += $entityRelationships.properties
+                        }
+                    }
+                }
+            } else {
+                # Scan all plugin folders except excluded ones
+                $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
+                
+                foreach ($pluginFolder in $pluginFolders) {
+                    $pluginName = $pluginFolder.Name
+                    
+                    # Scan for CFC files in all packages subdirectories
+                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
+                    if (Test-Path $packagesPath) {
+                        $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
+                        
+                        foreach ($cfcFile in $cfcFiles) {
+                            $processedFiles++
+                            $progressPercent = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
                             
-                            # Extract all properties for attributes (not just relationships)
-                            $propertyPattern = $config.propertyExtraction.propertyPattern
-                            $ftTypePattern = $config.propertyExtraction.ftTypePattern
-                            $allPropertyMatches = [regex]::Matches($content, $propertyPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                            foreach ($match in $allPropertyMatches) {
-                                $propertyName = $match.Groups[1].Value
-                                $propertyType = $match.Groups[2].Value
-                                
-                                # Get ftType if available
-                                $ftTypeMatch = [regex]::Match($content, "name=`"$propertyName`".*?$ftTypePattern", [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                                $ftType = if ($ftTypeMatch.Success) { $ftTypeMatch.Groups[1].Value } else { $propertyType }
-                                
-                                # Only add if not already added as a relationship property
-                                $existingProperty = $relationships.properties | Where-Object { $_.entity -eq $entityName -and $_.property -eq $propertyName }
-                                if (-not $existingProperty) {
-                                    $relationships.properties += @{
-                                        entity = $entityName
-                                        plugin = $pluginName
-                                        property = $propertyName
-                                        ftType = $ftType
-                                        isArray = $false
-                                    }
+                            # Create progress bar
+                            $progressBar = "█" * [math]::Floor($progressPercent / 2) + "░" * (50 - [math]::Floor($progressPercent / 2))
+                            $currentFile = Split-Path $cfcFile.Name -Leaf
+                            
+                            Write-Host "`r🔍 Scanning: [$progressBar] $progressPercent% - $currentFile" -NoNewline -ForegroundColor Green
+                            
+                            # Extract entity name from filename first (before reading file)
+                            $entityName = [System.IO.Path]::GetFileNameWithoutExtension($cfcFile.Name)
+                            
+                            # Only process if entity is in known tables (skip reading file if not needed)
+                            if ($knownTables -contains $entityName) {
+                                $content = Get-Content $cfcFile.FullName -Raw
+                                # Extract entity info
+                                $relationships.entities += @{
+                                    name = $entityName
+                                    plugin = $pluginName
+                                    file = $cfcFile.FullName
                                 }
+                                
+                                Write-Host "  ✅ Added entity: $entityName from $pluginName" -ForegroundColor Green
+                                
+                                # Use the optimized relationship detection from the module
+                                $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
+                                
+                                # Merge relationships
+                                $relationships.directFK += $entityRelationships.directFK
+                                $relationships.joinTables += $entityRelationships.joinTables
+                                $relationships.properties += $entityRelationships.properties
                             }
                         }
                     }
@@ -508,7 +519,7 @@ function Get-EntityPluginPrefix {
 
 # Function to generate Mermaid ER diagram
 function Generate-MermaidERD {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @())
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{})
     
     $mermaidContent = "erDiagram`n"
     
@@ -551,7 +562,12 @@ function Generate-MermaidERD {
         
         # If domains are specified, only include entities from those domains
         if ($domainList.Count -gt 0) {
-            return $domainList -contains $pluginName
+            foreach ($domain in $domainList) {
+                if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
+                    return $true
+                }
+            }
+            return $false
         }
         
         # If no filters, include all entities
@@ -560,6 +576,13 @@ function Generate-MermaidERD {
     
     # Get list of filtered entities that exist
     $existingEntities = $filteredEntities | ForEach-Object { $_.name }
+    
+    # DEBUG: Show what entities are being filtered
+    Write-Host "🔍 DEBUG: All available entities:" -ForegroundColor Magenta
+    $allEntities | ForEach-Object { Write-Host "   $($_.plugin) - $($_.name)" -ForegroundColor Gray }
+    
+    Write-Host "🔍 DEBUG: Filtered entities:" -ForegroundColor Magenta
+    $filteredEntities | ForEach-Object { Write-Host "   $($_.plugin) - $($_.name)" -ForegroundColor Green }
     
     Write-Host "📊 Filtered to $($filteredEntities.Count) entities based on parameters:" -ForegroundColor Cyan
     if ($lFocus) { Write-Host "   Focus: $lFocus" -ForegroundColor Yellow }
@@ -748,7 +771,7 @@ function Generate-MermaidERD {
 
 # Function to generate Mermaid Class diagram with full styling
 function Generate-MermaidClassDiagram {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @())
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{})
     
     $mermaidContent = "classDiagram`n"
     
@@ -791,7 +814,12 @@ function Generate-MermaidClassDiagram {
         
         # If domains are specified, only include entities from those domains
         if ($domainList.Count -gt 0) {
-            return $domainList -contains $pluginName
+            foreach ($domain in $domainList) {
+                if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
+                    return $true
+                }
+            }
+            return $false
         }
         
         # If no filters, include all entities
@@ -1027,9 +1055,9 @@ Write-Host "Found $($relationships.joinTables.Count) join table relationships"
 
 # Generate Mermaid diagrams based on type
 if ($DiagramType -eq "ER") {
-    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains
+    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig
 } else {
-    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains
+    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig
 }
 
 # Ensure exports directory exists

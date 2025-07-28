@@ -55,9 +55,23 @@ function Get-RelationshipsFromContent {
     
     $exclusionPatterns = $config.relationshipPatterns.exclusions.patterns
     
-    # Simple approach: Find all cfproperty tags (self-closing or not)
-    # Use a basic pattern to find the opening tag, then parse attributes
-    $cfPropertyMatches = [regex]::Matches($content, '<cfproperty[^>]*>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    # Handle multiline cfproperty tags properly
+    $cfPropertyMatches = @()
+    
+    # First, try to find complete cfproperty tags (self-closing)
+    $selfClosingMatches = [regex]::Matches($content, '<cfproperty[^>]*?>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    foreach ($match in $selfClosingMatches) {
+        $cfPropertyMatches += $match
+    }
+    
+    # Then find opening cfproperty tags that might span multiple lines
+    $openingMatches = [regex]::Matches($content, '<cfproperty[^>]*>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    foreach ($match in $openingMatches) {
+        # Skip if this is already a self-closing tag
+        if ($match.Value -notmatch '>$') {
+            $cfPropertyMatches += $match
+        }
+    }
     
     Write-Host "🔍 Processing $entityName - Found $($cfPropertyMatches.Count) cfproperty tags" -ForegroundColor Cyan
     
