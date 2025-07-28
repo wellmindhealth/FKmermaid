@@ -47,9 +47,43 @@ param(
     [string]$DiagramType = "ER",
     [switch]$RefreshCFCs = $false,
     [switch]$DebugScan = $false,
+    [switch]$Help = $false,
     [string]$ConfigFile = "D:\GIT\farcry\Cursor\FKmermaid\config\cfc_scan_config.json",
     [string]$OutputFile = ""
 )
+
+# Help function
+function Show-Help {
+    Write-Host "FarCry ERD Generator (Enhanced)" -ForegroundColor Cyan
+    Write-Host "=================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "📚 COMPLETE PARAMETER REFERENCE:" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "🔴 REQUIRED PARAMETERS:" -ForegroundColor Red
+    Write-Host "  -lFocus 'entityName'     # Focus entity (e.g., 'activityDef', 'progRole', 'member')" -ForegroundColor White
+    Write-Host "  -DiagramType 'ER|Class'  # Diagram type ('ER' or 'Class')" -ForegroundColor White
+    Write-Host "  -lDomains 'domain1,domain2' # Domains to include (e.g., 'programme,participant')" -ForegroundColor White
+    Write-Host ""
+    Write-Host "🟡 OPTIONAL PARAMETERS:" -ForegroundColor Yellow
+    Write-Host "  -RefreshCFCs             # Force fresh CFC scanning (bypass cache)" -ForegroundColor White
+    Write-Host "  -ConfigFile 'path'       # Custom config file path" -ForegroundColor White
+    Write-Host "  -OutputFile 'path'       # Custom output file path" -ForegroundColor White
+    Write-Host "  -Help                    # Show this help message" -ForegroundColor White
+    Write-Host ""
+    Write-Host "💡 USAGE EXAMPLES:" -ForegroundColor Cyan
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "📖 For complete documentation, see: README.md" -ForegroundColor Yellow
+    exit 0
+}
+
+# Check for help parameter first
+if ($Help) {
+    Show-Help
+}
 
 # Load relationship detection module
 $modulePath = Join-Path $PSScriptRoot "relationship_detection.ps1"
@@ -249,7 +283,33 @@ function Get-CFCRelationships {
     # Get scan directories from config
     $scanDirectories = $config.scanSettings.scanDirectories
     
-    # Second pass: process files
+    # First pass: count total files to process for progress bar
+    $totalFiles = 0
+    foreach ($scanDir in $scanDirectories) {
+        if (Test-Path $scanDir) {
+            if ($scanDir -like "*zfarcrycore*") {
+                $packagesPath = Join-Path $scanDir "packages"
+                if (Test-Path $packagesPath) {
+                    $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
+                    $totalFiles += ($cfcFiles | Where-Object { $knownTables -contains [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }).Count
+                }
+            } else {
+                $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
+                foreach ($pluginFolder in $pluginFolders) {
+                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
+                    if (Test-Path $packagesPath) {
+                        $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
+                        $totalFiles += ($cfcFiles | Where-Object { $knownTables -contains [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }).Count
+                    }
+                }
+            }
+        }
+    }
+    
+    Write-Host "📁 Scanning CFC files for relationships... ($totalFiles files to process)" -ForegroundColor Cyan
+    
+    # Second pass: process files with progress bar
+    $processedFiles = 0
     foreach ($scanDir in $scanDirectories) {
         if (Test-Path $scanDir) {
             # Handle zfarcrycore differently (it's not a plugin)
@@ -267,6 +327,10 @@ function Get-CFCRelationships {
                         
                         # Only process if entity is in known tables (skip reading file if not needed)
                         if ($knownTables -contains $entityName) {
+                            $processedFiles++
+                            $progress = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
+                            Write-Host "`r📁 Processing: $entityName [$progress%]   " -NoNewline
+                            
                             $content = Get-Content $cfcFile.FullName -Raw
                             # Extract entity info
                             $relationships.entities += @{
@@ -303,6 +367,10 @@ function Get-CFCRelationships {
                             
                             # Only process if entity is in known tables (skip reading file if not needed)
                             if ($knownTables -contains $entityName) {
+                                $processedFiles++
+                                $progress = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
+                                Write-Host "`r📁 Processing: $entityName [$progress%]   " -NoNewline
+                                
                                 $content = Get-Content $cfcFile.FullName -Raw
                                 # Extract entity info
                                 $relationships.entities += @{
@@ -310,8 +378,6 @@ function Get-CFCRelationships {
                                     plugin = $pluginName
                                     file = $cfcFile.FullName
                                 }
-                                
-
                                 
                                 # Use the optimized relationship detection from the module
                                 $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
@@ -328,7 +394,7 @@ function Get-CFCRelationships {
         }
     }
     
-
+    Write-Host "`n✅ CFC scanning complete!" -ForegroundColor Green
     
     return $relationships
 }
@@ -1115,14 +1181,8 @@ $stylesPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "css\mermaid_sty
 $cssStyles = Get-MermaidStyles -stylesPath $stylesPath
 
 # Echo chosen parameters
-Write-Host "📋 PARAMETERS:" -ForegroundColor Cyan
-Write-Host "   Focus Entity: $lFocus" -ForegroundColor Yellow
-Write-Host "   Diagram Type: $DiagramType" -ForegroundColor Yellow
-Write-Host "   Domains: $lDomains" -ForegroundColor Yellow
-Write-Host "   Refresh CFCs: $RefreshCFCs" -ForegroundColor Yellow
-Write-Host "   Config File: $ConfigFile" -ForegroundColor Yellow
-Write-Host "   Output File: $OutputFile" -ForegroundColor Yellow
-Write-Host ""
+Write-Host "📋 Loaded $($cssStyles.Count) styles from Mermaid styles file" -ForegroundColor Green
+Write-Host "🎯 Focus: $lFocus | 📊 Type: $DiagramType | 🌍 Domains: $lDomains" -ForegroundColor Cyan
 
 # Determine whether to use fresh scan or cached data
 if ($RefreshCFCs -or !(Test-Path $cacheFile)) {
@@ -1503,25 +1563,4 @@ Start-Process $htmlFile
 Write-Host "✅ Enhanced ERD generation complete!"
 Write-Host "📁 MMD file: $outputFile"
 Write-Host "🌐 HTML file: $htmlFile"
-Write-Host "🔗 Browser should have opened automatically"
-
-# Display comprehensive usage information
-Write-Host "`n📚 COMPLETE PARAMETER REFERENCE:" -ForegroundColor Yellow
-Write-Host "`n🔴 REQUIRED PARAMETERS:" -ForegroundColor Red
-Write-Host "  -lFocus 'entityName'     # Focus entity (e.g., 'activityDef', 'progRole', 'member')" -ForegroundColor White
-Write-Host "  -DiagramType 'ER|Class'  # Diagram type ('ER' or 'Class')" -ForegroundColor White
-Write-Host "  -lDomains 'domain1,domain2' # Domains to include (e.g., 'programme,participant')" -ForegroundColor White
-
-Write-Host "`n🟡 OPTIONAL PARAMETERS:" -ForegroundColor Yellow
-Write-Host "  -RefreshCFCs             # Force fresh CFC scanning (bypass cache)" -ForegroundColor White
-Write-Host "  -ConfigFile 'path'       # Custom config file path" -ForegroundColor White
-Write-Host "  -OutputFile 'path'       # Custom output file path" -ForegroundColor White
-
-Write-Host "`n💡 USAGE EXAMPLES:" -ForegroundColor Cyan
-Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Green
-Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Green
-Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Green
-Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
-
-Write-Host "`n📖 For complete documentation, see: README.md" -ForegroundColor Yellow 
-Write-Host "`n📖 For complete documentation, see: README.md" -ForegroundColor Yellow 
+Write-Host "🔗 Browser should have opened automatically" 

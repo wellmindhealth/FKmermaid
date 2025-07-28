@@ -30,7 +30,6 @@ function Test-PropertyExclusion {
         foreach ($attrName in $attributes.Keys) {
             $attrValue = $attributes[$attrName]
             if ($attrValue -match $pattern) {
-                Write-Host "    🔍 EXCLUSION MATCH: $attrName='$attrValue' matches pattern '$pattern'" -ForegroundColor Yellow
                 return $true
             }
         }
@@ -39,7 +38,7 @@ function Test-PropertyExclusion {
     return $false
 }
 
-# Function to detect relationships using attribute parsing
+# Function to extract relationships from CFC content
 function Get-RelationshipsFromContent {
     param(
         [string]$content,
@@ -55,8 +54,6 @@ function Get-RelationshipsFromContent {
     }
     
     $exclusionPatterns = $config.relationshipPatterns.exclusions.patterns
-    
-    Write-Host "🔍 DEBUG: Exclusion patterns loaded: $($exclusionPatterns -join ', ')" -ForegroundColor Magenta
     
     # Handle multiline cfproperty tags properly
     $cfPropertyMatches = @()
@@ -76,8 +73,6 @@ function Get-RelationshipsFromContent {
         }
     }
     
-    Write-Host "🔍 Processing $entityName - Found $($cfPropertyMatches.Count) cfproperty tags" -ForegroundColor Cyan
-    
     foreach ($match in $cfPropertyMatches) {
         $cfPropertyTag = $match.Value
         
@@ -91,17 +86,8 @@ function Get-RelationshipsFromContent {
         
         # Check for exclusions
         if ($exclusionPatterns) {
-            # Debug: Show attributes for properties that might be excluded
-            if ($propertyName -in @("aGroups", "lGroups")) {
-                Write-Host "  🔍 DEBUG: Checking $propertyName attributes:" -ForegroundColor Yellow
-                foreach ($attrName in $attributes.Keys) {
-                    Write-Host "    $attrName = '$($attributes[$attrName])'" -ForegroundColor Yellow
-                }
-            }
-            
             $isExcluded = Test-PropertyExclusion -attributes $attributes -exclusionPatterns $exclusionPatterns
             if ($isExcluded) {
-                Write-Host "  ❌ EXCLUDED: $propertyName (matched exclusion pattern)" -ForegroundColor Red
                 continue
             }
         }
@@ -109,8 +95,6 @@ function Get-RelationshipsFromContent {
         # Check if this is an array relationship (must have both type="array" AND ftJoin)
         if ($attributes -and $attributes.ContainsKey("type") -and $attributes["type"] -eq "array" -and $attributes.ContainsKey("ftJoin")) {
             $targetEntity = $attributes["ftJoin"]
-            
-            Write-Host "  🔗 Array: $propertyName -> $targetEntity" -ForegroundColor Blue
             
             # Join table relationship
             $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
@@ -136,8 +120,6 @@ function Get-RelationshipsFromContent {
         if ($attributes -and $attributes.ContainsKey("ftJoin") -and -not ($attributes.ContainsKey("type") -and $attributes["type"] -eq "array")) {
             $targetEntity = $attributes["ftJoin"]
             
-            Write-Host "  🔗 Direct FK: $propertyName -> $targetEntity" -ForegroundColor Green
-            
             # Direct FK relationship
             $relationships.directFK += @{
                 source = $entityName
@@ -155,21 +137,7 @@ function Get-RelationshipsFromContent {
                 isArray = $false
             }
         }
-        # Store all properties for entity definition
-        else {
-            $ftType = if ($attributes -and $attributes.ContainsKey("ftType")) { $attributes["ftType"] } else { if ($attributes -and $attributes.ContainsKey("type")) { $attributes["type"] } else { "string" } }
-            
-            $relationships.properties += @{
-                entity = $entityName
-                plugin = $pluginName
-                property = $propertyName
-                ftType = $ftType
-                isArray = $false
-            }
-        }
     }
-    
-    Write-Host "📊 $entityName results: $($relationships.directFK.Count) direct FK, $($relationships.joinTables.Count) join tables" -ForegroundColor Cyan
     
     return $relationships
 } 
