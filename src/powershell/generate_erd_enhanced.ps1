@@ -1661,7 +1661,8 @@ Write-Host "✅ Generated compressed Mermaid.live URL" -ForegroundColor Green
 
 # Non-blocking browser launch to prevent hanging
 try {
-    Start-Process $mermaidLiveUrl -WindowStyle Hidden -ErrorAction Stop
+    # Use Start-Job to make it truly non-blocking
+    Start-Job -ScriptBlock { param($url) Start-Process $url -WindowStyle Hidden } -ArgumentList $mermaidLiveUrl | Out-Null
     Write-Host "🌐 Opened Mermaid.live directly with content" -ForegroundColor Green
 } catch {
     Write-Host "⚠️  Could not open browser automatically. Please copy this URL:" -ForegroundColor Yellow
