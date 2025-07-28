@@ -1,4 +1,34 @@
 {
+  "scanSettings": {
+    "scanDirectories": [
+      "D:\\GIT\\farcry\\plugins",
+      "D:\\GIT\\farcry\\zfarcrycore"
+    ],
+    "excludeFolders": [
+      "farcrycms",
+      "social",
+      "aws",
+      "farcryldap",
+      "microsoftud",
+      "social",
+      "testmxunit"
+    ],
+    "excludeFiles": [
+      "participant.cfc",
+      "module.cfc",
+      "moduleDef.cfc",
+      "ruleActivityDefListing.cfc",
+      "farFilter.cfc",
+      "farTask.cfc",
+      "ruleImageGallerySlick.cfc",
+      "shopItem.cfc",
+      "orderItem.cfc",
+      "orderMaster.cfc"
+    ],
+    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
+    "farcryPath": "D:\\GIT\\farcry",
+    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd"
+  },
   "entityConstraints": {
     "knownTables": [
       "activity",
@@ -57,7 +87,6 @@
       "farCoapi",
       "farConfig",
       "farFeedback",
-      "farFilter",
       "farFilterProperty",
       "farFilterProperty_aRelated",
       "farFU",
@@ -73,7 +102,6 @@
       "farRole",
       "farRole_aGroups",
       "farRole_aPermissions",
-      "farTask",
       "farTaskDef",
       "farTaskDef_aRoles",
       "farUser",
@@ -104,9 +132,7 @@
       "memberGroup",
       "memberGroup_aFarcryUsers",
       "memberType",
-      "module",
       "module_aActivityIDs",
-      "moduleDef",
       "nested_tree_objects",
       "oauth2",
       "oauth2Facebook",
@@ -131,7 +157,6 @@
       "refObjects",
       "report",
       "report_aMemberGroupID",
-      "ruleActivityDefListing",
       "ruleActivityDefListing_aActivityDef",
       "ruleChildLinks",
       "ruleDidYouKnowFact",
@@ -180,30 +205,6 @@
       "xealth_order",
       "xealth_patient",
       "zzRemote"
-    ]
-  },
-  "scanSettings": {
-    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
-    "excludeFiles": [
-      "participant.cfc",
-      "module.cfc",
-      "moduleDef.cfc",
-      "ruleActivityDefListing.cfc"
-    ],
-    "farcryPath": "D:\\GIT\\farcry",
-    "scanDirectories": [
-      "D:\\GIT\\farcry\\plugins",
-      "D:\\GIT\\farcry\\zfarcrycore"
-    ],
-    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd",
-    "excludeFolders": [
-      "farcrycms",
-      "social",
-      "aws",
-      "farcryldap",
-      "microsoftud",
-      "social",
-      "testmxunit"
     ]
   }
 }

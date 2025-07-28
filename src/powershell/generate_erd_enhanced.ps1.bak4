@@ -817,18 +817,7 @@ function Generate-MermaidERD {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         $entityDisplayName = "$pluginName - $entityName"
-        
-        # Construct full focus entity name with plugin prefix
-        $fullFocusEntity = $lFocus
-        if ($lFocus -and $lFocus -ne "") {
-            # Find the plugin for the focus entity
-            $focusEntityInfo = $relationships.entities | Where-Object { $_.name -eq $lFocus } | Select-Object -First 1
-            if ($focusEntityInfo) {
-                $fullFocusEntity = "$($focusEntityInfo.plugin)_$lFocus"
-            }
-        }
-        
-        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $fullFocusEntity -relatedEntities $relatedEntities -cssStyles $cssStyles -validatedDomains $validatedDomains -domainsConfig $domainsConfig
+        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities -cssStyles $cssStyles -validatedDomains $validatedDomains -domainsConfig $domainsConfig
         
         # Use sanitized entity name for style definition (no spaces, hyphens, or quotes)
         $sanitizedEntityName = Get-SanitizedEntityName -entityName $entityDisplayName
@@ -1008,18 +997,7 @@ function Generate-MermaidClassDiagram {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         $entityDisplayName = "$pluginName - $entityName"
-        
-        # Construct full focus entity name with plugin prefix
-        $fullFocusEntity = $lFocus
-        if ($lFocus -and $lFocus -ne "") {
-            # Find the plugin for the focus entity
-            $focusEntityInfo = $relationships.entities | Where-Object { $_.name -eq $lFocus } | Select-Object -First 1
-            if ($focusEntityInfo) {
-                $fullFocusEntity = "$($focusEntityInfo.plugin)_$lFocus"
-            }
-        }
-        
-        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $fullFocusEntity -relatedEntities $relatedEntities -cssStyles $cssStyles -validatedDomains $validatedDomains -domainsConfig $domainsConfig
+        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities -cssStyles $cssStyles -validatedDomains $validatedDomains -domainsConfig $domainsConfig
         
         # Sanitize entity name for style definition (same as class names)
         $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
@@ -1167,17 +1145,7 @@ function Get-EntityStyle {
     $focusEntities = $focusEntity -split ',' | ForEach-Object { $_.Trim() }
     
     # Focus entity styling - use CSS if available, otherwise fallback
-    # Extract base entity name from focus entities for comparison
-    $baseFocusEntities = @()
-    foreach ($focus in $focusEntities) {
-        $baseFocus = $focus
-        if ($focus -match '^[^_]+_(.+)$') {
-            $baseFocus = $matches[1]
-        }
-        $baseFocusEntities += $baseFocus
-    }
-    
-    if ($baseFocusEntities -contains $entityName) {
+    if ($focusEntities -contains $entityName) {
         if ($cssStyles.ContainsKey("focus")) {
             return $cssStyles["focus"]
         }
@@ -1199,62 +1167,29 @@ function Get-EntityStyle {
         return "fill:#1565c0,stroke:#0d47a1,stroke-width:1px,color:#fff"
     }
     
-    # Check if entity is in the same domain as the focus entity (but not directly related)
-    $isInSameDomainAsFocus = $false
+    # Check if entity is in specified domains but not directly related
+    $isInSpecifiedDomains = $false
     if ($validatedDomains -and $domainsConfig -and $domainsConfig.domains) {
-
-        # Find which domain the focus entity belongs to
-        $focusDomain = $null
         foreach ($domain in $validatedDomains) {
             if ($domainsConfig.domains.ContainsKey($domain)) {
                 $domainEntities = @()
                 foreach ($category in $domainsConfig.domains[$domain].entities.PSObject.Properties) {
                     $domainEntities += $category.Value
                 }
-                
-                # Extract base entity name from focus entity name (remove plugin prefix)
-                $baseFocusEntity = $focusEntity
-                if ($focusEntity -match '^[^_]+_(.+)$') {
-                    $baseFocusEntity = $matches[1]
-                }
-                
-                if ($domainEntities -contains $baseFocusEntity) {
-                    $focusDomain = $domain
+                if ($domainEntities -contains $entityName) {
+                    $isInSpecifiedDomains = $true
                     break
                 }
-            }
-        }
-        
-        # Check if current entity is in the same domain as focus
-        if ($focusDomain -and $domainsConfig.domains.ContainsKey($focusDomain)) {
-            $focusDomainEntities = @()
-            foreach ($category in $domainsConfig.domains[$focusDomain].entities.PSObject.Properties) {
-                $focusDomainEntities += $category.Value
-            }
-            
-            # Extract base entity name from full entity name (remove plugin prefix)
-            $baseEntityName = $entityName
-            if ($entityName -match '^[^_]+_(.+)$') {
-                $baseEntityName = $matches[1]
-            }
-            
-            # Debug: Check specific entities
-            if ($entityName -eq "zfarcrycore_farRole" -or $entityName -eq "zfarcrycore_farPermission") {
-                Write-Host "DEBUG: $entityName -> $baseEntityName, focusDomain=$focusDomain, contains=$($focusDomainEntities -contains $baseEntityName)" -ForegroundColor Yellow
-            }
-            
-            if ($focusDomainEntities -contains $baseEntityName) {
-                $isInSameDomainAsFocus = $true
             }
         }
     }
     
     # Domain entities that aren't directly related - use CSS if available, otherwise fallback
-    if ($isInSameDomainAsFocus) {
+    if ($isInSpecifiedDomains) {
         if ($cssStyles.ContainsKey("domain_other")) {
             return $cssStyles["domain_other"]
         }
-        return "fill:#37474f,stroke:#263238,stroke-width:2px,color:#b0bec5"
+        return "fill:#1a1a1a,stroke:#0a0a0a,stroke-width:1px,color:#666"
     }
     
     # Default styling for all other entities - use CSS if available, otherwise fallback

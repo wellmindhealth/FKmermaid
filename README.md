@@ -52,6 +52,41 @@ This ensures:
 .\generate_cfc_scan_config.ps1
 ```
 
+### Exclusion System
+
+The tool uses a two-level exclusion system to ensure entities are completely removed from diagram generation:
+
+1. **`excludeFiles`** - Prevents CFC files from being scanned for relationships
+2. **`knownTables` filtering** - Removes entities from the database-derived table list
+
+**How it works:**
+- The generator script reads the existing `cfc_scan_config.json`
+- Extracts the `excludeFiles` array (e.g., `["farFilter.cfc", "farTask.cfc"]`)
+- Converts `.cfc` filenames to entity names (e.g., `farFilter.cfc` → `farFilter`)
+- Filters the `knownTables` array to exclude these entities
+- Updates the config with the filtered `knownTables`
+
+**To exclude an entity:**
+1. Add the `.cfc` filename to the `excludeFiles` array in `cfc_scan_config.json`
+2. Run `.\generate_cfc_scan_config.ps1` to regenerate the config
+3. The entity will be excluded from both CFC scanning and `knownTables`
+
+**Example:**
+```json
+{
+  "scanSettings": {
+    "excludeFiles": [
+      "participant.cfc",
+      "module.cfc", 
+      "farFilter.cfc",
+      "farTask.cfc"
+    ]
+  }
+}
+```
+
+This ensures that excluded entities never appear in generated diagrams, even if they exist in the database.
+
 ## Usage
 ```powershell
 .\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "programme"
