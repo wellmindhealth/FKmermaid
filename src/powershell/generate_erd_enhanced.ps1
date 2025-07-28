@@ -646,37 +646,37 @@ function Generate-MermaidERD {
         $group = $selfRefGroups[$entityName]
         $mermaidContent += "    %% Self-Referencing Relationships for $entityName`n"
         
+        # Collect all self-referencing relationships for this entity
+        $allSelfRefRelationships = @()
+        
         # Add self-referencing direct FK relationships for this entity
         foreach ($fk in $selfRefDirectFK) {
             if ($fk.source -eq $entityName) {
-                $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $fk.source }).plugin
-                $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $fk.target }).plugin
-                $sourceDisplayName = "$sourcePlugin - $($fk.source)"
-                $targetDisplayName = "$targetPlugin - $($fk.target)"
-                $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-                $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-                $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-                $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-                $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-                $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-                $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
+                $allSelfRefRelationships += $fk.property
             }
         }
         
         # Add self-referencing join table relationships for this entity
         foreach ($join in $group) {
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $join.source }).plugin
-            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $join.target }).plugin
-            $sourceDisplayName = "$sourcePlugin - $($join.source)"
-            $targetDisplayName = "$targetPlugin - $($join.target)"
-            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-            $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
+            $allSelfRefRelationships += $join.property
         }
+        
+        # Add comment listing all the self-referencing relationships
+        $relationshipList = $allSelfRefRelationships -join ', '
+        $mermaidContent += "    %% Self-refs include: $relationshipList`n"
+        
+        # Create a short placeholder label for consolidated self-referencing relationships
+        $consolidatedLabel = "self_refs"
+        
+        # Get entity display names
+        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $entityName }).plugin
+        $sourceDisplayName = "$sourcePlugin - $entityName"
+        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+        
+        # Add single consolidated relationship line
+        $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedSourceName`" : $consolidatedLabel`n"
         
         $mermaidContent += "    %% End Self-Referencing Relationships for $entityName`n`n"
     }
