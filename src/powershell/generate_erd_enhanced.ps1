@@ -454,6 +454,38 @@ function Generate-MermaidERD {
     # Get list of filtered entities that exist
     $existingEntities = $filteredEntities | ForEach-Object { $_.name }
     
+    # Consolidate duplicate entities (same entity name in different plugins)
+    $consolidatedEntities = @{}
+    $consolidatedFilteredEntities = @()
+    
+    foreach ($entity in $filteredEntities) {
+        $entityName = $entity.name
+        $pluginName = $entity.plugin
+        
+        if (-not $consolidatedEntities.ContainsKey($entityName)) {
+            # First occurrence of this entity name
+            $consolidatedEntities[$entityName] = @($pluginName)
+            $consolidatedFilteredEntities += $entity
+        } else {
+            # Duplicate entity name - add plugin to existing list
+            $consolidatedEntities[$entityName] += $pluginName
+            # Don't add duplicate entity to filtered list
+        }
+    }
+    
+    # Update filtered entities to use consolidated list
+    $filteredEntities = $consolidatedFilteredEntities
+    $existingEntities = $filteredEntities | ForEach-Object { $_.name }
+    
+    # Log consolidation results
+    $duplicateEntities = $consolidatedEntities | Where-Object { $_.Value.Count -gt 1 }
+    if ($duplicateEntities.Count -gt 0) {
+        Write-Host "🔗 Consolidated duplicate entities:" -ForegroundColor Yellow
+        foreach ($entity in $duplicateEntities) {
+            Write-Host "   $($entity.Key): $($entity.Value -join ', ')" -ForegroundColor Cyan
+        }
+    }
+    
 
     
     Write-Host "📊 Filtered to $($filteredEntities.Count) entities based on parameters:" -ForegroundColor Cyan
