@@ -67,8 +67,8 @@ function Get-RelationshipsFromContent {
         # Parse attributes from the opening tag
         $attributes = Parse-CFPropertyAttributes -cfPropertyTag $cfPropertyTag
         
-        # Skip if no name attribute
-        if (-not $attributes.ContainsKey("name")) { continue }
+        # Skip if attributes is null or no name attribute
+        if (-not $attributes -or -not $attributes.ContainsKey("name")) { continue }
         
         $propertyName = $attributes["name"]
         
@@ -78,7 +78,7 @@ function Get-RelationshipsFromContent {
         }
         
         # Check if this is an array relationship
-        if ($attributes.ContainsKey("type") -and $attributes["type"] -eq "array" -and $attributes.ContainsKey("ftJoin")) {
+        if ($attributes -and $attributes.ContainsKey("type") -and $attributes["type"] -eq "array" -and $attributes.ContainsKey("ftJoin")) {
             $targetEntity = $attributes["ftJoin"]
             
             Write-Host "  🔗 Array: $propertyName -> $targetEntity" -ForegroundColor Blue
@@ -102,8 +102,9 @@ function Get-RelationshipsFromContent {
                 isArray = $true
             }
         }
+        
         # Check if this is a direct FK relationship
-        elseif ($attributes.ContainsKey("ftJoin")) {
+        if ($attributes -and $attributes.ContainsKey("ftJoin") -and -not ($attributes.ContainsKey("type") -and $attributes["type"] -eq "array")) {
             $targetEntity = $attributes["ftJoin"]
             
             Write-Host "  🔗 Direct FK: $propertyName -> $targetEntity" -ForegroundColor Green
@@ -127,7 +128,7 @@ function Get-RelationshipsFromContent {
         }
         # Store all properties for entity definition
         else {
-            $ftType = if ($attributes.ContainsKey("ftType")) { $attributes["ftType"] } else { $attributes["type"] }
+            $ftType = if ($attributes -and $attributes.ContainsKey("ftType")) { $attributes["ftType"] } else { if ($attributes -and $attributes.ContainsKey("type")) { $attributes["type"] } else { "string" } }
             
             $relationships.properties += @{
                 entity = $entityName
