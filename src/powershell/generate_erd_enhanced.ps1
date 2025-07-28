@@ -607,23 +607,27 @@ function Generate-MermaidERD {
     }
     
     # Add non-self-referencing direct FK relationships
-    foreach ($fk in $otherDirectFK) {
-        $sourceEntity = $fk.source
-        $targetEntity = $fk.target
-        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-        
-        # Sanitize entity names for relationships
-        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-        $targetDisplayName = "$targetPlugin - $targetEntity"
-        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-        
-        $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
+    if ($otherDirectFK.Count -gt 0) {
+        $mermaidContent += "    %% Direct FK Relationships`n"
+        foreach ($fk in $otherDirectFK) {
+            $sourceEntity = $fk.source
+            $targetEntity = $fk.target
+            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+            
+            # Sanitize entity names for relationships
+            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+            $targetDisplayName = "$targetPlugin - $targetEntity"
+            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+            
+            $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
+        }
+        $mermaidContent += "    %% End Direct FK Relationships`n`n"
     }
 
     # Process join table relationships for self-referencing
@@ -690,20 +694,24 @@ function Generate-MermaidERD {
     }
 
     # Add other join table relationships
-    foreach ($join in $otherJoinRelationships) {
-        $sourceEntity = $join.source
-        $targetEntity = $join.target
-        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-        $targetDisplayName = "$targetPlugin - $targetEntity"
-        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-        $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
+    if ($otherJoinRelationships.Count -gt 0) {
+        $mermaidContent += "    %% Join Table Relationships`n"
+        foreach ($join in $otherJoinRelationships) {
+            $sourceEntity = $join.source
+            $targetEntity = $join.target
+            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+            $targetDisplayName = "$targetPlugin - $targetEntity"
+            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+            $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
+        }
+        $mermaidContent += "    %% End Join Table Relationships`n`n"
     }
 
     # Add styling
