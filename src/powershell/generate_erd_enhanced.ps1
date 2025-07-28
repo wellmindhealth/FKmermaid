@@ -385,9 +385,14 @@ function Generate-MermaidERD {
     
     $mermaidContent = "erDiagram`n"
     
-        # Add parameters as a comment since ER diagrams may not support notes properly
-    $paramComment = "%% Parameters: Focus=$lFocus Domains=$($validatedDomains -join ',') ChartType=ER"
-    $mermaidContent += "    $paramComment`n"
+                # Add parameters as a comment since ER diagrams may not support notes properly
+        $paramComment = @"
+%% Parameters:
+%%   Focus: $lFocus
+%%   Domains: $($validatedDomains -join ', ')
+%%   Chart Type: ER
+"@
+        $mermaidContent += "    $paramComment`n"
     
     # Use validated domains
     $domainList = $validatedDomains
