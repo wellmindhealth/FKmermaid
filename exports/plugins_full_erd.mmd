@@ -1,9 +1,4 @@
 erDiagram
-    "pathway_activityDef" {
-        UUID ObjectID
-        string name
-    }
-
     "pathway_address" {
         UUID ObjectID
         string name
@@ -25,16 +20,6 @@ erDiagram
     }
 
     "pathway_memberType" {
-        UUID ObjectID
-        string name
-    }
-
-    "pathway_module" {
-        UUID ObjectID
-        string name
-    }
-
-    "pathway_moduleDef" {
         UUID ObjectID
         string name
     }
@@ -74,58 +59,37 @@ erDiagram
         string name
     }
 
-    "pathway_activityDef" }o--|| "pathway_activityDef" : aInteract5Activities
-    "pathway_address" }o--|| "pathway_member" : memberID
-    "pathway_center" }o--|| "pathway_referer" : aReferers
-    "pathway_member" }o--|| "pathway_address" : aAddresses
-    "pathway_member" }o--|| "pathway_activityDef" : ActivityDef
-    "pathway_member" }o--|| "pathway_progRole" : roleID
-    "pathway_progMember" }o--|| "pathway_member" : memberID
-    "pathway_referer" }o--|| "pathway_partner" : partnerID
-    "pathway_referer" }o--|| "pathway_memberGroup" : memberGroupID
-    "pathway_referer" }o--|| "pathway_center" : centerID
-    "pathway_report" }o--|| "pathway_memberGroup" : aMemberGroupID
-    "pathway_testimonial" }o--|| "pathway_member" : memberID
-    "pathway_testimonial" }o--|| "pathway_activityDef" : activityDefID
-    %% aInteractXActivities Group
-    "pathway_activityDef" }o--|| "pathway_activityDef" : aInteract1Activities
-    %% aInteractXActivities Group
-    "pathway_activityDef" }o--|| "pathway_activityDef" : aInteract2Activities
-    %% aInteractXActivities Group
-    "pathway_activityDef" }o--|| "pathway_activityDef" : aInteract3Activities
-    %% aInteractXActivities Group
-    "pathway_activityDef" }o--|| "pathway_activityDef" : aInteract4Activities
-    "pathway_activityDef" }o--|| "pathway_progRole" : role
-    "pathway_activityDef" }o--|| "pathway_activityDef" : onEndID
-    "pathway_activityDef" }o--|| "pathway_activityDef" : aCuePointActivities
+    "pathway_address" ||--|| "pathway_member" : memberID
+    "pathway_member" ||--|| "pathway_progRole" : roleID
+    "pathway_progMember" ||--|| "pathway_member" : memberID
+    "pathway_referer" ||--|| "pathway_partner" : partnerID
+    "pathway_referer" ||--|| "pathway_memberGroup" : memberGroupID
+    "pathway_referer" ||--|| "pathway_center" : centerID
+    "pathway_testimonial" ||--|| "pathway_member" : memberID
     "pathway_center" }o--|| "pathway_partner" : partnerID
     "pathway_center" }o--|| "pathway_memberGroup" : memberGroupID
+    "pathway_center" }o--|| "pathway_referer" : aReferers
+    "pathway_member" }o--|| "pathway_memberType" : Member
+    "pathway_member" }o--|| "pathway_address" : aAddresses
     "pathway_member" }o--|| "pathway_memberType" : memberTypeID
     "pathway_member" }o--|| "pathway_memberGroup" : memberGroupID
     "pathway_member" }o--|| "pathway_partner" : partnerID
     "pathway_member" }o--|| "pathway_center" : centerID
     "pathway_member" }o--|| "pathway_referer" : refererID
     "pathway_member" }o--|| "pathway_orderMaster" : aOrderIDs
+    "pathway_memberGroup" }o--|| "pathway_partner" : Member Group
     "pathway_memberGroup" }o--|| "pathway_partner" : partnerID
-    "pathway_module" }o--|| "pathway_progMember" : progMemberID
-    "pathway_module" }o--|| "pathway_moduleDef" : moduleDefID
-    "pathway_module" }o--|| "pathway_member" : memberID
-    "pathway_module" }o--|| "pathway_module" : currModuleDefID
-    "pathway_moduleDef" }o--|| "pathway_member" : memberID
-    "pathway_moduleDef" }o--|| "pathway_module" : currModuleDefID
     "pathway_report" }o--|| "pathway_partner" : partnerID
     "pathway_report" }o--|| "pathway_member" : memberID
     "pathway_report" }o--|| "pathway_memberType" : memberTypeID
+    "pathway_report" }o--|| "pathway_memberGroup" : aMemberGroupID
 
     %% Entity Styling
-    style pathway_activityDef fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
     style pathway_address fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
     style pathway_center fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
     style pathway_member fill:#ff9800,stroke:#e65100,stroke-width:2px,color:#fff
     style pathway_memberGroup fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
     style pathway_memberType fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
-    style pathway_module fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
-    style pathway_moduleDef fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
     style pathway_orderMaster fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
     style pathway_partner fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
     style pathway_progMember fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff

@@ -6,7 +6,7 @@
       "D:\\GIT\\farcry\\zfarcrycore"
     ],
     "excludeFolders": ["farcrycms", "social"],
-    "excludeFiles": ["participant.cfc"],
+    "excludeFiles": ["participant.cfc", "module.cfc", "moduleDef.cfc"],
     "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
     "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd"
   },
@@ -75,6 +75,7 @@
     "directFK": {
       "description": "Direct foreign key relationships using ftJoin property",
       "pattern": "<cfproperty[^>]*name=[\"']([^\"']+)[\"'][^>]*ftJoin=[\"']([^\"']+)[\"'][^>]*>",
+      "multiLinePattern": "<cfproperty[^>]*name=[\"']([^\"']+)[\"'][^>]*ftJoin=[\"']([^\"']+)[\"'][^>]*[^>]*\/>",
       "arrayPattern": "name=[\"']([^\"']+)[\"'].*?type=[\"']array[\"']",
       "cardinality": "||--||"
     },

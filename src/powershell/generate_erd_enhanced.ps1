@@ -153,8 +153,8 @@ function Validate-Parameters {
     
     if ($errors.Count -gt 0) {
         Write-Host "`n❌ PARAMETER VALIDATION FAILED:`n" -ForegroundColor Red
-        foreach ($error in $errors) {
-            Write-Host $error -ForegroundColor Red
+        foreach ($errorMsg in $errors) {
+            Write-Host $errorMsg -ForegroundColor Red
         }
         Write-Host "`n📖 USAGE EXAMPLES:`n" -ForegroundColor Yellow
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Cyan
@@ -259,62 +259,201 @@ function Get-CFCRelationships {
                                 file = $cfcFile.FullName
                             }
                             
-                            # Extract all properties with ftJoin using config pattern
-                            $pattern = $config.relationshipPatterns.directFK.pattern
-                            $propertyMatches = [regex]::Matches($content, $pattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                            foreach ($match in $propertyMatches) {
-                                $propertyName = $match.Groups[1].Value
-                                $targetEntity = $match.Groups[2].Value
-                                
-                                # Check if this property should be excluded
-                                $shouldExclude = $false
-                                if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
-                                    foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
-                                        # Check if the property definition contains any exclusion patterns
-                                        $propertyDefinition = [regex]::Match($content, "name=`"$propertyName`".*?/>", [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                                        if ($propertyDefinition.Success -and [regex]::IsMatch($propertyDefinition.Value, $exclusionPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)) {
-                                            $shouldExclude = $true
-                                            break
+                            # Process array relationships FIRST (to avoid duplicates)
+                            $arrayPattern = $config.relationshipPatterns.directFK.arrayPattern
+                            $arrayMatches = [regex]::Matches($content, $arrayPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                            $processedArrayProperties = @()
+                            $processedDirectFKProperties = @()
+                            
+                            foreach ($match in $arrayMatches) {
+                                if ($match.Groups[1].Success) {
+                                    $propertyName = $match.Groups[1].Value
+                                    $processedArrayProperties += $propertyName
+                                    
+                                    # Find the corresponding ftJoin for this array property
+                                    $ftJoinMatch = [regex]::Match($content, "name=`"$propertyName`".*?ftJoin=`"([^`"]+)`"", [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                    if ($ftJoinMatch.Success) {
+                                        $targetEntity = $ftJoinMatch.Groups[1].Value
+                                        
+                                        # Check if this property should be excluded
+                                        $shouldExclude = $false
+                                        if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
+                                            foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
+                                                # Check if the property definition contains any exclusion patterns (handle multi-line properties)
+                                                # Use a more robust pattern that captures the entire property definition
+                                                $propertyDefinition = [regex]::Match($content, "<cfproperty[^>]*name=`"$propertyName`"[^>]*>.*?/>", [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                                if ($propertyDefinition.Success -and [regex]::IsMatch($propertyDefinition.Value, $exclusionPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)) {
+                                                    $shouldExclude = $true
+                                                    break
+                                                }
+                                            }
+                                        }
+                                        
+                                        # Skip excluded properties
+                                        if ($shouldExclude) {
+                                            continue
+                                        }
+                                        
+                                        # Join table relationship using config naming pattern
+                                        $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
+                                        $relationships.joinTables += @{
+                                            source = $entityName
+                                            sourcePlugin = $pluginName
+                                            target = $targetEntity
+                                            property = $propertyName
+                                            joinTable = $joinTableName
+                                        }
+                                        
+                                        # Store property info
+                                        $relationships.properties += @{
+                                            entity = $entityName
+                                            plugin = $pluginName
+                                            property = $propertyName
+                                            target = $targetEntity
+                                            isArray = $true
                                         }
                                     }
                                 }
-                                
-                                # Skip excluded properties
-                                if ($shouldExclude) {
-                                    continue
-                                }
-                                
-                                # Check if it's an array using config pattern
-                                $arrayPattern = $config.relationshipPatterns.directFK.arrayPattern
-                                $isArray = [regex]::IsMatch($content, "name=`"$propertyName`".*?$arrayPattern", [System.Text.RegularExpressions.RegexOptions]::Singleline)
-                                
-                                if ($isArray) {
-                                    # Join table relationship using config naming pattern
-                                    $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
-                                    $relationships.joinTables += @{
-                                        source = $entityName
-                                        sourcePlugin = $pluginName
-                                        target = $targetEntity
-                                        property = $propertyName
-                                        joinTable = $joinTableName
+                            }
+                            
+                            # Extract all properties with ftJoin using both single-line and multi-line patterns
+                            $singleLinePattern = $config.relationshipPatterns.directFK.pattern
+                            $multiLinePattern = $config.relationshipPatterns.directFK.multiLinePattern
+                            
+                            # Process single-line matches (skip if already processed as array)
+                            $singleLineMatches = [regex]::Matches($content, $singleLinePattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                            foreach ($match in $singleLineMatches) {
+                                if ($match.Groups[1].Success -and $match.Groups[2].Success) {
+                                    $propertyName = $match.Groups[1].Value
+                                    
+                                    # Skip if already processed as array relationship
+                                    if ($processedArrayProperties -contains $propertyName) {
+                                        continue
                                     }
-                                } else {
-                                    # Direct FK relationship
-                                    $relationships.directFK += @{
-                                        source = $entityName
-                                        sourcePlugin = $pluginName
-                                        target = $targetEntity
-                                        property = $propertyName
+                                    
+                                    $targetEntity = $match.Groups[2].Value
+                                    
+                                    # Check if this property is an array (type="array")
+                                    $isArrayProperty = [regex]::IsMatch($content, "name=`"$propertyName`".*?type=`"array`"", [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                    
+                                    # Check if this property should be excluded
+                                    $shouldExclude = $false
+                                    if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
+                                        foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
+                                            # Check if the property definition contains any exclusion patterns (handle multi-line properties)
+                                            # Use a more robust pattern that captures the entire property definition
+                                            $propertyDefinition = [regex]::Match($content, "<cfproperty[^>]*name=`"$propertyName`"[^>]*>.*?/>", [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                            if ($propertyDefinition.Success -and [regex]::IsMatch($propertyDefinition.Value, $exclusionPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)) {
+                                                $shouldExclude = $true
+                                                break
+                                            }
+                                        }
                                     }
+                                    
+                                    # Skip excluded properties
+                                    if ($shouldExclude) {
+                                        continue
+                                    }
+                                    
+                                    # Process as array relationship if it's an array
+                                    if ($isArrayProperty) {
+                                        # Join table relationship using config naming pattern
+                                        $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
+                                        $relationships.joinTables += @{
+                                            source = $entityName
+                                            sourcePlugin = $pluginName
+                                            target = $targetEntity
+                                            property = $propertyName
+                                            joinTable = $joinTableName
+                                        }
+                                        
+                                        # Store property info
+                                        $relationships.properties += @{
+                                            entity = $entityName
+                                            plugin = $pluginName
+                                            property = $propertyName
+                                            target = $targetEntity
+                                            isArray = $true
+                                        }
+                                    } else {
+                                        # Add to direct FK relationships if not excluded
+                                        $relationships.directFK += @{
+                                            source = $entityName
+                                            property = $propertyName
+                                            target = $targetEntity
+                                            plugin = $pluginName
+                                        }
+                                    }
+                                    
+                                    # Mark as processed to avoid duplication in multi-line processing
+                                    $processedDirectFKProperties += $propertyName
                                 }
-                                
-                                # Store property info
-                                $relationships.properties += @{
-                                    entity = $entityName
-                                    plugin = $pluginName
-                                    property = $propertyName
-                                    target = $targetEntity
-                                    isArray = $isArray
+                            }
+                            
+                            # Process multi-line matches (skip if already processed as array or single-line)
+                            $multiLineMatches = [regex]::Matches($content, $multiLinePattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                            foreach ($match in $multiLineMatches) {
+                                if ($match.Groups[1].Success -and $match.Groups[2].Success) {
+                                    $propertyName = $match.Groups[1].Value
+                                    
+                                    # Skip if already processed as array relationship or single-line
+                                    if ($processedArrayProperties -contains $propertyName -or $processedDirectFKProperties -contains $propertyName) {
+                                        continue
+                                    }
+                                    
+                                    $targetEntity = $match.Groups[2].Value
+                                    
+                                    # Check if this property is an array (type="array")
+                                    $isArrayProperty = [regex]::IsMatch($content, "name=`"$propertyName`".*?type=`"array`"", [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                    
+                                    # Check if this property should be excluded
+                                    $shouldExclude = $false
+                                    if ($config.relationshipPatterns.exclusions -and $config.relationshipPatterns.exclusions.patterns) {
+                                        foreach ($exclusionPattern in $config.relationshipPatterns.exclusions.patterns) {
+                                            # Check if the property definition contains any exclusion patterns (handle multi-line properties)
+                                            # Use a more robust pattern that captures the entire property definition
+                                            $propertyDefinition = [regex]::Match($content, "<cfproperty[^>]*name=`"$propertyName`"[^>]*>.*?/>", [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                            if ($propertyDefinition.Success -and [regex]::IsMatch($propertyDefinition.Value, $exclusionPattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)) {
+                                                $shouldExclude = $true
+                                                break
+                                            }
+                                        }
+                                    }
+                                    
+                                    # Skip excluded properties
+                                    if ($shouldExclude) {
+                                        continue
+                                    }
+                                    
+                                    # Process as array relationship if it's an array
+                                    if ($isArrayProperty) {
+                                        # Join table relationship using config naming pattern
+                                        $joinTableName = $config.relationshipPatterns.joinTables.namingPattern -replace "{entity}", $entityName -replace "{target}", $targetEntity
+                                        $relationships.joinTables += @{
+                                            source = $entityName
+                                            sourcePlugin = $pluginName
+                                            target = $targetEntity
+                                            property = $propertyName
+                                            joinTable = $joinTableName
+                                        }
+                                        
+                                        # Store property info
+                                        $relationships.properties += @{
+                                            entity = $entityName
+                                            plugin = $pluginName
+                                            property = $propertyName
+                                            target = $targetEntity
+                                            isArray = $true
+                                        }
+                                    } else {
+                                        # Add to direct FK relationships if not excluded
+                                        $relationships.directFK += @{
+                                            source = $entityName
+                                            property = $propertyName
+                                            target = $targetEntity
+                                            plugin = $pluginName
+                                        }
+                                    }
                                 }
                             }
                             
@@ -502,12 +641,12 @@ function Generate-MermaidERD {
             $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
             $sanitizedTargetName = $sanitizedTargetName.Trim('_')
             
-            $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($fk.property)`n"
+            $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
         }
     }
 
-    # Group aInteractXActivities relationships together for better visibility
-    $interactRelationships = @()
+    # Process join table relationships (single loop to avoid duplication)
+    $selfRefGroups = @{}
     $otherJoinRelationships = @()
     
     foreach ($join in $relationships.joinTables) {
@@ -516,45 +655,44 @@ function Generate-MermaidERD {
         
         # Only include if both entities are in our filtered list
         if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
-            # Check if this is an aInteractXActivities relationship
-            if ($join.property -match '^aInteract[1-5]Activities$') {
-                $interactRelationships += $join
+            if ($sourceEntity -eq $targetEntity) {
+                # Self-referencing relationship (ftJoin points to same entity)
+                if (-not $selfRefGroups.ContainsKey($sourceEntity)) {
+                    $selfRefGroups[$sourceEntity] = @()
+                }
+                $selfRefGroups[$sourceEntity] += $join
             } else {
+                # Cross-entity relationship
                 $otherJoinRelationships += $join
             }
         }
     }
     
-    # Add aInteractXActivities relationships first (grouped together)
-    foreach ($join in $interactRelationships) {
-        $sourceEntity = $join.source
-        $targetEntity = $join.target
-        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-        
-        # Sanitize entity names for relationships
-        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-        $targetDisplayName = "$targetPlugin - $targetEntity"
-        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-        
-        # Add special styling comment for aInteractXActivities
-        $mermaidContent += "    %% aInteractXActivities Group`n"
-        $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
+    # Output self-referencing groups per entity
+    foreach ($entityName in $selfRefGroups.Keys) {
+        $group = $selfRefGroups[$entityName]
+        $mermaidContent += "    %% Self-Referencing Relationships for $entityName`n"
+        foreach ($join in $group) {
+            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $join.source }).plugin
+            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $join.target }).plugin
+            $sourceDisplayName = "$sourcePlugin - $($join.source)"
+            $targetDisplayName = "$targetPlugin - $($join.target)"
+            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+            $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
+        }
     }
-    
+
     # Add other join table relationships
     foreach ($join in $otherJoinRelationships) {
         $sourceEntity = $join.source
         $targetEntity = $join.target
         $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
         $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-        
-        # Sanitize entity names for relationships
         $sourceDisplayName = "$sourcePlugin - $sourceEntity"
         $targetDisplayName = "$targetPlugin - $targetEntity"
         $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
@@ -563,7 +701,6 @@ function Generate-MermaidERD {
         $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
         $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
         $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-        
         $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
     }
 
