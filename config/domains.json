@@ -11,9 +11,9 @@
     "participant": {
       "description": "Participant/User Experience Domain - User journeys and personal data",
       "entities": {
-        "core": ["member", "memberGroup", "progMember"],
-        "tracking": ["journal", "tracker", "trackerDef", "library"],
-        "programme": ["programme", "progRole", "activityDef", "activity", "media", "guide"]
+        "core": ["member", "memberGroup", "progMember", "activity", "programme"],
+        "tracking": ["journal", "journalDef", "tracker", "trackerDef"],
+        "programme": ["progRole", "activityDef", "media", "library", "guide"]
       }
     },
     "programme": {

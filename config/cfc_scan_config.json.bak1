@@ -1,30 +1,34 @@
 {
   "scanSettings": {
-    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
     "scanDirectories": [
       "D:\\GIT\\farcry\\plugins",
       "D:\\GIT\\farcry\\zfarcrycore"
-    ],
-    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd",
-    "farcryPath": "D:\\GIT\\farcry",
-    "excludeFiles": [
-      "participant.cfc",
-      "module.cfc",
-      "moduleDef.cfc",
-      "address.cfc",
-      "farFilter.cfc",
-      "farTask.cfc"
     ],
     "excludeFolders": [
       "farcrycms",
       "social",
       "aws",
-      "Cursor",
       "farcryldap",
       "microsoftud",
       "social",
       "testmxunit"
-    ]
+    ],
+    "excludeFiles": [
+      "participant.cfc",
+      "module.cfc",
+      "moduleDef.cfc",
+      "ruleActivityDefListing.cfc",
+      "farFilter.cfc",
+      "farTask.cfc",
+      "ruleImageGallerySlick.cfc",
+      "shopItem.cfc",
+      "orderItem.cfc",
+      "orderMaster.cfc",
+      "address.cfc"
+    ],
+    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
+    "farcryPath": "D:\\GIT\\farcry",
+    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd"
   },
   "entityConstraints": {
     "knownTables": [
@@ -84,7 +88,6 @@
       "farCoapi",
       "farConfig",
       "farFeedback",
-      "farFilter",
       "farFilterProperty",
       "farFilterProperty_aRelated",
       "farFU",
@@ -100,7 +103,6 @@
       "farRole",
       "farRole_aGroups",
       "farRole_aPermissions",
-      "farTask",
       "farTaskDef",
       "farTaskDef_aRoles",
       "farUser",
@@ -131,9 +133,7 @@
       "memberGroup",
       "memberGroup_aFarcryUsers",
       "memberType",
-      "module",
       "module_aActivityIDs",
-      "moduleDef",
       "nested_tree_objects",
       "oauth2",
       "oauth2Facebook",
@@ -158,7 +158,6 @@
       "refObjects",
       "report",
       "report_aMemberGroupID",
-      "ruleActivityDefListing",
       "ruleActivityDefListing_aActivityDef",
       "ruleChildLinks",
       "ruleDidYouKnowFact",
@@ -208,30 +207,5 @@
       "xealth_patient",
       "zzRemote"
     ]
-  },
-  "relationshipPatterns": {
-    "directFK": {
-      "description": "Direct foreign key relationships using ftJoin property",
-      "pattern": "<cfproperty[^>]*name=[\"']([^\"']+)[\"'][^>]*ftJoin=[\"']([^\"']+)[\"'][^>]*>",
-      "multiLinePattern": "<cfproperty[^>]*name=[\"']([^\"']+)[\"'][^>]*ftJoin=[\"']([^\"']+)[\"'][^>]*[^>]*\/>",
-      "arrayPattern": "name=[\"']([^\"']+)[\"'].*?type=[\"']array[\"']",
-      "cardinality": "||--||"
-    },
-    "joinTables": {
-      "description": "Many-to-many relationships using join tables",
-      "namingPattern": "{entity}_a{target}",
-      "structure": {
-        "parentid": "UUID",
-        "data": "UUID", 
-        "seq": "int",
-        "typename": "string"
-      }
-    },
-    "exclusions": {
-      "description": "Properties that should be excluded from relationship detection",
-      "patterns": [
-        "Filter Fields"
-      ]
-    }
   }
 }

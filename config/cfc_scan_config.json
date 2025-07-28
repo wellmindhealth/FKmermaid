@@ -1,5 +1,19 @@
 {
   "scanSettings": {
+    "excludeFiles": [
+      "participant.cfc",
+      "module.cfc",
+      "moduleDef.cfc",
+      "ruleActivityDefListing.cfc",
+      "farFilter.cfc",
+      "farTask.cfc",
+      "ruleImageGallerySlick.cfc",
+      "shopItem.cfc",
+      "orderItem.cfc",
+      "orderMaster.cfc",
+      "address.cfc"
+    ],
+    "farcryPath": "D:\\GIT\\farcry",
     "scanDirectories": [
       "D:\\GIT\\farcry\\plugins",
       "D:\\GIT\\farcry\\zfarcrycore"
@@ -13,21 +27,8 @@
       "social",
       "testmxunit"
     ],
-    "excludeFiles": [
-      "participant.cfc",
-      "module.cfc",
-      "moduleDef.cfc",
-      "ruleActivityDefListing.cfc",
-      "farFilter.cfc",
-      "farTask.cfc",
-      "ruleImageGallerySlick.cfc",
-      "shopItem.cfc",
-      "orderItem.cfc",
-      "orderMaster.cfc"
-    ],
-    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
-    "farcryPath": "D:\\GIT\\farcry",
-    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd"
+    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd",
+    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json"
   },
   "entityConstraints": {
     "knownTables": [
@@ -40,7 +41,6 @@
       "activityDef_aInteract4Activities",
       "activityDef_aInteract5Activities",
       "activityDef_aMediaIDs",
-      "address",
       "apiAccessKey",
       "auth0",
       "center",
@@ -137,8 +137,6 @@
       "oauth2",
       "oauth2Facebook",
       "oAuth2service",
-      "orderItem",
-      "orderMaster",
       "orderMaster_aOrderItemIDs",
       "partner",
       "partner_aCenters",
@@ -173,7 +171,6 @@
       "ruleImageGallery",
       "ruleImageGalleryGalleria",
       "ruleImageGalleryGalleria_aImages",
-      "ruleImageGallerySlick",
       "ruleImageGallerySlick_aImages",
       "ruleLatesttestimonial",
       "ruleLatesttestimonial_aTestimonials",
@@ -191,7 +188,6 @@
       "ruleShowWebfeed_aWebDisplayFeeds",
       "ruleText",
       "ruleXMLFeed",
-      "shopItem",
       "shopItem_aPublishCriteriaIDs",
       "SSQ_arthritis01",
       "SSQ_pain01",

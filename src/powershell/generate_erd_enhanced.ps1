@@ -587,7 +587,6 @@ function Generate-MermaidERD {
             
             $mermaidContent += "    `"$sanitizedEntityName`" {`n"
             $mermaidContent += "        UUID ObjectID`n"
-            $mermaidContent += "        string name`n"
             $mermaidContent += "    }`n`n"
         }
     }
@@ -675,13 +674,11 @@ function Generate-MermaidERD {
         if (-not $farUserExists) {
             $mermaidContent += "    `"zfarcrycore_farUser`" {`n"
             $mermaidContent += "        UUID ObjectID`n"
-            $mermaidContent += "        string name`n"
             $mermaidContent += "    }`n`n"
         }
         if (-not $dmProfileExists) {
             $mermaidContent += "    `"zfarcrycore_dmProfile`" {`n"
             $mermaidContent += "        UUID ObjectID`n"
-            $mermaidContent += "        string name`n"
             $mermaidContent += "    }`n`n"
         }
     }
@@ -843,6 +840,15 @@ function Generate-MermaidClassDiagram {
     param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{})
     
     $mermaidContent = "classDiagram`n"
+    
+    # Add parameters as a comment since Class diagrams may not support notes properly
+    $paramComment = @"
+%% Parameters:
+%%   Focus: $lFocus
+%%   Domains: $($validatedDomains -join ', ')
+%%   Chart Type: Class
+"@
+    $mermaidContent += "    $paramComment`n"
     
     # Use validated domains
     $domainList = $validatedDomains

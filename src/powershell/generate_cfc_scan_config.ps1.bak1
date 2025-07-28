@@ -35,10 +35,34 @@ Write-Host "📁 Found $($allPluginFolders.Count) total plugin folders" -Foregro
 Write-Host "📁 Workspace folders: $($workspaceFolders -join ', ')" -ForegroundColor Green
 Write-Host "📁 Excluding folders: $($foldersToExclude -join ', ')" -ForegroundColor Yellow
 
-# Use all table names from database (no filtering by folder structure)
-$knownTables = $tableNames
+# Read existing config to get excludeFiles
+$existingConfig = @{}
+if (Test-Path $outputPath) {
+    try {
+        $existingConfig = Get-Content -Path $outputPath -Raw | ConvertFrom-Json
+        Write-Host "📋 Found existing config file" -ForegroundColor Green
+    } catch {
+        Write-Host "⚠️  Could not read existing config, using defaults" -ForegroundColor Yellow
+    }
+}
+
+# Get excludeFiles from existing config or use defaults
+$excludeFiles = @("participant.cfc", "module.cfc", "moduleDef.cfc", "farFilter.cfc", "farTask.cfc", "ruleActivityDefListing.cfc")
+if ($existingConfig.scanSettings.excludeFiles) {
+    $excludeFiles = $existingConfig.scanSettings.excludeFiles
+    Write-Host "📋 Using excludeFiles from existing config: $($excludeFiles.Count) items" -ForegroundColor Green
+} else {
+    Write-Host "📋 Using default excludeFiles: $($excludeFiles.Count) items" -ForegroundColor Yellow
+}
+
+# Convert .cfc filenames to entity names for knownTables filtering
+$excludeEntities = $excludeFiles | ForEach-Object { $_.Replace('.cfc', '') }
+
+# Filter out excluded entities from knownTables
+$knownTables = $tableNames | Where-Object { $excludeEntities -notcontains $_ }
 
 Write-Host "✅ Generated configuration with $($knownTables.Count) tables from database" -ForegroundColor Green
+Write-Host "🚫 Excluded entities from knownTables: $($excludeEntities -join ', ')" -ForegroundColor Yellow
 
 # Generate the configuration
 $config = @{
@@ -49,7 +73,7 @@ $config = @{
             "D:\GIT\farcry\zfarcrycore"
         )
         excludeFolders = @("farcrycms", "social") + $foldersToExclude
-        excludeFiles = @("participant.cfc", "module.cfc", "moduleDef.cfc")
+        excludeFiles = $excludeFiles
         cacheFile = "D:\GIT\farcry\Cursor\FKmermaid\config\cfc_cache.json"
         outputFile = "D:\GIT\farcry\Cursor\FKmermaid\exports\plugins_full_erd.mmd"
     }
@@ -65,5 +89,7 @@ $configJson | Out-File -FilePath $outputPath -Encoding UTF8
 Write-Host "✅ Configuration saved to: $outputPath" -ForegroundColor Green
 Write-Host "📊 Summary:" -ForegroundColor Yellow
 Write-Host "   - Total database tables: $($tableNames.Count)" -ForegroundColor White
+Write-Host "   - Tables after exclusions: $($knownTables.Count)" -ForegroundColor White
+Write-Host "   - Excluded entities: $($excludeEntities.Count)" -ForegroundColor White
 Write-Host "   - Excluded folders: $($foldersToExclude.Count)" -ForegroundColor White
 Write-Host "   - Workspace folders: $($workspaceFolders.Count)" -ForegroundColor White 
