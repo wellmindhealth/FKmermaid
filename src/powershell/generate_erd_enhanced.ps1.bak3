@@ -47,9 +47,43 @@ param(
     [string]$DiagramType = "ER",
     [switch]$RefreshCFCs = $false,
     [switch]$DebugScan = $false,
+    [switch]$Help = $false,
     [string]$ConfigFile = "D:\GIT\farcry\Cursor\FKmermaid\config\cfc_scan_config.json",
     [string]$OutputFile = ""
 )
+
+# Help function
+function Show-Help {
+    Write-Host "FarCry ERD Generator (Enhanced)" -ForegroundColor Cyan
+    Write-Host "=================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "📚 COMPLETE PARAMETER REFERENCE:" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "🔴 REQUIRED PARAMETERS:" -ForegroundColor Red
+    Write-Host "  -lFocus 'entityName'     # Focus entity (e.g., 'activityDef', 'progRole', 'member')" -ForegroundColor White
+    Write-Host "  -DiagramType 'ER|Class'  # Diagram type ('ER' or 'Class')" -ForegroundColor White
+    Write-Host "  -lDomains 'domain1,domain2' # Domains to include (e.g., 'programme,participant')" -ForegroundColor White
+    Write-Host ""
+    Write-Host "🟡 OPTIONAL PARAMETERS:" -ForegroundColor Yellow
+    Write-Host "  -RefreshCFCs             # Force fresh CFC scanning (bypass cache)" -ForegroundColor White
+    Write-Host "  -ConfigFile 'path'       # Custom config file path" -ForegroundColor White
+    Write-Host "  -OutputFile 'path'       # Custom output file path" -ForegroundColor White
+    Write-Host "  -Help                    # Show this help message" -ForegroundColor White
+    Write-Host ""
+    Write-Host "💡 USAGE EXAMPLES:" -ForegroundColor Cyan
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "📖 For complete documentation, see: README.md" -ForegroundColor Yellow
+    exit 0
+}
+
+# Check for help parameter first
+if ($Help) {
+    Show-Help
+}
 
 # Load relationship detection module
 $modulePath = Join-Path $PSScriptRoot "relationship_detection.ps1"
@@ -249,7 +283,33 @@ function Get-CFCRelationships {
     # Get scan directories from config
     $scanDirectories = $config.scanSettings.scanDirectories
     
-    # Second pass: process files
+    # First pass: count total files to process for progress bar
+    $totalFiles = 0
+    foreach ($scanDir in $scanDirectories) {
+        if (Test-Path $scanDir) {
+            if ($scanDir -like "*zfarcrycore*") {
+                $packagesPath = Join-Path $scanDir "packages"
+                if (Test-Path $packagesPath) {
+                    $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
+                    $totalFiles += ($cfcFiles | Where-Object { $knownTables -contains [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }).Count
+                }
+            } else {
+                $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
+                foreach ($pluginFolder in $pluginFolders) {
+                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
+                    if (Test-Path $packagesPath) {
+                        $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
+                        $totalFiles += ($cfcFiles | Where-Object { $knownTables -contains [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }).Count
+                    }
+                }
+            }
+        }
+    }
+    
+    Write-Host "📁 Scanning CFC files for relationships... ($totalFiles files to process)" -ForegroundColor Cyan
+    
+    # Second pass: process files with progress bar
+    $processedFiles = 0
     foreach ($scanDir in $scanDirectories) {
         if (Test-Path $scanDir) {
             # Handle zfarcrycore differently (it's not a plugin)
@@ -267,6 +327,10 @@ function Get-CFCRelationships {
                         
                         # Only process if entity is in known tables (skip reading file if not needed)
                         if ($knownTables -contains $entityName) {
+                            $processedFiles++
+                            $progress = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
+                            Write-Host "`r📁 Processing: $entityName [$progress%]   " -NoNewline
+                            
                             $content = Get-Content $cfcFile.FullName -Raw
                             # Extract entity info
                             $relationships.entities += @{
@@ -303,6 +367,10 @@ function Get-CFCRelationships {
                             
                             # Only process if entity is in known tables (skip reading file if not needed)
                             if ($knownTables -contains $entityName) {
+                                $processedFiles++
+                                $progress = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
+                                Write-Host "`r📁 Processing: $entityName [$progress%]   " -NoNewline
+                                
                                 $content = Get-Content $cfcFile.FullName -Raw
                                 # Extract entity info
                                 $relationships.entities += @{
@@ -310,8 +378,6 @@ function Get-CFCRelationships {
                                     plugin = $pluginName
                                     file = $cfcFile.FullName
                                 }
-                                
-
                                 
                                 # Use the optimized relationship detection from the module
                                 $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
@@ -328,7 +394,7 @@ function Get-CFCRelationships {
         }
     }
     
-
+    Write-Host "`n✅ CFC scanning complete!" -ForegroundColor Green
     
     return $relationships
 }
@@ -381,7 +447,7 @@ function Get-EntityPluginPrefix {
 
 # Function to generate Mermaid ER diagram
 function Generate-MermaidERD {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{})
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{})
     
     $mermaidContent = "erDiagram`n"
     
@@ -646,37 +712,37 @@ function Generate-MermaidERD {
         $group = $selfRefGroups[$entityName]
         $mermaidContent += "    %% Self-Referencing Relationships for $entityName`n"
         
+        # Collect all self-referencing relationships for this entity
+        $allSelfRefRelationships = @()
+        
         # Add self-referencing direct FK relationships for this entity
         foreach ($fk in $selfRefDirectFK) {
             if ($fk.source -eq $entityName) {
-                $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $fk.source }).plugin
-                $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $fk.target }).plugin
-                $sourceDisplayName = "$sourcePlugin - $($fk.source)"
-                $targetDisplayName = "$targetPlugin - $($fk.target)"
-                $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-                $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-                $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-                $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-                $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-                $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-                $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedTargetName`" : $($fk.property)`n"
+                $allSelfRefRelationships += $fk.property
             }
         }
         
         # Add self-referencing join table relationships for this entity
         foreach ($join in $group) {
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $join.source }).plugin
-            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $join.target }).plugin
-            $sourceDisplayName = "$sourcePlugin - $($join.source)"
-            $targetDisplayName = "$targetPlugin - $($join.target)"
-            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-            $mermaidContent += "    `"$sanitizedSourceName`" }o--|| `"$sanitizedTargetName`" : $($join.property)`n"
+            $allSelfRefRelationships += $join.property
         }
+        
+        # Add comment listing all the self-referencing relationships
+        $relationshipList = $allSelfRefRelationships -join ', '
+        $mermaidContent += "    %% Self-refs include: $relationshipList`n"
+        
+        # Create a short placeholder label for consolidated self-referencing relationships
+        $consolidatedLabel = "self_refs"
+        
+        # Get entity display names
+        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $entityName }).plugin
+        $sourceDisplayName = "$sourcePlugin - $entityName"
+        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+        
+        # Add single consolidated relationship line
+        $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedSourceName`" : $consolidatedLabel`n"
         
         $mermaidContent += "    %% End Self-Referencing Relationships for $entityName`n`n"
     }
@@ -749,7 +815,7 @@ function Generate-MermaidERD {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         $entityDisplayName = "$pluginName - $entityName"
-        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities
+        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities -cssStyles $cssStyles
         
         # Use sanitized entity name for style definition (no spaces, hyphens, or quotes)
         $sanitizedEntityName = Get-SanitizedEntityName -entityName $entityDisplayName
@@ -761,7 +827,7 @@ function Generate-MermaidERD {
 
 # Function to generate Mermaid Class diagram with full styling
 function Generate-MermaidClassDiagram {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{})
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{})
     
     $mermaidContent = "classDiagram`n"
     
@@ -929,7 +995,7 @@ function Generate-MermaidClassDiagram {
         $entityName = $entity.name
         $pluginName = $entity.plugin
         $entityDisplayName = "$pluginName - $entityName"
-        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities
+        $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $lFocus -relatedEntities $relatedEntities -cssStyles $cssStyles
         
         # Sanitize entity name for style definition (same as class names)
         $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
@@ -1029,60 +1095,94 @@ function Get-SanitizedEntityName {
     return $sanitized
 }
 
-# Function to get entity styling based on importance and type
-function Get-EntityStyle {
-    param([string]$entityName, [string]$pluginName, [string]$focusEntity, [string[]]$relatedEntities)
+# Function to parse Mermaid styles file and extract styles
+function Get-MermaidStyles {
+    param(
+        [string]$stylesPath
+    )
     
-    # Define styling rules - keeping only SSQ entities for now
-    $stylingRules = @{
-        # SSQ entities - special styling (keeping these as requested)
-        "SSQ_arthritis01" = "fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
-        "SSQ_pain01" = "fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
-        "SSQ_stress01" = "fill:#b39ddb,stroke:#7e57c2,stroke-width:2px,color:#222"
-        "SSQ_HUB" = "fill:#e0e0e0,stroke:#bdbdbd,stroke-width:0px,color:#333"
+    $styles = @{}
+    
+    if (Test-Path $stylesPath) {
+        $stylesContent = Get-Content $stylesPath -Raw
+        
+        # Parse Mermaid style rules using regex
+        $stylePattern = 'style\s+(\w+)\s+([^\r\n]+)'
+        $matches = [regex]::Matches($stylesContent, $stylePattern)
+        
+        foreach ($match in $matches) {
+            $entityName = $match.Groups[1].Value
+            $styleDefinition = $match.Groups[2].Value.Trim()
+            $styles[$entityName] = $styleDefinition
+        }
+        
+        Write-Host "📋 Loaded $($styles.Count) styles from Mermaid styles file" -ForegroundColor Green
+    } else {
+        Write-Host "⚠️  Mermaid styles file not found: $stylesPath" -ForegroundColor Yellow
     }
     
+    return $styles
+}
+
+# Function to get entity styling based on importance and type
+function Get-EntityStyle {
+    param([string]$entityName, [string]$pluginName, [string]$focusEntity, [string[]]$relatedEntities, [hashtable]$cssStyles)
+    
     # Check for exact match first (SSQ entities)
-    if ($stylingRules.ContainsKey($entityName)) {
-        return $stylingRules[$entityName]
+    if ($cssStyles.ContainsKey($entityName)) {
+        return $cssStyles[$entityName]
     }
     
     # Check for plugin-specific styling
     $pluginEntityKey = "$pluginName - $entityName"
-    if ($stylingRules.ContainsKey($pluginEntityKey)) {
-        return $stylingRules[$pluginEntityKey]
+    if ($cssStyles.ContainsKey($pluginEntityKey)) {
+        return $cssStyles[$pluginEntityKey]
     }
     
     # Split focus entities if comma-separated
     $focusEntities = $focusEntity -split ',' | ForEach-Object { $_.Trim() }
     
-    # Focus entity styling (orange/amber) - check if this entity is any of the focus entities
+    # Focus entity styling - use CSS if available, otherwise fallback
     if ($focusEntities -contains $entityName) {
-        return "fill:#ff9800,stroke:#e65100,stroke-width:2px,color:#fff"
+        if ($cssStyles.ContainsKey("focus")) {
+            return $cssStyles["focus"]
+        }
+        return "fill:#e65100,stroke:#bf360c,stroke-width:2px,color:#fff"
     }
     
-    # Close relatives in same domain styling (blue)
+    # Check for SSQ entities FIRST (before related entities)
+    if ($entityName -like "SSQ_*") {
+        if ($cssStyles.ContainsKey("ssq_group")) {
+            return $cssStyles["ssq_group"]
+        }
+    }
+    
+    # Close relatives in same domain styling - use CSS if available, otherwise fallback
     if ($relatedEntities -and $relatedEntities.Contains($entityName)) {
-        return "fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff"
+        if ($cssStyles.ContainsKey("related")) {
+            return $cssStyles["related"]
+        }
+        return "fill:#1565c0,stroke:#0d47a1,stroke-width:1px,color:#fff"
     }
     
-    # Default styling for all other entities (grey)
-    return "fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff"
+    # Default styling for all other entities - use CSS if available, otherwise fallback
+    if ($cssStyles.ContainsKey("secondary")) {
+        return $cssStyles["secondary"]
+    }
+    return "fill:#424242,stroke:#212121,stroke-width:1px,color:#fff"
 }
 
 # Main execution
 Write-Host "FarCry ERD Generator (Enhanced)"
 Write-Host "==============================="
 
+# Load Mermaid styles once
+$stylesPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "css\mermaid_styles.mmd"
+$cssStyles = Get-MermaidStyles -stylesPath $stylesPath
+
 # Echo chosen parameters
-Write-Host "📋 PARAMETERS:" -ForegroundColor Cyan
-Write-Host "   Focus Entity: $lFocus" -ForegroundColor Yellow
-Write-Host "   Diagram Type: $DiagramType" -ForegroundColor Yellow
-Write-Host "   Domains: $lDomains" -ForegroundColor Yellow
-Write-Host "   Refresh CFCs: $RefreshCFCs" -ForegroundColor Yellow
-Write-Host "   Config File: $ConfigFile" -ForegroundColor Yellow
-Write-Host "   Output File: $OutputFile" -ForegroundColor Yellow
-Write-Host ""
+Write-Host "📋 Loaded $($cssStyles.Count) styles from Mermaid styles file" -ForegroundColor Green
+Write-Host "🎯 Focus: $lFocus | 📊 Type: $DiagramType | 🌍 Domains: $lDomains" -ForegroundColor Cyan
 
 # Determine whether to use fresh scan or cached data
 if ($RefreshCFCs -or !(Test-Path $cacheFile)) {
@@ -1105,9 +1205,9 @@ Write-Host "Found $($relationships.joinTables.Count) join table relationships"
 
 # Generate Mermaid diagrams based on type
 if ($DiagramType -eq "ER") {
-    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig
+    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig -cssStyles $cssStyles
 } else {
-    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig
+    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig -cssStyles $cssStyles
 }
 
 # Ensure exports directory exists
@@ -1150,7 +1250,7 @@ $mermaidLiveHtml = @"
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>$fullTitle - Mermaid Live Editor</title>
-    <link rel="stylesheet" href="css/mermaid_styles.css">
+    <link rel="stylesheet" href="css/mermaid_styles.mmd">
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -1463,25 +1563,4 @@ Start-Process $htmlFile
 Write-Host "✅ Enhanced ERD generation complete!"
 Write-Host "📁 MMD file: $outputFile"
 Write-Host "🌐 HTML file: $htmlFile"
-Write-Host "🔗 Browser should have opened automatically"
-
-# Display comprehensive usage information
-Write-Host "`n📚 COMPLETE PARAMETER REFERENCE:" -ForegroundColor Yellow
-Write-Host "`n🔴 REQUIRED PARAMETERS:" -ForegroundColor Red
-Write-Host "  -lFocus 'entityName'     # Focus entity (e.g., 'activityDef', 'progRole', 'member')" -ForegroundColor White
-Write-Host "  -DiagramType 'ER|Class'  # Diagram type ('ER' or 'Class')" -ForegroundColor White
-Write-Host "  -lDomains 'domain1,domain2' # Domains to include (e.g., 'programme,participant')" -ForegroundColor White
-
-Write-Host "`n🟡 OPTIONAL PARAMETERS:" -ForegroundColor Yellow
-Write-Host "  -RefreshCFCs             # Force fresh CFC scanning (bypass cache)" -ForegroundColor White
-Write-Host "  -ConfigFile 'path'       # Custom config file path" -ForegroundColor White
-Write-Host "  -OutputFile 'path'       # Custom output file path" -ForegroundColor White
-
-Write-Host "`n💡 USAGE EXAMPLES:" -ForegroundColor Cyan
-Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Green
-Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Green
-Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Green
-Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
-
-Write-Host "`n📖 For complete documentation, see: README.md" -ForegroundColor Yellow 
-Write-Host "`n📖 For complete documentation, see: README.md" -ForegroundColor Yellow 
+Write-Host "🔗 Browser should have opened automatically" 

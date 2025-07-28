@@ -85,6 +85,8 @@ if ($Help) {
     Show-Help
 }
 
+# Node.js tools are available for Mermaid.live URL generation
+
 # Load relationship detection module
 $modulePath = Join-Path $PSScriptRoot "relationship_detection.ps1"
 if (Test-Path $modulePath) {
@@ -1555,12 +1557,20 @@ $mermaidLiveHtml = @"
 </html>
 "@
 
-$mermaidLiveHtml | Set-Content -Path $htmlFile
+# COMMENTED OUT: HTML generation for direct Mermaid.live spawn
+# $mermaidLiveHtml | Set-Content -Path $htmlFile
 
-# Open the HTML file in browser
-Start-Process $htmlFile
+# DANGEROUS: Direct Mermaid.live browser spawn (pako is ALIVE again!)
+Write-Host "🚀 Spawning Mermaid.live directly with content..." -ForegroundColor Yellow
+
+# Use the working Node.js tool for proper pako compression
+$nodeScriptPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "src\node\generate_url.js"
+$mermaidLiveUrl = $mermaidContent | node $nodeScriptPath
+
+Write-Host "✅ Generated compressed Mermaid.live URL" -ForegroundColor Green
+Start-Process $mermaidLiveUrl
 
 Write-Host "✅ Enhanced ERD generation complete!"
 Write-Host "📁 MMD file: $outputFile"
-Write-Host "🌐 HTML file: $htmlFile"
+Write-Host "🌐 Opened Mermaid.live directly with content" -ForegroundColor Green
 Write-Host "🔗 Browser should have opened automatically" 
