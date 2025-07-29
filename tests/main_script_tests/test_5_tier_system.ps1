@@ -1,200 +1,149 @@
-# Test 5-Tier Semantic Styling System
-# Tests the semantic styling system with known parameter combinations
+# Test 5-tier semantic styling system
+# This test validates that the 5-tier system works correctly with known baseline
 
-param(
-    [switch]$Verbose,
-    [switch]$Help
-)
+Write-Host "🎨 Testing 5-tier semantic styling system..." -ForegroundColor Cyan
 
-if ($Help) {
-    Write-Host "Test 5-Tier Semantic Styling System" -ForegroundColor Cyan
-    Write-Host "====================================" -ForegroundColor Cyan
-    Write-Host "Tests the semantic styling system with known parameter combinations" -ForegroundColor White
-    Write-Host ""
-    Write-Host "Parameters:" -ForegroundColor Yellow
-    Write-Host "  -Verbose    Show detailed output" -ForegroundColor White
-    Write-Host "  -Help       Show this help" -ForegroundColor White
-    exit
-}
-
-# Test Configuration
-$scriptPath = "D:\GIT\farcry\Cursor\FKmermaid\src\powershell"
-$exportsPath = "D:\GIT\farcry\Cursor\FKmermaid\exports"
-$testResultsPath = "D:\GIT\farcry\Cursor\FKmermaid\tests\results"
-$stylesPath = "D:\GIT\farcry\Cursor\FKmermaid\styles\mermaid_styles.mmd"
-
-# Create results directory if it doesn't exist
-if (-not (Test-Path $testResultsPath)) {
-    New-Item -ItemType Directory -Path $testResultsPath -Force | Out-Null
-}
-
-Write-Host "🧪 Testing 5-Tier Semantic Styling System" -ForegroundColor Cyan
-Write-Host "=========================================" -ForegroundColor Cyan
-
-# Function to load colors from styles file
-function Get-StyleColors {
-    param([string]$stylesPath)
+# Function to analyze Mermaid diagram
+function Analyze-MermaidDiagram {
+    param([string]$content)
     
-    $colors = @{}
-    if (Test-Path $stylesPath) {
-        $content = Get-Content $stylesPath
-        foreach ($line in $content) {
-            if ($line -match 'style\s+(\w+)\s+fill:(#[0-9a-fA-F]+)') {
-                $styleName = $matches[1]
-                $color = $matches[2]
-                $colors[$styleName] = $color
-            }
+    $analysis = @{
+        Entities = @()
+        Relationships = @()
+        Styling = @{}
+        EntityCount = 0
+        RelationshipCount = 0
+        Tiers = @{
+            "focus" = @()
+            "domain_related" = @()
+            "related" = @()
+            "domain_other" = @()
+            "secondary" = @()
         }
     }
-    return $colors
-}
-
-# Load current colors from styles file
-$styleColors = Get-StyleColors -stylesPath $stylesPath
-Write-Host "📋 Loaded colors from styles file:" -ForegroundColor White
-foreach ($style in $styleColors.Keys) {
-    Write-Host "  $style`: $($styleColors[$style])" -ForegroundColor Gray
-}
-
-# Define test cases with expected results
-$testCases = @(
-    @{
-        Name = "Perfect 5-Tier Test"
-        Focus = "partner"
-        Domains = "partner,participant,programme"
-        DiagramType = "ER"
-        ExpectedTiers = @{
-            Focus = @("pathway_partner")  # Orange tier
-            DomainRelated = @("pathway_center", "pathway_media", "pathway_memberGroup", "pathway_programme", "pathway_referer", "zfarcrycore_dmProfile")  # Dark burnt gold tier
-            Related = @("pathway_ruleSelfRegistration", "pathway_dmImage", "pathway_guide", "pathway_member", "pathway_report")  # Blue tier
-            DomainOther = @("pathway_activityDef", "pathway_intake", "pathway_progRole", "zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")  # Blue-grey tier
-            Secondary = @("pathway_activity", "pathway_journal", "pathway_journalDef", "pathway_library", "pathway_progMember", "pathway_tracker", "pathway_trackerDef")  # Dark grey tier
-        }
-    },
-    @{
-        Name = "Member Focus Test"
-        Focus = "member"
-        Domains = "participant,programme"
-        DiagramType = "ER"
-        ExpectedTiers = @{
-            Focus = @("pathway_member")  # Orange tier
-            DomainRelated = @()  # Will be populated based on actual relationships
-            Related = @()  # Will be populated based on actual relationships
-            DomainOther = @()  # Will be populated based on actual relationships
-            Secondary = @()  # Will be populated based on actual relationships
+    
+    # Parse entities
+    $entityMatches = [regex]::Matches($content, '"([^"]+)"\s*\{')
+    foreach ($match in $entityMatches) {
+        $entity = $match.Groups[1].Value
+        $analysis.Entities += $entity
+    }
+    $analysis.EntityCount = $analysis.Entities.Count
+    
+    # Parse relationships
+    $relationshipMatches = [regex]::Matches($content, '"([^"]+)"\s*\|\|--\|\|\s*"([^"]+)"\s*:\s*([^\n]+)')
+    foreach ($match in $relationshipMatches) {
+        $fromEntity = $match.Groups[1].Value
+        $toEntity = $match.Groups[2].Value
+        $relationship = $match.Groups[3].Value.Trim()
+        $analysis.Relationships += @{
+            From = $fromEntity
+            To = $toEntity
+            Type = $relationship
         }
     }
-)
-
-Set-Location $scriptPath
-
-$testResults = @()
-
-foreach ($testCase in $testCases) {
-    Write-Host "`n📋 Test: $($testCase.Name)" -ForegroundColor Yellow
-    Write-Host "Focus: $($testCase.Focus), Domains: $($testCase.Domains), Type: $($testCase.DiagramType)" -ForegroundColor White
+    $analysis.RelationshipCount = $analysis.Relationships.Count
     
-    # Generate test diagram
-    $testOutput = "test_5tier_$($testCase.Focus).mmd"
-    $result = & ".\generate_erd_enhanced.ps1" -lFocus $testCase.Focus -DiagramType $testCase.DiagramType -lDomains $testCase.Domains -OutputFile $testOutput 2>&1
+    # Parse styling
+    $styleMatches = [regex]::Matches($content, 'style\s+(\w+)\s+fill:(#[0-9a-fA-F]+)')
+    foreach ($match in $styleMatches) {
+        $entity = $match.Groups[1].Value
+        $color = $match.Groups[2].Value
+        $analysis.Styling[$entity] = $color
+    }
     
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "✅ Diagram generated successfully" -ForegroundColor Green
+    return $analysis
+}
+
+# Load the baseline file
+$baselineFile = "D:\GIT\farcry\Cursor\FKmermaid\tests\baseline_tests\baselines\Edge_Case_Multiple_Focus_Entities.mmd"
+
+if (-not (Test-Path $baselineFile)) {
+    Write-Host "❌ Baseline file not found: $baselineFile" -ForegroundColor Red
+    Write-Host "   Run generate_baselines.ps1 first to create baseline files" -ForegroundColor Yellow
+    exit 1
+}
+
+Write-Host "📁 Using baseline: $baselineFile" -ForegroundColor Green
+
+# Analyze the baseline
+$baselineContent = Get-Content $baselineFile -Raw
+$analysis = Analyze-MermaidDiagram -content $baselineContent
+
+Write-Host "📊 Baseline Analysis:" -ForegroundColor Yellow
+Write-Host "   Entities: $($analysis.EntityCount)" -ForegroundColor Gray
+Write-Host "   Relationships: $($analysis.RelationshipCount)" -ForegroundColor Gray
+Write-Host "   Tiers found: $($analysis.Tiers.Count)" -ForegroundColor Gray
+
+# Expected tiers for 5-tier system (partner domain with partner,member focus)
+$ExpectedTiers = @{
+    "focus" = @("pathway_partner", "pathway_member", "pathway_programme")  # Orange tier
+    "domain_related" = @("pathway_partner", "pathway_memberGroup", "pathway_memberType")  # Gold tier (same domain + related)
+    "related" = @("pathway_progMember", "pathway_center", "pathway_guide")  # Blue tier (related but different domain)
+    "domain_other" = @("pathway_activity", "pathway_activityDef", "pathway_media")  # Blue-grey tier (same domain, not related)
+    "secondary" = @("pathway_journal", "pathway_library", "pathway_testimonial")  # Dark grey tier (other domains)
+}
+
+# Validate tiers
+$tierValidation = @{}
+foreach ($tier in $ExpectedTiers.Keys) {
+    $expectedEntities = $ExpectedTiers[$tier]
+    $actualEntities = $analysis.Tiers[$tier]
+    
+    if ($actualEntities) {
+        $missing = @()
+        $extra = @()
         
-        # Analyze the generated file
-        $generatedFile = "$exportsPath\$testOutput"
-        if (Test-Path $generatedFile) {
-            $content = Get-Content $generatedFile -Raw
-            
-            # Extract styling information
-            $actualTiers = @{
-                Focus = @()
-                DomainRelated = @()
-                Related = @()
-                DomainOther = @()
-                Secondary = @()
+        foreach ($entity in $expectedEntities) {
+            if ($entity -notin $actualEntities) {
+                $missing += $entity
             }
-            
-            # Parse style lines to extract entity-tier mappings
-            $styleLines = $content -split "`n" | Where-Object { $_ -match "style.*fill:#" }
-            
-            foreach ($line in $styleLines) {
-                if ($line -match 'style\s+(\w+)\s+fill:(#[0-9a-fA-F]+)') {
-                    $entity = $matches[1]
-                    $color = $matches[2]
-                    
-                    # Map colors to tiers based on current styles
-                    switch ($color) {
-                        $styleColors["focus"] { $actualTiers.Focus += $entity }
-                        $styleColors["domain_related"] { $actualTiers.DomainRelated += $entity }
-                        $styleColors["related"] { $actualTiers.Related += $entity }
-                        $styleColors["domain_other"] { $actualTiers.DomainOther += $entity }
-                        $styleColors["secondary"] { $actualTiers.Secondary += $entity }
-                    }
-                }
+        }
+        
+        foreach ($entity in $actualEntities) {
+            if ($entity -notin $expectedEntities) {
+                $extra += $entity
             }
-            
-            # Validate results
-            $validationResults = @{}
-            $overallSuccess = $true
-            
-            foreach ($tier in $actualTiers.Keys) {
-                $expected = $testCase.ExpectedTiers[$tier]
-                $actual = $actualTiers[$tier]
-                
-                if ($expected.Count -gt 0) {
-                    # Check if expected entities are present
-                    $missing = @()
-                    foreach ($expectedEntity in $expected) {
-                        if ($actual -notcontains $expectedEntity) {
-                            $missing += $expectedEntity
-                        }
-                    }
-                    
-                    if ($missing.Count -eq 0) {
-                        Write-Host "✅ $tier tier: All expected entities present" -ForegroundColor Green
-                        $validationResults[$tier] = $true
-                    } else {
-                        Write-Host "❌ $tier tier: Missing $($missing -join ', ')" -ForegroundColor Red
-                        $validationResults[$tier] = $false
-                        $overallSuccess = $false
-                    }
-                } else {
-                    # For cases where we don't have specific expectations, just report what we found
-                    Write-Host "📊 $tier tier: $($actual.Count) found" -ForegroundColor White
-                    $validationResults[$tier] = $true
-                }
-            }
-            
-            # Save test result
-            $testResult = @{
-                TestName = $testCase.Name
-                Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-                Focus = $testCase.Focus
-                Domains = $testCase.Domains
-                DiagramType = $testCase.DiagramType
-                ActualTiers = $actualTiers
-                ValidationResults = $validationResults
-                Success = $overallSuccess
-            }
-            
-            $testResults += $testResult
-            
-            # Clean up test file
-            Remove-Item $generatedFile -Force
-            Write-Host "✅ Cleaned up test file" -ForegroundColor Green
-            
-        } else {
-            Write-Host "❌ Generated file not found" -ForegroundColor Red
+        }
+        
+        $tierValidation[$tier] = @{
+            Valid = ($missing.Count -eq 0 -and $extra.Count -eq 0)
+            Missing = $missing
+            Extra = $extra
         }
     } else {
-        Write-Host "❌ Failed to generate diagram" -ForegroundColor Red
-        Write-Host $result -ForegroundColor Red
+        $tierValidation[$tier] = @{
+            Valid = $false
+            Missing = $expectedEntities
+            Extra = @()
+        }
     }
 }
 
-# Save all test results
-$testResults | ConvertTo-Json -Depth 10 | Out-File "$testResultsPath\5tier_system_test_results.json"
+# Report results
+$allValid = $true
+Write-Host "`n🎯 Tier Validation Results:" -ForegroundColor Cyan
 
-Write-Host "`n🏁 5-Tier System Test Complete" -ForegroundColor Cyan
-Write-Host "📊 Test Results: $($testResults.Count) tests completed" -ForegroundColor White
+foreach ($tier in $tierValidation.Keys) {
+    $validation = $tierValidation[$tier]
+    if ($validation.Valid) {
+        Write-Host "   ✅ $tier tier: Valid" -ForegroundColor Green
+    } else {
+        $allValid = $false
+        Write-Host "   ❌ $tier tier: Invalid" -ForegroundColor Red
+        if ($validation.Missing.Count -gt 0) {
+            Write-Host "      Missing: $($validation.Missing -join ', ')" -ForegroundColor Yellow
+        }
+        if ($validation.Extra.Count -gt 0) {
+            Write-Host "      Extra: $($validation.Extra -join ', ')" -ForegroundColor Yellow
+        }
+    }
+}
+
+if ($allValid) {
+    Write-Host "`n✅ 5-tier system test PASSED!" -ForegroundColor Green
+    exit 0
+} else {
+    Write-Host "`n❌ 5-tier system test FAILED!" -ForegroundColor Red
+    exit 1
+}

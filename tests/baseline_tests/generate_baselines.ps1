@@ -30,49 +30,189 @@ if (-not (Test-Path $baselinePath)) {
 Write-Host "🧪 Generating Baseline Outputs" -ForegroundColor Cyan
 Write-Host "=============================" -ForegroundColor Cyan
 
-# Define baseline test cases
+# Define baseline test cases - EDGE CASES THAT PUSH LIMITS
 $baselineTests = @(
     @{
-        Name = "Perfect 4-Tier Test"
-        Focus = "partner"
-        Domains = "partner,participant,programme"
+        Name = "Edge_Case_No_Focus_All_Domains"
+        Focus = ""
+        Domains = "all"
         DiagramType = "ER"
-        Description = "Shows all 4 color tiers working together"
+        Description = "Tests behavior with no focus but all domains (should be all entities)"
     },
     @{
-        Name = "Member Focus Test"
+        Name = "Edge_Case_No_Focus_No_Domains"
+        Focus = ""
+        Domains = ""
+        DiagramType = "ER"
+        Description = "Tests behavior with no focus and no domains (should be all entities)"
+    },
+    @{
+        Name = "Edge_Case_Site_Domain_Only"
+        Focus = ""
+        Domains = "site"
+        DiagramType = "ER"
+        Description = "Tests site domain entities only (should be minimal, isolated domain)"
+    },
+    @{
+        Name = "Edge_Case_Programme_Domain_Only"
+        Focus = ""
+        Domains = "programme"
+        DiagramType = "ER"
+        Description = "Tests programme domain entities only (should be programme-specific)"
+    },
+    @{
+        Name = "Edge_Case_Invalid_Domain"
+        Focus = "partner"
+        Domains = "nonexistent"
+        DiagramType = "ER"
+        Description = "Tests behavior with non-existent domain (should be minimal)"
+    },
+    @{
+        Name = "Edge_Case_Empty_Focus_Invalid_Domain"
+        Focus = ""
+        Domains = "nonexistent"
+        DiagramType = "ER"
+        Description = "Tests empty focus with invalid domain (should be empty)"
+    },
+    @{
+        Name = "Edge_Case_Class_Diagram_Complex"
         Focus = "member"
         Domains = "participant,programme"
-        DiagramType = "ER"
-        Description = "Tests member-focused diagram"
-    },
-    @{
-        Name = "Programme Focus Test"
-        Focus = "programme"
-        Domains = "programme,site"
-        DiagramType = "ER"
-        Description = "Tests programme-focused diagram"
-    },
-    @{
-        Name = "Class Diagram Test"
-        Focus = "partner"
-        Domains = "partner,participant"
         DiagramType = "Class"
-        Description = "Tests Class diagram generation"
+        Description = "Tests Class diagram with complex relationships (different diagram type)"
     },
     @{
-        Name = "Single Domain Test"
+        Name = "Edge_Case_Partner_Site_Only"
+        Focus = "partner"
+        Domains = "site"
+        DiagramType = "ER"
+        Description = "Tests partner focus with site domain only (should be minimal - partner not in site domain)"
+    },
+    @{
+        Name = "Edge_Case_Programme_Site_Only"
+        Focus = "programme"
+        Domains = "site"
+        DiagramType = "ER"
+        Description = "Tests programme focus with site domain only (should be minimal - programme not in site domain)"
+    },
+    @{
+        Name = "Edge_Case_Member_Partner_Only"
         Focus = "member"
+        Domains = "partner"
+        DiagramType = "ER"
+        Description = "Tests member focus with partner domain only (should be minimal - member not in partner domain)"
+    },
+    @{
+        Name = "Edge_Case_Multiple_Focus_Entities"
+        Focus = "partner,member,programme"
+        Domains = "all"
+        DiagramType = "ER"
+        Description = "Tests multiple focus entities (comma-separated) - uncommon parameter"
+    },
+    @{
+        Name = "Edge_Case_Class_Diagram_Site_Only"
+        Focus = "dmImage"
+        Domains = "site"
+        DiagramType = "Class"
+        Description = "Tests Class diagram with site domain only (uncommon combination)"
+    },
+    @{
+        Name = "Edge_Case_ER_Diagram_All_Domains"
+        Focus = "farUser"
+        Domains = "all"
+        DiagramType = "ER"
+        Description = "Tests ER diagram with all domains and admin entity focus"
+    },
+    @{
+        Name = "Edge_Case_Class_Diagram_All_Domains"
+        Focus = "farUser"
+        Domains = "all"
+        DiagramType = "Class"
+        Description = "Tests Class diagram with all domains and admin entity focus"
+    },
+    @{
+        Name = "Edge_Case_ER_Diagram_Cross_Domain_Focus"
+        Focus = "dmProfile"
         Domains = "participant"
         DiagramType = "ER"
-        Description = "Tests single domain filtering"
+        Description = "Tests admin entity focus with participant domain (cross-domain)"
     },
     @{
-        Name = "Multi Domain Test"
-        Focus = "programme"
-        Domains = "programme,participant,site"
+        Name = "Edge_Case_Class_Diagram_Cross_Domain_Focus"
+        Focus = "dmProfile"
+        Domains = "participant"
+        DiagramType = "Class"
+        Description = "Tests Class diagram with admin entity focus and participant domain"
+    },
+    @{
+        Name = "Edge_Case_ER_Diagram_Media_Focus"
+        Focus = "media"
+        Domains = "programme"
         DiagramType = "ER"
-        Description = "Tests multi-domain filtering"
+        Description = "Tests media entity focus with programme domain (media is in multiple domains)"
+    },
+    @{
+        Name = "Edge_Case_Class_Diagram_Media_Focus"
+        Focus = "media"
+        Domains = "programme"
+        DiagramType = "Class"
+        Description = "Tests Class diagram with media entity focus and programme domain"
+    },
+    @{
+        Name = "Edge_Case_ER_Diagram_ProgRole_Focus"
+        Focus = "progRole"
+        Domains = "partner"
+        DiagramType = "ER"
+        Description = "Tests progRole focus with partner domain (progRole is in multiple domains)"
+    },
+    @{
+        Name = "Edge_Case_Class_Diagram_ProgRole_Focus"
+        Focus = "progRole"
+        Domains = "partner"
+        DiagramType = "Class"
+        Description = "Tests Class diagram with progRole focus and partner domain"
+    },
+    @{
+        Name = "Edge_Case_ER_Diagram_ActivityDef_Focus"
+        Focus = "activityDef"
+        Domains = "site"
+        DiagramType = "ER"
+        Description = "Tests activityDef focus with site domain (activityDef not in site domain)"
+    },
+    @{
+        Name = "Edge_Case_Class_Diagram_ActivityDef_Focus"
+        Focus = "activityDef"
+        Domains = "site"
+        DiagramType = "Class"
+        Description = "Tests Class diagram with activityDef focus and site domain"
+    },
+    @{
+        Name = "Edge_Case_ER_Diagram_Guide_Focus"
+        Focus = "guide"
+        Domains = "partner"
+        DiagramType = "ER"
+        Description = "Tests guide focus with partner domain (guide is in participant/programme domains)"
+    },
+    @{
+        Name = "Edge_Case_Class_Diagram_Guide_Focus"
+        Focus = "guide"
+        Domains = "partner"
+        DiagramType = "Class"
+        Description = "Tests Class diagram with guide focus and partner domain"
+    },
+    @{
+        Name = "Edge_Case_ER_Diagram_Journal_Focus"
+        Focus = "journal"
+        Domains = "programme"
+        DiagramType = "ER"
+        Description = "Tests journal focus with programme domain (journal is in participant domain)"
+    },
+    @{
+        Name = "Edge_Case_Class_Diagram_Journal_Focus"
+        Focus = "journal"
+        Domains = "programme"
+        DiagramType = "Class"
+        Description = "Tests Class diagram with journal focus and programme domain"
     }
 )
 
@@ -87,7 +227,7 @@ foreach ($test in $baselineTests) {
     $baselineFile = "$baselinePath\$($test.Name -replace '\s+', '_').mmd"
     
     # Check if baseline already exists
-    if (Test-Path $baselineFile -and -not $Force) {
+    if ((Test-Path $baselineFile) -and (-not $Force)) {
         Write-Host "⚠️  Baseline already exists. Use -Force to overwrite." -ForegroundColor Yellow
         continue
     }

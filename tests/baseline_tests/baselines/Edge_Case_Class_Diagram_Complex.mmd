@@ -1,0 +1,138 @@
+classDiagram
+    %% Parameters:
+%%   Focus: member
+%%   Domains: participant, programme
+%%   Chart Type: Class
+    class pathway_activityDef {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_center {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_intake {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_member {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_memberGroup {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_memberType {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_partner {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_progMember {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_progRole {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_referer {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_report {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_SSQ_arthritis01 {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_SSQ_pain01 {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_SSQ_stress01 {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_testimonial {
+        +UUID ObjectID
+        +string name
+    }
+
+    pathway_activityDef --> pathway_progRole : role
+    pathway_activityDef --> pathway_activityDef : onEndID
+    pathway_center --> pathway_partner : partnerID
+    pathway_center --> pathway_memberGroup : memberGroupID
+    pathway_intake --> pathway_memberGroup : memberGroupID
+    pathway_intake --> pathway_center : centerID
+    pathway_member --> pathway_memberType : memberTypeID
+    pathway_member --> pathway_memberGroup : memberGroupID
+    pathway_member --> pathway_partner : partnerID
+    pathway_member --> pathway_center : centerID
+    pathway_member --> pathway_referer : refererID
+    pathway_member --> pathway_activityDef : activityDefID
+    pathway_member --> pathway_progRole : roleID
+    pathway_memberGroup --> pathway_partner : partnerID
+    pathway_progMember --> pathway_member : memberID
+    pathway_referer --> pathway_partner : partnerID
+    pathway_referer --> pathway_memberGroup : memberGroupID
+    pathway_referer --> pathway_center : centerID
+    pathway_report --> pathway_partner : partnerID
+    pathway_report --> pathway_member : memberID
+    pathway_report --> pathway_memberType : memberTypeID
+    pathway_SSQ_arthritis01 --> pathway_progMember : progMemberID
+    pathway_SSQ_arthritis01 --> pathway_member : memberID
+    pathway_SSQ_pain01 --> pathway_progMember : progMemberID
+    pathway_SSQ_pain01 --> pathway_member : memberID
+    pathway_SSQ_stress01 --> pathway_progMember : progMemberID
+    pathway_SSQ_stress01 --> pathway_member : memberID
+    pathway_testimonial --> pathway_member : memberID
+    pathway_testimonial --> pathway_activityDef : activityDefID
+    pathway_activityDef --> pathway_activityDef : aCuePointActivities
+    pathway_activityDef --> pathway_activityDef : aInteract1Activities
+    pathway_activityDef --> pathway_activityDef : aInteract2Activities
+    pathway_activityDef --> pathway_activityDef : aInteract3Activities
+    pathway_activityDef --> pathway_activityDef : aInteract4Activities
+    pathway_activityDef --> pathway_activityDef : aInteract5Activities
+    pathway_center --> pathway_referer : aReferers
+    pathway_intake --> pathway_member : aMembers
+    pathway_partner --> pathway_center : aCenters
+    pathway_partner --> pathway_referer : aReferers
+    pathway_report --> pathway_memberGroup : aMemberGroupID
+
+    %% Entity Styling
+    style pathway_activityDef fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_intake fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_member fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style pathway_memberGroup fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style pathway_memberType fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_partner fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_progMember fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style pathway_progRole fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style pathway_referer fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_report fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_SSQ_arthritis01 fill:#8e24aa,stroke:#6a1b9a,stroke-width:2px,color:#fff
+    style pathway_SSQ_pain01 fill:#8e24aa,stroke:#6a1b9a,stroke-width:2px,color:#fff
+    style pathway_SSQ_stress01 fill:#8e24aa,stroke:#6a1b9a,stroke-width:2px,color:#fff
+    style pathway_testimonial fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+

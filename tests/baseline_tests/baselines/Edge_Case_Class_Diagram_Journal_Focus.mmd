@@ -1,0 +1,37 @@
+classDiagram
+    %% Parameters:
+%%   Focus: journal
+%%   Domains: programme
+%%   Chart Type: Class
+    class pathway_activity {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_journal {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_journalDef {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_progMember {
+        +UUID ObjectID
+        +string name
+    }
+
+    pathway_activity --> pathway_progMember : progMemberID
+    pathway_journal --> pathway_progMember : progMemberID
+    pathway_journal --> pathway_journalDef : journalDefID
+    pathway_journal --> pathway_activity : activityID
+    pathway_progMember --> pathway_activity : currActivityID
+
+    %% Entity Styling
+    style pathway_activity fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_journal fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style pathway_journalDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_progMember fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+

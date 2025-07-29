@@ -1,36 +1,4 @@
 {
-  "scanSettings": {
-    "excludeFiles": [
-      "participant.cfc",
-      "module.cfc",
-      "moduleDef.cfc",
-      "ruleActivityDefListing.cfc",
-      "farFilter.cfc",
-      "farTask.cfc",
-      "ruleImageGallerySlick.cfc",
-      "shopItem.cfc",
-      "orderItem.cfc",
-      "orderMaster.cfc",
-      "address.cfc",
-      "promotion.cfc"
-    ],
-    "farcryPath": "D:\\GIT\\farcry",
-    "scanDirectories": [
-      "D:\\GIT\\farcry\\plugins",
-      "D:\\GIT\\farcry\\zfarcrycore"
-    ],
-    "excludeFolders": [
-      "farcrycms",
-      "social",
-      "aws",
-      "farcryldap",
-      "microsoftud",
-      "social",
-      "testmxunit"
-    ],
-    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd",
-    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json"
-  },
   "entityConstraints": {
     "knownTables": [
       "activity",
@@ -201,6 +169,38 @@
       "xealth_order",
       "xealth_patient",
       "zzRemote"
+    ]
+  },
+  "scanSettings": {
+    "farcryPath": "D:\\GIT\\farcry",
+    "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd",
+    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
+    "scanDirectories": [
+      "D:\\GIT\\farcry\\plugins",
+      "D:\\GIT\\farcry\\zfarcrycore"
+    ],
+    "excludeFiles": [
+      "participant.cfc",
+      "module.cfc",
+      "moduleDef.cfc",
+      "ruleActivityDefListing.cfc",
+      "farFilter.cfc",
+      "farTask.cfc",
+      "ruleImageGallerySlick.cfc",
+      "shopItem.cfc",
+      "orderItem.cfc",
+      "orderMaster.cfc",
+      "address.cfc",
+      "promotion.cfc"
+    ],
+    "excludeFolders": [
+      "farcrycms",
+      "social",
+      "aws",
+      "farcryldap",
+      "microsoftud",
+      "social",
+      "testmxunit"
     ]
   }
 }

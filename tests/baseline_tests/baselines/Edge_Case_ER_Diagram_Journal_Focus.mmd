@@ -1,0 +1,88 @@
+erDiagram
+    %% Parameters:
+%%   Focus: journal
+%%   Domains: programme
+%%   Chart Type: ER
+    "pathway_activity" {
+        UUID ObjectID
+    }
+
+    "pathway_activityDef" {
+        UUID ObjectID
+    }
+
+    "pathway_guide" {
+        UUID ObjectID
+    }
+
+    "pathway_journal" {
+        UUID ObjectID
+    }
+
+    "pathway_journalDef" {
+        UUID ObjectID
+    }
+
+    "pathway_media" {
+        UUID ObjectID
+    }
+
+    "pathway_progMember" {
+        UUID ObjectID
+    }
+
+    "pathway_programme" {
+        UUID ObjectID
+    }
+
+    "pathway_progRole" {
+        UUID ObjectID
+    }
+
+    %% Direct FK Relationships
+    "pathway_activity" ||--|| "pathway_progMember" : progMemberID
+    "pathway_activity" ||--|| "pathway_activityDef" : activityDefID
+    "pathway_activityDef" ||--|| "pathway_programme" : programmeID
+    "pathway_activityDef" ||--|| "pathway_guide" : guideID
+    "pathway_activityDef" ||--|| "pathway_progRole" : role
+    "pathway_activityDef" ||--|| "pathway_media" : defaultMediaID
+    "pathway_activityDef" ||--|| "pathway_journalDef" : journalID
+    "pathway_journal" ||--|| "pathway_progMember" : progMemberID
+    "pathway_journal" ||--|| "pathway_journalDef" : journalDefID
+    "pathway_journal" ||--|| "pathway_activity" : activityID
+    "pathway_journalDef" ||--|| "pathway_programme" : programmeID
+    "pathway_media" ||--|| "pathway_guide" : guideID
+    "pathway_media" ||--|| "pathway_programme" : programmeID
+    "pathway_media" ||--|| "pathway_progRole" : roleID
+    "pathway_progMember" ||--|| "pathway_programme" : programmeID
+    "pathway_progMember" ||--|| "pathway_activity" : currActivityID
+    "pathway_programme" ||--|| "pathway_activityDef" : firstActivityDefID
+    "pathway_programme" ||--|| "pathway_activityDef" : lastActivityDefID
+    "pathway_progRole" ||--|| "pathway_programme" : programmeID
+    %% End Direct FK Relationships
+
+    %% Special Joins
+    %% End Special Joins
+
+    %% Self-Referencing Relationships for activityDef
+    %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+    "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
+    %% End Self-Referencing Relationships for activityDef
+
+    %% Join Table Relationships
+    "pathway_activityDef" }o--|| "pathway_media" : aMediaIDs
+    "pathway_programme" }o--|| "pathway_activityDef" : aFollowupActivityDefIDs
+    %% End Join Table Relationships
+
+
+    %% Entity Styling
+    style pathway_activity fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_activityDef fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_guide fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_journal fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style pathway_journalDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_media fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_progMember fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_programme fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_progRole fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+

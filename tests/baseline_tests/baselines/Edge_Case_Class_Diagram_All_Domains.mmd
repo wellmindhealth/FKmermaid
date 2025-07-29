@@ -1,0 +1,29 @@
+classDiagram
+    %% Parameters:
+%%   Focus: farUser
+%%   Domains: partner, participant, programme, site
+%%   Chart Type: Class
+    class pathway_memberGroup {
+        +UUID ObjectID
+        +string name
+    }
+
+    class zfarcrycore_farGroup {
+        +UUID ObjectID
+        +string name
+    }
+
+    class zfarcrycore_farUser {
+        +UUID ObjectID
+        +string name
+    }
+
+    zfarcrycore_farUser --> zfarcrycore_farGroup : lGroups
+    pathway_memberGroup --> zfarcrycore_farUser : aFarcryUsers
+    zfarcrycore_farUser --> zfarcrycore_farGroup : aGroups
+
+    %% Entity Styling
+    style pathway_memberGroup fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style zfarcrycore_farGroup fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style zfarcrycore_farUser fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+

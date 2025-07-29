@@ -1,0 +1,64 @@
+classDiagram
+    %% Parameters:
+%%   Focus: guide
+%%   Domains: partner
+%%   Chart Type: Class
+    class pathway_dmImage {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_activityDef {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_center {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_guide {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_media {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_partner {
+        +UUID ObjectID
+        +string name
+    }
+
+    pathway_activityDef --> pathway_dmImage : teaserImage
+    pathway_activityDef --> pathway_guide : guideID
+    pathway_activityDef --> pathway_activityDef : onEndID
+    pathway_activityDef --> pathway_media : defaultMediaID
+    pathway_center --> pathway_dmImage : Logo
+    pathway_center --> pathway_partner : partnerID
+    pathway_guide --> pathway_dmImage : picture
+    pathway_guide --> pathway_partner : partnerID
+    pathway_guide --> pathway_center : centerID
+    pathway_media --> pathway_guide : guideID
+    pathway_media --> pathway_partner : partnerID
+    pathway_partner --> pathway_dmImage : Logo
+    pathway_activityDef --> pathway_activityDef : aCuePointActivities
+    pathway_activityDef --> pathway_media : aMediaIDs
+    pathway_activityDef --> pathway_activityDef : aInteract1Activities
+    pathway_activityDef --> pathway_activityDef : aInteract2Activities
+    pathway_activityDef --> pathway_activityDef : aInteract3Activities
+    pathway_activityDef --> pathway_activityDef : aInteract4Activities
+    pathway_activityDef --> pathway_activityDef : aInteract5Activities
+    pathway_partner --> pathway_center : aCenters
+
+    %% Entity Styling
+    style pathway_dmImage fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_guide fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style pathway_media fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_partner fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+

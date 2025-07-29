@@ -1,0 +1,61 @@
+classDiagram
+    %% Parameters:
+%%   Focus: dmProfile
+%%   Domains: participant
+%%   Chart Type: Class
+    class pathway_center {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_memberGroup {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_partner {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_referer {
+        +UUID ObjectID
+        +string name
+    }
+
+    class zfarcrycore_dmProfile {
+        +UUID ObjectID
+        +string name
+    }
+
+    class zfarcrycore_farGroup {
+        +UUID ObjectID
+        +string name
+    }
+
+    pathway_center --> zfarcrycore_dmProfile : dmProfileID
+    pathway_center --> pathway_partner : partnerID
+    pathway_center --> pathway_memberGroup : memberGroupID
+    pathway_memberGroup --> pathway_partner : partnerID
+    pathway_partner --> zfarcrycore_dmProfile : dmProfileID
+    pathway_partner --> zfarcrycore_dmProfile : seniorSupportID
+    pathway_referer --> zfarcrycore_dmProfile : dmProfileID
+    pathway_referer --> pathway_partner : partnerID
+    pathway_referer --> pathway_memberGroup : memberGroupID
+    pathway_referer --> pathway_center : centerID
+    zfarcrycore_dmProfile --> pathway_memberGroup : memberGroupID
+    zfarcrycore_dmProfile --> zfarcrycore_farGroup : lGroups
+    pathway_center --> zfarcrycore_dmProfile : aUsers
+    pathway_center --> pathway_referer : aReferers
+    pathway_partner --> pathway_center : aCenters
+    pathway_partner --> pathway_referer : aReferers
+    zfarcrycore_dmProfile --> zfarcrycore_farGroup : aGroups
+
+    %% Entity Styling
+    style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_memberGroup fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_partner fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_referer fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style zfarcrycore_dmProfile fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style zfarcrycore_farGroup fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+

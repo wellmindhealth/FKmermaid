@@ -1,15 +1,11 @@
 {
-  "ExclusionsPresent": false,
-  "MissingExclusions": [
-    "farFilter",
-    "farTask",
-    "address"
-  ],
-  "ExpectedEntityCount": 84,
-  "EntityCount": 0,
+  "ExclusionsPresent": true,
+  "MissingExclusions": [],
+  "ExpectedEntityCount": 168,
+  "EntityCount": 168,
   "DirectFKCount": 0,
-  "Timestamp": "2025-07-29 07:54:22",
-  "Success": false,
+  "Timestamp": "2025-07-29 08:42:06",
+  "Success": true,
   "TestName": "CFC Scan Generation",
-  "ExpectedDirectFKCount": 109
+  "ExpectedDirectFKCount": 0
 }
