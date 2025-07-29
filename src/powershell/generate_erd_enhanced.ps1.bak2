@@ -1187,7 +1187,7 @@ function Get-EntityStyle {
         if ($cssStyles.ContainsKey("focus")) {
             return $cssStyles["focus"]
         }
-        return "fill:#ff9800,stroke:#f57c00,stroke-width:4px,color:#fff"
+        return "fill:#e65100,stroke:#bf360c,stroke-width:2px,color:#fff"
     }
     
     # Check for SSQ entities FIRST (before related entities)
@@ -1277,7 +1277,7 @@ Write-Host "FarCry ERD Generator (Enhanced)"
 Write-Host "==============================="
 
 # Load Mermaid styles once
-$stylesPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "styles\mermaid_styles.mmd"
+$stylesPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "css\mermaid_styles.mmd"
 $cssStyles = Get-MermaidStyles -stylesPath $stylesPath
 
 # Echo chosen parameters
@@ -1350,7 +1350,7 @@ $mermaidLiveHtml = @"
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>$fullTitle - Mermaid Live Editor</title>
-    <link rel="stylesheet" href="styles/mermaid_styles.mmd">
+    <link rel="stylesheet" href="css/mermaid_styles.mmd">
     <style>
         body { 
             font-family: Arial, sans-serif; 
