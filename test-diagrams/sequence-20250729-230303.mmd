@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant U as User
+    participant S as System
+    participant D as Database
+    
+    U->>S: Login Request
+    S->>D: Validate Credentials
+    D-->>S: User Data
+    S-->>U: Login Success
+    
+    U->>S: Create Order
+    S->>D: Save Order
+    D-->>S: Order Confirmed
+    S-->>U: Order Created
