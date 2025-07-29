@@ -116,3 +116,12 @@ try {
 }
 
 Write-Host "`n🏁 CFC Scan Generation Test Complete" -ForegroundColor Cyan
+
+# Set exit code based on test success
+if ($testResult.Success) {
+    Write-Host "✅ Test PASSED" -ForegroundColor Green
+    exit 0
+} else {
+    Write-Host "❌ Test FAILED" -ForegroundColor Red
+    exit 1
+}

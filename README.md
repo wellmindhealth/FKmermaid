@@ -1,35 +1,68 @@
 # FKmermaid ER Diagram Generator
 
-A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagrams from ColdFusion Components (CFCs), visualized with Mermaid diagrams. **Now with comprehensive testing, shared logic, and roadmap for enterprise integration!**
+A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagrams from ColdFusion Components (CFCs), visualized with Mermaid diagrams. **Now with comprehensive testing, 5-tier semantic styling, and enterprise-ready features!**
 
 ## 🎯 Current Status
 
-✅ **All tests passing** - Comprehensive test suite with 4 categories  
+✅ **All tests passing** - Comprehensive test suite with 5 categories  
+✅ **5-tier semantic styling** - Advanced color-coded relationship prioritization  
 ✅ **Shared logic** - ER and Class diagrams use unified relationship processing  
 ✅ **Entity consolidation** - Prevents duplicate entities (e.g., `dmImage`)  
 ✅ **Self-referencing grouping** - Both diagram types properly group self-refs  
 ✅ **Robust error handling** - Directory creation and parameter validation  
 ✅ **Caching system** - Optimized performance with relationship caching  
+✅ **CFC scan configuration** - Automated config generation from database structure  
 
-## 🔄 Upcoming Enhancements
+## 🎨 5-Tier Semantic Styling System
 
-### **Enhanced Testing & Analysis** ✅ COMPLETED
-- [x] **Deeper Entity Mapping** - More sophisticated relationship pattern recognition
-- [x] **Cross-Domain Analysis** - Better understanding of relationships across domains
-- [x] **Relationship Strength Scoring** - Quantify relationship importance
-- [x] **Advanced Test Scenarios** - Edge cases and complex relationship testing
-- [x] **Performance Benchmarking** - Test suite for large-scale diagrams
+The tool now features an advanced 5-tier semantic styling system that color-codes entities based on their relationship importance:
+
+### **Tier 1: Focus Entities** (`#d75500` - Gold)
+- Primary entities of interest
+- Highest visual prominence
+- Example: `pathway_partner` in partner-focused diagrams
+
+### **Tier 2: Domain Related** (`#693a00` - Bronze)
+- Entities in the same domain as focus entities
+- Direct business relationships
+- Example: `pathway_center`, `pathway_media`, `pathway_memberGroup`
+
+### **Tier 3: Related Entities** (`#1963d2` - Blue)
+- Entities with direct relationships to focus entities
+- Cross-domain connections
+- Example: `pathway_ruleSelfRegistration`, `pathway_guide`, `pathway_member`
+
+### **Tier 4: Domain Other** (`#44517f` - Gray)
+- Entities in the same domain but not directly related
+- Secondary domain entities
+- Example: `pathway_activityDef`, `pathway_intake`, `pathway_progRole`
+
+### **Tier 5: Secondary Entities** (`#1a1a1a` - Black)
+- Entities from other domains
+- Background context entities
+- Example: `pathway_activity`, `pathway_journal`, `pathway_library`
+
+## 🔄 Recent Enhancements
+
+### **Test Suite Improvements** ✅ COMPLETED
+- [x] **CFC Scan Generation Test** - Validates configuration generation from database
+- [x] **CFC Exclusions Test** - Ensures proper entity exclusion functionality
+- [x] **5-Tier Semantic Styling Test** - Validates color-coded relationship tiers
+- [x] **Domain Detection Test** - Tests domain filtering and focus entity detection
+- [x] **Manual Verification Test** - Validates diagram generation against criteria
+
+### **Configuration Management** ✅ COMPLETED
+- [x] **Automated Config Generation** - `generate_cfc_scan_config.ps1` creates config from database
+- [x] **Database Integration** - Reads actual database structure from `config/dbdump.sql`
+- [x] **Folder Scanning** - Discovers CFC files in plugin directories
+- [x] **Exclusion System** - Two-level exclusion (CFC files + database tables)
+- [x] **Entity-Plugin Mapping** - Automatic mapping based on folder locations
 
 ### **Advanced Relationship Analysis** ✅ COMPLETED
 - [x] **Impact Analysis** - What happens when entities change
 - [x] **Dependency Chains** - Multi-level relationship tracing
 - [x] **Circular Dependency Detection** - Identify problematic relationship cycles
 - [x] **Relationship Visualization** - Different views of the same relationships
-
-### **New Modules Added**
-- [x] **Relationship Analyzer** (`relationship_analyzer.ps1`) - Deep pattern analysis
-- [x] **Impact Analyzer** (`impact_analyzer.ps1`) - Change impact assessment
-- [x] **Advanced Test Scenarios** (`advanced_test_scenarios.ps1`) - Edge case testing
 
 ## 🚀 Roadmap & Future Enhancements
 
@@ -72,7 +105,7 @@ A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagra
   - [x] Multiple format batch export
 
 - [x] **Enhanced Testing**
-  - [x] Comprehensive test suite with 4 categories
+  - [x] Comprehensive test suite with 5 categories
   - [x] Baseline validation and regression testing
   - [x] Fresh generation approach with expectation updates
   - [x] Automated test result analysis
@@ -155,6 +188,7 @@ Imagine a system where:
 ## Features
 
 - **Dual Diagram Types**: Generate ER diagrams or Class diagrams
+- **5-Tier Semantic Styling**: Advanced color-coded relationship prioritization
 - **Focus Entity Prioritization**: Primary focus entity appears first in the diagram
 - **Domain Filtering**: Filter relationships by specific domains
 - **Reliable Viewing**: Local HTML files with embedded Mermaid diagrams
@@ -162,6 +196,8 @@ Imagine a system where:
 - **Clean Output**: User-friendly interface with clear instructions
 - **Comprehensive Testing**: Full test suite with baseline validation
 - **Shared Logic**: Unified relationship processing for both diagram types
+- **Automated Configuration**: Generate config from database structure
+- **Exclusion System**: Two-level exclusion for complete entity removal
 
 ## Domain Definitions
 
@@ -279,7 +315,7 @@ This ensures that excluded entities never appear in generated diagrams, even if 
 
 ## Testing
 
-The project includes a comprehensive test suite:
+The project includes a comprehensive test suite with 5 categories:
 
 ```powershell
 # Run all tests
@@ -289,12 +325,14 @@ cd tests
 
 ### Test Categories:
 - **CFC Scan Tests**: Configuration generation and validation
-- **Main Script Tests**: 4-tier semantic styling system
-- **Baseline Tests**: Regression testing with known outputs
-- **Integration Tests**: End-to-end workflow validation
+- **CFC Exclusions Tests**: Entity exclusion functionality
+- **5-Tier Semantic Styling Tests**: Color-coded relationship validation
+- **Domain Detection Tests**: Focus entity and domain filtering
+- **Manual Verification Tests**: End-to-end workflow validation
 
 ### Test Results:
-- ✅ **All tests passing**
+- ✅ **All 5 test categories passing**
+- ✅ **100% success rate**
 - ✅ **Comprehensive validation**
 - ✅ **Baseline regression protection**
 - ✅ **Performance monitoring**
@@ -374,6 +412,7 @@ FKmermaid/
 │   ├── run_all_tests.ps1             # Main test runner
 │   ├── main_script_tests/            # Core functionality tests
 │   ├── baseline_tests/               # Regression testing
+│   ├── cfc_scan_tests/              # Configuration tests
 │   └── results/                      # Test results and reports
 ├── exports/                  # Generated diagram files
 │   ├── *.mmd                # Mermaid source files
@@ -388,6 +427,7 @@ FKmermaid/
 - **Browser issues**: Try opening the `.html` file manually
 - **Copy-paste issues**: Ensure you copy the entire content from the `.mmd` file
 - **Test failures**: Run `.\run_all_tests.ps1` to identify specific issues
+- **Configuration issues**: Run `.\generate_cfc_scan_config.ps1` to regenerate config
 
 ## Contributing
 

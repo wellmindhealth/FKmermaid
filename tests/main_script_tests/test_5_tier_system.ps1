@@ -52,11 +52,32 @@ function Analyze-MermaidDiagram {
         $analysis.Styling[$entity] = $color
     }
     
+    # Categorize entities into tiers based on colors
+    foreach ($entity in $analysis.Entities) {
+        if ($analysis.Styling.ContainsKey($entity)) {
+            $color = $analysis.Styling[$entity]
+            switch ($color) {
+                "#d75500" { $analysis.Tiers["focus"] += $entity }  # Gold tier
+                "#693a00" { $analysis.Tiers["domain_related"] += $entity }  # Bronze tier
+                "#1963d2" { $analysis.Tiers["related"] += $entity }  # Blue tier
+                "#44517f" { $analysis.Tiers["domain_other"] += $entity }  # Gray tier
+                "#1a1a1a" { $analysis.Tiers["secondary"] += $entity }  # Black tier
+                default { 
+                    Write-Host "⚠️  Unknown color tier for $entity : $color" -ForegroundColor Yellow
+                    $analysis.Tiers["secondary"] += $entity  # Default to secondary
+                }
+            }
+        } else {
+            Write-Host "⚠️  No styling found for $entity" -ForegroundColor Yellow
+            $analysis.Tiers["secondary"] += $entity  # Default to secondary
+        }
+    }
+    
     return $analysis
 }
 
 # Load the baseline file
-$baselineFile = "D:\GIT\farcry\Cursor\FKmermaid\tests\baseline_tests\baselines\Edge_Case_Multiple_Focus_Entities.mmd"
+$baselineFile = "D:\GIT\farcry\Cursor\FKmermaid\tests\baseline_tests\baselines\Perfect_5-Tier_Test.mmd"
 
 if (-not (Test-Path $baselineFile)) {
     Write-Host "❌ Baseline file not found: $baselineFile" -ForegroundColor Red
@@ -77,11 +98,11 @@ Write-Host "   Tiers found: $($analysis.Tiers.Count)" -ForegroundColor Gray
 
 # Expected tiers for 5-tier system (partner domain with partner,member focus)
 $ExpectedTiers = @{
-    "focus" = @("pathway_partner", "pathway_member", "pathway_programme")  # Orange tier
-    "domain_related" = @("pathway_partner", "pathway_memberGroup", "pathway_memberType")  # Gold tier (same domain + related)
-    "related" = @("pathway_progMember", "pathway_center", "pathway_guide")  # Blue tier (related but different domain)
-    "domain_other" = @("pathway_activity", "pathway_activityDef", "pathway_media")  # Blue-grey tier (same domain, not related)
-    "secondary" = @("pathway_journal", "pathway_library", "pathway_testimonial")  # Dark grey tier (other domains)
+    "focus" = @("pathway_partner")  # Gold tier (#d75500)
+    "domain_related" = @("pathway_center", "pathway_media", "pathway_memberGroup", "pathway_programme", "pathway_referer", "zfarcrycore_dmProfile")  # Bronze tier (#693a00)
+    "related" = @("pathway_ruleSelfRegistration", "pathway_dmImage", "pathway_guide", "pathway_member", "pathway_report")  # Blue tier (#1963d2)
+    "domain_other" = @("pathway_activityDef", "pathway_intake", "pathway_progRole", "zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")  # Gray tier (#44517f)
+    "secondary" = @("pathway_activity", "pathway_journal", "pathway_journalDef", "pathway_library", "pathway_progMember", "pathway_tracker", "pathway_trackerDef")  # Black tier (#1a1a1a)
 }
 
 # Validate tiers
