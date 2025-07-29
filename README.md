@@ -12,6 +12,7 @@ A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagra
 ✅ **Robust error handling** - Directory creation and parameter validation  
 ✅ **Caching system** - Optimized performance with relationship caching  
 ✅ **CFC scan configuration** - Automated config generation from database structure  
+✅ **Comprehensive logging system** - Multi-level logging with file output and rotation
 
 ## 🎨 5-Tier Semantic Styling System
 
@@ -57,6 +58,16 @@ The tool now features an advanced 5-tier semantic styling system that color-code
 - [x] **Folder Scanning** - Discovers CFC files in plugin directories
 - [x] **Exclusion System** - Two-level exclusion (CFC files + database tables)
 - [x] **Entity-Plugin Mapping** - Automatic mapping based on folder locations
+
+### **Comprehensive Logging System** ✅ COMPLETED
+- [x] **Multi-Level Logging** - DEBUG, INFO, WARN, ERROR, FATAL levels
+- [x] **File Output** - Automatic log file creation with timestamps
+- [x] **Log Rotation** - Automatic rotation when files exceed size limit
+- [x] **Performance Logging** - Built-in performance monitoring and metrics
+- [x] **Error Logging** - Exception details with stack traces
+- [x] **Context-Aware Logging** - Module-specific log levels and contexts
+- [x] **Log Statistics** - Analysis and reporting of log data
+- [x] **Configuration-Driven** - JSON-based logging configuration
 
 ### **Advanced Relationship Analysis** ✅ COMPLETED
 - [x] **Impact Analysis** - What happens when entities change
@@ -198,6 +209,7 @@ Imagine a system where:
 - **Shared Logic**: Unified relationship processing for both diagram types
 - **Automated Configuration**: Generate config from database structure
 - **Exclusion System**: Two-level exclusion for complete entity removal
+- **Comprehensive Logging**: Multi-level logging with file output and rotation
 
 ## Domain Definitions
 
@@ -403,17 +415,24 @@ FKmermaid/
 ├── config/
 │   ├── domains.json          # Domain and entity definitions
 │   ├── cfc_scan_config.json  # CFC scanning configuration
+│   ├── logging.json          # Logging configuration
 │   └── dbdump.sql           # Database structure reference
 ├── src/powershell/
 │   ├── generate_erd_enhanced.ps1     # Main ER diagram generator
 │   ├── generate_cfc_scan_config.ps1  # Configuration generator from DB
-│   └── relationship_detection.ps1     # CFC relationship detection
+│   ├── relationship_detection.ps1     # CFC relationship detection
+│   ├── logger.ps1                    # Logging module
+│   └── logging_integration.ps1       # Logging integration helpers
 ├── tests/
 │   ├── run_all_tests.ps1             # Main test runner
 │   ├── main_script_tests/            # Core functionality tests
 │   ├── baseline_tests/               # Regression testing
 │   ├── cfc_scan_tests/              # Configuration tests
+│   ├── logging_tests/                # Logging system tests
 │   └── results/                      # Test results and reports
+├── logs/                     # Log files (auto-created)
+│   ├── fkmermaid_*.log      # Application logs
+│   └── *.log                # Rotated log files
 ├── exports/                  # Generated diagram files
 │   ├── *.mmd                # Mermaid source files
 │   └── *.html               # HTML viewer files

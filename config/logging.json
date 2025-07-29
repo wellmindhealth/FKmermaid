@@ -1,0 +1,32 @@
+{
+  "logging": {
+    "defaultLevel": "INFO",
+    "logDirectory": "logs",
+    "maxLogSize": "10MB",
+    "maxLogFiles": 5,
+    "timestampFormat": "yyyy-MM-dd HH:mm:ss",
+    "enableConsoleOutput": true,
+    "enableFileOutput": true,
+    "logRotation": true,
+    "contexts": {
+      "default": "INFO",
+      "performance": "INFO",
+      "database": "DEBUG",
+      "cfc_scan": "INFO",
+      "relationship_detection": "DEBUG",
+      "diagram_generation": "INFO",
+      "test_execution": "INFO",
+      "error_handling": "WARN"
+    },
+    "performance": {
+      "enabled": true,
+      "threshold": 1000,
+      "logSlowOperations": true
+    },
+    "errorHandling": {
+      "logExceptions": true,
+      "logStackTraces": true,
+      "includeContext": true
+    }
+  }
+}

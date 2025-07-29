@@ -1,0 +1,14 @@
+2025-07-29 09:05:44 [INFO] Logger Initialize-Logger Logger initialized
+2025-07-29 09:05:44 [INFO] Logger Initialize-Logger Log level: INFO
+2025-07-29 09:05:44 [INFO] Logger Initialize-Logger Log file: D:\GIT\farcry\Cursor\FKmermaid\logs\fkmermaid_20250729_090544.log
+2025-07-29 09:05:44 [INFO] Logging Write-InfoLog Module logging initialized: cfc_scan
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog Starting CFC scan configuration generation
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog Performance: Database Table Extraction completed in 11.9912ms | Data: {"Metrics":{"FilePath":"D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\dbdump.sql"},"Operation":"Database Table Extraction","Duration":11.9912}
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog Found 179 tables in database | Data: {"DatabasePath":"D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\dbdump.sql","TableCount":179}
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog Performance: Plugin Folder Discovery completed in 3.3333ms | Data: {"Metrics":{"PluginsPath":"D:\\GIT\\farcry\\plugins"},"Operation":"Plugin Folder Discovery","Duration":3.3333}
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog Plugin folder analysis completed | Data: {"ExcludedFolders":["aws","farcryldap","microsoftud","social","testmxunit"],"WorkspaceFolders":["pathway","api","farcrycms"],"TotalFolders":8}
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog Loaded existing configuration | Data: {"ConfigPath":"D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_scan_config.json"}
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog Using excludeFiles from existing config | Data: {"ExcludeFileCount":12,"ExcludeFiles":["participant.cfc","module.cfc","moduleDef.cfc","ruleActivityDefListing.cfc","farFilter.cfc","farTask.cfc","ruleImageGallerySlick.cfc","shopItem.cfc","orderItem.cfc","orderMaster.cfc","address.cfc","promotion.cfc"]}
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog Configuration generation completed | Data: {"ExcludedEntityCount":12,"FilteredTables":168,"ExcludedEntities":["participant","module","moduleDef","ruleActivityDefListing","farFilter","farTask","ruleImageGallerySlick","shopItem","orderItem","orderMaster","address","promotion"],"TotalTables":179}
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog Configuration saved successfully | Data: {"OutputPath":"D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_scan_config.json","ConfigSize":5208}
+2025-07-29 09:05:44 [INFO] CFC_Scan Write-InfoLog CFC scan configuration generation completed successfully | Data: {"Summary":{"ExcludedFolders":5,"FilteredTables":168,"ExcludedEntities":12,"WorkspaceFolders":3,"TotalTables":179}}

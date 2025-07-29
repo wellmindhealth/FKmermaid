@@ -1,0 +1,9 @@
+2025-07-29 09:02:42 [INFO] Logger Initialize-Logger Logger initialized
+2025-07-29 09:02:42 [INFO] Logger Initialize-Logger Log level: INFO
+2025-07-29 09:02:42 [INFO] Logger Initialize-Logger Log file: D:\GIT\farcry\Cursor\FKmermaid\logs\fkmermaid_20250729_090242.log
+2025-07-29 09:02:42 [INFO] Logging Write-InfoLog Module logging initialized: test_logging
+2025-07-29 09:02:42 [INFO] Test Write-InfoLog This is an info message
+2025-07-29 09:02:42 [WARN] Test Write-WarnLog This is a warning message
+2025-07-29 09:02:42 [ERROR] Test Write-ErrorLog This is an error message
+2025-07-29 09:02:42 [INFO] Performance Write-InfoLog Performance: Test Performance completed in 113.8137ms | Data: {"Metrics":{"Duration":100,"TestType":"Sleep"},"Operation":"Test Performance","Duration":113.8137}
+2025-07-29 09:02:42 [ERROR] ErrorTest Write-ErrorLog Exception: Test exception for error logging | Data: {"ExceptionType":"RuntimeException","StackTrace":null,"ExceptionMessage":"Test exception for error logging","AdditionalData":{}}

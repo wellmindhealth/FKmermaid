@@ -172,9 +172,17 @@
     ]
   },
   "scanSettings": {
-    "farcryPath": "D:\\GIT\\farcry",
+    "excludeFolders": [
+      "farcrycms",
+      "social",
+      "aws",
+      "farcryldap",
+      "microsoftud",
+      "social",
+      "testmxunit"
+    ],
     "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd",
-    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
+    "farcryPath": "D:\\GIT\\farcry",
     "scanDirectories": [
       "D:\\GIT\\farcry\\plugins",
       "D:\\GIT\\farcry\\zfarcrycore"
@@ -193,14 +201,6 @@
       "address.cfc",
       "promotion.cfc"
     ],
-    "excludeFolders": [
-      "farcrycms",
-      "social",
-      "aws",
-      "farcryldap",
-      "microsoftud",
-      "social",
-      "testmxunit"
-    ]
+    "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json"
   }
 }

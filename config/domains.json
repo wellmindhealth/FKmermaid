@@ -12,8 +12,8 @@
       "description": "Participant/User Experience Domain - User journeys and personal data",
       "entities": {
         "core": ["member", "memberGroup", "progMember", "activity", "programme"],
-        "tracking": ["journal", "journalDef", "tracker", "trackerDef"],
-        "programme": ["progRole", "activityDef", "media", "library", "guide"]
+        "tracking": [ "ssq_stress01", "ssq_pain01", "ssq_arthritis01", "tracker", "trackerDef"],
+        "programme": ["progRole", "activityDef", "media", "journal", "journalDef","library", "guide"]
       }
     },
     "programme": {
