@@ -325,8 +325,8 @@ if ($OutputFile -eq "") {
     $uniqueFilename = Get-UniqueFilename -baseName $baseName -extension "mmd"
     $outputFile = Join-Path "D:\GIT\farcry\Cursor\FKmermaid\exports" $uniqueFilename
 } else {
-    # If OutputFile is specified, use it but ensure it's in the exports directory
-    $outputFile = Join-Path "D:\GIT\farcry\Cursor\FKmermaid\exports" (Split-Path $OutputFile -Leaf)
+    # If OutputFile is specified, use the full path as provided
+    $outputFile = $OutputFile
 }
 
 # Clean old files before generating new ones
@@ -679,13 +679,30 @@ function Generate-MermaidERD {
         }
     }
     
-    # Add relationships using shared processing function
-    $processedRelationships = Process-Relationships -relationships $relationships -filteredEntities $filteredEntities -existingEntities $existingEntities -outputType "ER"
+    # Process direct FK relationships for self-referencing
+    $selfRefDirectFK = @()
+    $otherDirectFK = @()
     
-    # Add cross-entity direct FK relationships
-    if ($processedRelationships.DirectFK.Count -gt 0) {
+    foreach ($fk in $relationships.directFK) {
+        $sourceEntity = $fk.source
+        $targetEntity = $fk.target
+        
+        # Only include if both entities are in our filtered list
+        if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
+            if ($sourceEntity -eq $targetEntity) {
+                # Self-referencing direct FK relationship
+                $selfRefDirectFK += $fk
+            } else {
+                # Cross-entity direct FK relationship
+                $otherDirectFK += $fk
+            }
+        }
+    }
+    
+    # Add non-self-referencing direct FK relationships
+    if ($otherDirectFK.Count -gt 0) {
         $mermaidContent += "    %% Direct FK Relationships`n"
-        foreach ($fk in $processedRelationships.DirectFK) {
+        foreach ($fk in $otherDirectFK) {
             $sourceEntity = $fk.source
             $targetEntity = $fk.target
             $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
@@ -754,43 +771,73 @@ function Generate-MermaidERD {
         }
     }
 
-    # Add self-referencing relationships (grouped)
-    foreach ($entityName in $processedRelationships.SelfRefGroups.Keys) {
-        $selfRefs = $processedRelationships.SelfRefGroups[$entityName]
-        if ($selfRefs.Count -gt 0) {
-            $mermaidContent += "    %% Self-Referencing Relationships for $entityName`n"
-            
-            # Collect all self-referencing relationships for this entity
-            $allSelfRefRelationships = @()
-            foreach ($selfRef in $selfRefs) {
-                $allSelfRefRelationships += $selfRef.property
+    # Process join table relationships for self-referencing
+    $selfRefGroups = @{}
+    $otherJoinRelationships = @()
+
+    foreach ($join in $relationships.joinTables) {
+        $sourceEntity = $join.source
+        $targetEntity = $join.target
+        
+        # Only include if both entities are in our filtered list
+        if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
+            if ($sourceEntity -eq $targetEntity) {
+                # Self-referencing relationship (ftJoin points to same entity)
+                if (-not $selfRefGroups.ContainsKey($sourceEntity)) {
+                    $selfRefGroups[$sourceEntity] = @()
+                }
+                $selfRefGroups[$sourceEntity] += $join
+            } else {
+                # Cross-entity relationship
+                $otherJoinRelationships += $join
             }
-            
-            # Add comment listing all the self-referencing relationships
-            $relationshipList = $allSelfRefRelationships -join ', '
-            $mermaidContent += "    %% Self-refs include: $relationshipList`n"
-            
-            # Create a short placeholder label for consolidated self-referencing relationships
-            $consolidatedLabel = "self_refs"
-            
-            # Get entity display names
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $entityName }).plugin
-            $sourceDisplayName = "$sourcePlugin - $entityName"
-            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-            
-            # Add single consolidated relationship line
-            $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedSourceName`" : $consolidatedLabel`n"
-            
-            $mermaidContent += "    %% End Self-Referencing Relationships for $entityName`n`n"
         }
+    }
+    
+    # Output self-referencing groups per entity (including both direct FK and join table relationships)
+    foreach ($entityName in $selfRefGroups.Keys) {
+        $group = $selfRefGroups[$entityName]
+        $mermaidContent += "    %% Self-Referencing Relationships for $entityName`n"
+        
+        # Collect all self-referencing relationships for this entity
+        $allSelfRefRelationships = @()
+        
+        # Add self-referencing direct FK relationships for this entity
+        foreach ($fk in $selfRefDirectFK) {
+            if ($fk.source -eq $entityName) {
+                $allSelfRefRelationships += $fk.property
+            }
+        }
+        
+        # Add self-referencing join table relationships for this entity
+        foreach ($join in $group) {
+            $allSelfRefRelationships += $join.property
+        }
+        
+        # Add comment listing all the self-referencing relationships
+        $relationshipList = $allSelfRefRelationships -join ', '
+        $mermaidContent += "    %% Self-refs include: $relationshipList`n"
+        
+        # Create a short placeholder label for consolidated self-referencing relationships
+        $consolidatedLabel = "self_refs"
+        
+        # Get entity display names
+        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $entityName }).plugin
+        $sourceDisplayName = "$sourcePlugin - $entityName"
+        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+        
+        # Add single consolidated relationship line
+        $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedSourceName`" : $consolidatedLabel`n"
+        
+        $mermaidContent += "    %% End Self-Referencing Relationships for $entityName`n`n"
     }
 
     # Add other join table relationships
-    if ($processedRelationships.JoinTables.Count -gt 0) {
+    if ($otherJoinRelationships.Count -gt 0) {
         $mermaidContent += "    %% Join Table Relationships`n"
-        foreach ($join in $processedRelationships.JoinTables) {
+        foreach ($join in $otherJoinRelationships) {
             $sourceEntity = $join.source
             $targetEntity = $join.target
             $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
@@ -1018,71 +1065,53 @@ function Generate-MermaidClassDiagram {
         }
     }
     
-    # Add relationships using shared processing function
-    $processedRelationships = Process-Relationships -relationships $relationships -filteredEntities $filteredEntities -existingEntities $existingEntities -outputType "Class"
-    
-    # Add cross-entity relationships (DirectFK and OtherJoinRelationships)
-    foreach ($fk in $processedRelationships.DirectFK) {
+    # Add relationships
+    foreach ($fk in $relationships.directFK) {
         $sourceEntity = $fk.source
         $targetEntity = $fk.target
         
-        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-        
-        # Sanitize class names for relationships
-        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-        $targetDisplayName = "$targetPlugin - $targetEntity"
-        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-        
-        $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($fk.property)`n"
+        # Only include if both entities are in our filtered list
+        if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
+            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+            
+            # Sanitize class names for relationships
+            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+            $targetDisplayName = "$targetPlugin - $targetEntity"
+            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+            
+            $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($fk.property)`n"
+        }
     }
 
-    foreach ($join in $processedRelationships.JoinTables) {
+    foreach ($join in $relationships.joinTables) {
         $sourceEntity = $join.source
         $targetEntity = $join.target
         
-        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-        
-        # Sanitize class names for relationships
-        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-        $targetDisplayName = "$targetPlugin - $targetEntity"
-        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-        
-        $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($join.property)`n"
-    }
-    
-    # Add self-referencing relationships (grouped)
-    foreach ($entityName in $processedRelationships.SelfRefGroups.Keys) {
-        $selfRefs = $processedRelationships.SelfRefGroups[$entityName]
-        if ($selfRefs.Count -gt 0) {
-            $entityPlugin = ($filteredEntities | Where-Object { $_.name -eq $entityName }).plugin
-            $entityDisplayName = "$entityPlugin - $entityName"
-            $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedEntityName = $sanitizedEntityName -replace '_+', '_'
-            $sanitizedEntityName = $sanitizedEntityName.Trim('_')
+        # Only include if both entities are in our filtered list
+        if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
+            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
             
-            # Group self-referencing relationships
-            $groupedSelfRefs = $selfRefs | Group-Object -Property { $_.property }
-            foreach ($group in $groupedSelfRefs) {
-                $propertyName = $group.Name
-                $count = $group.Count
-                $relationshipText = if ($count -eq 1) { $propertyName } else { "$propertyName ($count)" }
-                $mermaidContent += "    $sanitizedEntityName --> $sanitizedEntityName : $relationshipText`n"
-            }
+            # Sanitize class names for relationships
+            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+            $targetDisplayName = "$targetPlugin - $targetEntity"
+            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+            
+            $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($join.property)`n"
         }
     }
-    
+
     # Add styling for class diagram (full color support)
     $mermaidContent += "`n    %% Entity Styling`n"
     
@@ -1403,72 +1432,6 @@ function Get-EntityStyle {
     return "fill:#424242,stroke:#212121,stroke-width:1px,color:#fff"
 }
 
-# Shared function to process relationships for both ER and Class diagrams
-function Process-Relationships {
-    param(
-        $relationships,
-        $filteredEntities,
-        $existingEntities,
-        [string]$outputType = "ER"  # "ER" or "Class"
-    )
-    
-    $processedRelationships = @{
-        DirectFK = @()
-        JoinTables = @()
-        SelfRefGroups = @{}
-        OtherJoinRelationships = @()
-    }
-    
-    # Process direct FK relationships
-    foreach ($fk in $relationships.directFK) {
-        $sourceEntity = $fk.source
-        $targetEntity = $fk.target
-        
-        # Check if both entities are in our filtered set
-        $sourceInSet = $existingEntities -contains $sourceEntity
-        $targetInSet = $existingEntities -contains $targetEntity
-        
-        if ($sourceInSet -and $targetInSet) {
-            # Self-referencing relationship
-            if ($sourceEntity -eq $targetEntity) {
-                if (-not $processedRelationships.SelfRefGroups.ContainsKey($sourceEntity)) {
-                    $processedRelationships.SelfRefGroups[$sourceEntity] = @()
-                }
-                $processedRelationships.SelfRefGroups[$sourceEntity] += $fk
-            } else {
-                # Cross-entity relationship
-                $processedRelationships.DirectFK += $fk
-            }
-        }
-    }
-    
-    # Process join table relationships
-    foreach ($join in $relationships.joinTables) {
-        $sourceEntity = $join.source
-        $targetEntity = $join.target
-        $joinTable = $join.joinTable
-        
-        # Check if both entities are in our filtered set
-        $sourceInSet = $existingEntities -contains $sourceEntity
-        $targetInSet = $existingEntities -contains $targetEntity
-        
-        if ($sourceInSet -and $targetInSet) {
-            # Self-referencing relationship
-            if ($sourceEntity -eq $targetEntity) {
-                if (-not $processedRelationships.SelfRefGroups.ContainsKey($sourceEntity)) {
-                    $processedRelationships.SelfRefGroups[$sourceEntity] = @()
-                }
-                $processedRelationships.SelfRefGroups[$sourceEntity] += $join
-            } else {
-                # Cross-entity relationship
-                $processedRelationships.JoinTables += $join
-            }
-        }
-    }
-    
-    return $processedRelationships
-}
-
 # Main execution
 Write-Host "FarCry ERD Generator (Enhanced)"
 Write-Host "==============================="
@@ -1509,7 +1472,7 @@ if ($DiagramType -eq "ER") {
 
 # Ensure exports directory exists
 $exportsDir = Split-Path $outputFile -Parent
-if ($exportsDir -and !(Test-Path $exportsDir)) {
+if (!(Test-Path $exportsDir)) {
     New-Item -ItemType Directory -Path $exportsDir -Force | Out-Null
 }
 
@@ -1517,16 +1480,18 @@ if ($exportsDir -and !(Test-Path $exportsDir)) {
 $mermaidContent | Set-Content $outputFile
 Write-Host "$DiagramType diagram saved to: $outputFile"
 
-# Clean up exports folder - keep only last 3 files
-$exportsPath = Split-Path $outputFile
-$allFiles = Get-ChildItem -Path $exportsPath -File | Sort-Object LastWriteTime -Descending
-if ($allFiles.Count -gt 3) {
-    $filesToDelete = $allFiles | Select-Object -Skip 3
-    foreach ($file in $filesToDelete) {
-        Remove-Item $file.FullName -Force
-        Write-Host "🗑️  Cleaned up: $($file.Name)" -ForegroundColor Yellow
+# Clean up exports folder - keep only last 3 files (only if output is in exports directory)
+$exportsPath = "D:\GIT\farcry\Cursor\FKmermaid\exports"
+if ((Split-Path $outputFile) -eq $exportsPath) {
+    $allFiles = Get-ChildItem -Path $exportsPath -File | Sort-Object LastWriteTime -Descending
+    if ($allFiles.Count -gt 3) {
+        $filesToDelete = $allFiles | Select-Object -Skip 3
+        foreach ($file in $filesToDelete) {
+            Remove-Item $file.FullName -Force
+            Write-Host "🗑️  Cleaned up: $($file.Name)" -ForegroundColor Yellow
+        }
+        Write-Host "🧹 Kept last 3 files in exports folder" -ForegroundColor Green
     }
-    Write-Host "🧹 Kept last 3 files in exports folder" -ForegroundColor Green
 }
 
 # Generate HTML file with embedded browser opening functionality
