@@ -1,0 +1,49 @@
+{
+  "project": {
+    "name": "FKmermaid",
+    "version": "2.0.0",
+    "description": "FarCry ER Diagram Generator with Mermaid support"
+  },
+  "paths": {
+    "projectRoot": "D:\\GIT\\farcry\\Cursor\\FKmermaid",
+    "config": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config",
+    "exports": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports",
+    "src": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\src",
+    "tests": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests",
+    "styles": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\styles",
+    "results": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\results"
+  },
+  "files": {
+    "cfcScanConfig": "cfc_scan_config.json",
+    "domainsConfig": "domains.json",
+    "projectConfig": "project_config.json",
+    "cacheFile": "cfc_cache.json",
+    "dbDump": "dbdump.sql"
+  },
+  "performance": {
+    "cacheTTL": 168,
+    "maxFileAge": 168,
+    "parallelProcessing": true,
+    "memoryLimit": "2GB"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "fkmermaid.log",
+    "maxSize": "10MB",
+    "backupCount": 5
+  },
+  "export": {
+    "formats": ["mmd", "html", "png", "svg", "pdf"],
+    "defaultFormat": "mmd",
+    "pngResolution": 300,
+    "svgOptimization": true
+  },
+  "confluence": {
+    "enabled": false,
+    "baseUrl": "",
+    "username": "",
+    "apiToken": "",
+    "spaceKey": "",
+    "parentPageId": ""
+  }
+}
