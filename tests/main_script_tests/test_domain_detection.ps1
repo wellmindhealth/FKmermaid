@@ -119,10 +119,10 @@ $testCases = @(
         Description = "Test 5-tier semantic styling system"
         ExpectedTiers = @{
             Focus = @("pathway_partner", "pathway_member")
-            GoldTier = @("pathway_center", "pathway_memberGroup", "pathway_referer", "zfarcrycore_dmProfile")
-            BlueTier = @("pathway_activityDef", "pathway_programme", "pathway_progMember", "pathway_progRole", "pathway_report", "pathway_testimonial", "pathway_media", "pathway_intake", "pathway_guide", "pathway_dmImage", "pathway_memberType", "pathway_ruleSelfRegistration")
-            BlueGreyTier = @()
-            DarkGreyTier = @("zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")
+            GoldTier = @("pathway_activityDef", "pathway_center", "pathway_intake", "pathway_media", "pathway_memberGroup", "pathway_programme", "pathway_progRole", "pathway_referer", "zfarcrycore_dmProfile")
+            BlueTier = @("pathway_ruleSelfRegistration", "pathway_dmImage", "pathway_guide", "pathway_memberType", "pathway_progMember", "pathway_report", "pathway_testimonial")
+            BlueGreyTier = @("zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")
+            DarkGreyTier = @()
         }
     }
 )

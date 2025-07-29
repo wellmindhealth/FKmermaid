@@ -1,0 +1,197 @@
+[
+  {
+    "ActualTiers": {
+      "GoldTier": [
+        "pathway_center",
+        "pathway_media",
+        "pathway_memberGroup",
+        "pathway_programme",
+        "pathway_referer",
+        "zfarcrycore_dmProfile"
+      ],
+      "Focus": [
+        "pathway_partner"
+      ],
+      "DarkGreyTier": [],
+      "BlueTier": [
+        "pathway_ruleSelfRegistration",
+        "pathway_dmImage",
+        "pathway_guide",
+        "pathway_member",
+        "pathway_report"
+      ],
+      "BlueGreyTier": [
+        "pathway_activityDef",
+        "pathway_intake",
+        "pathway_progRole",
+        "zfarcrycore_farGroup",
+        "zfarcrycore_farPermission",
+        "zfarcrycore_farRole",
+        "zfarcrycore_farUser"
+      ]
+    },
+    "Domains": "partner",
+    "Timestamp": "2025-07-29 03:04:47",
+    "TestName": "Partner Focus - Single Domain",
+    "Focus": "partner",
+    "GeneratedFile": "baseline_Partner_Focus_-_Single_Domain.mmd",
+    "DiagramType": "ER"
+  },
+  {
+    "ActualTiers": {
+      "GoldTier": [
+        "pathway_activityDef",
+        "pathway_center",
+        "pathway_intake",
+        "pathway_media",
+        "pathway_memberGroup",
+        "pathway_programme",
+        "pathway_progRole",
+        "pathway_referer",
+        "zfarcrycore_dmProfile"
+      ],
+      "Focus": [
+        "pathway_member",
+        "pathway_partner"
+      ],
+      "DarkGreyTier": [],
+      "BlueTier": [
+        "pathway_ruleSelfRegistration",
+        "pathway_dmImage",
+        "pathway_guide",
+        "pathway_memberType",
+        "pathway_progMember",
+        "pathway_report",
+        "pathway_testimonial"
+      ],
+      "BlueGreyTier": [
+        "zfarcrycore_farGroup",
+        "zfarcrycore_farPermission",
+        "zfarcrycore_farRole",
+        "zfarcrycore_farUser"
+      ]
+    },
+    "Domains": "partner",
+    "Timestamp": "2025-07-29 03:04:49",
+    "TestName": "Partner+Member Focus - Single Domain",
+    "Focus": "partner,member",
+    "GeneratedFile": "baseline_Partner+Member_Focus_-_Single_Domain.mmd",
+    "DiagramType": "ER"
+  },
+  {
+    "ActualTiers": {
+      "GoldTier": [
+        "pathway_center",
+        "pathway_media",
+        "pathway_memberGroup",
+        "pathway_programme",
+        "pathway_referer",
+        "zfarcrycore_dmProfile"
+      ],
+      "Focus": [
+        "pathway_partner"
+      ],
+      "DarkGreyTier": [
+        "pathway_activity",
+        "pathway_journal",
+        "pathway_journalDef",
+        "pathway_library",
+        "pathway_progMember",
+        "pathway_tracker",
+        "pathway_trackerDef"
+      ],
+      "BlueTier": [
+        "pathway_ruleSelfRegistration",
+        "pathway_dmImage",
+        "pathway_guide",
+        "pathway_member",
+        "pathway_report"
+      ],
+      "BlueGreyTier": [
+        "pathway_activityDef",
+        "pathway_intake",
+        "pathway_progRole",
+        "zfarcrycore_farGroup",
+        "zfarcrycore_farPermission",
+        "zfarcrycore_farRole",
+        "zfarcrycore_farUser"
+      ]
+    },
+    "Domains": "partner,participant",
+    "Timestamp": "2025-07-29 03:04:50",
+    "TestName": "Partner Focus - Multi Domain",
+    "Focus": "partner",
+    "GeneratedFile": "baseline_Partner_Focus_-_Multi_Domain.mmd",
+    "DiagramType": "ER"
+  },
+  {
+    "ActualTiers": {
+      "GoldTier": [],
+      "Focus": [
+        "pathway_member"
+      ],
+      "DarkGreyTier": [
+        "pathway_guide",
+        "pathway_media",
+        "pathway_programme"
+      ],
+      "BlueTier": [
+        "pathway_activityDef",
+        "pathway_center",
+        "pathway_intake",
+        "pathway_memberGroup",
+        "pathway_memberType",
+        "pathway_partner",
+        "pathway_progMember",
+        "pathway_progRole",
+        "pathway_referer",
+        "pathway_report",
+        "pathway_testimonial"
+      ],
+      "BlueGreyTier": []
+    },
+    "Domains": "programme",
+    "Timestamp": "2025-07-29 03:04:51",
+    "TestName": "Member Focus - Programme Domain",
+    "Focus": "member",
+    "GeneratedFile": "baseline_Member_Focus_-_Programme_Domain.mmd",
+    "DiagramType": "ER"
+  },
+  {
+    "ActualTiers": {
+      "GoldTier": [
+        "pathway_intake",
+        "pathway_memberGroup",
+        "pathway_partner",
+        "pathway_referer",
+        "zfarcrycore_dmProfile"
+      ],
+      "Focus": [
+        "pathway_center"
+      ],
+      "DarkGreyTier": [],
+      "BlueTier": [
+        "pathway_ruleSelfRegistration",
+        "pathway_dmImage",
+        "pathway_guide",
+        "pathway_member"
+      ],
+      "BlueGreyTier": [
+        "pathway_activityDef",
+        "pathway_media",
+        "pathway_programme",
+        "pathway_progRole",
+        "zfarcrycore_farGroup",
+        "zfarcrycore_farPermission",
+        "zfarcrycore_farRole",
+        "zfarcrycore_farUser"
+      ]
+    },
+    "Domains": "partner",
+    "Timestamp": "2025-07-29 03:04:52",
+    "TestName": "Center Focus - Partner Domain",
+    "Focus": "center",
+    "GeneratedFile": "baseline_Center_Focus_-_Partner_Domain.mmd",
+    "DiagramType": "ER"
+  }
+]

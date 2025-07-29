@@ -34,6 +34,15 @@
 .EXAMPLE
     .\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "programme,participant" -OutputFile "custom.mmd"
     
+.EXAMPLE
+    .\generate_erd_enhanced.ps1 -lFocus "dmImage" -DiagramType "ER" -lDomains "site" -OutputFile "custom.mmd"
+    
+.EXAMPLE
+    .\generate_erd_enhanced.ps1 -lFocus "farUser" -DiagramType "ER" -lDomains "all"
+    
+.EXAMPLE
+    .\generate_erd_enhanced.ps1 -lFocus "partner" -DiagramType "ER"
+    
 .NOTES
     - All parameters are validated before execution
     - Generated files are saved to the exports/ directory
@@ -63,6 +72,7 @@ function Show-Help {
     Write-Host "  -lFocus 'entityName'     # Focus entity (e.g., 'activityDef', 'progRole', 'member')" -ForegroundColor White
     Write-Host "  -DiagramType 'ER|Class'  # Diagram type ('ER' or 'Class')" -ForegroundColor White
     Write-Host "  -lDomains 'domain1,domain2' # Domains to include (e.g., 'programme,participant')" -ForegroundColor White
+    Write-Host "                           # Use 'all' or omit for all domains" -ForegroundColor White
     Write-Host ""
     Write-Host "🟡 OPTIONAL PARAMETERS:" -ForegroundColor Yellow
     Write-Host "  -RefreshCFCs             # Force fresh CFC scanning (bypass cache)" -ForegroundColor White
@@ -75,6 +85,8 @@ function Show-Help {
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Green
     Write-Host ""
     Write-Host "📖 For complete documentation, see: README.md" -ForegroundColor Yellow
     exit 0
@@ -98,11 +110,14 @@ function Get-UniqueFilename {
 
 # Function to clean old files
 function Clean-OldFiles {
-    param([string]$directory, [string]$pattern, [int]$maxAgeHours = 24)
+    param([string]$directory, [string]$pattern, [int]$maxAgeHours = 24, [string]$excludePattern = "")
     
     if (Test-Path $directory) {
         $cutoffTime = (Get-Date).AddHours(-$maxAgeHours)
-        $oldFiles = Get-ChildItem -Path $directory -Filter $pattern | Where-Object { $_.LastWriteTime -lt $cutoffTime }
+        $oldFiles = Get-ChildItem -Path $directory -Filter $pattern | Where-Object { 
+            $_.LastWriteTime -lt $cutoffTime -and 
+            (-not $excludePattern -or $_.Name -notlike $excludePattern)
+        }
         
         if ($oldFiles.Count -gt 0) {
             Write-Host "🧹 Cleaning $($oldFiles.Count) old files from $directory" -ForegroundColor Gray
@@ -193,8 +208,8 @@ function Validate-Domains {
     
     $validDomains = $domainsConfig.PSObject.Properties.Name
     
-    if ([string]::IsNullOrWhiteSpace($lDomains)) {
-        Write-Host "📋 No domains specified - using ALL domains: $($validDomains -join ', ')" -ForegroundColor Cyan
+    if ([string]::IsNullOrWhiteSpace($lDomains) -or $lDomains -eq "all") {
+        Write-Host "📋 No domains specified or 'all' used - using ALL domains: $($validDomains -join ', ')" -ForegroundColor Cyan
         return $validDomains
     }
     
@@ -239,7 +254,11 @@ function Validate-Parameters {
     }
     
     if ([string]::IsNullOrWhiteSpace($lDomains)) {
-        $errors += "ERROR: -lDomains parameter is REQUIRED. Example: -lDomains 'programme' or -lDomains 'programme,participant'"
+        # Allow null/empty domains - they will be handled by Validate-Domains function
+        # which will use all available domains
+    } elseif ($lDomains -eq "all") {
+        # Special case: 'all' means use all domains (same as empty)
+        $lDomains = ""
     }
     
     # Check optional parameters
@@ -263,6 +282,9 @@ function Validate-Parameters {
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Cyan
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Cyan
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Cyan
         Write-Host "`n📚 See README.md for complete parameter documentation" -ForegroundColor Yellow
         exit 1
     }
@@ -308,7 +330,7 @@ if ($OutputFile -eq "") {
 }
 
 # Clean old files before generating new ones
-Clean-OldFiles -directory "D:\GIT\farcry\Cursor\FKmermaid\exports" -pattern "erd_*.mmd" -maxAgeHours 24
+Clean-OldFiles -directory "D:\GIT\farcry\Cursor\FKmermaid\exports" -pattern "*.mmd" -maxAgeHours 168 -excludePattern "baseline_*"
 
 # Function to scan CFCs and extract relationships
 function Get-CFCRelationships {
@@ -497,11 +519,14 @@ function Get-UniqueFilename {
 
 # Function to clean old files
 function Clean-OldFiles {
-    param([string]$directory, [string]$pattern, [int]$maxAgeHours = 24)
+    param([string]$directory, [string]$pattern, [int]$maxAgeHours = 24, [string]$excludePattern = "")
     
     if (Test-Path $directory) {
         $cutoffTime = (Get-Date).AddHours(-$maxAgeHours)
-        $oldFiles = Get-ChildItem -Path $directory -Filter $pattern | Where-Object { $_.LastWriteTime -lt $cutoffTime }
+        $oldFiles = Get-ChildItem -Path $directory -Filter $pattern | Where-Object { 
+            $_.LastWriteTime -lt $cutoffTime -and 
+            (-not $excludePattern -or $_.Name -notlike $excludePattern)
+        }
         
         if ($oldFiles.Count -gt 0) {
             Write-Host "🧹 Cleaning $($oldFiles.Count) old files from $directory" -ForegroundColor Gray
@@ -855,22 +880,41 @@ function Generate-MermaidERD {
                 else { $_.joinTable }
             }
             
+            # Convert base entity names to full entity names with plugin prefixes
+            $fullDirectRelated = @()
+            foreach ($baseEntity in $directRelated) {
+                $entityInfo = $relationships.entities | Where-Object { $_.name -eq $baseEntity } | Select-Object -First 1
+                if ($entityInfo) {
+                    $fullDirectRelated += "$($entityInfo.plugin)_$baseEntity"
+                }
+            }
+            
+            $fullJoinRelated = @()
+            foreach ($baseEntity in $joinRelated) {
+                $entityInfo = $relationships.entities | Where-Object { $_.name -eq $baseEntity } | Select-Object -First 1
+                if ($entityInfo) {
+                    $fullJoinRelated += "$($entityInfo.plugin)_$baseEntity"
+                }
+            }
+            
             # Add all related entities to the list
-            $relatedEntities += $directRelated
-            $relatedEntities += $joinRelated
+            $relatedEntities += $fullDirectRelated
+            $relatedEntities += $fullJoinRelated
         }
         
-        # Add special join relationships
+        # Add special join relationships with full names
         # farUser <-> dmProfile special join
         if ($focusEntities -contains "dmProfile") {
-            $relatedEntities += "farUser"
+            $relatedEntities += "zfarcrycore_farUser"
         }
         if ($focusEntities -contains "farUser") {
-            $relatedEntities += "dmProfile"
+            $relatedEntities += "zfarcrycore_dmProfile"
         }
         
         # Remove duplicates and focus entities themselves
         $relatedEntities = $relatedEntities | Where-Object { $focusEntities -notcontains $_ } | Sort-Object -Unique
+        
+        # Debug logging
     }
     
     foreach ($entity in $filteredEntities) {
@@ -964,8 +1008,37 @@ function Generate-MermaidClassDiagram {
         return $true
     }
     
-    # Get list of filtered entities that exist
+    # Consolidate duplicate entities (same entity name in different plugins) - same logic as ER diagram
+    $consolidatedEntities = @{}
+    $consolidatedFilteredEntities = @()
+    
+    foreach ($entity in $filteredEntities) {
+        $entityName = $entity.name
+        $pluginName = $entity.plugin
+        
+        if (-not $consolidatedEntities.ContainsKey($entityName)) {
+            # First occurrence of this entity name
+            $consolidatedEntities[$entityName] = @($pluginName)
+            $consolidatedFilteredEntities += $entity
+        } else {
+            # Duplicate entity name - add plugin to existing list
+            $consolidatedEntities[$entityName] += $pluginName
+            # Don't add duplicate entity to filtered list
+        }
+    }
+    
+    # Update filtered entities to use consolidated list
+    $filteredEntities = $consolidatedFilteredEntities
     $existingEntities = $filteredEntities | ForEach-Object { $_.name }
+    
+    # Log consolidation results
+    $duplicateEntities = $consolidatedEntities | Where-Object { $_.Value.Count -gt 1 }
+    if ($duplicateEntities.Count -gt 0) {
+        Write-Host "🔗 Consolidated duplicate entities:" -ForegroundColor Yellow
+        foreach ($entity in $duplicateEntities) {
+            Write-Host "   $($entity.Key): $($entity.Value -join ', ')" -ForegroundColor Cyan
+        }
+    }
     
     Write-Host "📊 Filtered to $($filteredEntities.Count) entities based on parameters:" -ForegroundColor Cyan
     if ($lFocus) { Write-Host "   Focus: $lFocus" -ForegroundColor Yellow }
@@ -1065,12 +1138,31 @@ function Generate-MermaidClassDiagram {
                 else { $_.joinTable }
             }
             
+            # Convert base entity names to full entity names with plugin prefixes
+            $fullDirectRelated = @()
+            foreach ($baseEntity in $directRelated) {
+                $entityInfo = $relationships.entities | Where-Object { $_.name -eq $baseEntity } | Select-Object -First 1
+                if ($entityInfo) {
+                    $fullDirectRelated += "$($entityInfo.plugin)_$baseEntity"
+                }
+            }
+            
+            $fullJoinRelated = @()
+            foreach ($baseEntity in $joinRelated) {
+                $entityInfo = $relationships.entities | Where-Object { $_.name -eq $baseEntity } | Select-Object -First 1
+                if ($entityInfo) {
+                    $fullJoinRelated += "$($entityInfo.plugin)_$baseEntity"
+                }
+            }
+            
             # Add all related entities to the list
-            $relatedEntities += $directRelated
-            $relatedEntities += $joinRelated
+            $relatedEntities += $fullDirectRelated
+            $relatedEntities += $fullJoinRelated
         }
         # Remove duplicates and focus entities themselves
         $relatedEntities = $relatedEntities | Where-Object { $focusEntities -notcontains $_ } | Sort-Object -Unique
+        
+        # Debug logging
     }
     
     foreach ($entity in $filteredEntities) {
@@ -1090,11 +1182,8 @@ function Generate-MermaidClassDiagram {
         
         $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $fullFocusEntity -relatedEntities $relatedEntities -cssStyles $cssStyles -validatedDomains $validatedDomains -domainsConfig $domainsConfig
         
-        # Sanitize entity name for style definition (same as class names)
-        $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedEntityName = $sanitizedEntityName -replace '_+', '_'
-        $sanitizedEntityName = $sanitizedEntityName.Trim('_')
-        
+        # Use sanitized entity name for style definition (no spaces, hyphens, or quotes)
+        $sanitizedEntityName = Get-SanitizedEntityName -entityName $entityDisplayName
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
@@ -1221,6 +1310,9 @@ function Get-MermaidStyles {
 function Get-EntityStyle {
     param([string]$entityName, [string]$pluginName, [string]$focusEntity, [string[]]$relatedEntities, [hashtable]$cssStyles, [string[]]$validatedDomains, [object]$domainsConfig)
     
+    # Construct full entity name for comparison with relatedEntities
+    $fullEntityName = "${pluginName}_$entityName"
+    
     # Check for exact match first (SSQ entities)
     if ($cssStyles.ContainsKey($entityName)) {
         return $cssStyles[$entityName]
@@ -1260,30 +1352,35 @@ function Get-EntityStyle {
         }
     }
     
-    # Check if entity is in the same domain as the focus entity
+    # Check if entity is in the same domain as ANY of the focus entities
     $isInSameDomainAsFocus = $false
     $focusDomain = $null
     if ($validatedDomains -and $domainsConfig) {
-        # Find which domain the focus entity belongs to
-        foreach ($domain in $validatedDomains) {
-            if ($domainsConfig.PSObject.Properties.Name -contains $domain) {
-                $domainEntities = @()
-                foreach ($category in $domainsConfig.$domain.entities.PSObject.Properties) {
-                    $domainEntities += $category.Value
-                }
-                
-                # Extract base entity name from focus entity name (remove plugin prefix)
-                $baseFocusEntity = $focusEntity
-                if ($focusEntity -match '^[^_]+_(.+)$') {
-                    $baseFocusEntity = $matches[1]
-                }
-                
-                if ($domainEntities -contains $baseFocusEntity) {
-                    $focusDomain = $domain
-                    break
+        # Find which domain ANY of the focus entities belongs to
+        foreach ($focus in $focusEntities) {
+            foreach ($domain in $validatedDomains) {
+                if ($domainsConfig.PSObject.Properties.Name -contains $domain) {
+                    $domainEntities = @()
+                    foreach ($category in $domainsConfig.$domain.entities.PSObject.Properties) {
+                        $domainEntities += $category.Value
+                    }
+                    
+                    # Extract base entity name from focus entity name (remove plugin prefix)
+                    $baseFocusEntity = $focus
+                    if ($focus -match '^[^_]+_(.+)$') {
+                        $baseFocusEntity = $matches[1]
+                    }
+                    
+                    if ($domainEntities -contains $baseFocusEntity) {
+                        $focusDomain = $domain
+                        break
+                    }
                 }
             }
+            if ($focusDomain) { break }
         }
+        
+        # Debug logging for domain detection
         
         # Check if current entity is in the same domain as focus
         if ($focusDomain -and $domainsConfig.PSObject.Properties.Name -contains $focusDomain) {
@@ -1305,7 +1402,7 @@ function Get-EntityStyle {
     }
     
     # NEW: Same domain AND directly related - GOLD tier
-    if ($isInSameDomainAsFocus -and $relatedEntities -and $relatedEntities.Contains($entityName)) {
+    if ($isInSameDomainAsFocus -and $relatedEntities -and $relatedEntities.Contains($fullEntityName)) {
         if ($cssStyles.ContainsKey("domain_related")) {
             return $cssStyles["domain_related"]
         }
@@ -1313,7 +1410,7 @@ function Get-EntityStyle {
     }
     
     # Directly related (but not same domain) - BLUE tier
-    if ($relatedEntities -and $relatedEntities.Contains($entityName)) {
+    if ($relatedEntities -and $relatedEntities.Contains($fullEntityName)) {
         if ($cssStyles.ContainsKey("related")) {
             return $cssStyles["related"]
         }

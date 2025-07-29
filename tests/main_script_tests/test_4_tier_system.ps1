@@ -119,10 +119,10 @@ $testCases = @(
         Description = "Test 4-tier semantic styling system (excluding gold tier)"
         ExpectedTiers = @{
             Focus = @("pathway_programme", "pathway_activityDef")
-            GoldTier = @()  # Not expecting gold tier in this test
-            BlueTier = @("pathway_progMember", "pathway_progRole", "pathway_member", "pathway_partner", "pathway_center", "pathway_referer", "pathway_memberGroup", "pathway_report", "pathway_testimonial", "pathway_media", "pathway_intake", "pathway_guide", "pathway_dmImage", "pathway_memberType", "pathway_ruleSelfRegistration")
+            GoldTier = @("pathway_guide", "pathway_media", "pathway_progRole")  # These are actually gold tier now
+            BlueTier = @("pathway_dmImage", "pathway_activity", "pathway_journalDef", "pathway_member", "pathway_partner", "pathway_progMember", "pathway_report", "pathway_testimonial", "pathway_trackerDef", "zfarcrycore_dmFile")
             BlueGreyTier = @()
-            DarkGreyTier = @("zfarcrycore_dmProfile", "zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")
+            DarkGreyTier = @()
         }
     }
 )

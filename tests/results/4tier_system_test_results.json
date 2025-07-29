@@ -1,0 +1,123 @@
+[
+  {
+    "Domains": "partner,participant,programme",
+    "DiagramType": "ER",
+    "ActualTiers": {
+      "DomainOther": [
+        "pathway_activityDef",
+        "pathway_intake",
+        "pathway_progRole",
+        "zfarcrycore_farGroup",
+        "zfarcrycore_farPermission",
+        "zfarcrycore_farRole",
+        "zfarcrycore_farUser"
+      ],
+      "Related": [
+        "pathway_ruleSelfRegistration",
+        "pathway_dmImage",
+        "pathway_guide",
+        "pathway_member",
+        "pathway_report"
+      ],
+      "Focus": [
+        "pathway_partner"
+      ],
+      "Secondary": [
+        "pathway_activity",
+        "pathway_journal",
+        "pathway_journalDef",
+        "pathway_library",
+        "pathway_progMember",
+        "pathway_tracker",
+        "pathway_trackerDef"
+      ]
+    },
+    "Timestamp": "2025-07-29 03:04:41",
+    "TestName": "Perfect 4-Tier Test",
+    "ValidationResults": {
+      "DomainOther": true,
+      "Related": false,
+      "Focus": true,
+      "Secondary": true
+    },
+    "Focus": "partner",
+    "Success": false
+  },
+  {
+    "Domains": "participant,programme",
+    "DiagramType": "ER",
+    "ActualTiers": {
+      "DomainOther": [
+        "pathway_activity",
+        "pathway_guide",
+        "pathway_journal",
+        "pathway_journalDef",
+        "pathway_library",
+        "pathway_media",
+        "pathway_programme",
+        "pathway_tracker",
+        "pathway_trackerDef"
+      ],
+      "Related": [
+        "pathway_center",
+        "pathway_intake",
+        "pathway_memberType",
+        "pathway_partner",
+        "pathway_referer",
+        "pathway_report",
+        "pathway_testimonial"
+      ],
+      "Focus": [
+        "pathway_member"
+      ],
+      "Secondary": []
+    },
+    "Timestamp": "2025-07-29 03:04:41",
+    "TestName": "Member Focus Test",
+    "ValidationResults": {
+      "DomainOther": true,
+      "Related": true,
+      "Focus": true,
+      "Secondary": true
+    },
+    "Focus": "member",
+    "Success": true
+  },
+  {
+    "Domains": "programme,site",
+    "DiagramType": "ER",
+    "ActualTiers": {
+      "DomainOther": [
+        "pathway_guide"
+      ],
+      "Related": [
+        "pathway_dmImage",
+        "pathway_journalDef",
+        "pathway_partner",
+        "pathway_progMember",
+        "pathway_report",
+        "pathway_trackerDef",
+        "zfarcrycore_dmFile"
+      ],
+      "Focus": [
+        "pathway_programme"
+      ],
+      "Secondary": [
+        "pathway_dmNavigation",
+        "pathway_dmNews",
+        "zfarcrycore_dmHTML",
+        "zfarcrycore_dmInclude"
+      ]
+    },
+    "Timestamp": "2025-07-29 03:04:42",
+    "TestName": "Programme Focus Test",
+    "ValidationResults": {
+      "DomainOther": true,
+      "Related": true,
+      "Focus": true,
+      "Secondary": true
+    },
+    "Focus": "programme",
+    "Success": true
+  }
+]

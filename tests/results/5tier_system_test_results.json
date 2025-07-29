@@ -1,0 +1,102 @@
+[
+  {
+    "Domains": "partner,participant,programme",
+    "DiagramType": "ER",
+    "ActualTiers": {
+      "DomainOther": [
+        "pathway_activityDef",
+        "pathway_intake",
+        "pathway_progRole",
+        "zfarcrycore_farGroup",
+        "zfarcrycore_farPermission",
+        "zfarcrycore_farRole",
+        "zfarcrycore_farUser"
+      ],
+      "Focus": [
+        "pathway_partner"
+      ],
+      "Related": [
+        "pathway_ruleSelfRegistration",
+        "pathway_dmImage",
+        "pathway_guide",
+        "pathway_member",
+        "pathway_report"
+      ],
+      "Secondary": [
+        "pathway_activity",
+        "pathway_journal",
+        "pathway_journalDef",
+        "pathway_library",
+        "pathway_progMember",
+        "pathway_tracker",
+        "pathway_trackerDef"
+      ],
+      "DomainRelated": [
+        "pathway_center",
+        "pathway_media",
+        "pathway_memberGroup",
+        "pathway_programme",
+        "pathway_referer",
+        "zfarcrycore_dmProfile"
+      ]
+    },
+    "Timestamp": "2025-07-29 03:04:45",
+    "TestName": "Perfect 5-Tier Test",
+    "ValidationResults": {
+      "DomainOther": true,
+      "Related": false,
+      "Focus": true,
+      "DomainRelated": true,
+      "Secondary": true
+    },
+    "Focus": "partner",
+    "Success": false
+  },
+  {
+    "Domains": "participant,programme",
+    "DiagramType": "ER",
+    "ActualTiers": {
+      "DomainOther": [
+        "pathway_activity",
+        "pathway_guide",
+        "pathway_journal",
+        "pathway_journalDef",
+        "pathway_library",
+        "pathway_media",
+        "pathway_programme",
+        "pathway_tracker",
+        "pathway_trackerDef"
+      ],
+      "Focus": [
+        "pathway_member"
+      ],
+      "Related": [
+        "pathway_center",
+        "pathway_intake",
+        "pathway_memberType",
+        "pathway_partner",
+        "pathway_referer",
+        "pathway_report",
+        "pathway_testimonial"
+      ],
+      "Secondary": [],
+      "DomainRelated": [
+        "pathway_activityDef",
+        "pathway_memberGroup",
+        "pathway_progMember",
+        "pathway_progRole"
+      ]
+    },
+    "Timestamp": "2025-07-29 03:04:46",
+    "TestName": "Member Focus Test",
+    "ValidationResults": {
+      "DomainOther": true,
+      "Related": true,
+      "Focus": true,
+      "DomainRelated": true,
+      "Secondary": true
+    },
+    "Focus": "member",
+    "Success": true
+  }
+]
