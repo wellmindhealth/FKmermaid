@@ -1,0 +1,14 @@
+erDiagram
+    USER ||--o{ ORDER : places
+    USER {
+        string id
+        string name
+        string email
+    }
+    ORDER ||--|{ ORDER_ITEM : contains
+    ORDER {
+        string id
+        string user_id
+        date created_at
+        string status
+    }
