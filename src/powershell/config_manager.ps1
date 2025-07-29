@@ -8,13 +8,26 @@ function Get-ProjectConfig {
     
     # Determine config path
     if (-not $configPath) {
+        # Try multiple possible locations
         $scriptDir = Split-Path $PSScriptRoot -Parent
-        $configPath = Join-Path $scriptDir "config\project_config.json"
+        $projectRoot = Split-Path $scriptDir -Parent
         
-        # If not found, try relative to current directory
-        if (-not (Test-Path $configPath)) {
-            $currentDir = Get-Location
-            $configPath = Join-Path $currentDir "config\project_config.json"
+        $possiblePaths = @(
+            # From project root (two levels up from src/powershell)
+            (Join-Path $projectRoot "config\project_config.json"),
+            # From current directory
+            (Join-Path (Get-Location) "config\project_config.json"),
+            # From current directory's parent
+            (Join-Path (Split-Path (Get-Location) -Parent) "config\project_config.json"),
+            # Absolute path to project root
+            "D:\GIT\farcry\Cursor\FKmermaid\config\project_config.json"
+        )
+        
+        foreach ($path in $possiblePaths) {
+            if (Test-Path $path) {
+                $configPath = $path
+                break
+            }
         }
     }
     
@@ -24,7 +37,7 @@ function Get-ProjectConfig {
             $config = Get-Content $configPath -Raw | ConvertFrom-Json
             return $config
         } else {
-            Write-Warning "Project config not found at: $configPath"
+            Write-Warning "Project config not found. Tried paths: $($possiblePaths -join ', ')"
             return $null
         }
     } catch {

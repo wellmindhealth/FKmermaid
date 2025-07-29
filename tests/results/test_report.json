@@ -1,5 +1,5 @@
 {
-  "Duration": "00:00:09",
+  "Duration": "00:00:11",
   "Categories": [
     {
       "Category": "CFC Scan Tests",
@@ -46,7 +46,7 @@
       "OverallSuccess": true
     }
   ],
-  "StartTime": "2025-07-29 06:09:44",
+  "StartTime": "2025-07-29 07:54:22",
   "Summary": {
     "FailedTests": 0.0,
     "PassedCategories": 4,
@@ -57,5 +57,5 @@
   },
   "TestSuite": "FKmermaid Test Suite",
   "OverallSuccess": true,
-  "EndTime": "2025-07-29 06:09:54"
+  "EndTime": "2025-07-29 07:54:34"
 }
