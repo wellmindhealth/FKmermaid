@@ -87,10 +87,6 @@ erDiagram
         UUID ObjectID
     }
 
-    "zfarcrycore_farGroup" {
-        UUID ObjectID
-    }
-
     %% Direct FK Relationships
     "pathway_activity" ||--|| "pathway_progMember" : progMemberID
     "pathway_activity" ||--|| "pathway_activityDef" : activityDefID
@@ -126,7 +122,6 @@ erDiagram
     "pathway_member" ||--|| "pathway_partner" : partnerID
     "pathway_member" ||--|| "pathway_center" : centerID
     "pathway_member" ||--|| "pathway_referer" : refererID
-    "pathway_member" ||--|| "pathway_activityDef" : activityDefID
     "pathway_member" ||--|| "pathway_progRole" : roleID
     "pathway_memberGroup" ||--|| "pathway_partner" : partnerID
     "pathway_partner" ||--|| "zfarcrycore_dmProfile" : dmProfileID
@@ -156,7 +151,6 @@ erDiagram
     "pathway_tracker" ||--|| "pathway_activity" : activityID
     "pathway_trackerDef" ||--|| "pathway_programme" : programmeID
     "zfarcrycore_dmProfile" ||--|| "pathway_memberGroup" : memberGroupID
-    "zfarcrycore_dmProfile" ||--|| "zfarcrycore_farGroup" : lGroups
     %% End Direct FK Relationships
 
     %% Special Joins
@@ -180,7 +174,6 @@ erDiagram
     "pathway_partner" }o--|| "pathway_referer" : aReferers
     "pathway_programme" }o--|| "pathway_activityDef" : aFollowupActivityDefIDs
     "pathway_programme" }o--|| "pathway_trackerDef" : aTrackerIDs
-    "zfarcrycore_dmProfile" }o--|| "zfarcrycore_farGroup" : aGroups
     %% End Join Table Relationships
 
 
@@ -206,6 +199,5 @@ erDiagram
     style pathway_tracker fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_trackerDef fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_dmProfile fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
-    style zfarcrycore_farGroup fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
 

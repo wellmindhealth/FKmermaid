@@ -355,7 +355,7 @@ if ($OutputFile -eq "") {
     $outputFile = $OutputFile
     # Ensure the directory exists
     $outputDir = Split-Path $outputFile -Parent
-    if (-not (Test-Path $outputDir)) {
+    if ($outputDir -and -not (Test-Path $outputDir)) {
         New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
     }
 }

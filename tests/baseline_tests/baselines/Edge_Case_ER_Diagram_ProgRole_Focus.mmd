@@ -79,7 +79,6 @@ erDiagram
     "pathway_member" ||--|| "pathway_partner" : partnerID
     "pathway_member" ||--|| "pathway_center" : centerID
     "pathway_member" ||--|| "pathway_referer" : refererID
-    "pathway_member" ||--|| "pathway_activityDef" : activityDefID
     "pathway_member" ||--|| "pathway_progRole" : roleID
     "pathway_memberGroup" ||--|| "pathway_partner" : partnerID
     "pathway_partner" ||--|| "zfarcrycore_dmProfile" : dmProfileID
@@ -93,7 +92,6 @@ erDiagram
     "pathway_referer" ||--|| "pathway_memberGroup" : memberGroupID
     "pathway_referer" ||--|| "pathway_center" : centerID
     "zfarcrycore_dmProfile" ||--|| "pathway_memberGroup" : memberGroupID
-    "zfarcrycore_dmProfile" ||--|| "zfarcrycore_farGroup" : lGroups
     "zfarcrycore_farPermission" ||--|| "zfarcrycore_farRole" : aRoles
     "zfarcrycore_farUser" ||--|| "zfarcrycore_farGroup" : lGroups
     %% End Direct FK Relationships
@@ -121,7 +119,6 @@ erDiagram
     "pathway_partner" }o--|| "pathway_center" : aCenters
     "pathway_partner" }o--|| "pathway_referer" : aReferers
     "pathway_programme" }o--|| "pathway_activityDef" : aFollowupActivityDefIDs
-    "zfarcrycore_dmProfile" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farPermission" : aPermissions
     "zfarcrycore_farUser" }o--|| "zfarcrycore_farGroup" : aGroups

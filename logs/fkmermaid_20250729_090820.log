@@ -1,6 +1,0 @@
-2025-07-29 09:08:20 [INFO] Logger Initialize-Logger Logger initialized
-2025-07-29 09:08:20 [INFO] Logger Initialize-Logger Log level: INFO
-2025-07-29 09:08:20 [INFO] Logger Initialize-Logger Log file: D:\GIT\farcry\Cursor\FKmermaid\logs\fkmermaid_20250729_090820.log
-2025-07-29 09:08:20 [INFO] Logging Write-InfoLog Module logging initialized: diagram_generation
-2025-07-29 09:08:20 [INFO] Diagram_Generation Write-InfoLog Starting ER diagram generation | Data: {"Domains":"partner","DiagramType":"ER","RefreshCFCs":{"IsPresent":false},"ConfigFile":"D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_scan_config.json","Focus":"partner"}
-2025-07-29 09:08:21 [INFO] Diagram_Generation Write-InfoLog ER diagram generation completed successfully | Data: {"DiagramType":"ER","EntityCount":0,"RelationshipCount":0,"OutputFile":"D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\partner_20250729_090821_f36ac2ac.mmd"}

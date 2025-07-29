@@ -1,0 +1,60 @@
+# FKmermaid Project .gitignore
+
+# Logs
+logs/
+*.log
+
+# Generated exports
+exports/
+*.mmd
+
+# Temporary files
+*.tmp
+*.temp
+*.bak*
+*.backup
+
+# Test results and reports
+tests/results/test_report_*.json
+tests/results/*.json
+
+# Cache files
+config/cfc_cache.json
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# PowerShell temporary files
+*.ps1.bak*
+*.bak3
+
+# Confluence demo files
+confluence_*.html
+confluence_*.mmd
+
+# Test files
+test_*.mmd
+domain_detection_test.mmd
+
+# Backup files
+*.bak1
+*.bak2
+*.bak3

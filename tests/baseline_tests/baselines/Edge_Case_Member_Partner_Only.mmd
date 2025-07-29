@@ -108,7 +108,6 @@ erDiagram
     "pathway_member" ||--|| "pathway_partner" : partnerID
     "pathway_member" ||--|| "pathway_center" : centerID
     "pathway_member" ||--|| "pathway_referer" : refererID
-    "pathway_member" ||--|| "pathway_activityDef" : activityDefID
     "pathway_member" ||--|| "pathway_progRole" : roleID
     "pathway_memberGroup" ||--|| "pathway_partner" : partnerID
     "pathway_partner" ||--|| "zfarcrycore_dmProfile" : dmProfileID
@@ -139,7 +138,6 @@ erDiagram
     "pathway_testimonial" ||--|| "pathway_member" : memberID
     "pathway_testimonial" ||--|| "pathway_activityDef" : activityDefID
     "zfarcrycore_dmProfile" ||--|| "pathway_memberGroup" : memberGroupID
-    "zfarcrycore_dmProfile" ||--|| "zfarcrycore_farGroup" : lGroups
     "zfarcrycore_farPermission" ||--|| "zfarcrycore_farRole" : aRoles
     "zfarcrycore_farUser" ||--|| "zfarcrycore_farGroup" : lGroups
     %% End Direct FK Relationships
@@ -168,7 +166,6 @@ erDiagram
     "pathway_partner" }o--|| "pathway_referer" : aReferers
     "pathway_programme" }o--|| "pathway_activityDef" : aFollowupActivityDefIDs
     "pathway_report" }o--|| "pathway_memberGroup" : aMemberGroupID
-    "zfarcrycore_dmProfile" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farPermission" : aPermissions
     "zfarcrycore_farUser" }o--|| "zfarcrycore_farGroup" : aGroups
@@ -176,7 +173,7 @@ erDiagram
 
 
     %% Entity Styling
-    style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_activityDef fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_intake fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_media fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
