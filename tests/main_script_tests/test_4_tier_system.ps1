@@ -1,5 +1,5 @@
-# Test 4-Tier Semantic Styling System
-# Tests the semantic styling system with known parameter combinations
+# Test 4-Tier System - Comprehensive Analysis
+# Tests the 4-tier semantic styling system with comprehensive analysis
 
 param(
     [switch]$Verbose,
@@ -7,9 +7,9 @@ param(
 )
 
 if ($Help) {
-    Write-Host "Test 4-Tier Semantic Styling System" -ForegroundColor Cyan
-    Write-Host "====================================" -ForegroundColor Cyan
-    Write-Host "Tests the semantic styling system with known parameter combinations" -ForegroundColor White
+    Write-Host "Test 4-Tier System - Comprehensive Analysis" -ForegroundColor Cyan
+    Write-Host "===========================================" -ForegroundColor Cyan
+    Write-Host "Tests the 4-tier semantic styling system with comprehensive analysis" -ForegroundColor White
     Write-Host ""
     Write-Host "Parameters:" -ForegroundColor Yellow
     Write-Host "  -Verbose    Show detailed output" -ForegroundColor White
@@ -28,8 +28,8 @@ if (-not (Test-Path $testResultsPath)) {
     New-Item -ItemType Directory -Path $testResultsPath -Force | Out-Null
 }
 
-Write-Host "🧪 Testing 4-Tier Semantic Styling System" -ForegroundColor Cyan
-Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host "🧪 Test 4-Tier System - Comprehensive Analysis" -ForegroundColor Cyan
+Write-Host "=============================================" -ForegroundColor Cyan
 
 # Function to load colors from styles file
 function Get-StyleColors {
@@ -49,65 +49,95 @@ function Get-StyleColors {
     return $colors
 }
 
-# Load current colors from styles file
-$styleColors = Get-StyleColors -stylesPath $stylesPath
-Write-Host "📋 Loaded colors from styles file:" -ForegroundColor White
-foreach ($style in $styleColors.Keys) {
-    Write-Host "  $style`: $($styleColors[$style])" -ForegroundColor Gray
+# Function to analyze Mermaid diagram comprehensively
+function Analyze-MermaidDiagram {
+    param([string]$content)
+    
+    $analysis = @{
+        Entities = @()
+        Relationships = @()
+        Styling = @{}
+        EntityCount = 0
+        RelationshipCount = 0
+        Tiers = @{
+            Focus = @()
+            GoldTier = @()
+            BlueTier = @()
+            BlueGreyTier = @()
+            DarkGreyTier = @()
+        }
+    }
+    
+    # Parse entities
+    $entityMatches = [regex]::Matches($content, '"([^"]+)"\s*\{')
+    foreach ($match in $entityMatches) {
+        $entity = $match.Groups[1].Value
+        $analysis.Entities += $entity
+    }
+    $analysis.EntityCount = $analysis.Entities.Count
+    
+    # Parse relationships
+    $relationshipMatches = [regex]::Matches($content, '"([^"]+)"\s*\|\|--\|\|\s*"([^"]+)"\s*:\s*([^\n]+)')
+    foreach ($match in $relationshipMatches) {
+        $fromEntity = $match.Groups[1].Value
+        $toEntity = $match.Groups[2].Value
+        $relationship = $match.Groups[3].Value.Trim()
+        $analysis.Relationships += @{
+            From = $fromEntity
+            To = $toEntity
+            Type = $relationship
+        }
+    }
+    $analysis.RelationshipCount = $analysis.Relationships.Count
+    
+    # Parse styling
+    $styleMatches = [regex]::Matches($content, 'style\s+(\w+)\s+fill:(#[0-9a-fA-F]+)')
+    foreach ($match in $styleMatches) {
+        $entity = $match.Groups[1].Value
+        $color = $match.Groups[2].Value
+        $analysis.Styling[$entity] = $color
+    }
+    
+    return $analysis
 }
 
-# Define test cases with expected results
+# Load current colors from styles file
+$styleColors = Get-StyleColors -stylesPath $stylesPath
+
+Write-Host "📋 Current style colors:" -ForegroundColor White
+Write-Host "  Focus: $($styleColors['focus'])" -ForegroundColor Gray
+Write-Host "  Domain Related (Gold): $($styleColors['domain_related'])" -ForegroundColor Gray
+Write-Host "  Related (Blue): $($styleColors['related'])" -ForegroundColor Gray
+
+# Define test cases for 4-tier system
 $testCases = @(
     @{
-        Name = "Perfect 4-Tier Test"
-        Focus = "partner"
-        Domains = "partner,participant,programme"
+        Name = "Programme+Activity Focus - 4-Tier Test"
+        Focus = "programme,activityDef"
+        Domains = "programme"
         DiagramType = "ER"
+        Description = "Test 4-tier semantic styling system (excluding gold tier)"
         ExpectedTiers = @{
-            Focus = @("pathway_partner")  # Orange tier
-            Related = @("pathway_ruleSelfRegistration", "pathway_dmImage", "pathway_guide", "pathway_member", "pathway_promotion", "pathway_report")  # Blue tier
-            DomainOther = @("pathway_activityDef", "pathway_intake", "pathway_progRole", "zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")  # Blue-grey tier
-            Secondary = @("pathway_activity", "pathway_journal", "pathway_journalDef", "pathway_library", "pathway_progMember", "pathway_tracker", "pathway_trackerDef")  # Dark grey tier
-        }
-    },
-    @{
-        Name = "Member Focus Test"
-        Focus = "member"
-        Domains = "participant,programme"
-        DiagramType = "ER"
-        ExpectedTiers = @{
-            Focus = @("pathway_member")  # Orange tier
-            Related = @()  # Will be populated based on actual relationships
-            DomainOther = @()  # Will be populated based on actual relationships
-            Secondary = @()  # Will be populated based on actual relationships
-        }
-    },
-    @{
-        Name = "Programme Focus Test"
-        Focus = "programme"
-        Domains = "programme,site"
-        DiagramType = "ER"
-        ExpectedTiers = @{
-            Focus = @("pathway_programme")  # Orange tier
-            Related = @()  # Will be populated based on actual relationships
-            DomainOther = @()  # Will be populated based on actual relationships
-            Secondary = @()  # Will be populated based on actual relationships
+            Focus = @("pathway_programme", "pathway_activityDef")
+            GoldTier = @()  # Not expecting gold tier in this test
+            BlueTier = @("pathway_progMember", "pathway_progRole", "pathway_member", "pathway_partner", "pathway_center", "pathway_referer", "pathway_memberGroup", "pathway_report", "pathway_testimonial", "pathway_media", "pathway_intake", "pathway_guide", "pathway_dmImage", "pathway_memberType", "pathway_ruleSelfRegistration")
+            BlueGreyTier = @()
+            DarkGreyTier = @("zfarcrycore_dmProfile", "zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")
         }
     }
 )
 
 Set-Location $scriptPath
 
-$testResults = @()
-
 foreach ($testCase in $testCases) {
     Write-Host "`n📋 Test: $($testCase.Name)" -ForegroundColor Yellow
-    Write-Host "Focus: $($testCase.Focus), Domains: $($testCase.Domains), Type: $($testCase.DiagramType)" -ForegroundColor White
-    
+    Write-Host "Focus: $($testCase.Focus), Domains: $($testCase.Domains)" -ForegroundColor White
+    Write-Host "Description: $($testCase.Description)" -ForegroundColor Gray
+
     # Generate test diagram
-    $testOutput = "test_4tier_$($testCase.Focus).mmd"
+    $testOutput = "4_tier_test.mmd"
     $result = & ".\generate_erd_enhanced.ps1" -lFocus $testCase.Focus -DiagramType $testCase.DiagramType -lDomains $testCase.Domains -OutputFile $testOutput 2>&1
-    
+
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✅ Diagram generated successfully" -ForegroundColor Green
         
@@ -116,81 +146,90 @@ foreach ($testCase in $testCases) {
         if (Test-Path $generatedFile) {
             $content = Get-Content $generatedFile -Raw
             
-            # Extract styling information
-            $actualTiers = @{
-                Focus = @()
-                Related = @()
-                DomainOther = @()
-                Secondary = @()
-            }
+            # Comprehensive analysis
+            $analysis = Analyze-MermaidDiagram -content $content
             
-            # Parse style lines to extract entity-tier mappings
-            $styleLines = $content -split "`n" | Where-Object { $_ -match "style.*fill:#" }
+            Write-Host "`n📊 COMPREHENSIVE ANALYSIS:" -ForegroundColor White
+            Write-Host "  Entity Count: $($analysis.EntityCount)" -ForegroundColor Gray
+            Write-Host "  Relationship Count: $($analysis.RelationshipCount)" -ForegroundColor Gray
+            Write-Host "  Entities: $($analysis.Entities -join ', ')" -ForegroundColor Gray
             
-            foreach ($line in $styleLines) {
-                if ($line -match 'style\s+(\w+)\s+fill:(#[0-9a-fA-F]+)') {
-                    $entity = $matches[1]
-                    $color = $matches[2]
-                    
-                    # Map colors to tiers based on current styles
+            # Categorize entities by tier based on styling
+            foreach ($entity in $analysis.Entities) {
+                if ($analysis.Styling.ContainsKey($entity)) {
+                    $color = $analysis.Styling[$entity]
                     switch ($color) {
-                        $styleColors["focus"] { $actualTiers.Focus += $entity }
-                        $styleColors["related"] { $actualTiers.Related += $entity }
-                        $styleColors["domain_other"] { $actualTiers.DomainOther += $entity }
-                        $styleColors["secondary"] { $actualTiers.Secondary += $entity }
+                        $styleColors["focus"] { $analysis.Tiers.Focus += $entity }
+                        $styleColors["domain_related"] { $analysis.Tiers.GoldTier += $entity }
+                        $styleColors["related"] { $analysis.Tiers.BlueTier += $entity }
+                        $styleColors["domain_other"] { $analysis.Tiers.BlueGreyTier += $entity }
+                        $styleColors["secondary"] { $analysis.Tiers.DarkGreyTier += $entity }
                     }
                 }
             }
             
-            # Validate results
-            $validationResults = @{}
-            $overallSuccess = $true
+            # Report tier breakdown
+            Write-Host "`n🎨 TIER BREAKDOWN:" -ForegroundColor White
+            Write-Host "  Focus entities: $($analysis.Tiers.Focus.Count) - $($analysis.Tiers.Focus -join ', ')" -ForegroundColor Gray
+            Write-Host "  Gold tier entities: $($analysis.Tiers.GoldTier.Count) - $($analysis.Tiers.GoldTier -join ', ')" -ForegroundColor Gray
+            Write-Host "  Blue tier entities: $($analysis.Tiers.BlueTier.Count) - $($analysis.Tiers.BlueTier -join ', ')" -ForegroundColor Gray
+            Write-Host "  Blue-grey tier entities: $($analysis.Tiers.BlueGreyTier.Count) - $($analysis.Tiers.BlueGreyTier -join ', ')" -ForegroundColor Gray
+            Write-Host "  Dark grey tier entities: $($analysis.Tiers.DarkGreyTier.Count) - $($analysis.Tiers.DarkGreyTier -join ', ')" -ForegroundColor Gray
             
-            foreach ($tier in $actualTiers.Keys) {
-                $expected = $testCase.ExpectedTiers[$tier]
-                $actual = $actualTiers[$tier]
+            # Validate against expected tiers
+            $testPassed = $true
+            $validationIssues = @()
+            
+            Write-Host "`n🎯 VALIDATION AGAINST EXPECTED TIERS:" -ForegroundColor Yellow
+            foreach ($tierName in @("Focus", "GoldTier", "BlueTier", "BlueGreyTier", "DarkGreyTier")) {
+                $expected = $testCase.ExpectedTiers[$tierName]
+                $actual = $analysis.Tiers[$tierName]
                 
-                if ($expected.Count -gt 0) {
-                    # Check if expected entities are present
-                    $missing = @()
-                    foreach ($expectedEntity in $expected) {
-                        if ($actual -notcontains $expectedEntity) {
-                            $missing += $expectedEntity
-                        }
-                    }
-                    
-                    if ($missing.Count -eq 0) {
-                        Write-Host "✅ $tier tier: All expected entities present" -ForegroundColor Green
-                        $validationResults[$tier] = $true
-                    } else {
-                        Write-Host "❌ $tier tier: Missing $($missing -join ', ')" -ForegroundColor Red
-                        $validationResults[$tier] = $false
-                        $overallSuccess = $false
-                    }
-                } else {
-                    # For cases where we don't have specific expectations, just report what we found
-                    Write-Host "📊 $tier tier: $($actual.Count) found" -ForegroundColor White
-                    $validationResults[$tier] = $true
+                $missing = $expected | Where-Object { $_ -notin $actual }
+                $unexpected = $actual | Where-Object { $_ -notin $expected }
+                
+                if ($missing.Count -gt 0) {
+                    Write-Host "  ❌ $tierName missing: $($missing -join ', ')" -ForegroundColor Red
+                    $validationIssues += "Missing from $tierName`: $($missing -join ', ')"
+                    $testPassed = $false
+                }
+                if ($unexpected.Count -gt 0) {
+                    Write-Host "  ⚠️  $tierName unexpected: $($unexpected -join ', ')" -ForegroundColor Yellow
+                    $validationIssues += "Unexpected in $tierName`: $($unexpected -join ', ')"
+                }
+                if ($missing.Count -eq 0 -and $unexpected.Count -eq 0) {
+                    Write-Host "  ✅ $tierName matches expected" -ForegroundColor Green
                 }
             }
             
-            # Save test result
+            # Save comprehensive test result
             $testResult = @{
                 TestName = $testCase.Name
                 Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
                 Focus = $testCase.Focus
                 Domains = $testCase.Domains
                 DiagramType = $testCase.DiagramType
-                ActualTiers = $actualTiers
-                ValidationResults = $validationResults
-                Success = $overallSuccess
+                Description = $testCase.Description
+                ExpectedTiers = $testCase.ExpectedTiers
+                Analysis = $analysis
+                GeneratedFile = $testOutput
+                ValidationIssues = $validationIssues
+                TestPassed = $testPassed
+                Status = "COMPREHENSIVE 4-TIER TEST"
             }
             
-            $testResults += $testResult
+            # Save test result
+            $testResult | ConvertTo-Json -Depth 10 | Out-File "$testResultsPath\4_tier_comprehensive.json"
             
-            # Clean up test file
-            Remove-Item $generatedFile -Force
-            Write-Host "✅ Cleaned up test file" -ForegroundColor Green
+            Write-Host "`n📁 Comprehensive test result saved to: $testResultsPath\4_tier_comprehensive.json" -ForegroundColor Gray
+            Write-Host "📁 Generated file: $generatedFile" -ForegroundColor Gray
+            
+            if ($testPassed) {
+                Write-Host "`n🎉 Test PASSED - All tiers match expected!" -ForegroundColor Green
+            } else {
+                Write-Host "`n❌ Test FAILED - Tier validation issues found" -ForegroundColor Red
+                Write-Host "Issues: $($validationIssues -join '; ')" -ForegroundColor Red
+            }
             
         } else {
             Write-Host "❌ Generated file not found" -ForegroundColor Red
@@ -200,9 +239,3 @@ foreach ($testCase in $testCases) {
         Write-Host $result -ForegroundColor Red
     }
 }
-
-# Save all test results
-$testResults | ConvertTo-Json -Depth 10 | Out-File "$testResultsPath\4tier_system_test_results.json"
-
-Write-Host "`n🏁 4-Tier System Test Complete" -ForegroundColor Cyan
-Write-Host "📊 Test Results: $($testResults.Count) tests completed" -ForegroundColor White

@@ -403,24 +403,6 @@
       "plugin": "pathway"
     },
     {
-      "target": "programme",
-      "source": "promotion",
-      "property": "product",
-      "plugin": "pathway"
-    },
-    {
-      "target": "partner",
-      "source": "promotion",
-      "property": "partner",
-      "plugin": "pathway"
-    },
-    {
-      "target": "",
-      "source": "promotion",
-      "property": "affiliate",
-      "plugin": "pathway"
-    },
-    {
       "target": "dmImage",
       "source": "referer",
       "property": "picture",
@@ -1294,27 +1276,6 @@
       "plugin": "pathway"
     },
     {
-      "target": "programme",
-      "isArray": false,
-      "property": "product",
-      "entity": "promotion",
-      "plugin": "pathway"
-    },
-    {
-      "target": "partner",
-      "isArray": false,
-      "property": "partner",
-      "entity": "promotion",
-      "plugin": "pathway"
-    },
-    {
-      "target": "",
-      "isArray": false,
-      "property": "affiliate",
-      "entity": "promotion",
-      "plugin": "pathway"
-    },
-    {
       "target": "dmImage",
       "isArray": false,
       "property": "picture",
@@ -1850,11 +1811,6 @@
     {
       "name": "progRole",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\progRole.cfc",
-      "plugin": "pathway"
-    },
-    {
-      "name": "promotion",
-      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\promotion.cfc",
       "plugin": "pathway"
     },
     {

@@ -52,6 +52,58 @@ function Get-StyleColors {
     return $colors
 }
 
+# Function to analyze Mermaid diagram comprehensively
+function Analyze-MermaidDiagram {
+    param([string]$content)
+    
+    $analysis = @{
+        Entities = @()
+        Relationships = @()
+        Styling = @{}
+        EntityCount = 0
+        RelationshipCount = 0
+        Tiers = @{
+            Focus = @()
+            GoldTier = @()
+            BlueTier = @()
+            BlueGreyTier = @()
+            DarkGreyTier = @()
+        }
+    }
+    
+    # Parse entities
+    $entityMatches = [regex]::Matches($content, '"([^"]+)"\s*\{')
+    foreach ($match in $entityMatches) {
+        $entity = $match.Groups[1].Value
+        $analysis.Entities += $entity
+    }
+    $analysis.EntityCount = $analysis.Entities.Count
+    
+    # Parse relationships
+    $relationshipMatches = [regex]::Matches($content, '"([^"]+)"\s*\|\|--\|\|\s*"([^"]+)"\s*:\s*([^\n]+)')
+    foreach ($match in $relationshipMatches) {
+        $fromEntity = $match.Groups[1].Value
+        $toEntity = $match.Groups[2].Value
+        $relationship = $match.Groups[3].Value.Trim()
+        $analysis.Relationships += @{
+            From = $fromEntity
+            To = $toEntity
+            Type = $relationship
+        }
+    }
+    $analysis.RelationshipCount = $analysis.Relationships.Count
+    
+    # Parse styling
+    $styleMatches = [regex]::Matches($content, 'style\s+(\w+)\s+fill:(#[0-9a-fA-F]+)')
+    foreach ($match in $styleMatches) {
+        $entity = $match.Groups[1].Value
+        $color = $match.Groups[2].Value
+        $analysis.Styling[$entity] = $color
+    }
+    
+    return $analysis
+}
+
 # Load current colors from styles file
 $styleColors = Get-StyleColors -stylesPath $stylesPath
 
@@ -88,41 +140,35 @@ if ($LASTEXITCODE -eq 0) {
     if (Test-Path $generatedFile) {
         $content = Get-Content $generatedFile -Raw
         
-        # Extract styling information
-        $actualTiers = @{
-            Focus = @()
-            GoldTier = @()
-            BlueTier = @()
-            BlueGreyTier = @()
-            DarkGreyTier = @()
-        }
+        # Comprehensive analysis
+        $analysis = Analyze-MermaidDiagram -content $content
         
-        # Parse style lines to extract entity-tier mappings
-        $styleLines = $content -split "`n" | Where-Object { $_ -match "style.*fill:#" }
+        Write-Host "`n📊 COMPREHENSIVE ANALYSIS:" -ForegroundColor White
+        Write-Host "  Entity Count: $($analysis.EntityCount)" -ForegroundColor Gray
+        Write-Host "  Relationship Count: $($analysis.RelationshipCount)" -ForegroundColor Gray
+        Write-Host "  Entities: $($analysis.Entities -join ', ')" -ForegroundColor Gray
         
-        foreach ($line in $styleLines) {
-            if ($line -match 'style\s+(\w+)\s+fill:(#[0-9a-fA-F]+)') {
-                $entity = $matches[1]
-                $color = $matches[2]
-                
-                # Map colors to tiers based on current styles
+        # Categorize entities by tier based on styling
+        foreach ($entity in $analysis.Entities) {
+            if ($analysis.Styling.ContainsKey($entity)) {
+                $color = $analysis.Styling[$entity]
                 switch ($color) {
-                    $styleColors["focus"] { $actualTiers.Focus += $entity }
-                    $styleColors["domain_related"] { $actualTiers.GoldTier += $entity }
-                    $styleColors["related"] { $actualTiers.BlueTier += $entity }
-                    $styleColors["domain_other"] { $actualTiers.BlueGreyTier += $entity }
-                    $styleColors["secondary"] { $actualTiers.DarkGreyTier += $entity }
+                    $styleColors["focus"] { $analysis.Tiers.Focus += $entity }
+                    $styleColors["domain_related"] { $analysis.Tiers.GoldTier += $entity }
+                    $styleColors["related"] { $analysis.Tiers.BlueTier += $entity }
+                    $styleColors["domain_other"] { $analysis.Tiers.BlueGreyTier += $entity }
+                    $styleColors["secondary"] { $analysis.Tiers.DarkGreyTier += $entity }
                 }
             }
         }
         
-        # Report what we actually found
-        Write-Host "`n📊 Current Results:" -ForegroundColor White
-        Write-Host "  Focus entities: $($actualTiers.Focus.Count) - $($actualTiers.Focus -join ', ')" -ForegroundColor Gray
-        Write-Host "  Gold tier entities: $($actualTiers.GoldTier.Count) - $($actualTiers.GoldTier -join ', ')" -ForegroundColor Gray
-        Write-Host "  Blue tier entities: $($actualTiers.BlueTier.Count) - $($actualTiers.BlueTier -join ', ')" -ForegroundColor Gray
-        Write-Host "  Blue-grey tier entities: $($actualTiers.BlueGreyTier.Count) - $($actualTiers.BlueGreyTier -join ', ')" -ForegroundColor Gray
-        Write-Host "  Dark grey tier entities: $($actualTiers.DarkGreyTier.Count) - $($actualTiers.DarkGreyTier -join ', ')" -ForegroundColor Gray
+        # Report tier breakdown
+        Write-Host "`n🎨 TIER BREAKDOWN:" -ForegroundColor White
+        Write-Host "  Focus entities: $($analysis.Tiers.Focus.Count) - $($analysis.Tiers.Focus -join ', ')" -ForegroundColor Gray
+        Write-Host "  Gold tier entities: $($analysis.Tiers.GoldTier.Count) - $($analysis.Tiers.GoldTier -join ', ')" -ForegroundColor Gray
+        Write-Host "  Blue tier entities: $($analysis.Tiers.BlueTier.Count) - $($analysis.Tiers.BlueTier -join ', ')" -ForegroundColor Gray
+        Write-Host "  Blue-grey tier entities: $($analysis.Tiers.BlueGreyTier.Count) - $($analysis.Tiers.BlueGreyTier -join ', ')" -ForegroundColor Gray
+        Write-Host "  Dark grey tier entities: $($analysis.Tiers.DarkGreyTier.Count) - $($analysis.Tiers.DarkGreyTier -join ', ')" -ForegroundColor Gray
         
         # Check for gold tier issues
         $goldTierIssues = @()
@@ -133,11 +179,11 @@ if ($LASTEXITCODE -eq 0) {
         
         Write-Host "`n🚨 GOLD TIER ISSUE ANALYSIS:" -ForegroundColor Red
         foreach ($expectedEntity in $testCase.ExpectedGoldEntities) {
-            if ($actualTiers.BlueTier -contains $expectedEntity) {
+            if ($analysis.Tiers.BlueTier -contains $expectedEntity) {
                 Write-Host "  ❌ $expectedEntity should be GOLD but is BLUE" -ForegroundColor Red
                 $goldTierIssues += $expectedEntity
                 $testPassed = $false
-            } elseif ($actualTiers.GoldTier -contains $expectedEntity) {
+            } elseif ($analysis.Tiers.GoldTier -contains $expectedEntity) {
                 Write-Host "  ✅ $expectedEntity is correctly GOLD" -ForegroundColor Green
             } else {
                 Write-Host "  ❓ $expectedEntity not found in any tier" -ForegroundColor Yellow
@@ -145,7 +191,7 @@ if ($LASTEXITCODE -eq 0) {
             }
         }
         
-        # Save debug result
+        # Save comprehensive debug result
         $debugResult = @{
             TestName = $testCase.Name
             Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
@@ -154,7 +200,7 @@ if ($LASTEXITCODE -eq 0) {
             DiagramType = $testCase.DiagramType
             Description = $testCase.Description
             ExpectedGoldEntities = $testCase.ExpectedGoldEntities
-            ActualTiers = $actualTiers
+            Analysis = $analysis
             GeneratedFile = $testOutput
             GoldTierIssues = $goldTierIssues
             TestPassed = $testPassed
@@ -162,9 +208,9 @@ if ($LASTEXITCODE -eq 0) {
         }
         
         # Save debug result
-        $debugResult | ConvertTo-Json -Depth 10 | Out-File "$testResultsPath\gold_tier_debug.json"
+        $debugResult | ConvertTo-Json -Depth 10 | Out-File "$testResultsPath\gold_tier_debug_comprehensive.json"
         
-        Write-Host "`n📁 Debug result saved to: $testResultsPath\gold_tier_debug.json" -ForegroundColor Gray
+        Write-Host "`n📁 Comprehensive debug result saved to: $testResultsPath\gold_tier_debug_comprehensive.json" -ForegroundColor Gray
         Write-Host "📁 Generated file: $generatedFile" -ForegroundColor Gray
         
         # Expected result for a debug test
