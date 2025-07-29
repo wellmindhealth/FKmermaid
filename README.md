@@ -1,6 +1,127 @@
 # FKmermaid ER Diagram Generator
 
-A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagrams from domain configurations, visualized with Mermaid diagrams.
+A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagrams from ColdFusion Components (CFCs), visualized with Mermaid diagrams. **Now with comprehensive testing, shared logic, and roadmap for enterprise integration!**
+
+## 🎯 Current Status
+
+✅ **All tests passing** - Comprehensive test suite with 4 categories  
+✅ **Shared logic** - ER and Class diagrams use unified relationship processing  
+✅ **Entity consolidation** - Prevents duplicate entities (e.g., `dmImage`)  
+✅ **Self-referencing grouping** - Both diagram types properly group self-refs  
+✅ **Robust error handling** - Directory creation and parameter validation  
+✅ **Caching system** - Optimized performance with relationship caching  
+
+## 🚀 Roadmap & Future Enhancements
+
+### Phase 1: Foundation Improvements (Q1 2024)
+- [ ] **Configuration Management**
+  - [ ] Remove hardcoded paths (`D:\GIT\farcry\Cursor\FKmermaid`)
+  - [ ] Environment variable support
+  - [ ] Portable configuration system
+  - [ ] Cross-platform compatibility
+
+- [ ] **Performance Optimizations**
+  - [ ] Enhanced caching with TTL (Time To Live)
+  - [ ] Memory usage optimization for large diagrams
+  - [ ] Parallel processing for CFC scanning
+  - [ ] Incremental updates (only scan changed files)
+
+- [ ] **Advanced Error Handling**
+  - [ ] Comprehensive exception handling
+  - [ ] Detailed error logging
+  - [ ] Graceful degradation
+  - [ ] Recovery mechanisms
+
+### Phase 2: Enhanced Features (Q2 2024)
+- [ ] **Analytics & Monitoring**
+  - [ ] Performance metrics collection
+  - [ ] Usage analytics dashboard
+  - [ ] Error tracking and reporting
+  - [ ] Diagram complexity metrics
+
+- [ ] **Advanced Diagram Types**
+  - [ ] Sequence diagrams
+  - [ ] Flowcharts
+  - [ ] State diagrams
+  - [ ] Component diagrams
+
+- [ ] **Export Formats**
+  - [ ] PNG export with high resolution
+  - [ ] SVG export for web use
+  - [ ] PDF export for documentation
+  - [ ] Multiple format batch export
+
+### Phase 3: Enterprise Integration (Q3 2024)
+- [ ] **🦄 HOLY GRAIL: Confluence Integration**
+  - [ ] **Automated Confluence page creation**
+  - [ ] **Diagram sets for auto-upload to Confluence**
+  - [ ] **Developer documentation automation**
+  - [ ] **Auditor-friendly relationship documentation**
+  - [ ] **Refactoring planning support**
+  - [ ] **Version control integration**
+  - [ ] **Change tracking and diff visualization**
+
+- [ ] **CI/CD Integration**
+  - [ ] Automated testing pipeline
+  - [ ] Deployment automation
+  - [ ] Version management
+  - [ ] Release automation
+
+- [ ] **Advanced Relationship Analysis**
+  - [ ] Deep relationship analysis
+  - [ ] Impact analysis for changes
+  - [ ] Dependency mapping
+  - [ ] Circular dependency detection
+
+### Phase 4: Intelligence & Automation (Q4 2024)
+- [ ] **AI-Powered Features**
+  - [ ] Smart entity grouping
+  - [ ] Automatic domain detection
+  - [ ] Relationship pattern recognition
+  - [ ] Anomaly detection
+
+- [ ] **Documentation Automation**
+  - [ ] Auto-generated API documentation
+  - [ ] Code comments from diagrams
+  - [ ] Change log generation
+  - [ ] Migration guides
+
+- [ ] **Collaboration Features**
+  - [ ] Multi-user diagram editing
+  - [ ] Comment and annotation system
+  - [ ] Review and approval workflows
+  - [ ] Real-time collaboration
+
+## 🎯 Holy Grail: Confluence Integration Vision
+
+### **The Ultimate Goal: Automated Documentation Ecosystem**
+
+Imagine a system where:
+- **Developers** get instant visual understanding of code relationships
+- **Auditors** receive comprehensive documentation automatically
+- **Project Managers** see impact analysis for every change
+- **Architects** can plan refactoring with confidence
+
+### **Confluence Integration Features:**
+1. **Automated Page Creation**
+   - Generate Confluence pages from diagram sets
+   - Automatic table of contents
+   - Cross-referenced documentation
+
+2. **Developer Documentation**
+   - Entity relationship guides
+   - API documentation with visual context
+   - Code change impact analysis
+
+3. **Auditor Documentation**
+   - Compliance documentation
+   - Data flow diagrams
+   - Security relationship mapping
+
+4. **Refactoring Support**
+   - Before/after comparison views
+   - Impact analysis for changes
+   - Migration planning tools
 
 ## Features
 
@@ -10,6 +131,8 @@ A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagra
 - **Reliable Viewing**: Local HTML files with embedded Mermaid diagrams
 - **Multiple Viewing Options**: HTML files, manual copy-paste, and content display
 - **Clean Output**: User-friendly interface with clear instructions
+- **Comprehensive Testing**: Full test suite with baseline validation
+- **Shared Logic**: Unified relationship processing for both diagram types
 
 ## Domain Definitions
 
@@ -125,6 +248,28 @@ This ensures that excluded entities never appear in generated diagrams, even if 
 .\generate_erd_enhanced.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "programme","participant" -ConfigFile "custom_config.json"
 ```
 
+## Testing
+
+The project includes a comprehensive test suite:
+
+```powershell
+# Run all tests
+cd tests
+.\run_all_tests.ps1
+```
+
+### Test Categories:
+- **CFC Scan Tests**: Configuration generation and validation
+- **Main Script Tests**: 4-tier semantic styling system
+- **Baseline Tests**: Regression testing with known outputs
+- **Integration Tests**: End-to-end workflow validation
+
+### Test Results:
+- ✅ **All tests passing**
+- ✅ **Comprehensive validation**
+- ✅ **Baseline regression protection**
+- ✅ **Performance monitoring**
+
 ## Output
 
 The tool generates:
@@ -194,7 +339,13 @@ FKmermaid/
 │   └── dbdump.sql           # Database structure reference
 ├── src/powershell/
 │   ├── generate_erd_enhanced.ps1     # Main ER diagram generator
-│   └── generate_cfc_scan_config.ps1  # Configuration generator from DB
+│   ├── generate_cfc_scan_config.ps1  # Configuration generator from DB
+│   └── relationship_detection.ps1     # CFC relationship detection
+├── tests/
+│   ├── run_all_tests.ps1             # Main test runner
+│   ├── main_script_tests/            # Core functionality tests
+│   ├── baseline_tests/               # Regression testing
+│   └── results/                      # Test results and reports
 ├── exports/                  # Generated diagram files
 │   ├── *.mmd                # Mermaid source files
 │   └── *.html               # HTML viewer files
@@ -206,4 +357,18 @@ FKmermaid/
 - **No diagram displayed**: Check the generated `.mmd` file for syntax errors
 - **Missing entities**: Verify the entity exists in the specified domains
 - **Browser issues**: Try opening the `.html` file manually
-- **Copy-paste issues**: Ensure you copy the entire content from the `.mmd` file 
+- **Copy-paste issues**: Ensure you copy the entire content from the `.mmd` file
+- **Test failures**: Run `.\run_all_tests.ps1` to identify specific issues
+
+## Contributing
+
+We welcome contributions! Areas for improvement:
+- Performance optimizations
+- New diagram types
+- Enhanced error handling
+- Documentation improvements
+- Test coverage expansion
+
+## License
+
+This project is part of the FarCry ecosystem and follows the same licensing terms. 
