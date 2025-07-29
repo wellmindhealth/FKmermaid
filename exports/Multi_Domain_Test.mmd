@@ -177,6 +177,11 @@ erDiagram
     %% Special Joins
     %% End Special Joins
 
+    %% Self-Referencing Relationships for dmNavigation
+    %% Self-refs include: internalRedirectID, ExternalLink
+    "pathway_dmNavigation" ||--|| "pathway_dmNavigation" : self_refs
+    %% End Self-Referencing Relationships for dmNavigation
+
     %% Self-Referencing Relationships for activityDef
     %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
     "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
