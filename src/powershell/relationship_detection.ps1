@@ -29,7 +29,9 @@ function Test-PropertyExclusion {
         # Check if any attribute matches the exclusion pattern
         foreach ($attrName in $attributes.Keys) {
             $attrValue = $attributes[$attrName]
-            if ($attrValue -match $pattern) {
+            # Check if the attribute name-value pair matches the pattern
+            $attrPair = "$attrName=`"$attrValue`""
+            if ($attrPair -match $pattern) {
                 return $true
             }
         }
@@ -69,6 +71,25 @@ function Get-RelationshipsFromContent {
     foreach ($match in $openingMatches) {
         # Skip if this is already a self-closing tag
         if ($match.Value -notmatch '>$') {
+            $cfPropertyMatches += $match
+        }
+    }
+    
+    # NEW: Handle multiline cfproperty tags that don't close properly
+    # Look for <cfproperty that spans multiple lines and ends with />
+    $multilineMatches = [regex]::Matches($content, '<cfproperty[^>]*?\/>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    foreach ($match in $multilineMatches) {
+        # Skip if this is already captured by self-closing pattern
+        if ($match.Value -notmatch '^<cfproperty[^>]*?>$') {
+            $cfPropertyMatches += $match
+        }
+    }
+    
+    # NEW: Handle multiline cfproperty tags that end with > (not />)
+    $multilineOpenMatches = [regex]::Matches($content, '<cfproperty[^>]*?[^\/]>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    foreach ($match in $multilineOpenMatches) {
+        # Skip if this is already captured by opening pattern
+        if ($match.Value -notmatch '^<cfproperty[^>]*>$') {
             $cfPropertyMatches += $match
         }
     }
