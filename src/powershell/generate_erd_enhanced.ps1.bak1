@@ -34,6 +34,15 @@
 .EXAMPLE
     .\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "programme,participant" -OutputFile "custom.mmd"
     
+.EXAMPLE
+    .\generate_erd_enhanced.ps1 -lFocus "dmImage" -DiagramType "ER" -lDomains "site" -OutputFile "custom.mmd"
+    
+.EXAMPLE
+    .\generate_erd_enhanced.ps1 -lFocus "farUser" -DiagramType "ER" -lDomains "all"
+    
+.EXAMPLE
+    .\generate_erd_enhanced.ps1 -lFocus "partner" -DiagramType "ER"
+    
 .NOTES
     - All parameters are validated before execution
     - Generated files are saved to the exports/ directory
@@ -63,6 +72,7 @@ function Show-Help {
     Write-Host "  -lFocus 'entityName'     # Focus entity (e.g., 'activityDef', 'progRole', 'member')" -ForegroundColor White
     Write-Host "  -DiagramType 'ER|Class'  # Diagram type ('ER' or 'Class')" -ForegroundColor White
     Write-Host "  -lDomains 'domain1,domain2' # Domains to include (e.g., 'programme,participant')" -ForegroundColor White
+    Write-Host "                           # Use 'all' or omit for all domains" -ForegroundColor White
     Write-Host ""
     Write-Host "🟡 OPTIONAL PARAMETERS:" -ForegroundColor Yellow
     Write-Host "  -RefreshCFCs             # Force fresh CFC scanning (bypass cache)" -ForegroundColor White
@@ -75,6 +85,8 @@ function Show-Help {
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Green
     Write-Host ""
     Write-Host "📖 For complete documentation, see: README.md" -ForegroundColor Yellow
     exit 0
@@ -86,6 +98,33 @@ if ($Help) {
 }
 
 # Node.js tools are available for Mermaid.live URL generation
+
+# Function to generate unique filename with timestamp
+function Get-UniqueFilename {
+    param([string]$baseName, [string]$extension = "mmd")
+    
+    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $uniqueId = [System.Guid]::NewGuid().ToString("N").Substring(0, 8)
+    return "${baseName}_${timestamp}_${uniqueId}.${extension}"
+}
+
+# Function to clean old files
+function Clean-OldFiles {
+    param([string]$directory, [string]$pattern, [int]$maxAgeHours = 24, [string]$excludePattern = "")
+    
+    if (Test-Path $directory) {
+        $cutoffTime = (Get-Date).AddHours(-$maxAgeHours)
+        $oldFiles = Get-ChildItem -Path $directory -Filter $pattern | Where-Object { 
+            $_.LastWriteTime -lt $cutoffTime -and 
+            (-not $excludePattern -or $_.Name -notlike $excludePattern)
+        }
+        
+        if ($oldFiles.Count -gt 0) {
+            Write-Host "🧹 Cleaning $($oldFiles.Count) old files from $directory" -ForegroundColor Gray
+            $oldFiles | Remove-Item -Force
+        }
+    }
+}
 
 # Load relationship detection module
 $modulePath = Join-Path $PSScriptRoot "relationship_detection.ps1"
@@ -169,8 +208,8 @@ function Validate-Domains {
     
     $validDomains = $domainsConfig.PSObject.Properties.Name
     
-    if ([string]::IsNullOrWhiteSpace($lDomains)) {
-        Write-Host "📋 No domains specified - using ALL domains: $($validDomains -join ', ')" -ForegroundColor Cyan
+    if ([string]::IsNullOrWhiteSpace($lDomains) -or $lDomains -eq "all") {
+        Write-Host "📋 No domains specified or 'all' used - using ALL domains: $($validDomains -join ', ')" -ForegroundColor Cyan
         return $validDomains
     }
     
@@ -215,7 +254,11 @@ function Validate-Parameters {
     }
     
     if ([string]::IsNullOrWhiteSpace($lDomains)) {
-        $errors += "ERROR: -lDomains parameter is REQUIRED. Example: -lDomains 'programme' or -lDomains 'programme,participant'"
+        # Allow null/empty domains - they will be handled by Validate-Domains function
+        # which will use all available domains
+    } elseif ($lDomains -eq "all") {
+        # Special case: 'all' means use all domains (same as empty)
+        $lDomains = ""
     }
     
     # Check optional parameters
@@ -239,6 +282,9 @@ function Validate-Parameters {
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Cyan
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Cyan
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Cyan
         Write-Host "`n📚 See README.md for complete parameter documentation" -ForegroundColor Yellow
         exit 1
     }
@@ -268,8 +314,23 @@ $pluginsPath = $config.scanSettings.pluginsPath
 $excludeFolders = $config.scanSettings.excludeFolders
 $excludeFiles = $config.scanSettings.excludeFiles
 $cacheFile = $config.scanSettings.cacheFile
-$outputFile = $config.scanSettings.outputFile
 $knownTables = $config.entityConstraints.knownTables
+
+# Generate unique output filename if not specified
+if ($OutputFile -eq "") {
+    $baseName = "erd"
+    if ($lFocus) {
+        $baseName = $lFocus -replace ',', '_'
+    }
+    $uniqueFilename = Get-UniqueFilename -baseName $baseName -extension "mmd"
+    $outputFile = Join-Path "D:\GIT\farcry\Cursor\FKmermaid\exports" $uniqueFilename
+} else {
+    # If OutputFile is specified, use it but ensure it's in the exports directory
+    $outputFile = Join-Path "D:\GIT\farcry\Cursor\FKmermaid\exports" (Split-Path $OutputFile -Leaf)
+}
+
+# Clean old files before generating new ones
+Clean-OldFiles -directory "D:\GIT\farcry\Cursor\FKmermaid\exports" -pattern "*.mmd" -maxAgeHours 168 -excludePattern "baseline_*"
 
 # Function to scan CFCs and extract relationships
 function Get-CFCRelationships {
@@ -447,6 +508,33 @@ function Get-EntityPluginPrefix {
     }
 }
 
+# Function to generate unique filename with timestamp
+function Get-UniqueFilename {
+    param([string]$baseName, [string]$extension = "mmd")
+    
+    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $uniqueId = [System.Guid]::NewGuid().ToString("N").Substring(0, 8)
+    return "${baseName}_${timestamp}_${uniqueId}.${extension}"
+}
+
+# Function to clean old files
+function Clean-OldFiles {
+    param([string]$directory, [string]$pattern, [int]$maxAgeHours = 24, [string]$excludePattern = "")
+    
+    if (Test-Path $directory) {
+        $cutoffTime = (Get-Date).AddHours(-$maxAgeHours)
+        $oldFiles = Get-ChildItem -Path $directory -Filter $pattern | Where-Object { 
+            $_.LastWriteTime -lt $cutoffTime -and 
+            (-not $excludePattern -or $_.Name -notlike $excludePattern)
+        }
+        
+        if ($oldFiles.Count -gt 0) {
+            Write-Host "🧹 Cleaning $($oldFiles.Count) old files from $directory" -ForegroundColor Gray
+            $oldFiles | Remove-Item -Force
+        }
+    }
+}
+
 # Function to generate Mermaid ER diagram
 function Generate-MermaidERD {
     param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{})
@@ -587,35 +675,17 @@ function Generate-MermaidERD {
             
             $mermaidContent += "    `"$sanitizedEntityName`" {`n"
             $mermaidContent += "        UUID ObjectID`n"
-            $mermaidContent += "        string name`n"
             $mermaidContent += "    }`n`n"
         }
     }
     
-    # Process direct FK relationships for self-referencing
-    $selfRefDirectFK = @()
-    $otherDirectFK = @()
+    # Add relationships using shared processing function
+    $processedRelationships = Process-Relationships -relationships $relationships -filteredEntities $filteredEntities -existingEntities $existingEntities -outputType "ER"
     
-    foreach ($fk in $relationships.directFK) {
-        $sourceEntity = $fk.source
-        $targetEntity = $fk.target
-        
-        # Only include if both entities are in our filtered list
-        if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
-            if ($sourceEntity -eq $targetEntity) {
-                # Self-referencing direct FK relationship
-                $selfRefDirectFK += $fk
-            } else {
-                # Cross-entity direct FK relationship
-                $otherDirectFK += $fk
-            }
-        }
-    }
-    
-    # Add non-self-referencing direct FK relationships
-    if ($otherDirectFK.Count -gt 0) {
+    # Add cross-entity direct FK relationships
+    if ($processedRelationships.DirectFK.Count -gt 0) {
         $mermaidContent += "    %% Direct FK Relationships`n"
-        foreach ($fk in $otherDirectFK) {
+        foreach ($fk in $processedRelationships.DirectFK) {
             $sourceEntity = $fk.source
             $targetEntity = $fk.target
             $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
@@ -675,84 +745,52 @@ function Generate-MermaidERD {
         if (-not $farUserExists) {
             $mermaidContent += "    `"zfarcrycore_farUser`" {`n"
             $mermaidContent += "        UUID ObjectID`n"
-            $mermaidContent += "        string name`n"
             $mermaidContent += "    }`n`n"
         }
         if (-not $dmProfileExists) {
             $mermaidContent += "    `"zfarcrycore_dmProfile`" {`n"
             $mermaidContent += "        UUID ObjectID`n"
-            $mermaidContent += "        string name`n"
             $mermaidContent += "    }`n`n"
         }
     }
 
-    # Process join table relationships for self-referencing
-    $selfRefGroups = @{}
-    $otherJoinRelationships = @()
-
-    foreach ($join in $relationships.joinTables) {
-        $sourceEntity = $join.source
-        $targetEntity = $join.target
-        
-        # Only include if both entities are in our filtered list
-        if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
-            if ($sourceEntity -eq $targetEntity) {
-                # Self-referencing relationship (ftJoin points to same entity)
-                if (-not $selfRefGroups.ContainsKey($sourceEntity)) {
-                    $selfRefGroups[$sourceEntity] = @()
-                }
-                $selfRefGroups[$sourceEntity] += $join
-            } else {
-                # Cross-entity relationship
-                $otherJoinRelationships += $join
+    # Add self-referencing relationships (grouped)
+    foreach ($entityName in $processedRelationships.SelfRefGroups.Keys) {
+        $selfRefs = $processedRelationships.SelfRefGroups[$entityName]
+        if ($selfRefs.Count -gt 0) {
+            $mermaidContent += "    %% Self-Referencing Relationships for $entityName`n"
+            
+            # Collect all self-referencing relationships for this entity
+            $allSelfRefRelationships = @()
+            foreach ($selfRef in $selfRefs) {
+                $allSelfRefRelationships += $selfRef.property
             }
+            
+            # Add comment listing all the self-referencing relationships
+            $relationshipList = $allSelfRefRelationships -join ', '
+            $mermaidContent += "    %% Self-refs include: $relationshipList`n"
+            
+            # Create a short placeholder label for consolidated self-referencing relationships
+            $consolidatedLabel = "self_refs"
+            
+            # Get entity display names
+            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $entityName }).plugin
+            $sourceDisplayName = "$sourcePlugin - $entityName"
+            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+            
+            # Add single consolidated relationship line
+            $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedSourceName`" : $consolidatedLabel`n"
+            
+            $mermaidContent += "    %% End Self-Referencing Relationships for $entityName`n`n"
         }
-    }
-    
-    # Output self-referencing groups per entity (including both direct FK and join table relationships)
-    foreach ($entityName in $selfRefGroups.Keys) {
-        $group = $selfRefGroups[$entityName]
-        $mermaidContent += "    %% Self-Referencing Relationships for $entityName`n"
-        
-        # Collect all self-referencing relationships for this entity
-        $allSelfRefRelationships = @()
-        
-        # Add self-referencing direct FK relationships for this entity
-        foreach ($fk in $selfRefDirectFK) {
-            if ($fk.source -eq $entityName) {
-                $allSelfRefRelationships += $fk.property
-            }
-        }
-        
-        # Add self-referencing join table relationships for this entity
-        foreach ($join in $group) {
-            $allSelfRefRelationships += $join.property
-        }
-        
-        # Add comment listing all the self-referencing relationships
-        $relationshipList = $allSelfRefRelationships -join ', '
-        $mermaidContent += "    %% Self-refs include: $relationshipList`n"
-        
-        # Create a short placeholder label for consolidated self-referencing relationships
-        $consolidatedLabel = "self_refs"
-        
-        # Get entity display names
-        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $entityName }).plugin
-        $sourceDisplayName = "$sourcePlugin - $entityName"
-        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-        
-        # Add single consolidated relationship line
-        $mermaidContent += "    `"$sanitizedSourceName`" ||--|| `"$sanitizedSourceName`" : $consolidatedLabel`n"
-        
-        $mermaidContent += "    %% End Self-Referencing Relationships for $entityName`n`n"
     }
 
     # Add other join table relationships
-    if ($otherJoinRelationships.Count -gt 0) {
+    if ($processedRelationships.JoinTables.Count -gt 0) {
         $mermaidContent += "    %% Join Table Relationships`n"
-        foreach ($join in $otherJoinRelationships) {
+        foreach ($join in $processedRelationships.JoinTables) {
             $sourceEntity = $join.source
             $targetEntity = $join.target
             $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
@@ -795,22 +833,41 @@ function Generate-MermaidERD {
                 else { $_.joinTable }
             }
             
+            # Convert base entity names to full entity names with plugin prefixes
+            $fullDirectRelated = @()
+            foreach ($baseEntity in $directRelated) {
+                $entityInfo = $relationships.entities | Where-Object { $_.name -eq $baseEntity } | Select-Object -First 1
+                if ($entityInfo) {
+                    $fullDirectRelated += "$($entityInfo.plugin)_$baseEntity"
+                }
+            }
+            
+            $fullJoinRelated = @()
+            foreach ($baseEntity in $joinRelated) {
+                $entityInfo = $relationships.entities | Where-Object { $_.name -eq $baseEntity } | Select-Object -First 1
+                if ($entityInfo) {
+                    $fullJoinRelated += "$($entityInfo.plugin)_$baseEntity"
+                }
+            }
+            
             # Add all related entities to the list
-            $relatedEntities += $directRelated
-            $relatedEntities += $joinRelated
+            $relatedEntities += $fullDirectRelated
+            $relatedEntities += $fullJoinRelated
         }
         
-        # Add special join relationships
+        # Add special join relationships with full names
         # farUser <-> dmProfile special join
         if ($focusEntities -contains "dmProfile") {
-            $relatedEntities += "farUser"
+            $relatedEntities += "zfarcrycore_farUser"
         }
         if ($focusEntities -contains "farUser") {
-            $relatedEntities += "dmProfile"
+            $relatedEntities += "zfarcrycore_dmProfile"
         }
         
         # Remove duplicates and focus entities themselves
         $relatedEntities = $relatedEntities | Where-Object { $focusEntities -notcontains $_ } | Sort-Object -Unique
+        
+        # Debug logging
     }
     
     foreach ($entity in $filteredEntities) {
@@ -843,6 +900,15 @@ function Generate-MermaidClassDiagram {
     param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{})
     
     $mermaidContent = "classDiagram`n"
+    
+    # Add parameters as a comment since Class diagrams may not support notes properly
+    $paramComment = @"
+%% Parameters:
+%%   Focus: $lFocus
+%%   Domains: $($validatedDomains -join ', ')
+%%   Chart Type: Class
+"@
+    $mermaidContent += "    $paramComment`n"
     
     # Use validated domains
     $domainList = $validatedDomains
@@ -895,8 +961,37 @@ function Generate-MermaidClassDiagram {
         return $true
     }
     
-    # Get list of filtered entities that exist
+    # Consolidate duplicate entities (same entity name in different plugins) - same logic as ER diagram
+    $consolidatedEntities = @{}
+    $consolidatedFilteredEntities = @()
+    
+    foreach ($entity in $filteredEntities) {
+        $entityName = $entity.name
+        $pluginName = $entity.plugin
+        
+        if (-not $consolidatedEntities.ContainsKey($entityName)) {
+            # First occurrence of this entity name
+            $consolidatedEntities[$entityName] = @($pluginName)
+            $consolidatedFilteredEntities += $entity
+        } else {
+            # Duplicate entity name - add plugin to existing list
+            $consolidatedEntities[$entityName] += $pluginName
+            # Don't add duplicate entity to filtered list
+        }
+    }
+    
+    # Update filtered entities to use consolidated list
+    $filteredEntities = $consolidatedFilteredEntities
     $existingEntities = $filteredEntities | ForEach-Object { $_.name }
+    
+    # Log consolidation results
+    $duplicateEntities = $consolidatedEntities | Where-Object { $_.Value.Count -gt 1 }
+    if ($duplicateEntities.Count -gt 0) {
+        Write-Host "🔗 Consolidated duplicate entities:" -ForegroundColor Yellow
+        foreach ($entity in $duplicateEntities) {
+            Write-Host "   $($entity.Key): $($entity.Value -join ', ')" -ForegroundColor Cyan
+        }
+    }
     
     Write-Host "📊 Filtered to $($filteredEntities.Count) entities based on parameters:" -ForegroundColor Cyan
     if ($lFocus) { Write-Host "   Focus: $lFocus" -ForegroundColor Yellow }
@@ -923,53 +1018,71 @@ function Generate-MermaidClassDiagram {
         }
     }
     
-    # Add relationships
-    foreach ($fk in $relationships.directFK) {
+    # Add relationships using shared processing function
+    $processedRelationships = Process-Relationships -relationships $relationships -filteredEntities $filteredEntities -existingEntities $existingEntities -outputType "Class"
+    
+    # Add cross-entity relationships (DirectFK and OtherJoinRelationships)
+    foreach ($fk in $processedRelationships.DirectFK) {
         $sourceEntity = $fk.source
         $targetEntity = $fk.target
         
-        # Only include if both entities are in our filtered list
-        if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
-            
-            # Sanitize class names for relationships
-            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-            $targetDisplayName = "$targetPlugin - $targetEntity"
-            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-            
-            $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($fk.property)`n"
-        }
+        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+        
+        # Sanitize class names for relationships
+        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+        $targetDisplayName = "$targetPlugin - $targetEntity"
+        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+        
+        $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($fk.property)`n"
     }
 
-    foreach ($join in $relationships.joinTables) {
+    foreach ($join in $processedRelationships.JoinTables) {
         $sourceEntity = $join.source
         $targetEntity = $join.target
         
-        # Only include if both entities are in our filtered list
-        if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
-            $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
-            $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+        $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
+        $targetPlugin = ($filteredEntities | Where-Object { $_.name -eq $targetEntity }).plugin
+        
+        # Sanitize class names for relationships
+        $sourceDisplayName = "$sourcePlugin - $sourceEntity"
+        $targetDisplayName = "$targetPlugin - $targetEntity"
+        $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
+        $sanitizedSourceName = $sanitizedSourceName.Trim('_')
+        $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
+        $sanitizedTargetName = $sanitizedTargetName.Trim('_')
+        
+        $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($join.property)`n"
+    }
+    
+    # Add self-referencing relationships (grouped)
+    foreach ($entityName in $processedRelationships.SelfRefGroups.Keys) {
+        $selfRefs = $processedRelationships.SelfRefGroups[$entityName]
+        if ($selfRefs.Count -gt 0) {
+            $entityPlugin = ($filteredEntities | Where-Object { $_.name -eq $entityName }).plugin
+            $entityDisplayName = "$entityPlugin - $entityName"
+            $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
+            $sanitizedEntityName = $sanitizedEntityName -replace '_+', '_'
+            $sanitizedEntityName = $sanitizedEntityName.Trim('_')
             
-            # Sanitize class names for relationships
-            $sourceDisplayName = "$sourcePlugin - $sourceEntity"
-            $targetDisplayName = "$targetPlugin - $targetEntity"
-            $sanitizedSourceName = $sourceDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedSourceName = $sanitizedSourceName -replace '_+', '_'
-            $sanitizedSourceName = $sanitizedSourceName.Trim('_')
-            $sanitizedTargetName = $targetDisplayName -replace '[^a-zA-Z0-9_]', '_'
-            $sanitizedTargetName = $sanitizedTargetName -replace '_+', '_'
-            $sanitizedTargetName = $sanitizedTargetName.Trim('_')
-            
-            $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($join.property)`n"
+            # Group self-referencing relationships
+            $groupedSelfRefs = $selfRefs | Group-Object -Property { $_.property }
+            foreach ($group in $groupedSelfRefs) {
+                $propertyName = $group.Name
+                $count = $group.Count
+                $relationshipText = if ($count -eq 1) { $propertyName } else { "$propertyName ($count)" }
+                $mermaidContent += "    $sanitizedEntityName --> $sanitizedEntityName : $relationshipText`n"
+            }
         }
     }
-
+    
     # Add styling for class diagram (full color support)
     $mermaidContent += "`n    %% Entity Styling`n"
     
@@ -996,12 +1109,31 @@ function Generate-MermaidClassDiagram {
                 else { $_.joinTable }
             }
             
+            # Convert base entity names to full entity names with plugin prefixes
+            $fullDirectRelated = @()
+            foreach ($baseEntity in $directRelated) {
+                $entityInfo = $relationships.entities | Where-Object { $_.name -eq $baseEntity } | Select-Object -First 1
+                if ($entityInfo) {
+                    $fullDirectRelated += "$($entityInfo.plugin)_$baseEntity"
+                }
+            }
+            
+            $fullJoinRelated = @()
+            foreach ($baseEntity in $joinRelated) {
+                $entityInfo = $relationships.entities | Where-Object { $_.name -eq $baseEntity } | Select-Object -First 1
+                if ($entityInfo) {
+                    $fullJoinRelated += "$($entityInfo.plugin)_$baseEntity"
+                }
+            }
+            
             # Add all related entities to the list
-            $relatedEntities += $directRelated
-            $relatedEntities += $joinRelated
+            $relatedEntities += $fullDirectRelated
+            $relatedEntities += $fullJoinRelated
         }
         # Remove duplicates and focus entities themselves
         $relatedEntities = $relatedEntities | Where-Object { $focusEntities -notcontains $_ } | Sort-Object -Unique
+        
+        # Debug logging
     }
     
     foreach ($entity in $filteredEntities) {
@@ -1021,11 +1153,8 @@ function Generate-MermaidClassDiagram {
         
         $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $fullFocusEntity -relatedEntities $relatedEntities -cssStyles $cssStyles -validatedDomains $validatedDomains -domainsConfig $domainsConfig
         
-        # Sanitize entity name for style definition (same as class names)
-        $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
-        $sanitizedEntityName = $sanitizedEntityName -replace '_+', '_'
-        $sanitizedEntityName = $sanitizedEntityName.Trim('_')
-        
+        # Use sanitized entity name for style definition (no spaces, hyphens, or quotes)
+        $sanitizedEntityName = Get-SanitizedEntityName -entityName $entityDisplayName
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
@@ -1152,6 +1281,9 @@ function Get-MermaidStyles {
 function Get-EntityStyle {
     param([string]$entityName, [string]$pluginName, [string]$focusEntity, [string[]]$relatedEntities, [hashtable]$cssStyles, [string[]]$validatedDomains, [object]$domainsConfig)
     
+    # Construct full entity name for comparison with relatedEntities
+    $fullEntityName = "${pluginName}_$entityName"
+    
     # Check for exact match first (SSQ entities)
     if ($cssStyles.ContainsKey($entityName)) {
         return $cssStyles[$entityName]
@@ -1181,7 +1313,7 @@ function Get-EntityStyle {
         if ($cssStyles.ContainsKey("focus")) {
             return $cssStyles["focus"]
         }
-        return "fill:#e65100,stroke:#bf360c,stroke-width:2px,color:#fff"
+        return "fill:#ff9800,stroke:#f57c00,stroke-width:4px,color:#fff"
     }
     
     # Check for SSQ entities FIRST (before related entities)
@@ -1191,38 +1323,35 @@ function Get-EntityStyle {
         }
     }
     
-    # Close relatives in same domain styling - use CSS if available, otherwise fallback
-    if ($relatedEntities -and $relatedEntities.Contains($entityName)) {
-        if ($cssStyles.ContainsKey("related")) {
-            return $cssStyles["related"]
-        }
-        return "fill:#1565c0,stroke:#0d47a1,stroke-width:1px,color:#fff"
-    }
-    
-    # Check if entity is in the same domain as the focus entity (but not directly related)
+    # Check if entity is in the same domain as ANY of the focus entities
     $isInSameDomainAsFocus = $false
+    $focusDomain = $null
     if ($validatedDomains -and $domainsConfig) {
-        # Find which domain the focus entity belongs to
-        $focusDomain = $null
-        foreach ($domain in $validatedDomains) {
-            if ($domainsConfig.PSObject.Properties.Name -contains $domain) {
-                $domainEntities = @()
-                foreach ($category in $domainsConfig.$domain.entities.PSObject.Properties) {
-                    $domainEntities += $category.Value
-                }
-                
-                # Extract base entity name from focus entity name (remove plugin prefix)
-                $baseFocusEntity = $focusEntity
-                if ($focusEntity -match '^[^_]+_(.+)$') {
-                    $baseFocusEntity = $matches[1]
-                }
-                
-                if ($domainEntities -contains $baseFocusEntity) {
-                    $focusDomain = $domain
-                    break
+        # Find which domain ANY of the focus entities belongs to
+        foreach ($focus in $focusEntities) {
+            foreach ($domain in $validatedDomains) {
+                if ($domainsConfig.PSObject.Properties.Name -contains $domain) {
+                    $domainEntities = @()
+                    foreach ($category in $domainsConfig.$domain.entities.PSObject.Properties) {
+                        $domainEntities += $category.Value
+                    }
+                    
+                    # Extract base entity name from focus entity name (remove plugin prefix)
+                    $baseFocusEntity = $focus
+                    if ($focus -match '^[^_]+_(.+)$') {
+                        $baseFocusEntity = $matches[1]
+                    }
+                    
+                    if ($domainEntities -contains $baseFocusEntity) {
+                        $focusDomain = $domain
+                        break
+                    }
                 }
             }
+            if ($focusDomain) { break }
         }
+        
+        # Debug logging for domain detection
         
         # Check if current entity is in the same domain as focus
         if ($focusDomain -and $domainsConfig.PSObject.Properties.Name -contains $focusDomain) {
@@ -1243,7 +1372,23 @@ function Get-EntityStyle {
         }
     }
     
-    # Domain entities that aren't directly related - use CSS if available, otherwise fallback
+    # NEW: Same domain AND directly related - GOLD tier
+    if ($isInSameDomainAsFocus -and $relatedEntities -and $relatedEntities.Contains($fullEntityName)) {
+        if ($cssStyles.ContainsKey("domain_related")) {
+            return $cssStyles["domain_related"]
+        }
+        return "fill:#ffc107,stroke:#ff8f00,stroke-width:4px,color:#000"
+    }
+    
+    # Directly related (but not same domain) - BLUE tier
+    if ($relatedEntities -and $relatedEntities.Contains($fullEntityName)) {
+        if ($cssStyles.ContainsKey("related")) {
+            return $cssStyles["related"]
+        }
+        return "fill:#1565c0,stroke:#0d47a1,stroke-width:1px,color:#fff"
+    }
+    
+    # Same domain but NOT directly related - BLUE-GREY tier
     if ($isInSameDomainAsFocus) {
         if ($cssStyles.ContainsKey("domain_other")) {
             return $cssStyles["domain_other"]
@@ -1251,11 +1396,77 @@ function Get-EntityStyle {
         return "fill:#37474f,stroke:#263238,stroke-width:2px,color:#b0bec5"
     }
     
-    # Default styling for all other entities - use CSS if available, otherwise fallback
+    # Default styling for all other entities - DARK GREY tier
     if ($cssStyles.ContainsKey("secondary")) {
         return $cssStyles["secondary"]
     }
     return "fill:#424242,stroke:#212121,stroke-width:1px,color:#fff"
+}
+
+# Shared function to process relationships for both ER and Class diagrams
+function Process-Relationships {
+    param(
+        $relationships,
+        $filteredEntities,
+        $existingEntities,
+        [string]$outputType = "ER"  # "ER" or "Class"
+    )
+    
+    $processedRelationships = @{
+        DirectFK = @()
+        JoinTables = @()
+        SelfRefGroups = @{}
+        OtherJoinRelationships = @()
+    }
+    
+    # Process direct FK relationships
+    foreach ($fk in $relationships.directFK) {
+        $sourceEntity = $fk.source
+        $targetEntity = $fk.target
+        
+        # Check if both entities are in our filtered set
+        $sourceInSet = $existingEntities -contains $sourceEntity
+        $targetInSet = $existingEntities -contains $targetEntity
+        
+        if ($sourceInSet -and $targetInSet) {
+            # Self-referencing relationship
+            if ($sourceEntity -eq $targetEntity) {
+                if (-not $processedRelationships.SelfRefGroups.ContainsKey($sourceEntity)) {
+                    $processedRelationships.SelfRefGroups[$sourceEntity] = @()
+                }
+                $processedRelationships.SelfRefGroups[$sourceEntity] += $fk
+            } else {
+                # Cross-entity relationship
+                $processedRelationships.DirectFK += $fk
+            }
+        }
+    }
+    
+    # Process join table relationships
+    foreach ($join in $relationships.joinTables) {
+        $sourceEntity = $join.source
+        $targetEntity = $join.target
+        $joinTable = $join.joinTable
+        
+        # Check if both entities are in our filtered set
+        $sourceInSet = $existingEntities -contains $sourceEntity
+        $targetInSet = $existingEntities -contains $targetEntity
+        
+        if ($sourceInSet -and $targetInSet) {
+            # Self-referencing relationship
+            if ($sourceEntity -eq $targetEntity) {
+                if (-not $processedRelationships.SelfRefGroups.ContainsKey($sourceEntity)) {
+                    $processedRelationships.SelfRefGroups[$sourceEntity] = @()
+                }
+                $processedRelationships.SelfRefGroups[$sourceEntity] += $join
+            } else {
+                # Cross-entity relationship
+                $processedRelationships.JoinTables += $join
+            }
+        }
+    }
+    
+    return $processedRelationships
 }
 
 # Main execution
@@ -1263,7 +1474,7 @@ Write-Host "FarCry ERD Generator (Enhanced)"
 Write-Host "==============================="
 
 # Load Mermaid styles once
-$stylesPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "css\mermaid_styles.mmd"
+$stylesPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "styles\mermaid_styles.mmd"
 $cssStyles = Get-MermaidStyles -stylesPath $stylesPath
 
 # Echo chosen parameters
@@ -1298,7 +1509,7 @@ if ($DiagramType -eq "ER") {
 
 # Ensure exports directory exists
 $exportsDir = Split-Path $outputFile -Parent
-if (!(Test-Path $exportsDir)) {
+if ($exportsDir -and !(Test-Path $exportsDir)) {
     New-Item -ItemType Directory -Path $exportsDir -Force | Out-Null
 }
 
@@ -1336,7 +1547,7 @@ $mermaidLiveHtml = @"
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>$fullTitle - Mermaid Live Editor</title>
-    <link rel="stylesheet" href="css/mermaid_styles.mmd">
+    <link rel="stylesheet" href="styles/mermaid_styles.mmd">
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -1655,7 +1866,8 @@ Write-Host "✅ Generated compressed Mermaid.live URL" -ForegroundColor Green
 
 # Non-blocking browser launch to prevent hanging
 try {
-    Start-Process $mermaidLiveUrl -WindowStyle Hidden -ErrorAction Stop
+    # Use Start-Job to make it truly non-blocking
+    Start-Job -ScriptBlock { param($url) Start-Process $url -WindowStyle Hidden } -ArgumentList $mermaidLiveUrl | Out-Null
     Write-Host "🌐 Opened Mermaid.live directly with content" -ForegroundColor Green
 } catch {
     Write-Host "⚠️  Could not open browser automatically. Please copy this URL:" -ForegroundColor Yellow
