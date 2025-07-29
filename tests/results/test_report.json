@@ -1,0 +1,61 @@
+{
+  "Duration": "00:00:13",
+  "Categories": [
+    {
+      "Category": "CFC Scan Tests",
+      "Tests": [
+        {
+          "Name": "CFC Scan Generation",
+          "Success": true
+        },
+        {
+          "Name": "Exclusions",
+          "Success": true
+        }
+      ],
+      "OverallSuccess": true
+    },
+    {
+      "Category": "Main Script Tests",
+      "Tests": [
+        {
+          "Name": "4-Color System",
+          "Success": true
+        }
+      ],
+      "OverallSuccess": true
+    },
+    {
+      "Category": "Baseline Tests",
+      "Tests": [
+        {
+          "Name": "Baseline Generation",
+          "Success": true
+        }
+      ],
+      "OverallSuccess": true
+    },
+    {
+      "Category": "Integration Tests",
+      "Tests": [
+        {
+          "Name": "Full Workflow",
+          "Success": true
+        }
+      ],
+      "OverallSuccess": true
+    }
+  ],
+  "StartTime": "2025-07-29 05:16:09",
+  "Summary": {
+    "FailedTests": 0.0,
+    "PassedCategories": 4,
+    "FailedCategories": 0,
+    "PassedTests": 8.0,
+    "TotalCategories": 4,
+    "TotalTests": 5.0
+  },
+  "TestSuite": "FKmermaid Test Suite",
+  "OverallSuccess": true,
+  "EndTime": "2025-07-29 05:16:22"
+}

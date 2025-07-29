@@ -1,8 +1,15 @@
 [
   {
-    "Domains": "partner,participant,programme",
-    "DiagramType": "ER",
+    "ValidationResults": {
+      "Focus": true,
+      "DomainOther": true,
+      "Related": false,
+      "Secondary": true
+    },
     "ActualTiers": {
+      "Focus": [
+        "pathway_partner"
+      ],
       "DomainOther": [
         "pathway_activityDef",
         "pathway_intake",
@@ -19,9 +26,6 @@
         "pathway_member",
         "pathway_report"
       ],
-      "Focus": [
-        "pathway_partner"
-      ],
       "Secondary": [
         "pathway_activity",
         "pathway_journal",
@@ -32,21 +36,24 @@
         "pathway_trackerDef"
       ]
     },
-    "Timestamp": "2025-07-29 03:04:41",
-    "TestName": "Perfect 4-Tier Test",
-    "ValidationResults": {
-      "DomainOther": true,
-      "Related": false,
-      "Focus": true,
-      "Secondary": true
-    },
+    "Timestamp": "2025-07-29 05:16:10",
+    "Success": false,
+    "DiagramType": "ER",
     "Focus": "partner",
-    "Success": false
+    "TestName": "Perfect 4-Tier Test",
+    "Domains": "partner,participant,programme"
   },
   {
-    "Domains": "participant,programme",
-    "DiagramType": "ER",
+    "ValidationResults": {
+      "Focus": true,
+      "DomainOther": true,
+      "Related": true,
+      "Secondary": true
+    },
     "ActualTiers": {
+      "Focus": [
+        "pathway_member"
+      ],
       "DomainOther": [
         "pathway_activity",
         "pathway_guide",
@@ -67,26 +74,26 @@
         "pathway_report",
         "pathway_testimonial"
       ],
-      "Focus": [
-        "pathway_member"
-      ],
       "Secondary": []
     },
-    "Timestamp": "2025-07-29 03:04:41",
-    "TestName": "Member Focus Test",
-    "ValidationResults": {
-      "DomainOther": true,
-      "Related": true,
-      "Focus": true,
-      "Secondary": true
-    },
+    "Timestamp": "2025-07-29 05:16:12",
+    "Success": true,
+    "DiagramType": "ER",
     "Focus": "member",
-    "Success": true
+    "TestName": "Member Focus Test",
+    "Domains": "participant,programme"
   },
   {
-    "Domains": "programme,site",
-    "DiagramType": "ER",
+    "ValidationResults": {
+      "Focus": true,
+      "DomainOther": true,
+      "Related": true,
+      "Secondary": true
+    },
     "ActualTiers": {
+      "Focus": [
+        "pathway_programme"
+      ],
       "DomainOther": [
         "pathway_guide"
       ],
@@ -99,9 +106,6 @@
         "pathway_trackerDef",
         "zfarcrycore_dmFile"
       ],
-      "Focus": [
-        "pathway_programme"
-      ],
       "Secondary": [
         "pathway_dmNavigation",
         "pathway_dmNews",
@@ -109,15 +113,11 @@
         "zfarcrycore_dmInclude"
       ]
     },
-    "Timestamp": "2025-07-29 03:04:42",
-    "TestName": "Programme Focus Test",
-    "ValidationResults": {
-      "DomainOther": true,
-      "Related": true,
-      "Focus": true,
-      "Secondary": true
-    },
+    "Timestamp": "2025-07-29 05:16:13",
+    "Success": true,
+    "DiagramType": "ER",
     "Focus": "programme",
-    "Success": true
+    "TestName": "Programme Focus Test",
+    "Domains": "programme,site"
   }
 ]

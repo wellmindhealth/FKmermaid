@@ -1,0 +1,94 @@
+erDiagram
+    %% Parameters:
+%%   Focus: guide
+%%   Domains: site
+%%   Chart Type: ER
+    "pathway_dmImage" {
+        UUID ObjectID
+    }
+
+    "pathway_dmNavigation" {
+        UUID ObjectID
+    }
+
+    "pathway_dmNews" {
+        UUID ObjectID
+    }
+
+    "pathway_activityDef" {
+        UUID ObjectID
+    }
+
+    "pathway_center" {
+        UUID ObjectID
+    }
+
+    "pathway_guide" {
+        UUID ObjectID
+    }
+
+    "pathway_media" {
+        UUID ObjectID
+    }
+
+    "pathway_partner" {
+        UUID ObjectID
+    }
+
+    "zfarcrycore_dmFile" {
+        UUID ObjectID
+    }
+
+    "zfarcrycore_dmHTML" {
+        UUID ObjectID
+    }
+
+    "zfarcrycore_dmInclude" {
+        UUID ObjectID
+    }
+
+    %% Direct FK Relationships
+    "pathway_dmNavigation" ||--|| "pathway_dmImage" : sourceImageID
+    "pathway_activityDef" ||--|| "pathway_dmImage" : teaserImage
+    "pathway_activityDef" ||--|| "pathway_guide" : guideID
+    "pathway_activityDef" ||--|| "pathway_media" : defaultMediaID
+    "pathway_center" ||--|| "pathway_dmImage" : Logo
+    "pathway_center" ||--|| "pathway_partner" : partnerID
+    "pathway_guide" ||--|| "pathway_dmImage" : picture
+    "pathway_guide" ||--|| "pathway_partner" : partnerID
+    "pathway_guide" ||--|| "pathway_center" : centerID
+    "pathway_media" ||--|| "pathway_guide" : guideID
+    "pathway_media" ||--|| "pathway_partner" : partnerID
+    "pathway_partner" ||--|| "pathway_dmImage" : Logo
+    "zfarcrycore_dmFile" ||--|| "pathway_dmImage" : teaserImage
+    "zfarcrycore_dmHTML" ||--|| "pathway_dmImage" : teaserImage
+    "zfarcrycore_dmInclude" ||--|| "pathway_dmImage" : teaserImage
+    %% End Direct FK Relationships
+
+    %% Special Joins
+    %% End Special Joins
+
+    %% Self-Referencing Relationships for activityDef
+    %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+    "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
+    %% End Self-Referencing Relationships for activityDef
+
+    %% Join Table Relationships
+    "pathway_activityDef" }o--|| "pathway_media" : aMediaIDs
+    "pathway_partner" }o--|| "pathway_center" : aCenters
+    %% End Join Table Relationships
+
+
+    %% Entity Styling
+    style pathway_dmImage fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_dmNavigation fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_dmNews fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_guide fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style pathway_media fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_partner fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style zfarcrycore_dmFile fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_dmHTML fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_dmInclude fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+

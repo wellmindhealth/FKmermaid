@@ -1,0 +1,115 @@
+{
+  "BaselinePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines",
+  "GeneratedAt": "2025-07-29 05:16:20",
+  "Baselines": [
+    {
+      "Description": "Shows all 4 color tiers working together",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Perfect_4-Tier_Test.mmd",
+      "EntityCount": 0,
+      "ColorDistribution": {
+        "Orange": 0,
+        "DarkGrey": 0,
+        "Blue": 0,
+        "BlueGrey": 0
+      },
+      "StyleCount": 0,
+      "Timestamp": "2025-07-29 05:16:14",
+      "FileSize": 0,
+      "TestName": "Perfect 4-Tier Test",
+      "Focus": "partner",
+      "DiagramType": "ER",
+      "Domains": "partner,participant,programme"
+    },
+    {
+      "Description": "Tests member-focused diagram",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Member_Focus_Test.mmd",
+      "EntityCount": 0,
+      "ColorDistribution": {
+        "Orange": 0,
+        "DarkGrey": 0,
+        "Blue": 0,
+        "BlueGrey": 0
+      },
+      "StyleCount": 0,
+      "Timestamp": "2025-07-29 05:16:15",
+      "FileSize": 0,
+      "TestName": "Member Focus Test",
+      "Focus": "member",
+      "DiagramType": "ER",
+      "Domains": "participant,programme"
+    },
+    {
+      "Description": "Tests programme-focused diagram",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Programme_Focus_Test.mmd",
+      "EntityCount": 0,
+      "ColorDistribution": {
+        "Orange": 0,
+        "DarkGrey": 0,
+        "Blue": 0,
+        "BlueGrey": 0
+      },
+      "StyleCount": 0,
+      "Timestamp": "2025-07-29 05:16:16",
+      "FileSize": 0,
+      "TestName": "Programme Focus Test",
+      "Focus": "programme",
+      "DiagramType": "ER",
+      "Domains": "programme,site"
+    },
+    {
+      "Description": "Tests Class diagram generation",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Class_Diagram_Test.mmd",
+      "EntityCount": 0,
+      "ColorDistribution": {
+        "Orange": 0,
+        "DarkGrey": 0,
+        "Blue": 0,
+        "BlueGrey": 0
+      },
+      "StyleCount": 0,
+      "Timestamp": "2025-07-29 05:16:17",
+      "FileSize": 0,
+      "TestName": "Class Diagram Test",
+      "Focus": "partner",
+      "DiagramType": "Class",
+      "Domains": "partner,participant"
+    },
+    {
+      "Description": "Tests single domain filtering",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Single_Domain_Test.mmd",
+      "EntityCount": 0,
+      "ColorDistribution": {
+        "Orange": 0,
+        "DarkGrey": 0,
+        "Blue": 0,
+        "BlueGrey": 0
+      },
+      "StyleCount": 0,
+      "Timestamp": "2025-07-29 05:16:19",
+      "FileSize": 0,
+      "TestName": "Single Domain Test",
+      "Focus": "member",
+      "DiagramType": "ER",
+      "Domains": "participant"
+    },
+    {
+      "Description": "Tests multi-domain filtering",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Multi_Domain_Test.mmd",
+      "EntityCount": 0,
+      "ColorDistribution": {
+        "Orange": 0,
+        "DarkGrey": 0,
+        "Blue": 0,
+        "BlueGrey": 0
+      },
+      "StyleCount": 0,
+      "Timestamp": "2025-07-29 05:16:20",
+      "FileSize": 0,
+      "TestName": "Multi Domain Test",
+      "Focus": "programme",
+      "DiagramType": "ER",
+      "Domains": "programme,participant,site"
+    }
+  ],
+  "TotalBaselines": 6
+}
