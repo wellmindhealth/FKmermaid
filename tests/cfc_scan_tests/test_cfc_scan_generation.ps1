@@ -1,0 +1,120 @@
+# Test CFC Scan Generation
+# Tests the generate_cfc_scan_config.ps1 script
+
+param(
+    [switch]$Verbose,
+    [switch]$Help
+)
+
+if ($Help) {
+    Write-Host "Test CFC Scan Generation" -ForegroundColor Cyan
+    Write-Host "========================" -ForegroundColor Cyan
+    Write-Host "Tests the generate_cfc_scan_config.ps1 script" -ForegroundColor White
+    Write-Host ""
+    Write-Host "Parameters:" -ForegroundColor Yellow
+    Write-Host "  -Verbose    Show detailed output" -ForegroundColor White
+    Write-Host "  -Help       Show this help" -ForegroundColor White
+    exit
+}
+
+# Test Configuration
+$scriptPath = "D:\GIT\farcry\Cursor\FKmermaid\src\powershell"
+$configPath = "D:\GIT\farcry\Cursor\FKmermaid\config"
+$testResultsPath = "D:\GIT\farcry\Cursor\FKmermaid\tests\results"
+
+# Create results directory if it doesn't exist
+if (-not (Test-Path $testResultsPath)) {
+    New-Item -ItemType Directory -Path $testResultsPath -Force | Out-Null
+}
+
+Write-Host "🧪 Testing CFC Scan Generation" -ForegroundColor Cyan
+Write-Host "=============================" -ForegroundColor Cyan
+
+# Test 1: Basic CFC Scan Generation
+Write-Host "`n📋 Test 1: Basic CFC Scan Generation" -ForegroundColor Yellow
+
+# Backup original config
+$originalConfig = "$configPath\cfc_scan_config.json"
+$backupConfig = "$configPath\cfc_scan_config.json.test_backup"
+
+if (Test-Path $originalConfig) {
+    Copy-Item $originalConfig $backupConfig -Force
+    Write-Host "✅ Backed up original config" -ForegroundColor Green
+}
+
+try {
+    # Run the CFC scan generation
+    Set-Location $scriptPath
+    $result = & ".\generate_cfc_scan_config.ps1" 2>&1
+    
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "✅ CFC scan generation completed successfully" -ForegroundColor Green
+    } else {
+        Write-Host "❌ CFC scan generation failed" -ForegroundColor Red
+        Write-Host $result -ForegroundColor Red
+    }
+    
+    # Test 2: Verify Expected Outputs
+    Write-Host "`n📋 Test 2: Verify Expected Outputs" -ForegroundColor Yellow
+    
+    if (Test-Path $originalConfig) {
+        $config = Get-Content $originalConfig | ConvertFrom-Json
+        
+        # Expected values
+        $expectedEntityCount = 84
+        $expectedDirectFKCount = 109
+        $expectedExclusions = @("farFilter", "farTask", "address")
+        
+        Write-Host "📊 Entity Count: $($config.knownTables.Count) (Expected: $expectedEntityCount)" -ForegroundColor White
+        Write-Host "📊 Direct FK Count: $($config.directFK.Count) (Expected: $expectedDirectFKCount)" -ForegroundColor White
+        
+        # Check entity count
+        if ($config.knownTables.Count -eq $expectedEntityCount) {
+            Write-Host "✅ Entity count matches expected" -ForegroundColor Green
+        } else {
+            Write-Host "❌ Entity count mismatch" -ForegroundColor Red
+        }
+        
+        # Check exclusions
+        $missingExclusions = @()
+        foreach ($exclusion in $expectedExclusions) {
+            if ($config.excludeFiles -notcontains $exclusion) {
+                $missingExclusions += $exclusion
+            }
+        }
+        
+        if ($missingExclusions.Count -eq 0) {
+            Write-Host "✅ All expected exclusions present" -ForegroundColor Green
+        } else {
+            Write-Host "❌ Missing exclusions: $($missingExclusions -join ', ')" -ForegroundColor Red
+        }
+        
+        # Save test results
+        $testResult = @{
+            TestName = "CFC Scan Generation"
+            Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+            EntityCount = $config.knownTables.Count
+            ExpectedEntityCount = $expectedEntityCount
+            DirectFKCount = $config.directFK.Count
+            ExpectedDirectFKCount = $expectedDirectFKCount
+            ExclusionsPresent = ($missingExclusions.Count -eq 0)
+            MissingExclusions = $missingExclusions
+            Success = ($config.knownTables.Count -eq $expectedEntityCount -and $missingExclusions.Count -eq 0)
+        }
+        
+        $testResult | ConvertTo-Json | Out-File "$testResultsPath\cfc_scan_test_result.json"
+        
+    } else {
+        Write-Host "❌ Config file not found" -ForegroundColor Red
+    }
+    
+} finally {
+    # Restore original config
+    if (Test-Path $backupConfig) {
+        Copy-Item $backupConfig $originalConfig -Force
+        Remove-Item $backupConfig -Force
+        Write-Host "✅ Restored original config" -ForegroundColor Green
+    }
+}
+
+Write-Host "`n🏁 CFC Scan Generation Test Complete" -ForegroundColor Cyan
