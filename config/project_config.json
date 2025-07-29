@@ -40,10 +40,10 @@
   },
   "confluence": {
     "enabled": false,
-    "baseUrl": "",
-    "username": "",
-    "apiToken": "",
-    "spaceKey": "",
-    "parentPageId": ""
+    "baseUrl": "${CONFLUENCE_BASE_URL}",
+    "username": "${CONFLUENCE_USERNAME}",
+    "apiToken": "${CONFLUENCE_API_TOKEN}",
+    "spaceKey": "${CONFLUENCE_SPACE_KEY}",
+    "parentPageId": "${CONFLUENCE_PARENT_PAGE_ID}"
   }
 }
