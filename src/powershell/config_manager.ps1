@@ -10,6 +10,12 @@ function Get-ProjectConfig {
     if (-not $configPath) {
         $scriptDir = Split-Path $PSScriptRoot -Parent
         $configPath = Join-Path $scriptDir "config\project_config.json"
+        
+        # If not found, try relative to current directory
+        if (-not (Test-Path $configPath)) {
+            $currentDir = Get-Location
+            $configPath = Join-Path $currentDir "config\project_config.json"
+        }
     }
     
     # Load configuration
