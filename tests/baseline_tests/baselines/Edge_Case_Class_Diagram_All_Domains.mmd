@@ -22,8 +22,19 @@ classDiagram
     pathway_memberGroup --> zfarcrycore_farUser : aFarcryUsers
     zfarcrycore_farUser --> zfarcrycore_farGroup : aGroups
 
+    %% Special Joins
+    zfarcrycore_farUser --> zfarcrycore_dmProfile : userID_to_userName_userDirectory
+    %% End Special Joins
+
+    class zfarcrycore_dmProfile {
+        +UUID ObjectID
+        +string name
+    }
+
+
     %% Entity Styling
     style pathway_memberGroup fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style zfarcrycore_farGroup fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style zfarcrycore_farUser fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff
 

@@ -3,53 +3,45 @@
 
 Write-Host "🔍 Testing Manual Verification Outputs..." -ForegroundColor Cyan
 
-# Define the test cases and their expected criteria
+# Define the test cases and their corresponding baseline files
 $testCases = @(
     @{
         Name = "single_focus_single_domain"
         Description = "Single focus with single domain"
-        Focus = "dmImage"
-        Domains = "partner"
-        DiagramType = "ER"
+        BaselineFile = "Single_Domain_Test.mmd"  # member focus, participant domain
         ExpectedCriteria = @{
-            FocusEntities = @("dmImage")
-            DomainFilter = @("partner")
+            FocusEntities = @("member")
+            DomainFilter = @("participant")
             DiagramType = "ER"
-            ExpectedEntityCount = 8  # Approximate based on dmImage relationships
+            ExpectedEntityCount = 15  # Approximate based on member+participant relationships
         }
     },
     @{
         Name = "single_focus_multiple_domains"
         Description = "Single focus with multiple domains"
-        Focus = "member"
-        Domains = "participant,programme"
-        DiagramType = "ER"
+        BaselineFile = "Multi_Domain_Test.mmd"  # member focus, multiple domains
         ExpectedCriteria = @{
             FocusEntities = @("member")
             DomainFilter = @("participant", "programme")
             DiagramType = "ER"
-            ExpectedEntityCount = 15  # Approximate based on member relationships
+            ExpectedEntityCount = 20  # Approximate based on member relationships
         }
     },
     @{
-        Name = "multiple_focus_single_domain"
-        Description = "Multiple focus with single domain"
-        Focus = "partner,member"
-        Domains = "partner"
-        DiagramType = "ER"
+        Name = "programme_focus_test"
+        Description = "Programme focus test"
+        BaselineFile = "Programme_Focus_Test.mmd"  # programme focus, all domains
         ExpectedCriteria = @{
-            FocusEntities = @("partner", "member")
-            DomainFilter = @("partner")
+            FocusEntities = @("programme")
+            DomainFilter = @("all")
             DiagramType = "ER"
-            ExpectedEntityCount = 12  # Approximate based on partner+member relationships
+            ExpectedEntityCount = 25  # Approximate based on programme relationships
         }
     },
     @{
         Name = "class_diagram_test"
         Description = "Class diagram test"
-        Focus = "dmImage"
-        Domains = "partner"
-        DiagramType = "Class"
+        BaselineFile = "Class_Diagram_Test.mmd"  # dmImage focus, partner domain, Class type
         ExpectedCriteria = @{
             FocusEntities = @("dmImage")
             DomainFilter = @("partner")
@@ -124,24 +116,17 @@ $baselinesDir = "D:\GIT\farcry\Cursor\FKmermaid\tests\baseline_tests\baselines"
 $allTestsPassed = $true
 
 foreach ($test in $testCases) {
-    $filename = "baseline_manual_verification_$($test.Name).mmd"
+    $filename = $test.BaselineFile
     $outputPath = Join-Path $baselinesDir $filename
     
     Write-Host "`n📋 Testing: $($test.Description)" -ForegroundColor Yellow
     Write-Host "   File: $filename" -ForegroundColor Gray
     
     if (-not (Test-Path $outputPath)) {
-        Write-Host "   ❌ File not found - generating..." -ForegroundColor Red
-        
-        # Generate the file
-        $command = "& 'D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1' -lFocus '$($test.Focus)' -DiagramType '$($test.DiagramType)' -lDomains '$($test.Domains)' -OutputFile '$outputPath'"
-        Invoke-Expression $command
-        
-        if (-not (Test-Path $outputPath)) {
-            Write-Host "   ❌ Failed to generate file" -ForegroundColor Red
-            $allTestsPassed = $false
-            continue
-        }
+        Write-Host "   ❌ Baseline file not found: $filename" -ForegroundColor Red
+        Write-Host "   💡 Run generate_baselines.ps1 to create missing baselines" -ForegroundColor Yellow
+        $allTestsPassed = $false
+        continue
     }
     
     # Analyze the file

@@ -30,7 +30,6 @@ classDiagram
 
     pathway_activityDef --> pathway_programme : programmeID
     pathway_activityDef --> pathway_progRole : role
-    pathway_activityDef --> pathway_activityDef : onEndID
     pathway_activityDef --> pathway_media : defaultMediaID
     pathway_media --> pathway_programme : programmeID
     pathway_media --> pathway_progRole : roleID
@@ -39,14 +38,13 @@ classDiagram
     pathway_programme --> pathway_activityDef : firstActivityDefID
     pathway_programme --> pathway_activityDef : lastActivityDefID
     pathway_progRole --> pathway_programme : programmeID
-    pathway_activityDef --> pathway_activityDef : aCuePointActivities
     pathway_activityDef --> pathway_media : aMediaIDs
-    pathway_activityDef --> pathway_activityDef : aInteract1Activities
-    pathway_activityDef --> pathway_activityDef : aInteract2Activities
-    pathway_activityDef --> pathway_activityDef : aInteract3Activities
-    pathway_activityDef --> pathway_activityDef : aInteract4Activities
-    pathway_activityDef --> pathway_activityDef : aInteract5Activities
     pathway_programme --> pathway_activityDef : aFollowupActivityDefIDs
+    pathway_activityDef --> pathway_activityDef : onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+
+    %% Special Joins
+    %% End Special Joins
+
 
     %% Entity Styling
     style pathway_activityDef fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff

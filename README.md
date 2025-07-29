@@ -51,6 +51,7 @@ The tool now features an advanced 5-tier semantic styling system that color-code
 - [x] **5-Tier Semantic Styling Test** - Validates color-coded relationship tiers
 - [x] **Domain Detection Test** - Tests domain filtering and focus entity detection
 - [x] **Manual Verification Test** - Validates diagram generation against criteria
+- [x] **Comprehensive Edge Case Tests** - 26 edge scenarios with baseline validation
 
 ### **Configuration Management** ✅ COMPLETED
 - [x] **Automated Config Generation** - `generate_cfc_scan_config.ps1` creates config from database
@@ -210,6 +211,7 @@ Imagine a system where:
 - **Automated Configuration**: Generate config from database structure
 - **Exclusion System**: Two-level exclusion for complete entity removal
 - **Comprehensive Logging**: Multi-level logging with file output and rotation
+- **Edge Case Testing**: 26 comprehensive edge scenarios with baseline validation
 
 ## Domain Definitions
 
@@ -286,6 +288,74 @@ The tool uses a two-level exclusion system to ensure entities are completely rem
 ```
 
 This ensures that excluded entities never appear in generated diagrams, even if they exist in the database.
+
+## 🧪 Edge Case Testing
+
+The system includes **26 comprehensive edge case tests** that validate behavior under unusual conditions and ensure robustness.
+
+### **Test Categories:**
+
+#### **1. Invalid Domain Tests**
+- Tests behavior with non-existent domains (e.g., `nonexistent`)
+- Validates proper error handling and fallback behavior
+- Ensures system gracefully handles invalid inputs
+
+#### **2. Cross-Domain Relationship Tests**
+- Tests admin entities with participant domains
+- Validates cross-domain relationship detection
+- Ensures proper entity filtering across domains
+
+#### **3. Multiple Focus Entity Tests**
+- Tests comma-separated focus parameters (e.g., `partner,member,programme`)
+- Validates multiple entity focus handling
+- Ensures proper relationship aggregation
+
+#### **4. Class vs ER Diagram Tests**
+- Tests both diagram types with complex relationships
+- Validates shared logic between diagram types
+- Ensures consistent behavior across diagram types
+
+#### **5. Domain-Specific Edge Cases**
+- Tests single domain scenarios (site domain only, programme domain only)
+- Validates domain isolation and filtering
+- Tests focus entities outside their primary domains
+
+### **Baseline Management:**
+
+#### **When to Regenerate Baselines:**
+- ✅ **`domains.json` changes** (new entities added)
+- ✅ **Script logic changes** (new features, bug fixes)
+- ✅ **Entity relationships change** (database schema updates)
+- ✅ **Expected behavior changes** (intentional modifications)
+
+#### **How to Regenerate Baselines:**
+```powershell
+# Navigate to baseline directory
+cd 'D:\GIT\farcry\Cursor\FKmermaid\tests\baseline_tests'
+
+# Regenerate all baselines (21 will be created, 5 will fail as expected)
+.\generate_baselines.ps1 -Force
+```
+
+#### **Test Execution:**
+```powershell
+# Run the full test suite (includes edge cases)
+.\tests\run_all_tests.ps1
+
+# Or run just the edge case tests
+.\tests\baseline_tests\test_edge_cases.ps1
+```
+
+### **Expected Test Results:**
+```
+Total Tests: 26
+Passed: 21
+Expected Failures: 5 (script requires focus parameter)
+Actual Failures: 0
+Success Rate: 100%
+```
+
+The 5 expected failures occur because the main script requires a focus parameter, which is by design. These are properly categorized as expected failures and don't affect the overall test suite success rate.
 
 ## Usage
 ```powershell

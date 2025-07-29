@@ -81,17 +81,22 @@ $testSuite = @(
         Name = "Manual Verification"
         Path = "D:\GIT\farcry\Cursor\FKmermaid\tests\main_script_tests\test_manual_verification.ps1"
         Description = "Tests manual verification outputs against criteria"
+    },
+    @{
+        Name = "Comprehensive Edge Cases"
+        Path = "D:\GIT\farcry\Cursor\FKmermaid\tests\baseline_tests\test_edge_cases.ps1"
+        Description = "Tests all 26 edge case baselines for comprehensive validation"
     }
 )
 
 # Check if baselines exist
 Write-Host "🔍 Checking baseline files..." -ForegroundColor Cyan
 $baselineFiles = @(
-    "Edge_Case_Invalid_Domain.mmd",
-    "Edge_Case_Class_Diagram_Complex.mmd",
-    "Edge_Case_Partner_Site_Only.mmd",
-    "Edge_Case_Programme_Site_Only.mmd",
-    "Edge_Case_Member_Partner_Only.mmd"
+    "Perfect_5-Tier_Test.mmd",  # Used by test_5_tier_system.ps1
+    "Single_Domain_Test.mmd",  # Used by test_manual_verification.ps1
+    "Multi_Domain_Test.mmd",  # Used by test_manual_verification.ps1
+    "Programme_Focus_Test.mmd",  # Used by test_manual_verification.ps1
+    "Class_Diagram_Test.mmd"  # Used by test_manual_verification.ps1
 )
 
 $missingBaselines = @()

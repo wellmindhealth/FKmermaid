@@ -67,7 +67,6 @@ classDiagram
     pathway_activityDef --> pathway_programme : programmeID
     pathway_activityDef --> pathway_dmImage : teaserImage
     pathway_activityDef --> pathway_guide : guideID
-    pathway_activityDef --> pathway_activityDef : onEndID
     pathway_center --> pathway_dmImage : Logo
     pathway_center --> pathway_partner : partnerID
     pathway_center --> pathway_memberGroup : memberGroupID
@@ -93,19 +92,17 @@ classDiagram
     zfarcrycore_dmFile --> pathway_dmImage : teaserImage
     zfarcrycore_dmHTML --> pathway_dmImage : teaserImage
     zfarcrycore_dmInclude --> pathway_dmImage : teaserImage
-    pathway_dmNavigation --> pathway_dmNavigation : internalRedirectID
-    pathway_dmNavigation --> pathway_dmNavigation : ExternalLink
-    pathway_activityDef --> pathway_activityDef : aCuePointActivities
-    pathway_activityDef --> pathway_activityDef : aInteract1Activities
-    pathway_activityDef --> pathway_activityDef : aInteract2Activities
-    pathway_activityDef --> pathway_activityDef : aInteract3Activities
-    pathway_activityDef --> pathway_activityDef : aInteract4Activities
-    pathway_activityDef --> pathway_activityDef : aInteract5Activities
     pathway_center --> pathway_referer : aReferers
     pathway_partner --> pathway_center : aCenters
     pathway_partner --> pathway_referer : aReferers
     pathway_programme --> pathway_activityDef : aFollowupActivityDefIDs
     pathway_programme --> zfarcrycore_dmFile : aObjectIDs
+    pathway_activityDef --> pathway_activityDef : onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+    pathway_dmNavigation --> pathway_dmNavigation : internalRedirectID, ExternalLink
+
+    %% Special Joins
+    %% End Special Joins
+
 
     %% Entity Styling
     style pathway_dmImage fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff

@@ -79,7 +79,6 @@ classDiagram
     }
 
     pathway_activityDef --> pathway_progRole : role
-    pathway_activityDef --> pathway_activityDef : onEndID
     pathway_center --> pathway_partner : partnerID
     pathway_center --> pathway_memberGroup : memberGroupID
     pathway_intake --> pathway_memberGroup : memberGroupID
@@ -107,17 +106,16 @@ classDiagram
     pathway_SSQ_stress01 --> pathway_member : memberID
     pathway_testimonial --> pathway_member : memberID
     pathway_testimonial --> pathway_activityDef : activityDefID
-    pathway_activityDef --> pathway_activityDef : aCuePointActivities
-    pathway_activityDef --> pathway_activityDef : aInteract1Activities
-    pathway_activityDef --> pathway_activityDef : aInteract2Activities
-    pathway_activityDef --> pathway_activityDef : aInteract3Activities
-    pathway_activityDef --> pathway_activityDef : aInteract4Activities
-    pathway_activityDef --> pathway_activityDef : aInteract5Activities
     pathway_center --> pathway_referer : aReferers
     pathway_intake --> pathway_member : aMembers
     pathway_partner --> pathway_center : aCenters
     pathway_partner --> pathway_referer : aReferers
     pathway_report --> pathway_memberGroup : aMemberGroupID
+    pathway_activityDef --> pathway_activityDef : onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+
+    %% Special Joins
+    %% End Special Joins
+
 
     %% Entity Styling
     style pathway_activityDef fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff

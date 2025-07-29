@@ -32,7 +32,10 @@ Write-Host "🧪 Testing Entity Exclusions" -ForegroundColor Cyan
 Write-Host "===========================" -ForegroundColor Cyan
 
 # Expected excluded entities
-$expectedExclusions = @("farFilter", "farTask", "address")
+$expectedExclusions = @("farFilter.cfc", "farTask.cfc", "address.cfc")
+
+# Expected excluded entity names (without .cfc extension)
+$expectedExcludedEntities = @("farFilter", "farTask", "address")
 
 # Test 1: Verify Exclusions in Config
 Write-Host "`n📋 Test 1: Verify Exclusions in Config" -ForegroundColor Yellow
@@ -41,7 +44,7 @@ $config = Get-Content "$configPath\cfc_scan_config.json" | ConvertFrom-Json
 $missingExclusions = @()
 
 foreach ($exclusion in $expectedExclusions) {
-    if ($config.excludeFiles -notcontains $exclusion) {
+    if ($config.scanSettings.excludeFiles -notcontains $exclusion) {
         $missingExclusions += $exclusion
     }
 }
@@ -81,12 +84,12 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ Test diagram generated successfully" -ForegroundColor Green
     
     # Check the generated file for excluded entities
-    $generatedFile = "$exportsPath\$testOutput"
+    $generatedFile = "$scriptPath\$testOutput"
     if (Test-Path $generatedFile) {
         $content = Get-Content $generatedFile -Raw
         
         $foundExclusions = @()
-        foreach ($exclusion in $expectedExclusions) {
+        foreach ($exclusion in $expectedExcludedEntities) {
             if ($content -match $exclusion) {
                 $foundExclusions += $exclusion
             }
@@ -118,7 +121,7 @@ if (Test-Path $cacheFile) {
     $cache = Get-Content $cacheFile | ConvertFrom-Json
     
     $excludedInCache = @()
-    foreach ($exclusion in $expectedExclusions) {
+    foreach ($exclusion in $expectedExcludedEntities) {
         if ($cache.entities -contains $exclusion) {
             $excludedInCache += $exclusion
         }
@@ -138,6 +141,7 @@ $testResult = @{
     TestName = "Entity Exclusions"
     Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     ExpectedExclusions = $expectedExclusions
+    ExpectedExcludedEntities = $expectedExcludedEntities
     MissingExclusionsInConfig = $missingExclusions
     ExcludedInKnownTables = $excludedInKnownTables
     ExcludedInCache = $excludedInCache

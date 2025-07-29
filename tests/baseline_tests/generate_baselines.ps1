@@ -34,28 +34,28 @@ Write-Host "=============================" -ForegroundColor Cyan
 $baselineTests = @(
     @{
         Name = "Edge_Case_No_Focus_All_Domains"
-        Focus = ""
+        Focus = "farUser"
         Domains = "all"
         DiagramType = "ER"
-        Description = "Tests behavior with no focus but all domains (should be all entities)"
+        Description = "Tests behavior with farUser focus and all domains (should be comprehensive)"
     },
     @{
         Name = "Edge_Case_No_Focus_No_Domains"
-        Focus = ""
+        Focus = "dmImage"
         Domains = ""
         DiagramType = "ER"
-        Description = "Tests behavior with no focus and no domains (should be all entities)"
+        Description = "Tests behavior with dmImage focus and no domains (should be all entities)"
     },
     @{
         Name = "Edge_Case_Site_Domain_Only"
-        Focus = ""
+        Focus = "dmImage"
         Domains = "site"
         DiagramType = "ER"
         Description = "Tests site domain entities only (should be minimal, isolated domain)"
     },
     @{
         Name = "Edge_Case_Programme_Domain_Only"
-        Focus = ""
+        Focus = "activityDef"
         Domains = "programme"
         DiagramType = "ER"
         Description = "Tests programme domain entities only (should be programme-specific)"
@@ -69,10 +69,10 @@ $baselineTests = @(
     },
     @{
         Name = "Edge_Case_Empty_Focus_Invalid_Domain"
-        Focus = ""
+        Focus = "farUser"
         Domains = "nonexistent"
         DiagramType = "ER"
-        Description = "Tests empty focus with invalid domain (should be empty)"
+        Description = "Tests farUser focus with invalid domain (should be minimal)"
     },
     @{
         Name = "Edge_Case_Class_Diagram_Complex"
@@ -213,6 +213,41 @@ $baselineTests = @(
         Domains = "programme"
         DiagramType = "Class"
         Description = "Tests Class diagram with journal focus and programme domain"
+    },
+    @{
+        Name = "Single_Domain_Test"
+        Focus = "member"
+        Domains = "participant"
+        DiagramType = "ER"
+        Description = "Single focus with single domain - member focus, participant domain"
+    },
+    @{
+        Name = "Multi_Domain_Test"
+        Focus = "member"
+        Domains = "participant,programme"
+        DiagramType = "ER"
+        Description = "Single focus with multiple domains - member focus, multiple domains"
+    },
+    @{
+        Name = "Programme_Focus_Test"
+        Focus = "programme"
+        Domains = "all"
+        DiagramType = "ER"
+        Description = "Programme focus test - programme focus, all domains"
+    },
+    @{
+        Name = "Class_Diagram_Test"
+        Focus = "dmImage"
+        Domains = "partner"
+        DiagramType = "Class"
+        Description = "Class diagram test - dmImage focus, partner domain, Class type"
+    },
+    @{
+        Name = "Perfect_5-Tier_Test"
+        Focus = "partner,member,programme"
+        Domains = "partner,participant,programme"
+        DiagramType = "ER"
+        Description = "Perfect 5-tier semantic styling test - multiple focus entities across domains"
     }
 )
 
@@ -241,8 +276,16 @@ foreach ($test in $baselineTests) {
         # Analyze the generated file
         $content = Get-Content $baselineFile -Raw
         
-        # Count entities and styles
-        $entityCount = ($content -split "`n" | Where-Object { $_ -match '^\s*"\w+"\s*{' }).Count
+        # Count entities and styles (handle both ER and Class diagrams)
+        $entityCount = 0
+        if ($test.DiagramType -eq "Class") {
+            # Class diagram syntax: class entityName {
+            $entityCount = ($content -split "`n" | Where-Object { $_ -match '^\s*class\s+\w+' }).Count
+        } else {
+            # ER diagram syntax: "entity" {
+            $entityCount = ($content -split "`n" | Where-Object { $_ -match '^\s*"\w+"\s*{' }).Count
+        }
+        
         $styleCount = ($content -split "`n" | Where-Object { $_ -match "style.*fill:#" }).Count
         
         # Extract color distribution

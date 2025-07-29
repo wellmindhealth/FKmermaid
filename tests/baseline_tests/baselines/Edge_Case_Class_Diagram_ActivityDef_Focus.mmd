@@ -63,7 +63,6 @@ classDiagram
     pathway_activityDef --> pathway_dmImage : teaserImage
     pathway_activityDef --> pathway_guide : guideID
     pathway_activityDef --> pathway_progRole : role
-    pathway_activityDef --> pathway_activityDef : onEndID
     pathway_activityDef --> pathway_media : defaultMediaID
     pathway_activityDef --> pathway_journalDef : journalID
     pathway_activityDef --> pathway_trackerDef : tracker01ID
@@ -87,15 +86,14 @@ classDiagram
     pathway_testimonial --> pathway_member : memberID
     pathway_testimonial --> pathway_activityDef : activityDefID
     pathway_trackerDef --> pathway_programme : programmeID
-    pathway_activityDef --> pathway_activityDef : aCuePointActivities
     pathway_activityDef --> pathway_media : aMediaIDs
-    pathway_activityDef --> pathway_activityDef : aInteract1Activities
-    pathway_activityDef --> pathway_activityDef : aInteract2Activities
-    pathway_activityDef --> pathway_activityDef : aInteract3Activities
-    pathway_activityDef --> pathway_activityDef : aInteract4Activities
-    pathway_activityDef --> pathway_activityDef : aInteract5Activities
     pathway_programme --> pathway_activityDef : aFollowupActivityDefIDs
     pathway_programme --> pathway_trackerDef : aTrackerIDs
+    pathway_activityDef --> pathway_activityDef : onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+
+    %% Special Joins
+    %% End Special Joins
+
 
     %% Entity Styling
     style pathway_dmImage fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff

@@ -351,12 +351,19 @@ if ($OutputFile -eq "") {
     $uniqueFilename = Get-UniqueFilename -baseName $baseName -extension "mmd"
     $outputFile = Join-Path "D:\GIT\farcry\Cursor\FKmermaid\exports" $uniqueFilename
 } else {
-    # If OutputFile is specified, use the full path as provided
+    # If OutputFile is specified, use the provided path
     $outputFile = $OutputFile
+    # Ensure the directory exists
+    $outputDir = Split-Path $outputFile -Parent
+    if (-not (Test-Path $outputDir)) {
+        New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+    }
 }
 
-# Clean old files before generating new ones
-Clean-OldFiles -directory "D:\GIT\farcry\Cursor\FKmermaid\exports" -pattern "*.mmd" -maxAgeHours 168 -excludePattern "baseline_*"
+# Clean old files before generating new ones (only if outputting to exports directory)
+if ($OutputFile -eq "" -or (Split-Path $outputFile -Parent) -eq "D:\GIT\farcry\Cursor\FKmermaid\exports") {
+    Clean-OldFiles -directory "D:\GIT\farcry\Cursor\FKmermaid\exports" -pattern "*.mmd" -maxAgeHours 168 -excludePattern "baseline_*"
+}
 
 # Function to scan CFCs and extract relationships
 function Get-CFCRelationships {
@@ -965,7 +972,73 @@ function Generate-MermaidERD {
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
+    # Add styling for special join entities
+    if ($farUserExists -or $dmProfileExists) {
+        # Check if the focused entity is in the same domain as farUser/dmProfile (partner domain)
+        $focusedEntityInPartnerDomain = $false
+        if ($lFocus) {
+            $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
+            foreach ($focused in $focusEntities) {
+                if (Entity-BelongsToDomain -entityName $focused -domainName "partner" -domainsConfig $domainsConfig) {
+                    $focusedEntityInPartnerDomain = $true
+                    break
+                }
+            }
+        }
+        
+        # Style special join entities based on domain relationship
+        if (-not $farUserExists) {
+            if ($focusedEntityInPartnerDomain) {
+                # Same domain - style blue (related entity)
+                $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            } else {
+                # Different domain - style grey (unrelated entity)
+                $mermaidContent += "    style zfarcrycore_farUser fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
+            }
+        }
+        if (-not $dmProfileExists) {
+            if ($focusedEntityInPartnerDomain) {
+                # Same domain - style blue (related entity)
+                $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
+            } else {
+                # Different domain - style grey (unrelated entity)
+                $mermaidContent += "    style zfarcrycore_dmProfile fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
+            }
+        }
+    }
+    
     return $mermaidContent
+}
+
+# Function to group self-referencing relationships
+function Group-SelfReferences {
+    param($relationships, $existingEntities)
+    
+    $selfReferenceGroups = @{}
+    
+    # Group direct FK self-references
+    foreach ($fk in $relationships.directFK) {
+        if ($fk.source -eq $fk.target -and $existingEntities -contains $fk.source) {
+            $entityName = $fk.source
+            if (-not $selfReferenceGroups.ContainsKey($entityName)) {
+                $selfReferenceGroups[$entityName] = @()
+            }
+            $selfReferenceGroups[$entityName] += $fk.property
+        }
+    }
+    
+    # Group join table self-references
+    foreach ($join in $relationships.joinTables) {
+        if ($join.source -eq $join.target -and $existingEntities -contains $join.source) {
+            $entityName = $join.source
+            if (-not $selfReferenceGroups.ContainsKey($entityName)) {
+                $selfReferenceGroups[$entityName] = @()
+            }
+            $selfReferenceGroups[$entityName] += $join.property
+        }
+    }
+    
+    return $selfReferenceGroups
 }
 
 # Function to generate Mermaid Class diagram with full styling
@@ -1091,10 +1164,18 @@ function Generate-MermaidClassDiagram {
         }
     }
     
-    # Add relationships
+    # Group self-references and add relationships
+    $selfReferenceGroups = Group-SelfReferences -relationships $relationships -existingEntities $existingEntities
+    
+    # Add non-self-referencing relationships
     foreach ($fk in $relationships.directFK) {
         $sourceEntity = $fk.source
         $targetEntity = $fk.target
+        
+        # Skip self-references (they'll be handled separately)
+        if ($sourceEntity -eq $targetEntity) {
+            continue
+        }
         
         # Only include if both entities are in our filtered list
         if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
@@ -1119,6 +1200,11 @@ function Generate-MermaidClassDiagram {
         $sourceEntity = $join.source
         $targetEntity = $join.target
         
+        # Skip self-references (they'll be handled separately)
+        if ($sourceEntity -eq $targetEntity) {
+            continue
+        }
+        
         # Only include if both entities are in our filtered list
         if ($existingEntities -contains $sourceEntity -and $existingEntities -contains $targetEntity) {
             $sourcePlugin = ($filteredEntities | Where-Object { $_.name -eq $sourceEntity }).plugin
@@ -1137,7 +1223,76 @@ function Generate-MermaidClassDiagram {
             $mermaidContent += "    $sanitizedSourceName --> $sanitizedTargetName : $($join.property)`n"
         }
     }
-
+    
+    # Add grouped self-references
+    foreach ($entityName in $selfReferenceGroups.Keys) {
+        $properties = $selfReferenceGroups[$entityName]
+        if ($properties.Count -gt 0) {
+            $entityInfo = $filteredEntities | Where-Object { $_.name -eq $entityName } | Select-Object -First 1
+            if ($entityInfo) {
+                $pluginName = $entityInfo.plugin
+                $entityDisplayName = "$pluginName - $entityName"
+                $sanitizedEntityName = $entityDisplayName -replace '[^a-zA-Z0-9_]', '_'
+                $sanitizedEntityName = $sanitizedEntityName -replace '_+', '_'
+                $sanitizedEntityName = $sanitizedEntityName.Trim('_')
+                
+                # Create grouped label for self-references
+                $groupedLabel = $properties -join ', '
+                $mermaidContent += "    $sanitizedEntityName --> $sanitizedEntityName : $groupedLabel`n"
+            }
+        }
+    }
+    
+    # Add special joins (complex relationships not detected by cfproperty parsing)
+    $mermaidContent += "`n    %% Special Joins`n"
+    
+    # farUser > dmProfile special join via userID = userName + '_' + userDirectory
+    $farUserExists = $existingEntities -contains "farUser"
+    $dmProfileExists = $existingEntities -contains "dmProfile"
+    if ($farUserExists -or $dmProfileExists) {
+        # Get plugin info for existing entities, use proper names for missing ones
+        if ($farUserExists) {
+            $farUserPlugin = ($filteredEntities | Where-Object { $_.name -eq "farUser" }).plugin
+            $farUserDisplayName = "$farUserPlugin - farUser"
+        } else {
+            $farUserDisplayName = "zfarcrycore - farUser"
+        }
+        
+        if ($dmProfileExists) {
+            $dmProfilePlugin = ($filteredEntities | Where-Object { $_.name -eq "dmProfile" }).plugin
+            $dmProfileDisplayName = "$dmProfilePlugin - dmProfile"
+        } else {
+            $dmProfileDisplayName = "zfarcrycore - dmProfile"
+        }
+        
+        $sanitizedFarUser = $farUserDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedFarUser = $sanitizedFarUser -replace '_+', '_'
+        $sanitizedFarUser = $sanitizedFarUser.Trim('_')
+        $sanitizedDmProfile = $dmProfileDisplayName -replace '[^a-zA-Z0-9_]', '_'
+        $sanitizedDmProfile = $sanitizedDmProfile -replace '_+', '_'
+        $sanitizedDmProfile = $sanitizedDmProfile.Trim('_')
+        
+        $mermaidContent += "    $sanitizedFarUser --> $sanitizedDmProfile : userID_to_userName_userDirectory`n"
+    }
+    
+    $mermaidContent += "    %% End Special Joins`n`n"
+    
+    # Add missing entities that are referenced in special joins but not in filtered entities
+    if ($farUserExists -or $dmProfileExists) {
+        if (-not $farUserExists) {
+            $mermaidContent += "    class zfarcrycore_farUser {`n"
+            $mermaidContent += "        +UUID ObjectID`n"
+            $mermaidContent += "        +string name`n"
+            $mermaidContent += "    }`n`n"
+        }
+        if (-not $dmProfileExists) {
+            $mermaidContent += "    class zfarcrycore_dmProfile {`n"
+            $mermaidContent += "        +UUID ObjectID`n"
+            $mermaidContent += "        +string name`n"
+            $mermaidContent += "    }`n`n"
+        }
+    }
+    
     # Add styling for class diagram (full color support)
     $mermaidContent += "`n    %% Entity Styling`n"
     
@@ -1213,12 +1368,12 @@ function Generate-MermaidClassDiagram {
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
-    # Add styling for special join entities (both existing and placeholder)
+    # Add styling for special join entities
     if ($farUserExists -or $dmProfileExists) {
         # Check if the focused entity is in the same domain as farUser/dmProfile (partner domain)
         $focusedEntityInPartnerDomain = $false
-        if ($focusEntity) {
-            $focusEntities = $focusEntity -split ',' | ForEach-Object { $_.Trim() }
+        if ($lFocus) {
+            $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
             foreach ($focused in $focusEntities) {
                 if (Entity-BelongsToDomain -entityName $focused -domainName "partner" -domainsConfig $domainsConfig) {
                     $focusedEntityInPartnerDomain = $true
@@ -1236,11 +1391,6 @@ function Generate-MermaidClassDiagram {
                 # Different domain - style grey (unrelated entity)
                 $mermaidContent += "    style zfarcrycore_farUser fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
             }
-        } else {
-            # farUser exists in filtered entities - ensure it gets blue styling if in same domain
-            if ($focusedEntityInPartnerDomain) {
-                $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
-            }
         }
         if (-not $dmProfileExists) {
             if ($focusedEntityInPartnerDomain) {
@@ -1249,11 +1399,6 @@ function Generate-MermaidClassDiagram {
             } else {
                 # Different domain - style grey (unrelated entity)
                 $mermaidContent += "    style zfarcrycore_dmProfile fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
-            }
-        } else {
-            # dmProfile exists in filtered entities - ensure it gets blue styling if in same domain
-            if ($focusedEntityInPartnerDomain) {
-                $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
             }
         }
     }
@@ -1498,7 +1643,7 @@ if ($DiagramType -eq "ER") {
 
 # Ensure exports directory exists
 $exportsDir = Split-Path $outputFile -Parent
-if (!(Test-Path $exportsDir)) {
+if ($exportsDir -and !(Test-Path $exportsDir)) {
     New-Item -ItemType Directory -Path $exportsDir -Force | Out-Null
 }
 
