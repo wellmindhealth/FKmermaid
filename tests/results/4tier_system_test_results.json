@@ -3,7 +3,7 @@
     "ValidationResults": {
       "Focus": true,
       "DomainOther": true,
-      "Related": false,
+      "Related": true,
       "Secondary": true
     },
     "ActualTiers": {
@@ -36,8 +36,8 @@
         "pathway_trackerDef"
       ]
     },
-    "Timestamp": "2025-07-29 05:54:42",
-    "Success": false,
+    "Timestamp": "2025-07-29 05:58:00",
+    "Success": true,
     "DiagramType": "ER",
     "Focus": "partner",
     "TestName": "Perfect 4-Tier Test",
@@ -76,7 +76,7 @@
       ],
       "Secondary": []
     },
-    "Timestamp": "2025-07-29 05:54:43",
+    "Timestamp": "2025-07-29 05:58:01",
     "Success": true,
     "DiagramType": "ER",
     "Focus": "member",
@@ -113,7 +113,7 @@
         "zfarcrycore_dmInclude"
       ]
     },
-    "Timestamp": "2025-07-29 05:54:45",
+    "Timestamp": "2025-07-29 05:58:03",
     "Success": true,
     "DiagramType": "ER",
     "Focus": "programme",

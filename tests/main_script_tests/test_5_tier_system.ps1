@@ -66,7 +66,7 @@ $testCases = @(
         ExpectedTiers = @{
             Focus = @("pathway_partner")  # Orange tier
             DomainRelated = @("pathway_center", "pathway_media", "pathway_memberGroup", "pathway_programme", "pathway_referer", "zfarcrycore_dmProfile")  # Dark burnt gold tier
-            Related = @("pathway_ruleSelfRegistration", "pathway_dmImage", "pathway_guide", "pathway_member", "pathway_promotion", "pathway_report")  # Blue tier
+            Related = @("pathway_ruleSelfRegistration", "pathway_dmImage", "pathway_guide", "pathway_member", "pathway_report")  # Blue tier
             DomainOther = @("pathway_activityDef", "pathway_intake", "pathway_progRole", "zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")  # Blue-grey tier
             Secondary = @("pathway_activity", "pathway_journal", "pathway_journalDef", "pathway_library", "pathway_progMember", "pathway_tracker", "pathway_trackerDef")  # Dark grey tier
         }

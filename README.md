@@ -11,6 +11,21 @@ A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagra
 ✅ **Robust error handling** - Directory creation and parameter validation  
 ✅ **Caching system** - Optimized performance with relationship caching  
 
+## 🔄 Upcoming Enhancements
+
+### **Enhanced Testing & Analysis**
+- [ ] **Deeper Entity Mapping** - More sophisticated relationship pattern recognition
+- [ ] **Cross-Domain Analysis** - Better understanding of relationships across domains
+- [ ] **Relationship Strength Scoring** - Quantify relationship importance
+- [ ] **Advanced Test Scenarios** - Edge cases and complex relationship testing
+- [ ] **Performance Benchmarking** - Test suite for large-scale diagrams
+
+### **Advanced Relationship Analysis**
+- [ ] **Impact Analysis** - What happens when entities change
+- [ ] **Dependency Chains** - Multi-level relationship tracing
+- [ ] **Circular Dependency Detection** - Identify problematic relationship cycles
+- [ ] **Relationship Visualization** - Different views of the same relationships
+
 ## 🚀 Roadmap & Future Enhancements
 
 ### Phase 1: Foundation Improvements (Q1 2024)
@@ -51,6 +66,12 @@ A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagra
   - [x] PDF export for documentation
   - [x] Multiple format batch export
 
+- [x] **Enhanced Testing**
+  - [x] Comprehensive test suite with 4 categories
+  - [x] Baseline validation and regression testing
+  - [x] Fresh generation approach with expectation updates
+  - [x] Automated test result analysis
+
 ### Phase 3: Enterprise Integration (Q3 2024)
 - [ ] **🦄 HOLY GRAIL: Confluence Integration**
   - [ ] **Automated Confluence page creation**
@@ -72,6 +93,9 @@ A PowerShell-based tool for generating Entity-Relationship (ER) and Class diagra
   - [ ] Impact analysis for changes
   - [ ] Dependency mapping
   - [ ] Circular dependency detection
+  - [ ] Deeper entity mapping and relationship patterns
+  - [ ] Cross-domain relationship analysis
+  - [ ] Relationship strength scoring
 
 ### Phase 4: Intelligence & Automation (Q4 2024)
 - [ ] **AI-Powered Features**

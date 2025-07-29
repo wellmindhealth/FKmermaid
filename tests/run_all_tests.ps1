@@ -88,24 +88,24 @@ if (-not $SkipMain) {
     Write-Host "`n📋 Test Category 2: Main Script Tests" -ForegroundColor Yellow
     Write-Host "=====================================" -ForegroundColor Yellow
     
-    # Test 4-Color System
-    Write-Host "`n🔍 Running 4-Color System Test..." -ForegroundColor White
-    $colorResult = & "$testRoot\main_script_tests\test_4_color_system.ps1" 2>&1
-    $colorSuccess = $LASTEXITCODE -eq 0
+    # Test 4-Tier System
+    Write-Host "`n🔍 Running 4-Tier System Test..." -ForegroundColor White
+    $tierResult = & "$testRoot\main_script_tests\test_4_tier_system.ps1" 2>&1
+    $tierSuccess = $LASTEXITCODE -eq 0
     
-    if ($colorSuccess) {
-        Write-Host "✅ 4-Color System Test Passed" -ForegroundColor Green
+    if ($tierSuccess) {
+        Write-Host "✅ 4-Tier System Test Passed" -ForegroundColor Green
     } else {
-        Write-Host "❌ 4-Color System Test Failed" -ForegroundColor Red
+        Write-Host "❌ 4-Tier System Test Failed" -ForegroundColor Red
         $overallSuccess = $false
     }
     
     $testResults += @{
         Category = "Main Script Tests"
         Tests = @(
-            @{ Name = "4-Color System"; Success = $colorSuccess }
+            @{ Name = "4-Tier System"; Success = $tierSuccess }
         )
-        OverallSuccess = $colorSuccess
+        OverallSuccess = $tierSuccess
     }
 } else {
     Write-Host "`n⏭️  Skipping Main Script Tests" -ForegroundColor Yellow
