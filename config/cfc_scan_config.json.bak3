@@ -11,8 +11,7 @@
       "shopItem.cfc",
       "orderItem.cfc",
       "orderMaster.cfc",
-      "address.cfc",
-      "promotion.cfc"
+      "address.cfc"
     ],
     "farcryPath": "D:\\GIT\\farcry",
     "scanDirectories": [
@@ -148,6 +147,7 @@
       "programme_aObjectIDs",
       "programme_aTrackerIDs",
       "progRole",
+      "promotion",
       "refCategories",
       "refContainers",
       "referer",

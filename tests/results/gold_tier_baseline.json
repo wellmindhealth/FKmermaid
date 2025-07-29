@@ -1,0 +1,42 @@
+{
+  "ActualTiers": {
+    "GoldTier": [],
+    "Focus": [
+      "pathway_member",
+      "pathway_partner"
+    ],
+    "DarkGreyTier": [
+      "zfarcrycore_farGroup",
+      "zfarcrycore_farPermission",
+      "zfarcrycore_farRole",
+      "zfarcrycore_farUser"
+    ],
+    "BlueTier": [
+      "pathway_ruleSelfRegistration",
+      "pathway_dmImage",
+      "pathway_activityDef",
+      "pathway_center",
+      "pathway_guide",
+      "pathway_intake",
+      "pathway_media",
+      "pathway_memberGroup",
+      "pathway_memberType",
+      "pathway_progMember",
+      "pathway_programme",
+      "pathway_progRole",
+      "pathway_referer",
+      "pathway_report",
+      "pathway_testimonial",
+      "zfarcrycore_dmProfile"
+    ],
+    "BlueGreyTier": []
+  },
+  "DiagramType": "ER",
+  "Focus": "partner,member",
+  "GeneratedFile": "plugins_full_erd.mmd",
+  "IssueStatus": "Current gold tier issue captured as baseline",
+  "Timestamp": "2025-07-29 02:09:25",
+  "TestName": "Partner+Member Focus - Gold Tier Issue",
+  "Domains": "partner",
+  "Description": "This test captures the current gold tier issue where entities that should be gold (same domain AND directly related) are appearing as blue"
+}

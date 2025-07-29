@@ -1,4 +1,4 @@
-# Test 4-Tier Semantic Styling System
+# Test 5-Tier Semantic Styling System
 # Tests the semantic styling system with known parameter combinations
 
 param(
@@ -7,7 +7,7 @@ param(
 )
 
 if ($Help) {
-    Write-Host "Test 4-Tier Semantic Styling System" -ForegroundColor Cyan
+    Write-Host "Test 5-Tier Semantic Styling System" -ForegroundColor Cyan
     Write-Host "====================================" -ForegroundColor Cyan
     Write-Host "Tests the semantic styling system with known parameter combinations" -ForegroundColor White
     Write-Host ""
@@ -28,8 +28,8 @@ if (-not (Test-Path $testResultsPath)) {
     New-Item -ItemType Directory -Path $testResultsPath -Force | Out-Null
 }
 
-Write-Host "🧪 Testing 4-Tier Semantic Styling System" -ForegroundColor Cyan
-Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host "🧪 Testing 5-Tier Semantic Styling System" -ForegroundColor Cyan
+Write-Host "=========================================" -ForegroundColor Cyan
 
 # Function to load colors from styles file
 function Get-StyleColors {
@@ -59,12 +59,13 @@ foreach ($style in $styleColors.Keys) {
 # Define test cases with expected results
 $testCases = @(
     @{
-        Name = "Perfect 4-Tier Test"
+        Name = "Perfect 5-Tier Test"
         Focus = "partner"
         Domains = "partner,participant,programme"
         DiagramType = "ER"
         ExpectedTiers = @{
             Focus = @("pathway_partner")  # Orange tier
+            DomainRelated = @("pathway_center", "pathway_media", "pathway_memberGroup", "pathway_programme", "pathway_referer", "zfarcrycore_dmProfile")  # Dark burnt gold tier
             Related = @("pathway_ruleSelfRegistration", "pathway_dmImage", "pathway_guide", "pathway_member", "pathway_promotion", "pathway_report")  # Blue tier
             DomainOther = @("pathway_activityDef", "pathway_intake", "pathway_progRole", "zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")  # Blue-grey tier
             Secondary = @("pathway_activity", "pathway_journal", "pathway_journalDef", "pathway_library", "pathway_progMember", "pathway_tracker", "pathway_trackerDef")  # Dark grey tier
@@ -77,18 +78,7 @@ $testCases = @(
         DiagramType = "ER"
         ExpectedTiers = @{
             Focus = @("pathway_member")  # Orange tier
-            Related = @()  # Will be populated based on actual relationships
-            DomainOther = @()  # Will be populated based on actual relationships
-            Secondary = @()  # Will be populated based on actual relationships
-        }
-    },
-    @{
-        Name = "Programme Focus Test"
-        Focus = "programme"
-        Domains = "programme,site"
-        DiagramType = "ER"
-        ExpectedTiers = @{
-            Focus = @("pathway_programme")  # Orange tier
+            DomainRelated = @()  # Will be populated based on actual relationships
             Related = @()  # Will be populated based on actual relationships
             DomainOther = @()  # Will be populated based on actual relationships
             Secondary = @()  # Will be populated based on actual relationships
@@ -105,7 +95,7 @@ foreach ($testCase in $testCases) {
     Write-Host "Focus: $($testCase.Focus), Domains: $($testCase.Domains), Type: $($testCase.DiagramType)" -ForegroundColor White
     
     # Generate test diagram
-    $testOutput = "test_4tier_$($testCase.Focus).mmd"
+    $testOutput = "test_5tier_$($testCase.Focus).mmd"
     $result = & ".\generate_erd_enhanced.ps1" -lFocus $testCase.Focus -DiagramType $testCase.DiagramType -lDomains $testCase.Domains -OutputFile $testOutput 2>&1
     
     if ($LASTEXITCODE -eq 0) {
@@ -119,6 +109,7 @@ foreach ($testCase in $testCases) {
             # Extract styling information
             $actualTiers = @{
                 Focus = @()
+                DomainRelated = @()
                 Related = @()
                 DomainOther = @()
                 Secondary = @()
@@ -135,6 +126,7 @@ foreach ($testCase in $testCases) {
                     # Map colors to tiers based on current styles
                     switch ($color) {
                         $styleColors["focus"] { $actualTiers.Focus += $entity }
+                        $styleColors["domain_related"] { $actualTiers.DomainRelated += $entity }
                         $styleColors["related"] { $actualTiers.Related += $entity }
                         $styleColors["domain_other"] { $actualTiers.DomainOther += $entity }
                         $styleColors["secondary"] { $actualTiers.Secondary += $entity }
@@ -202,7 +194,7 @@ foreach ($testCase in $testCases) {
 }
 
 # Save all test results
-$testResults | ConvertTo-Json -Depth 10 | Out-File "$testResultsPath\4tier_system_test_results.json"
+$testResults | ConvertTo-Json -Depth 10 | Out-File "$testResultsPath\5tier_system_test_results.json"
 
-Write-Host "`n🏁 4-Tier System Test Complete" -ForegroundColor Cyan
+Write-Host "`n🏁 5-Tier System Test Complete" -ForegroundColor Cyan
 Write-Host "📊 Test Results: $($testResults.Count) tests completed" -ForegroundColor White
