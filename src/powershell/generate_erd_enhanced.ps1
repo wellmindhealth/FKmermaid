@@ -87,6 +87,30 @@ if ($Help) {
 
 # Node.js tools are available for Mermaid.live URL generation
 
+# Function to generate unique filename with timestamp
+function Get-UniqueFilename {
+    param([string]$baseName, [string]$extension = "mmd")
+    
+    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $uniqueId = [System.Guid]::NewGuid().ToString("N").Substring(0, 8)
+    return "${baseName}_${timestamp}_${uniqueId}.${extension}"
+}
+
+# Function to clean old files
+function Clean-OldFiles {
+    param([string]$directory, [string]$pattern, [int]$maxAgeHours = 24)
+    
+    if (Test-Path $directory) {
+        $cutoffTime = (Get-Date).AddHours(-$maxAgeHours)
+        $oldFiles = Get-ChildItem -Path $directory -Filter $pattern | Where-Object { $_.LastWriteTime -lt $cutoffTime }
+        
+        if ($oldFiles.Count -gt 0) {
+            Write-Host "🧹 Cleaning $($oldFiles.Count) old files from $directory" -ForegroundColor Gray
+            $oldFiles | Remove-Item -Force
+        }
+    }
+}
+
 # Load relationship detection module
 $modulePath = Join-Path $PSScriptRoot "relationship_detection.ps1"
 if (Test-Path $modulePath) {
@@ -268,8 +292,23 @@ $pluginsPath = $config.scanSettings.pluginsPath
 $excludeFolders = $config.scanSettings.excludeFolders
 $excludeFiles = $config.scanSettings.excludeFiles
 $cacheFile = $config.scanSettings.cacheFile
-$outputFile = $config.scanSettings.outputFile
 $knownTables = $config.entityConstraints.knownTables
+
+# Generate unique output filename if not specified
+if ($OutputFile -eq "") {
+    $baseName = "erd"
+    if ($lFocus) {
+        $baseName = $lFocus -replace ',', '_'
+    }
+    $uniqueFilename = Get-UniqueFilename -baseName $baseName -extension "mmd"
+    $outputFile = Join-Path "D:\GIT\farcry\Cursor\FKmermaid\exports" $uniqueFilename
+} else {
+    # If OutputFile is specified, use it but ensure it's in the exports directory
+    $outputFile = Join-Path "D:\GIT\farcry\Cursor\FKmermaid\exports" (Split-Path $OutputFile -Leaf)
+}
+
+# Clean old files before generating new ones
+Clean-OldFiles -directory "D:\GIT\farcry\Cursor\FKmermaid\exports" -pattern "erd_*.mmd" -maxAgeHours 24
 
 # Function to scan CFCs and extract relationships
 function Get-CFCRelationships {
@@ -444,6 +483,30 @@ function Get-EntityPluginPrefix {
     } else {
         # Default to pathway if not specified
         return "pathway"
+    }
+}
+
+# Function to generate unique filename with timestamp
+function Get-UniqueFilename {
+    param([string]$baseName, [string]$extension = "mmd")
+    
+    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $uniqueId = [System.Guid]::NewGuid().ToString("N").Substring(0, 8)
+    return "${baseName}_${timestamp}_${uniqueId}.${extension}"
+}
+
+# Function to clean old files
+function Clean-OldFiles {
+    param([string]$directory, [string]$pattern, [int]$maxAgeHours = 24)
+    
+    if (Test-Path $directory) {
+        $cutoffTime = (Get-Date).AddHours(-$maxAgeHours)
+        $oldFiles = Get-ChildItem -Path $directory -Filter $pattern | Where-Object { $_.LastWriteTime -lt $cutoffTime }
+        
+        if ($oldFiles.Count -gt 0) {
+            Write-Host "🧹 Cleaning $($oldFiles.Count) old files from $directory" -ForegroundColor Gray
+            $oldFiles | Remove-Item -Force
+        }
     }
 }
 

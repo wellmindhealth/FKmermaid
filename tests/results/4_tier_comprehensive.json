@@ -1,0 +1,373 @@
+{
+  "DiagramType": "ER",
+  "Focus": "programme,activityDef",
+  "GeneratedFile": "4_tier_test.mmd",
+  "ValidationIssues": [
+    "Missing from BlueTier: pathway_center, pathway_referer, pathway_memberGroup, pathway_intake, pathway_memberType, pathway_ruleSelfRegistration",
+    "Unexpected in BlueTier: pathway_activity, pathway_journalDef, pathway_trackerDef, zfarcrycore_dmFile",
+    "Missing from DarkGreyTier: zfarcrycore_dmProfile, zfarcrycore_farGroup, zfarcrycore_farPermission, zfarcrycore_farRole, zfarcrycore_farUser"
+  ],
+  "Timestamp": "2025-07-29 02:30:06",
+  "TestName": "Programme+Activity Focus - 4-Tier Test",
+  "Status": "COMPREHENSIVE 4-TIER TEST",
+  "Domains": "programme",
+  "ExpectedTiers": {
+    "DarkGreyTier": [
+      "zfarcrycore_dmProfile",
+      "zfarcrycore_farGroup",
+      "zfarcrycore_farPermission",
+      "zfarcrycore_farRole",
+      "zfarcrycore_farUser"
+    ],
+    "Focus": [
+      "pathway_programme",
+      "pathway_activityDef"
+    ],
+    "GoldTier": [],
+    "BlueGreyTier": [],
+    "BlueTier": [
+      "pathway_progMember",
+      "pathway_progRole",
+      "pathway_member",
+      "pathway_partner",
+      "pathway_center",
+      "pathway_referer",
+      "pathway_memberGroup",
+      "pathway_report",
+      "pathway_testimonial",
+      "pathway_media",
+      "pathway_intake",
+      "pathway_guide",
+      "pathway_dmImage",
+      "pathway_memberType",
+      "pathway_ruleSelfRegistration"
+    ]
+  },
+  "Description": "Test 4-tier semantic styling system (excluding gold tier)",
+  "Analysis": {
+    "Tiers": {
+      "GoldTier": [],
+      "Focus": [
+        "pathway_activityDef",
+        "pathway_programme"
+      ],
+      "DarkGreyTier": [],
+      "BlueTier": [
+        "pathway_dmImage",
+        "pathway_activity",
+        "pathway_guide",
+        "pathway_journalDef",
+        "pathway_media",
+        "pathway_member",
+        "pathway_partner",
+        "pathway_progMember",
+        "pathway_progRole",
+        "pathway_report",
+        "pathway_testimonial",
+        "pathway_trackerDef",
+        "zfarcrycore_dmFile"
+      ],
+      "BlueGreyTier": []
+    },
+    "Entities": [
+      "pathway_dmImage",
+      "pathway_activity",
+      "pathway_activityDef",
+      "pathway_guide",
+      "pathway_journalDef",
+      "pathway_media",
+      "pathway_member",
+      "pathway_partner",
+      "pathway_progMember",
+      "pathway_programme",
+      "pathway_progRole",
+      "pathway_report",
+      "pathway_SSQ_arthritis01",
+      "pathway_SSQ_pain01",
+      "pathway_SSQ_stress01",
+      "pathway_testimonial",
+      "pathway_trackerDef",
+      "zfarcrycore_dmFile"
+    ],
+    "Styling": {
+      "pathway_dmImage": "#1963d2",
+      "pathway_activity": "#1963d2",
+      "pathway_trackerDef": "#1963d2",
+      "pathway_media": "#1963d2",
+      "pathway_programme": "#d75500",
+      "pathway_testimonial": "#1963d2",
+      "pathway_SSQ_stress01": "#8e24aa",
+      "pathway_guide": "#1963d2",
+      "pathway_activityDef": "#d75500",
+      "pathway_SSQ_pain01": "#8e24aa",
+      "pathway_progRole": "#1963d2",
+      "pathway_progMember": "#1963d2",
+      "pathway_journalDef": "#1963d2",
+      "pathway_SSQ_arthritis01": "#8e24aa",
+      "pathway_member": "#1963d2",
+      "pathway_report": "#1963d2",
+      "zfarcrycore_dmFile": "#1963d2",
+      "pathway_partner": "#1963d2"
+    },
+    "RelationshipCount": 51,
+    "EntityCount": 18,
+    "Relationships": [
+      {
+        "Type": "progMemberID",
+        "To": "pathway_progMember",
+        "From": "pathway_activity"
+      },
+      {
+        "Type": "activityDefID",
+        "To": "pathway_activityDef",
+        "From": "pathway_activity"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "teaserImage",
+        "To": "pathway_dmImage",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "guideID",
+        "To": "pathway_guide",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "role",
+        "To": "pathway_progRole",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "defaultMediaID",
+        "To": "pathway_media",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "journalID",
+        "To": "pathway_journalDef",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "tracker01ID",
+        "To": "pathway_trackerDef",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "tracker02ID",
+        "To": "pathway_trackerDef",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "tracker03ID",
+        "To": "pathway_trackerDef",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "tracker04ID",
+        "To": "pathway_trackerDef",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "tracker05ID",
+        "To": "pathway_trackerDef",
+        "From": "pathway_activityDef"
+      },
+      {
+        "Type": "picture",
+        "To": "pathway_dmImage",
+        "From": "pathway_guide"
+      },
+      {
+        "Type": "partnerID",
+        "To": "pathway_partner",
+        "From": "pathway_guide"
+      },
+      {
+        "Type": "tracker01ID",
+        "To": "pathway_trackerDef",
+        "From": "pathway_journalDef"
+      },
+      {
+        "Type": "tracker02ID",
+        "To": "pathway_trackerDef",
+        "From": "pathway_journalDef"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_journalDef"
+      },
+      {
+        "Type": "guideID",
+        "To": "pathway_guide",
+        "From": "pathway_media"
+      },
+      {
+        "Type": "partnerID",
+        "To": "pathway_partner",
+        "From": "pathway_media"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_media"
+      },
+      {
+        "Type": "roleID",
+        "To": "pathway_progRole",
+        "From": "pathway_media"
+      },
+      {
+        "Type": "partnerID",
+        "To": "pathway_partner",
+        "From": "pathway_member"
+      },
+      {
+        "Type": "activityDefID",
+        "To": "pathway_activityDef",
+        "From": "pathway_member"
+      },
+      {
+        "Type": "roleID",
+        "To": "pathway_progRole",
+        "From": "pathway_member"
+      },
+      {
+        "Type": "Logo",
+        "To": "pathway_dmImage",
+        "From": "pathway_partner"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_progMember"
+      },
+      {
+        "Type": "memberID",
+        "To": "pathway_member",
+        "From": "pathway_progMember"
+      },
+      {
+        "Type": "currActivityID",
+        "To": "pathway_activity",
+        "From": "pathway_progMember"
+      },
+      {
+        "Type": "partnerID",
+        "To": "pathway_partner",
+        "From": "pathway_programme"
+      },
+      {
+        "Type": "Logo",
+        "To": "pathway_dmImage",
+        "From": "pathway_programme"
+      },
+      {
+        "Type": "firstActivityDefID",
+        "To": "pathway_activityDef",
+        "From": "pathway_programme"
+      },
+      {
+        "Type": "lastActivityDefID",
+        "To": "pathway_activityDef",
+        "From": "pathway_programme"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_progRole"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_report"
+      },
+      {
+        "Type": "partnerID",
+        "To": "pathway_partner",
+        "From": "pathway_report"
+      },
+      {
+        "Type": "memberID",
+        "To": "pathway_member",
+        "From": "pathway_report"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_SSQ_arthritis01"
+      },
+      {
+        "Type": "progMemberID",
+        "To": "pathway_progMember",
+        "From": "pathway_SSQ_arthritis01"
+      },
+      {
+        "Type": "memberID",
+        "To": "pathway_member",
+        "From": "pathway_SSQ_arthritis01"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_SSQ_pain01"
+      },
+      {
+        "Type": "progMemberID",
+        "To": "pathway_progMember",
+        "From": "pathway_SSQ_pain01"
+      },
+      {
+        "Type": "memberID",
+        "To": "pathway_member",
+        "From": "pathway_SSQ_pain01"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_SSQ_stress01"
+      },
+      {
+        "Type": "progMemberID",
+        "To": "pathway_progMember",
+        "From": "pathway_SSQ_stress01"
+      },
+      {
+        "Type": "memberID",
+        "To": "pathway_member",
+        "From": "pathway_SSQ_stress01"
+      },
+      {
+        "Type": "memberID",
+        "To": "pathway_member",
+        "From": "pathway_testimonial"
+      },
+      {
+        "Type": "activityDefID",
+        "To": "pathway_activityDef",
+        "From": "pathway_testimonial"
+      },
+      {
+        "Type": "programmeID",
+        "To": "pathway_programme",
+        "From": "pathway_trackerDef"
+      },
+      {
+        "Type": "teaserImage",
+        "To": "pathway_dmImage",
+        "From": "zfarcrycore_dmFile"
+      },
+      {
+        "Type": "self_refs",
+        "To": "pathway_activityDef",
+        "From": "pathway_activityDef"
+      }
+    ]
+  },
+  "TestPassed": false
+}

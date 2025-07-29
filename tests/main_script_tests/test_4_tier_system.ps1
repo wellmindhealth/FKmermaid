@@ -141,7 +141,7 @@ foreach ($testCase in $testCases) {
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✅ Diagram generated successfully" -ForegroundColor Green
         
-        # Analyze the generated file
+        # Analyze the generated file - the main script now creates unique filenames
         $generatedFile = "$exportsPath\$testOutput"
         if (Test-Path $generatedFile) {
             $content = Get-Content $generatedFile -Raw

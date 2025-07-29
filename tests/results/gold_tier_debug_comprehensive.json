@@ -7,12 +7,18 @@
     "pathway_referer",
     "zfarcrycore_dmProfile"
   ],
-  "GeneratedFile": "plugins_full_erd.mmd",
-  "Timestamp": "2025-07-29 02:23:01",
-  "TestName": "Partner+Member Focus - Comprehensive Analysis",
-  "Status": "COMPREHENSIVE BASELINE CAPTURED",
+  "GeneratedFile": "gold_tier_debug.mmd",
+  "Timestamp": "2025-07-29 02:30:16",
+  "TestName": "Partner+Member Focus - Gold Tier Debug",
+  "GoldTierIssues": [
+    "pathway_center",
+    "pathway_memberGroup",
+    "pathway_referer",
+    "zfarcrycore_dmProfile"
+  ],
+  "Status": "KNOWN TO FAIL - TEMPORARY DEBUG TEST",
   "Domains": "partner",
-  "Description": "Comprehensive analysis of current output including entities, relationships, and styling",
+  "Description": "Temporary debug test for gold tier issue - EXPECTED TO FAIL",
   "Analysis": {
     "Tiers": {
       "GoldTier": [],
@@ -449,5 +455,6 @@
         "From": "zfarcrycore_farPermission"
       }
     ]
-  }
+  },
+  "TestPassed": false
 }

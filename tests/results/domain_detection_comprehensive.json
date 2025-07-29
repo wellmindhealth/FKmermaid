@@ -1,18 +1,49 @@
 {
   "DiagramType": "ER",
   "Focus": "partner,member",
-  "ExpectedGoldEntities": [
-    "pathway_center",
-    "pathway_memberGroup",
-    "pathway_referer",
-    "zfarcrycore_dmProfile"
+  "GeneratedFile": "domain_detection_test.mmd",
+  "ValidationIssues": [
+    "Missing from GoldTier: pathway_center, pathway_memberGroup, pathway_referer, zfarcrycore_dmProfile",
+    "Unexpected in BlueTier: pathway_center, pathway_memberGroup, pathway_referer, zfarcrycore_dmProfile"
   ],
-  "GeneratedFile": "plugins_full_erd.mmd",
-  "Timestamp": "2025-07-29 02:23:01",
-  "TestName": "Partner+Member Focus - Comprehensive Analysis",
-  "Status": "COMPREHENSIVE BASELINE CAPTURED",
+  "Timestamp": "2025-07-29 02:29:55",
+  "TestName": "Partner+Member Focus - 5-Tier Test",
+  "Status": "COMPREHENSIVE 5-TIER TEST",
   "Domains": "partner",
-  "Description": "Comprehensive analysis of current output including entities, relationships, and styling",
+  "ExpectedTiers": {
+    "DarkGreyTier": [
+      "zfarcrycore_farGroup",
+      "zfarcrycore_farPermission",
+      "zfarcrycore_farRole",
+      "zfarcrycore_farUser"
+    ],
+    "Focus": [
+      "pathway_partner",
+      "pathway_member"
+    ],
+    "GoldTier": [
+      "pathway_center",
+      "pathway_memberGroup",
+      "pathway_referer",
+      "zfarcrycore_dmProfile"
+    ],
+    "BlueGreyTier": [],
+    "BlueTier": [
+      "pathway_activityDef",
+      "pathway_programme",
+      "pathway_progMember",
+      "pathway_progRole",
+      "pathway_report",
+      "pathway_testimonial",
+      "pathway_media",
+      "pathway_intake",
+      "pathway_guide",
+      "pathway_dmImage",
+      "pathway_memberType",
+      "pathway_ruleSelfRegistration"
+    ]
+  },
+  "Description": "Test 5-tier semantic styling system",
   "Analysis": {
     "Tiers": {
       "GoldTier": [],
@@ -449,5 +480,6 @@
         "From": "zfarcrycore_farPermission"
       }
     ]
-  }
+  },
+  "TestPassed": false
 }

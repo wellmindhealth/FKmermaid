@@ -1,0 +1,232 @@
+erDiagram
+    %% Parameters:
+%%   Focus: partner,member
+%%   Domains: partner
+%%   Chart Type: ER
+    "pathway_ruleSelfRegistration" {
+        UUID ObjectID
+    }
+
+    "pathway_dmImage" {
+        UUID ObjectID
+    }
+
+    "pathway_activityDef" {
+        UUID ObjectID
+    }
+
+    "pathway_center" {
+        UUID ObjectID
+    }
+
+    "pathway_guide" {
+        UUID ObjectID
+    }
+
+    "pathway_intake" {
+        UUID ObjectID
+    }
+
+    "pathway_media" {
+        UUID ObjectID
+    }
+
+    "pathway_member" {
+        UUID ObjectID
+    }
+
+    "pathway_memberGroup" {
+        UUID ObjectID
+    }
+
+    "pathway_memberType" {
+        UUID ObjectID
+    }
+
+    "pathway_partner" {
+        UUID ObjectID
+    }
+
+    "pathway_progMember" {
+        UUID ObjectID
+    }
+
+    "pathway_programme" {
+        UUID ObjectID
+    }
+
+    "pathway_progRole" {
+        UUID ObjectID
+    }
+
+    "pathway_referer" {
+        UUID ObjectID
+    }
+
+    "pathway_report" {
+        UUID ObjectID
+    }
+
+    "pathway_SSQ_arthritis01" {
+        UUID ObjectID
+    }
+
+    "pathway_SSQ_pain01" {
+        UUID ObjectID
+    }
+
+    "pathway_SSQ_stress01" {
+        UUID ObjectID
+    }
+
+    "pathway_testimonial" {
+        UUID ObjectID
+    }
+
+    "zfarcrycore_dmProfile" {
+        UUID ObjectID
+    }
+
+    "zfarcrycore_farGroup" {
+        UUID ObjectID
+    }
+
+    "zfarcrycore_farPermission" {
+        UUID ObjectID
+    }
+
+    "zfarcrycore_farRole" {
+        UUID ObjectID
+    }
+
+    "zfarcrycore_farUser" {
+        UUID ObjectID
+    }
+
+    %% Direct FK Relationships
+    "pathway_ruleSelfRegistration" ||--|| "pathway_memberType" : memberTypeID
+    "pathway_ruleSelfRegistration" ||--|| "pathway_memberGroup" : memberGroupID
+    "pathway_ruleSelfRegistration" ||--|| "pathway_partner" : partnerID
+    "pathway_ruleSelfRegistration" ||--|| "pathway_center" : centerID
+    "pathway_ruleSelfRegistration" ||--|| "pathway_referer" : refererID
+    "pathway_activityDef" ||--|| "pathway_programme" : programmeID
+    "pathway_activityDef" ||--|| "pathway_dmImage" : teaserImage
+    "pathway_activityDef" ||--|| "pathway_guide" : guideID
+    "pathway_activityDef" ||--|| "pathway_progRole" : role
+    "pathway_activityDef" ||--|| "pathway_media" : defaultMediaID
+    "pathway_center" ||--|| "pathway_dmImage" : Logo
+    "pathway_center" ||--|| "zfarcrycore_dmProfile" : dmProfileID
+    "pathway_center" ||--|| "pathway_partner" : partnerID
+    "pathway_center" ||--|| "pathway_memberGroup" : memberGroupID
+    "pathway_guide" ||--|| "pathway_dmImage" : picture
+    "pathway_guide" ||--|| "pathway_partner" : partnerID
+    "pathway_guide" ||--|| "pathway_center" : centerID
+    "pathway_intake" ||--|| "pathway_memberGroup" : memberGroupID
+    "pathway_intake" ||--|| "pathway_center" : centerID
+    "pathway_media" ||--|| "pathway_guide" : guideID
+    "pathway_media" ||--|| "pathway_partner" : partnerID
+    "pathway_media" ||--|| "pathway_programme" : programmeID
+    "pathway_media" ||--|| "pathway_progRole" : roleID
+    "pathway_member" ||--|| "pathway_memberType" : memberTypeID
+    "pathway_member" ||--|| "pathway_memberGroup" : memberGroupID
+    "pathway_member" ||--|| "pathway_partner" : partnerID
+    "pathway_member" ||--|| "pathway_center" : centerID
+    "pathway_member" ||--|| "pathway_referer" : refererID
+    "pathway_member" ||--|| "pathway_activityDef" : activityDefID
+    "pathway_member" ||--|| "pathway_progRole" : roleID
+    "pathway_memberGroup" ||--|| "pathway_partner" : partnerID
+    "pathway_memberGroup" ||--|| "pathway_dmImage" : Logo
+    "pathway_partner" ||--|| "pathway_dmImage" : Logo
+    "pathway_partner" ||--|| "zfarcrycore_dmProfile" : dmProfileID
+    "pathway_partner" ||--|| "zfarcrycore_dmProfile" : seniorSupportID
+    "pathway_progMember" ||--|| "pathway_programme" : programmeID
+    "pathway_progMember" ||--|| "pathway_member" : memberID
+    "pathway_programme" ||--|| "pathway_partner" : partnerID
+    "pathway_programme" ||--|| "pathway_dmImage" : Logo
+    "pathway_programme" ||--|| "pathway_activityDef" : firstActivityDefID
+    "pathway_programme" ||--|| "pathway_activityDef" : lastActivityDefID
+    "pathway_progRole" ||--|| "pathway_programme" : programmeID
+    "pathway_referer" ||--|| "pathway_dmImage" : picture
+    "pathway_referer" ||--|| "zfarcrycore_dmProfile" : dmProfileID
+    "pathway_referer" ||--|| "pathway_partner" : partnerID
+    "pathway_referer" ||--|| "pathway_memberGroup" : memberGroupID
+    "pathway_referer" ||--|| "pathway_center" : centerID
+    "pathway_report" ||--|| "pathway_programme" : programmeID
+    "pathway_report" ||--|| "pathway_partner" : partnerID
+    "pathway_report" ||--|| "pathway_member" : memberID
+    "pathway_report" ||--|| "pathway_memberType" : memberTypeID
+    "pathway_SSQ_arthritis01" ||--|| "pathway_programme" : programmeID
+    "pathway_SSQ_arthritis01" ||--|| "pathway_progMember" : progMemberID
+    "pathway_SSQ_arthritis01" ||--|| "pathway_member" : memberID
+    "pathway_SSQ_pain01" ||--|| "pathway_programme" : programmeID
+    "pathway_SSQ_pain01" ||--|| "pathway_progMember" : progMemberID
+    "pathway_SSQ_pain01" ||--|| "pathway_member" : memberID
+    "pathway_SSQ_stress01" ||--|| "pathway_programme" : programmeID
+    "pathway_SSQ_stress01" ||--|| "pathway_progMember" : progMemberID
+    "pathway_SSQ_stress01" ||--|| "pathway_member" : memberID
+    "pathway_testimonial" ||--|| "pathway_member" : memberID
+    "pathway_testimonial" ||--|| "pathway_activityDef" : activityDefID
+    "zfarcrycore_dmProfile" ||--|| "pathway_memberGroup" : memberGroupID
+    "zfarcrycore_dmProfile" ||--|| "zfarcrycore_farGroup" : lGroups
+    "zfarcrycore_farPermission" ||--|| "zfarcrycore_farRole" : aRoles
+    "zfarcrycore_farUser" ||--|| "zfarcrycore_farGroup" : lGroups
+    %% End Direct FK Relationships
+
+    %% Special Joins
+    "zfarcrycore_farUser" ||--|| "zfarcrycore_dmProfile" : userID_to_userName_userDirectory
+    %% End Special Joins
+
+    %% Self-Referencing Relationships for activityDef
+    %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+    "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
+    %% End Self-Referencing Relationships for activityDef
+
+    %% Self-Referencing Relationships for farPermission
+    %% Self-refs include: aRelatedtypes
+    "zfarcrycore_farPermission" ||--|| "zfarcrycore_farPermission" : self_refs
+    %% End Self-Referencing Relationships for farPermission
+
+    %% Join Table Relationships
+    "pathway_activityDef" }o--|| "pathway_media" : aMediaIDs
+    "pathway_center" }o--|| "zfarcrycore_dmProfile" : aUsers
+    "pathway_center" }o--|| "pathway_referer" : aReferers
+    "pathway_intake" }o--|| "pathway_member" : aMembers
+    "pathway_memberGroup" }o--|| "zfarcrycore_farUser" : aFarcryUsers
+    "pathway_partner" }o--|| "pathway_center" : aCenters
+    "pathway_partner" }o--|| "pathway_referer" : aReferers
+    "pathway_programme" }o--|| "pathway_activityDef" : aFollowupActivityDefIDs
+    "pathway_report" }o--|| "pathway_memberGroup" : aMemberGroupID
+    "zfarcrycore_dmProfile" }o--|| "zfarcrycore_farGroup" : aGroups
+    "zfarcrycore_farRole" }o--|| "zfarcrycore_farGroup" : aGroups
+    "zfarcrycore_farRole" }o--|| "zfarcrycore_farPermission" : aPermissions
+    "zfarcrycore_farUser" }o--|| "zfarcrycore_farGroup" : aGroups
+    %% End Join Table Relationships
+
+
+    %% Entity Styling
+    style pathway_ruleSelfRegistration fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_dmImage fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_guide fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_intake fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_media fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_member fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style pathway_memberGroup fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_memberType fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_partner fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style pathway_progMember fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_programme fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_progRole fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_referer fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_report fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_SSQ_arthritis01 fill:#8e24aa,stroke:#6a1b9a,stroke-width:2px,color:#fff
+    style pathway_SSQ_pain01 fill:#8e24aa,stroke:#6a1b9a,stroke-width:2px,color:#fff
+    style pathway_SSQ_stress01 fill:#8e24aa,stroke:#6a1b9a,stroke-width:2px,color:#fff
+    style pathway_testimonial fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style zfarcrycore_dmProfile fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style zfarcrycore_farGroup fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farPermission fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farRole fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farUser fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+
