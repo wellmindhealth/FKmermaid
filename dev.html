@@ -1020,10 +1020,7 @@
                     <div class="strata-name" title="Content Layer&#10;&#10;Media and resource management"><i class="fas fa-file-alt"></i>&nbsp;Content</div>
                     <div class="strata-description" title="Content Layer&#10;&#10;Media and resource management">Media & resources</div>
                 </div>
-                <div class="strata-item strata-flow" data-layer="flow">
-                    <div class="strata-name" title="Flow Layer&#10;&#10;Workflow management and process control"><i class="fas fa-project-diagram"></i>&nbsp;Flow</div>
-                    <div class="strata-description" title="Flow Layer&#10;&#10;Workflow management and process control">Workflow management</div>
-                </div>
+
                 <div class="strata-item strata-admin" data-layer="admin">
                     <div class="strata-name" title="Admin Layer&#10;&#10;Administrative and configuration tools"><i class="fas fa-cogs"></i>&nbsp;Admin</div>
                     <div class="strata-description" title="Admin Layer&#10;&#10;Administrative and configuration tools">Configuration tools</div>
@@ -1473,8 +1470,11 @@
             // Generate cards for each layer/component combination
             Object.entries(domainInfo.entities).forEach(([layerKey, components]) => {
                 components.forEach(componentName => {
-                    const card = createComponentCard(componentName, domainKey, layerKey, domainInfo.description);
-                    diagramsGrid.appendChild(card);
+                    // Check if this component should be excluded from this domain/layer
+                    if (!shouldExcludeComponent(componentName, domainKey, layerKey)) {
+                        const card = createComponentCard(componentName, domainKey, layerKey, domainInfo.description);
+                        diagramsGrid.appendChild(card);
+                    }
                 });
             });
             
@@ -1485,6 +1485,22 @@
             return domainSection;
         }
         
+        // Check if a component should be excluded from display
+        function shouldExcludeComponent(componentName, domainKey, layerKey) {
+            // Exclude activityDef self-references from Pathway domain flow layer
+            if (domainKey === 'pathway' && layerKey === 'flow') {
+                const activityDefSelfRefs = [
+                    'onEndID', 'aCuePointActivities', 'aInteract1Activities', 
+                    'aInteract2Activities', 'aInteract3Activities', 'aInteract4Activities', 
+                    'aInteract5Activities'
+                ];
+                return activityDefSelfRefs.includes(componentName);
+            }
+            
+            // Add more exclusion rules here as needed
+            return false;
+        }
+
         // Get domain icon
         function getDomainIcon(domainKey) {
             const icons = {
@@ -1652,7 +1668,6 @@
                 'programme': 'Programme and content management components',
                 'tracking': 'Progress tracking and assessment components',
                 'content': 'Content and media management components',
-                'flow': 'Programme flow and interaction components',
                 'resources': 'Resource and asset management components'
             };
             return layerDescriptions[layerKey] || 'Component layer';
