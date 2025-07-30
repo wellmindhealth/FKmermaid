@@ -4,7 +4,7 @@
 param(
     [string]$DiagramSetPath = "",
     [string]$PageTitle = "",
-    [string]$SpaceKey = "FK",
+    [string]$SpaceKey = "SD",
     [string]$ParentPageId = "",
     [switch]$CreateNewPage = $false,
     [switch]$UpdateExistingPage = $false,
@@ -35,10 +35,17 @@ param(
     [switch]$TestStratusMermaidCloudWorking = $false,
     [switch]$TestNativeAtlassianMermaidCorrect = $false,
     [switch]$TestWorkingMermaidSolution = $false,
+    [switch]$TestStratusGitHubIntegration = $false,
+    [switch]$TestStratusGitHubMacroGeneration = $false,
     [switch]$ListTestPages = $false,
     [switch]$CleanupTestPages = $false,
     [switch]$TestContentCleaning = $false,
     [switch]$CreateFolder = $false,
+    [switch]$TestEmbeddedMermaid = $false,
+    [switch]$QuickMermaid = $false,
+    [switch]$TestEmbeddedMermaidOnly = $false,
+    [switch]$TestConfluenceDirect = $false,
+    [switch]$TestTemplateBased = $false,
     [switch]$Debug = $false,
     [switch]$Help = $false
 )
@@ -55,7 +62,7 @@ if ($Help) {
     Write-Host "  -PageTitle 'title'       # Confluence page title" -ForegroundColor White
     Write-Host ""
     Write-Host "🟡 OPTIONAL PARAMETERS:" -ForegroundColor Yellow
-    Write-Host "  -SpaceKey 'key'          # Confluence space key (default: FK)" -ForegroundColor White
+    Write-Host "  -SpaceKey 'key'          # Confluence space key (default: SD)" -ForegroundColor White
     Write-Host "  -ParentPageId 'id'       # Parent page ID for hierarchy" -ForegroundColor White
     Write-Host "  -CreateNewPage           # Create new page" -ForegroundColor White
     Write-Host "  -UpdateExistingPage      # Update existing page" -ForegroundColor White
@@ -72,6 +79,9 @@ if ($Help) {
   -TestNativeAtlassianFixed # Test native Atlassian Mermaid (fixed)
   -TestMermaidLiveLink      # Test Mermaid.live link (bypasses CSP)" -ForegroundColor White
     Write-Host "  -TestContentCleaning    # Test Mermaid content cleaning" -ForegroundColor White
+    Write-Host "  -TestEmbeddedMermaid    # Test embedded Mermaid page creation" -ForegroundColor White
+    Write-Host "  -QuickMermaid           # Quick Mermaid diagram creation" -ForegroundColor White
+    Write-Host "  -TestEmbeddedMermaidOnly # Test embedded Mermaid (GitHub only)" -ForegroundColor White
     Write-Host "  -Debug                   # Enable debug mode" -ForegroundColor White
     Write-Host "  -Help                    # Show this help" -ForegroundColor White
     Write-Host ""
@@ -2538,14 +2548,22 @@ function Remove-TestPages {
             return
         }
         
-        Write-Host "⚠️  About to delete $($testPages.Count) test pages:" -ForegroundColor Yellow
-        foreach ($page in $testPages) {
+        # Filter out the working page (Manual Mermaid Test - 2025-07-29 18:26)
+        $pagesToDelete = $testPages | Where-Object { $_.id -ne "22183968" }
+        $workingPage = $testPages | Where-Object { $_.id -eq "22183968" }
+        
+        if ($workingPage) {
+            Write-Host "🛡️  Keeping working page: $($workingPage.title) (ID: $($workingPage.id))" -ForegroundColor Green
+        }
+        
+        Write-Host "⚠️  About to delete $($pagesToDelete.Count) test pages:" -ForegroundColor Yellow
+        foreach ($page in $pagesToDelete) {
             Write-Host "  🗑️  $($page.title) (ID: $($page.id))" -ForegroundColor Red
         }
         
         $confirm = Read-Host "Are you sure you want to delete these pages? (y/N)"
         if ($confirm -eq "y" -or $confirm -eq "Y") {
-            foreach ($page in $testPages) {
+            foreach ($page in $pagesToDelete) {
                 Write-Host "🗑️  Deleting: $($page.title)..." -ForegroundColor Red
                 $deleteUrl = "$($EnvVars.CONFLUENCE_BASE_URL)/rest/api/content/$($page.id)"
                 $headers = @{
@@ -2555,7 +2573,7 @@ function Remove-TestPages {
                 Invoke-RestMethod -Uri $deleteUrl -Headers $headers -Method Delete
                 Write-Host "✅ Deleted: $($page.title)" -ForegroundColor Green
             }
-            Write-Host "🎉 Cleanup completed!" -ForegroundColor Green
+            Write-Host "🎉 Cleanup completed! $($pagesToDelete.Count) pages deleted, 1 working page kept" -ForegroundColor Green
         } else {
             Write-Host "❌ Cleanup cancelled" -ForegroundColor Yellow
         }
@@ -2566,18 +2584,659 @@ function Remove-TestPages {
     }
 }
 
+function Test-StratusGitHubIntegration {
+    <#
+    .SYNOPSIS
+    Test Stratus add-on GitHub integration with our FKmermaid repository
+    
+    .DESCRIPTION
+    Creates a test page that demonstrates how to use the Stratus add-on
+    with GitHub repository integration to fetch .mmd files
+    #>
+    
+    Write-InfoLog "Testing Stratus GitHub Integration" -Context "Stratus_GitHub_Test"
+    
+    $pageTitle = "Stratus GitHub Integration Test - $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+    $spaceKey = "SD"
+    
+    # Create the test content
+    $content = @"
+<h2>🎯 Stratus Add-on GitHub Integration Test</h2>
+
+<p>This page tests the Stratus Mermaid add-on's GitHub integration with our FKmermaid repository.</p>
+
+<h3>📋 Setup Instructions:</h3>
+<ol>
+<li>Install the <strong>Stratus Add-ons for Confluence</strong> from the Atlassian Marketplace</li>
+<li>In the Stratus add-on configuration, connect your GitHub account via OAuth</li>
+<li>Use the GitHub Repository Explorer (GRE) to navigate to: <code>wellmindhealth/FKmermaid/test-diagrams/</code></li>
+<li>Select any .mmd file to render it in-page</li>
+</ol>
+
+<h3>🔗 Available Test Diagrams:</h3>
+<ul>
+<li><strong>simple-flow.mmd</strong> - Basic flowchart diagram</li>
+<li><strong>er-diagram.mmd</strong> - Entity Relationship diagram</li>
+<li><strong>sequence-diagram.mmd</strong> - Sequence diagram</li>
+</ul>
+
+<h3>📁 GitHub Repository:</h3>
+<p>Repository: <a href="https://github.com/wellmindhealth/FKmermaid" target="_blank">https://github.com/wellmindhealth/FKmermaid</a></p>
+<p>Path: <code>test-diagrams/</code></p>
+
+<h3>🎨 Expected Result:</h3>
+<p>When you select a .mmd file through the Stratus GitHub integration, it should:</p>
+<ul>
+<li>✅ Fetch the file content from GitHub</li>
+<li>✅ Parse the Mermaid syntax</li>
+<li>✅ Render the diagram in-page</li>
+<li>✅ Provide zoom/pan controls</li>
+<li>✅ Allow full-screen viewing</li>
+</ul>
+
+<h3>🔧 Troubleshooting:</h3>
+<p>If the integration doesn't work:</p>
+<ol>
+<li>Check that GitHub OAuth is properly connected</li>
+<li>Verify the repository is accessible (public or you have access)</li>
+<li>Ensure the .mmd files contain valid Mermaid syntax</li>
+<li>Try refreshing the page after selecting a file</li>
+</ol>
+
+<hr>
+<p><em>Test created: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')</em></p>
+"@
+    
+    try {
+        # Create the test page
+        $result = New-ConfluencePage -Title $pageTitle -Content $content -SpaceKey $spaceKey
+        
+        if ($result.Success) {
+            Write-SuccessLog "Stratus GitHub integration test page created successfully" -Context "Stratus_GitHub_Test" -Data @{
+                PageId = $result.PageId
+                PageUrl = $result.PageUrl
+                Title = $pageTitle
+            }
+            
+            Write-Host "✅ Stratus GitHub Integration Test Page Created!" -ForegroundColor Green
+            Write-Host "📄 Page ID: $($result.PageId)" -ForegroundColor Cyan
+            Write-Host "🔗 URL: $($result.PageUrl)" -ForegroundColor Cyan
+            Write-Host ""
+            Write-Host "🎯 Next Steps:" -ForegroundColor Yellow
+            Write-Host "1. Go to the page and install Stratus add-on" -ForegroundColor White
+            Write-Host "2. Connect GitHub OAuth in Stratus settings" -ForegroundColor White
+            Write-Host "3. Use GitHub Repository Explorer to select .mmd files" -ForegroundColor White
+            Write-Host "4. Test rendering diagrams from GitHub" -ForegroundColor White
+        } else {
+            Write-ErrorLog "Failed to create Stratus GitHub integration test page" -Context "Stratus_GitHub_Test" -Data @{
+                Error = $result.Error
+                Title = $pageTitle
+            }
+        }
+    } catch {
+        Write-ErrorLog "Exception in Stratus GitHub integration test" -Context "Stratus_GitHub_Test" -Data @{
+            Exception = $_.Exception.Message
+            StackTrace = $_.Exception.StackTrace
+        }
+    }
+}
+
+function New-StratusGitHubMacro {
+    <#
+    .SYNOPSIS
+    Generate Stratus GitHub macro HTML for Mermaid diagrams
+    
+    .DESCRIPTION
+    Creates the HTML macro code for Stratus add-on to render Mermaid diagrams from GitHub
+    Based on the working example with repository=gh and filename parameters
+    
+    .PARAMETER Filename
+    The filename of the .mmd file (without extension) in the test-diagrams folder
+    
+    .PARAMETER PageId
+    The Confluence page ID where the macro will be inserted
+    
+    .PARAMETER Zoom
+    Zoom level (default: "fit")
+    
+    .PARAMETER Toolbar
+    Toolbar position (default: "bottom")
+    
+    .EXAMPLE
+    New-StratusGitHubMacro -Filename "er-diagram" -PageId "22183968"
+    #>
+    
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Filename,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$PageId,
+        
+        [string]$Zoom = "fit",
+        [string]$Toolbar = "bottom"
+    )
+    
+    # Generate a unique macro ID
+    $macroId = [System.Guid]::NewGuid().ToString()
+    $uniqueKey = "com.stratusaddons.confluence.plugins.mermaid__mermaid-cloud$([System.Guid]::NewGuid().ToString().Replace('-', ''))"
+    $iframeId = "com.stratusaddons.confluence.plugins.mermaid__mermaid-cloud__$([System.Guid]::NewGuid().ToString().Replace('-', ''))"
+    
+    # Create the macro parameters JSON (based on working example)
+    $macroParams = @{
+        toolbar = $Toolbar
+        filename = $Filename
+        zoom = $Zoom
+        revision = "1"
+    } | ConvertTo-Json -Compress
+    
+    # Create the HTML macro (simplified version based on working example)
+    $html = @"
+<div class="ak-renderer-extension" data-layout="default" style="width: 100%;">
+    <div class="ak-renderer-extension-overflow-container">
+        <div style="display: none;"></div>
+        <span></span>
+        <div class="_o5724jg8 _11rm1hrf _5xln4jg8 _1v0sze3t _tmbuze3t _og5autpp _oxx4utpp" 
+             data-fabric-macro="$macroId" 
+             data-macro-body="" 
+             data-macro-parameters="$($macroParams -replace '"', '&quot;')" 
+             data-testid="legacy-macro-element" 
+             data-vc="legacy-macro-element_mermaid-cloud" 
+             data-vc-ignore-if-no-layout-shift="true" 
+             data-ssr-placeholder-replace="$macroId">
+            <div class="ap-container conf-macro output-block" 
+                 id="ap-com.stratusaddons.confluence.plugins.mermaid__mermaid-cloud$($uniqueKey)" 
+                 data-hasbody="false" 
+                 data-macro-name="mermaid-cloud" 
+                 data-macro-id="$macroId" 
+                 data-layout="default" 
+                 data-local-id="$([System.Guid]::NewGuid().ToString())">
+                <div class="ap-content" id="embedded-com.stratusaddons.confluence.plugins.mermaid__mermaid-cloud$($uniqueKey)">
+                    <div class="ap-iframe-container iframe-init" id="embedded-com.stratusaddons.confluence.plugins.mermaid__mermaid-cloud__$($iframeId)">
+                        <iframe id="$iframeId" 
+                                width="100%" 
+                                height="1px" 
+                                sandbox="allow-downloads allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin allow-top-navigation-by-user-activation allow-storage-access-by-user-activation" 
+                                referrerpolicy="no-referrer" 
+                                class="ap-iframe" 
+                                style="width: 100%; height: 400px;">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+"@
+    
+    return @{
+        Html = $html
+        MacroId = $macroId
+        Filename = $Filename
+        PageId = $PageId
+    }
+}
+
+function Test-StratusGitHubMacroGeneration {
+    <#
+    .SYNOPSIS
+    Test the Stratus GitHub macro generation with all available diagrams
+    
+    .DESCRIPTION
+    Creates a test page with all three Mermaid diagrams using Stratus GitHub integration
+    #>
+    
+    Write-InfoLog "Testing Stratus GitHub Macro Generation" -Context "Stratus_GitHub_Macro_Test"
+    
+    $pageTitle = "Stratus GitHub Macro Test - $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+    $spaceKey = "SD"
+    
+    # Generate macros for all three diagrams
+    $diagrams = @("simple-flow", "er-diagram", "sequence-diagram")
+    $macroHtmls = @()
+    
+    foreach ($diagram in $diagrams) {
+        $macro = New-StratusGitHubMacro -Filename $diagram -PageId "TEMP_PAGE_ID"
+        $macroHtmls += "<h3>📊 $($diagram.ToUpper()) Diagram</h3>"
+        $macroHtmls += $macro.Html
+        $macroHtmls += "<hr>"
+    }
+    
+    # Create the test content
+    $content = @"
+<h2>🎯 Stratus GitHub Macro Generation Test</h2>
+
+<p>This page tests automated generation of Stratus GitHub macros for all available Mermaid diagrams.</p>
+
+<h3>📋 Test Diagrams:</h3>
+<ul>
+    <li><strong>simple-flow</strong> - Basic flowchart diagram</li>
+    <li><strong>er-diagram</strong> - Entity Relationship diagram</li>
+    <li><strong>sequence-diagram</strong> - Sequence diagram</li>
+</ul>
+
+<h3>🔗 GitHub Repository:</h3>
+<p>All diagrams are fetched from: <a href="https://github.com/wellmindhealth/FKmermaid/tree/master/test-diagrams" target="_blank">https://github.com/wellmindhealth/FKmermaid/tree/master/test-diagrams</a></p>
+
+<h3>🎨 Generated Macros:</h3>
+
+$($macroHtmls -join "`n")
+
+<p><em>Test created: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')</em></p>
+"@
+    
+    try {
+        # Create the test page
+        $result = New-ConfluencePage -Title $pageTitle -Content $content -SpaceKey $spaceKey
+        
+        if ($result.Success) {
+            Write-SuccessLog "Stratus GitHub macro test page created successfully" -Context "Stratus_GitHub_Macro_Test" -Data @{
+                PageId = $result.PageId
+                PageUrl = $result.PageUrl
+                Title = $pageTitle
+                Diagrams = $diagrams
+            }
+            
+            Write-Host "✅ Stratus GitHub Macro Test Page Created!" -ForegroundColor Green
+            Write-Host "📄 Page ID: $($result.PageId)" -ForegroundColor Cyan
+            Write-Host "🔗 URL: $($result.PageUrl)" -ForegroundColor Cyan
+            Write-Host ""
+            Write-Host "🎯 Test Diagrams:" -ForegroundColor Yellow
+            foreach ($diagram in $diagrams) {
+                Write-Host "  • $diagram" -ForegroundColor White
+            }
+        } else {
+            Write-ErrorLog "Failed to create Stratus GitHub macro test page" -Context "Stratus_GitHub_Macro_Test" -Data @{
+                Error = $result.Error
+                Title = $pageTitle
+            }
+        }
+    } catch {
+        Write-ErrorLog "Exception in Stratus GitHub macro test" -Context "Stratus_GitHub_Macro_Test" -Data @{
+            Exception = $_.Exception.Message
+            StackTrace = $_.Exception.StackTrace
+        }
+    }
+}
+
+function New-EmbeddedMermaidPage {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$PageTitle,
+        [Parameter(Mandatory=$true)]
+        [string]$MermaidContent,
+        [string]$DiagramType = "graph",
+        [string]$SpaceKey = "SD",
+        [string]$ParentPageId = "",
+        [string]$Filename = "",
+        [string]$Zoom = "fit",
+        [string]$Toolbar = "bottom",
+        [switch]$AutoCommit = $true,
+        [switch]$CreatePage = $true
+    )
+    
+    Write-InfoLog "Creating embedded Mermaid page" -Context "Embedded_Mermaid" -Data @{
+        PageTitle = $PageTitle
+        DiagramType = $DiagramType
+        SpaceKey = $SpaceKey
+        AutoCommit = $AutoCommit
+        CreatePage = $CreatePage
+    }
+    
+    try {
+        # Load environment variables
+        $envPath = Join-Path $PSScriptRoot "..\..\.env"
+        $envContent = Get-Content $envPath
+        $envVars = @{}
+        
+        foreach ($line in $envContent) {
+            if ($line -match '^([^=]+)=(.*)$') {
+                $key = $matches[1]
+                $value = $matches[2]
+                $envVars[$key] = $value
+            }
+        }
+        
+        # Generate unique filename if not provided
+        if (-not $Filename) {
+            $Filename = "$($DiagramType)-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+        }
+        
+        # Create the .mmd file content
+        $mermaidFile = @"
+$MermaidContent
+"@
+        
+        # Ensure test-diagrams directory exists
+        $testDiagramsPath = Join-Path $PSScriptRoot "..\..\test-diagrams"
+        if (-not (Test-Path $testDiagramsPath)) {
+            New-Item -ItemType Directory -Path $testDiagramsPath -Force | Out-Null
+            Write-InfoLog "Created test-diagrams directory" -Context "Embedded_Mermaid"
+        }
+        
+        # Write the .mmd file
+        $mmdFilePath = Join-Path $testDiagramsPath "$Filename.mmd"
+        $mermaidFile | Out-File -FilePath $mmdFilePath -Encoding UTF8
+        Write-InfoLog "Created Mermaid file" -Context "Embedded_Mermaid" -Data @{
+            FilePath = $mmdFilePath
+            ContentLength = $mermaidFile.Length
+        }
+        
+        # Git operations for automatic upload
+        if ($AutoCommit) {
+            $gitPath = Join-Path $PSScriptRoot "..\.."
+            Push-Location $gitPath
+            
+            try {
+                # Add the new file
+                git add "test-diagrams/$Filename.mmd"
+                Write-InfoLog "Added file to git" -Context "Embedded_Mermaid"
+                
+                # Commit with descriptive message
+                $commitMessage = "Add embedded Mermaid diagram: $PageTitle ($DiagramType)"
+                git commit -m $commitMessage
+                Write-InfoLog "Committed to git" -Context "Embedded_Mermaid"
+                
+                # Push to GitHub
+                git push
+                Write-InfoLog "Pushed to GitHub successfully" -Context "Embedded_Mermaid"
+                
+            } catch {
+                Write-ErrorLog "Git operations failed" -Context "Embedded_Mermaid" -Data @{
+                    Error = $_.Exception.Message
+                }
+                throw
+            } finally {
+                Pop-Location
+            }
+        }
+        
+        # Create Confluence page with embedded diagram
+        if ($CreatePage) {
+            # Generate Stratus macro HTML
+            $macro = New-StratusGitHubMacro -Filename $Filename -PageId "TEMP_PAGE_ID" -Zoom $Zoom -Toolbar $Toolbar
+            
+            # Create page content with embedded diagram
+            $pageContent = @"
+<h2>🎯 $PageTitle</h2>
+<p>This page contains an embedded Mermaid diagram generated on $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss').</p>
+
+<h3>📊 Diagram Details:</h3>
+<ul>
+<li><strong>Type:</strong> $DiagramType</li>
+<li><strong>Filename:</strong> $Filename.mmd</li>
+<li><strong>Repository:</strong> GitHub (wellmindhealth/FKmermaid)</li>
+<li><strong>Path:</strong> test-diagrams/$Filename.mmd</li>
+</ul>
+
+<h3>🎨 Embedded Diagram:</h3>
+$($macro.Html)
+
+<h3>📋 Diagram Source:</h3>
+<pre><code>$MermaidContent</code></pre>
+
+<hr>
+<p><em>Generated automatically on $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')</em></p>
+"@
+            
+                    # Create the Confluence page with parent page ID
+        $parentPageId = if ($ParentPageId) { $ParentPageId } else { $envVars.CONFLUENCE_PAGE_ID }
+        $result = New-ConfluencePage -Title $PageTitle -Content $pageContent -SpaceKey $SpaceKey -ParentPageId $parentPageId -EnvVars $envVars
+            
+            if ($result.Success) {
+                Write-InfoLog "Embedded Mermaid page created successfully" -Context "Embedded_Mermaid" -Data @{
+                    PageId = $result.PageId
+                    PageUrl = $result.PageUrl
+                    Title = $PageTitle
+                    Filename = $Filename
+                }
+                
+                Write-Host "🎉 Embedded Mermaid Page Created!" -ForegroundColor Green
+                Write-Host "📄 Page ID: $($result.PageId)" -ForegroundColor Cyan
+                Write-Host "🔗 URL: $($result.PageUrl)" -ForegroundColor Cyan
+                Write-Host "📁 GitHub: https://github.com/wellmindhealth/FKmermaid/blob/main/test-diagrams/$Filename.mmd" -ForegroundColor Cyan
+                
+                return @{
+                    Success = $true
+                    PageId = $result.PageId
+                    PageUrl = $result.PageUrl
+                    Filename = $Filename
+                    MacroHtml = $macro.Html
+                }
+            } else {
+                Write-ErrorLog "Failed to create embedded Mermaid page" -Context "Embedded_Mermaid" -Data @{
+                    Error = $result.Error
+                    Title = $PageTitle
+                }
+                return @{
+                    Success = $false
+                    Error = $result.Error
+                }
+            }
+        } else {
+            # Return just the macro HTML for manual insertion
+            return @{
+                Success = $true
+                Filename = $Filename
+                MacroHtml = $macro.Html
+                MermaidContent = $MermaidContent
+            }
+        }
+        
+    } catch {
+        Write-ErrorLog "Exception in embedded Mermaid page creation" -Context "Embedded_Mermaid" -Data @{
+            Exception = $_.Exception.Message
+            StackTrace = $_.Exception.StackTrace
+        }
+        return @{
+            Success = $false
+            Error = $_.Exception.Message
+        }
+    }
+}
+
+function New-QuickMermaidDiagram {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Title,
+        [Parameter(Mandatory=$true)]
+        [string]$Content,
+        [string]$Type = "graph",
+        [string]$SpaceKey = "SD",
+        [switch]$AutoCommit = $true,
+        [switch]$CreatePage = $true
+    )
+    
+    Write-Host "🚀 Creating Quick Mermaid Diagram..." -ForegroundColor Cyan
+    Write-Host "📝 Title: $Title" -ForegroundColor White
+    Write-Host "🎨 Type: $Type" -ForegroundColor White
+    
+    $result = New-EmbeddedMermaidPage -PageTitle $Title -MermaidContent $Content -DiagramType $Type -SpaceKey $SpaceKey -AutoCommit:$AutoCommit -CreatePage:$CreatePage
+    
+    if ($result.Success) {
+        Write-Host "✅ Quick Mermaid diagram created successfully!" -ForegroundColor Green
+        if ($result.PageUrl) {
+            Write-Host "🔗 View at: $($result.PageUrl)" -ForegroundColor Cyan
+        }
+    } else {
+        Write-Host "❌ Failed to create quick Mermaid diagram: $($result.Error)" -ForegroundColor Red
+    }
+    
+    return $result
+}
+
+function Test-EmbeddedMermaidOnly {
+    param(
+        [string]$Title = "Test Embedded Mermaid Only - $(Get-Date -Format 'yyyy-MM-dd HH:mm')",
+        [string]$Content = @"
+graph TD
+    A[Start] --> B[Process]
+    B --> C[Decision]
+    C -->|Yes| D[Action]
+    C -->|No| E[End]
+    D --> E
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#fff3e0
+    style D fill:#e8f5e8
+    style E fill:#ffebee
+"@,
+        [string]$Type = "graph"
+    )
+    
+    Write-Host "🧪 Testing embedded Mermaid (GitHub only)..." -ForegroundColor Yellow
+    Write-Host "📝 Title: $Title" -ForegroundColor White
+    Write-Host "🎨 Type: $Type" -ForegroundColor White
+    
+    try {
+        # Generate unique filename
+        $Filename = "$($Type)-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+        
+        # Create the .mmd file content
+        $mermaidFile = @"
+$Content
+"@
+        
+        # Ensure test-diagrams directory exists
+        $testDiagramsPath = Join-Path $PSScriptRoot "..\..\test-diagrams"
+        if (-not (Test-Path $testDiagramsPath)) {
+            New-Item -ItemType Directory -Path $testDiagramsPath -Force | Out-Null
+            Write-Host "📁 Created test-diagrams directory" -ForegroundColor Green
+        }
+        
+        # Write the .mmd file
+        $mmdFilePath = Join-Path $testDiagramsPath "$Filename.mmd"
+        $mermaidFile | Out-File -FilePath $mmdFilePath -Encoding UTF8
+        Write-Host "📄 Created Mermaid file: $Filename.mmd" -ForegroundColor Green
+        
+        # Git operations for automatic upload
+        $gitPath = Join-Path $PSScriptRoot "..\.."
+        Push-Location $gitPath
+        
+        try {
+            # Add the new file
+            git add "test-diagrams/$Filename.mmd"
+            Write-Host "📝 Added file to git" -ForegroundColor Green
+            
+            # Commit with descriptive message
+            $commitMessage = "Add embedded Mermaid diagram: $Title ($Type)"
+            git commit -m $commitMessage
+            Write-Host "💾 Committed to git" -ForegroundColor Green
+            
+            # Push to GitHub
+            git push
+            Write-Host "🚀 Pushed to GitHub successfully!" -ForegroundColor Green
+            
+        } catch {
+            Write-Host "❌ Git operations failed: $($_.Exception.Message)" -ForegroundColor Red
+            throw
+        } finally {
+            Pop-Location
+        }
+        
+        # Generate Stratus macro HTML (without creating page)
+        $macro = New-StratusGitHubMacro -Filename $Filename -PageId "TEMP_PAGE_ID" -Zoom "fit" -Toolbar "bottom"
+        
+        # Create HTML file with the macro for manual testing
+        $htmlContent = @"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>$Title</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .macro-container { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        .info { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🎯 $Title</h1>
+    
+    <div class="info">
+        <h3>📊 Diagram Details:</h3>
+        <ul>
+            <li><strong>Type:</strong> $Type</li>
+            <li><strong>Filename:</strong> $Filename.mmd</li>
+            <li><strong>Repository:</strong> GitHub (wellmindhealth/FKmermaid)</li>
+            <li><strong>Path:</strong> test-diagrams/$Filename.mmd</li>
+            <li><strong>GitHub URL:</strong> <a href="https://github.com/wellmindhealth/FKmermaid/blob/main/test-diagrams/$Filename.mmd" target="_blank">View on GitHub</a></li>
+        </ul>
+    </div>
+    
+    <h3>🎨 Embedded Diagram Macro:</h3>
+    <div class="macro-container">
+        $($macro.Html)
+    </div>
+    
+    <h3>📋 Diagram Source:</h3>
+    <pre><code>$Content</code></pre>
+    
+    <hr>
+    <p><em>Generated automatically on $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')</em></p>
+</body>
+</html>
+"@
+        
+        # Save the HTML file
+        $htmlFilePath = Join-Path $testDiagramsPath "$Filename.html"
+        $htmlContent | Out-File -FilePath $htmlFilePath -Encoding UTF8
+        Write-Host "📄 Created HTML preview: $Filename.html" -ForegroundColor Green
+        
+        Write-Host "✅ Test completed successfully!" -ForegroundColor Green
+        Write-Host "📁 Mermaid file: test-diagrams/$Filename.mmd" -ForegroundColor Cyan
+        Write-Host "🌐 GitHub: https://github.com/wellmindhealth/FKmermaid/blob/main/test-diagrams/$Filename.mmd" -ForegroundColor Cyan
+        Write-Host "📄 HTML preview: $htmlFilePath" -ForegroundColor Cyan
+        
+        return @{
+            Success = $true
+            Filename = $Filename
+            MacroHtml = $macro.Html
+            MermaidContent = $Content
+            HtmlFilePath = $htmlFilePath
+        }
+        
+    } catch {
+        Write-Host "❌ Test failed: $($_.Exception.Message)" -ForegroundColor Red
+        return @{
+            Success = $false
+            Error = $_.Exception.Message
+        }
+    }
+}
+
 # Main execution
 try {
     Write-Host "🦄 FKmermaid Confluence Integration - HOLY GRAIL" -ForegroundColor Cyan
     Write-Host "=================================================" -ForegroundColor Cyan
     
-    # Validate parameters
-    if (-not $TestMermaid -and -not $TestBasic -and -not $TestMermaidCloud -and -not $TestAlternative -and -not $TestManual -and -not $TestMermaidLive -and -not $TestNativeMermaid -and -not $TestStratusMermaid -and -not $TestMermaidComparison -and -not $TestSimpleMermaid -and -not $TestWorkingCodeBlock -and -not $TestCorrectStratus -and -not $TestStandaloneMermaid -and -not $TestMermaidLiveIframe -and -not $TestMermaidLiveFixed -and -not $TestNativeAtlassianFixed -and -not $TestMermaidLiveLink -and -not $TestNativeAtlassianWorking -and -not $TestCombinedMermaidApproaches -and -not $TestOtherPluginExamples -and -not $TestWorkingSolutions -and -not $TestContentCleaning -and -not $DiagramSetPath) {
-        throw "DiagramSetPath is required. Use -Help for usage information."
+    # Validate parameters (skip for cleanup and test functions)
+    # Get all switch parameters that start with "Test" or are cleanup-related
+    $testAndCleanupSwitches = Get-Variable | Where-Object { 
+        $_.Name -like "Test*" -or 
+        $_.Name -like "*Cleanup*" -or 
+        $_.Name -like "*List*" -or
+        $_.Name -eq "QuickMermaid"
+    } | ForEach-Object { $_.Name }
+    
+    # Check if any test/cleanup switch is enabled
+    $hasTestOrCleanupSwitch = $false
+    foreach ($switchName in $testAndCleanupSwitches) {
+        if ((Get-Variable $switchName -ErrorAction SilentlyContinue).Value -eq $true) {
+            $hasTestOrCleanupSwitch = $true
+            break
+        }
     }
     
-    if (-not $TestMermaid -and -not $TestBasic -and -not $TestMermaidCloud -and -not $TestAlternative -and -not $TestManual -and -not $TestMermaidLive -and -not $TestNativeMermaid -and -not $TestStratusMermaid -and -not $TestMermaidComparison -and -not $TestSimpleMermaid -and -not $TestWorkingCodeBlock -and -not $TestCorrectStratus -and -not $TestStandaloneMermaid -and -not $TestMermaidLiveIframe -and -not $TestMermaidLiveFixed -and -not $TestNativeAtlassianFixed -and -not $TestMermaidLiveLink -and -not $TestContentCleaning -and -not $PageTitle) {
-        throw "PageTitle is required. Use -Help for usage information."
+    # Only validate required parameters if no test/cleanup switch is enabled
+    if (-not $hasTestOrCleanupSwitch) {
+        if (-not $DiagramSetPath) {
+            throw "DiagramSetPath is required. Use -Help for usage information."
+        }
+        
+        if (-not $PageTitle) {
+            throw "PageTitle is required. Use -Help for usage information."
+        }
     }
     
     # Load environment variables
@@ -2762,6 +3421,20 @@ try {
         return
     }
     
+    # Test Stratus GitHub integration if requested
+    if ($TestStratusGitHubIntegration) {
+        Write-Host "🧪 Testing Stratus GitHub integration..." -ForegroundColor Yellow
+        Test-StratusGitHubIntegration
+        return
+    }
+    
+    # Test Stratus GitHub macro generation if requested
+    if ($TestStratusGitHubMacroGeneration) {
+        Write-Host "🧪 Testing Stratus GitHub macro generation..." -ForegroundColor Yellow
+        Test-StratusGitHubMacroGeneration
+        return
+    }
+    
     # List test pages for cleanup if requested
     if ($ListTestPages) {
         Write-Host "🧹 Listing test pages for cleanup..." -ForegroundColor Yellow
@@ -2787,6 +3460,91 @@ try {
     if ($TestContentCleaning) {
         Write-Host "🧪 Testing Content Cleaning..." -ForegroundColor Yellow
         Test-ContentCleaning -EnvVars $envVars
+        return
+    }
+    
+    # Test embedded Mermaid page creation if requested
+    if ($TestEmbeddedMermaid) {
+        Write-Host "🧪 Testing embedded Mermaid page creation..." -ForegroundColor Yellow
+        $testContent = @"
+graph TD
+    A[Start] --> B[Process]
+    B --> C[Decision]
+    C -->|Yes| D[Action]
+    C -->|No| E[End]
+    D --> E
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#fff3e0
+    style D fill:#e8f5e8
+    style E fill:#ffebee
+"@
+        $result = New-EmbeddedMermaidPage -PageTitle "Test Embedded Mermaid - $(Get-Date -Format 'yyyy-MM-dd HH:mm')" -MermaidContent $testContent -DiagramType "graph" -SpaceKey "SD" -AutoCommit -CreatePage
+        if ($result.Success) {
+            Write-Host "✅ Test embedded Mermaid page created successfully!" -ForegroundColor Green
+            Write-Host "🔗 URL: $($result.PageUrl)" -ForegroundColor Cyan
+        } else {
+            Write-Host "❌ Test embedded Mermaid page failed: $($result.Error)" -ForegroundColor Red
+        }
+        return
+    }
+    
+    # Quick Mermaid diagram creation if requested
+    if ($QuickMermaid) {
+        Write-Host "🚀 Quick Mermaid diagram creation..." -ForegroundColor Yellow
+        $quickContent = @"
+sequenceDiagram
+    participant U as User
+    participant S as System
+    participant D as Database
+    
+    U->>S: Login Request
+    S->>D: Validate Credentials
+    D-->>S: User Data
+    S-->>U: Login Success
+    
+    U->>S: Create Order
+    S->>D: Save Order
+    D-->>S: Order Confirmed
+    S-->>U: Order Created
+"@
+        $result = New-QuickMermaidDiagram -Title "Quick Sequence Diagram - $(Get-Date -Format 'yyyy-MM-dd HH:mm')" -Content $quickContent -Type "sequence" -SpaceKey "SD" -AutoCommit -CreatePage
+        return
+    }
+    
+    # Test embedded Mermaid (GitHub only) if requested
+    if ($TestEmbeddedMermaidOnly) {
+        Write-Host "🧪 Testing embedded Mermaid (GitHub only)..." -ForegroundColor Yellow
+        $result = Test-EmbeddedMermaidOnly
+        return
+    }
+    
+    # Test Confluence API directly (bypassing validation)
+    if ($TestConfluenceDirect) {
+        Write-Host "🚀 Testing Confluence API directly..." -ForegroundColor Yellow
+        $result = Test-ConfluenceDirect
+        return
+    }
+    
+    # Test template-based Mermaid page creation
+    if ($TestTemplateBased) {
+        Write-Host "🎯 Testing template-based Mermaid page creation..." -ForegroundColor Yellow
+        $testContent = @"
+graph TD
+    A[Start] --> B[Process]
+    B --> C[Decision]
+    C -->|Yes| D[Action]
+    C -->|No| E[End]
+    D --> E
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#fff3e0
+    style D fill:#e8f5e8
+    style E fill:#ffebee
+"@
+        $result = New-TemplateBasedMermaidPage -PageTitle "Template Test - $(Get-Date -Format 'yyyy-MM-dd HH:mm')" -MermaidContent $testContent -DiagramType "graph" -SpaceKey "SD" -AutoCommit -CreatePage
         return
     }
     
@@ -2837,4 +3595,257 @@ try {
         StackTrace = $_.Exception.StackTrace
     }
     exit 1
+}
+
+function Test-ConfluenceDirect {
+    Write-Host "🚀 Testing Confluence API directly (bypassing validation)..." -ForegroundColor Yellow
+    
+    try {
+        # Load environment variables directly
+        $envPath = Join-Path $PSScriptRoot "..\..\.env"
+        $envContent = Get-Content $envPath
+        $envVars = @{}
+        
+        foreach ($line in $envContent) {
+            if ($line -match '^([^=]+)=(.*)$') {
+                $key = $matches[1]
+                $value = $matches[2]
+                $envVars[$key] = $value
+            }
+        }
+        
+        Write-Host "📋 Loaded environment variables:" -ForegroundColor Cyan
+        foreach ($key in $envVars.Keys) {
+            Write-Host "  $key = $($envVars[$key])" -ForegroundColor Gray
+        }
+        
+        # Test basic API call
+        $basicAuth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$($envVars.CONFLUENCE_USER):$($envVars.CONFLUENCE_API_TOKEN)"))
+        $headers = @{
+            "Authorization" = "Basic $basicAuth"
+            "Content-Type" = "application/json"
+            "Accept" = "application/json"
+        }
+        
+        $url = "$($envVars.CONFLUENCE_BASE_URL)/rest/api/user/current"
+        Write-Host "🔍 Testing URL: $url" -ForegroundColor Cyan
+        
+        $response = Invoke-RestMethod -Uri $url -Headers $headers -Method Get
+        Write-Host "✅ API Test Successful!" -ForegroundColor Green
+        Write-Host "👤 User: $($response.displayName)" -ForegroundColor Green
+        
+        # Now try to create a simple page
+        $pageTitle = "Direct API Test - $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+        $pageContent = @"
+<h2>🎯 Direct API Test</h2>
+<p>This page was created by bypassing all validation and going straight to the Confluence API.</p>
+<p><strong>Timestamp:</strong> $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')</p>
+<p><strong>Status:</strong> ✅ Success!</p>
+"@
+        
+        $body = @{
+            type = "page"
+            title = $pageTitle
+            space = @{
+                key = "FK"
+            }
+            body = @{
+                storage = @{
+                    value = $pageContent
+                    representation = "storage"
+                }
+            }
+        }
+        
+        $createUrl = "$($envVars.CONFLUENCE_BASE_URL)/rest/api/content"
+        Write-Host "📄 Creating page: $pageTitle" -ForegroundColor Cyan
+        
+        $pageResponse = Invoke-RestMethod -Uri $createUrl -Headers $headers -Method Post -Body ($body | ConvertTo-Json -Depth 10)
+        
+        Write-Host "🎉 Page created successfully!" -ForegroundColor Green
+        Write-Host "📄 Page ID: $($pageResponse.id)" -ForegroundColor Cyan
+        Write-Host "🔗 URL: $($envVars.CONFLUENCE_BASE_URL)/pages/viewpage.action?pageId=$($pageResponse.id)" -ForegroundColor Cyan
+        
+        return @{
+            Success = $true
+            PageId = $pageResponse.id
+            PageUrl = "$($envVars.CONFLUENCE_BASE_URL)/pages/viewpage.action?pageId=$($pageResponse.id)"
+        }
+        
+    } catch {
+        Write-Host "❌ Direct API test failed: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "🔍 Full error: $($_.Exception)" -ForegroundColor Red
+        return @{
+            Success = $false
+            Error = $_.Exception.Message
+        }
+    }
+}
+
+function New-TemplateBasedMermaidPage {
+    <#
+    .SYNOPSIS
+    Create Mermaid pages using the working manual page as a template
+    
+    .DESCRIPTION
+    Uses the working manual page structure and adapts it for different diagrams from GitHub.
+    This approach avoids CSP issues by using the proven working template.
+    #>
+    
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$PageTitle,
+        [Parameter(Mandatory=$true)]
+        [string]$MermaidContent,
+        [string]$DiagramType = "graph",
+        [string]$SpaceKey = "SD",
+        [string]$ParentPageId = "",
+        [string]$Filename = "",
+        [string]$Zoom = "fit",
+        [string]$Toolbar = "bottom",
+        [switch]$AutoCommit = $true,
+        [switch]$CreatePage = $true
+    )
+    
+    Write-Host "🎯 Creating template-based Mermaid page..." -ForegroundColor Cyan
+    Write-Host "📝 Title: $PageTitle" -ForegroundColor White
+    Write-Host "🎨 Type: $DiagramType" -ForegroundColor White
+    
+    try {
+        # Load environment variables
+        $envPath = Join-Path $PSScriptRoot "..\..\.env"
+        $envContent = Get-Content $envPath
+        $envVars = @{}
+        
+        foreach ($line in $envContent) {
+            if ($line -match '^([^=]+)=(.*)$') {
+                $key = $matches[1]
+                $value = $matches[2]
+                $envVars[$key] = $value
+            }
+        }
+        
+        # Generate unique filename if not provided
+        if (-not $Filename) {
+            $Filename = "$($DiagramType)-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+        }
+        
+        # Create the .mmd file content
+        $mermaidFile = @"
+$MermaidContent
+"@
+        
+        # Ensure test-diagrams directory exists
+        $testDiagramsPath = Join-Path $PSScriptRoot "..\..\test-diagrams"
+        if (-not (Test-Path $testDiagramsPath)) {
+            New-Item -ItemType Directory -Path $testDiagramsPath -Force | Out-Null
+            Write-Host "📁 Created test-diagrams directory" -ForegroundColor Green
+        }
+        
+        # Write the .mmd file
+        $mmdFilePath = Join-Path $testDiagramsPath "$Filename.mmd"
+        $mermaidFile | Out-File -FilePath $mmdFilePath -Encoding UTF8
+        Write-Host "📄 Created Mermaid file: $Filename.mmd" -ForegroundColor Green
+        
+        # Git operations for automatic upload
+        if ($AutoCommit) {
+            $gitPath = Join-Path $PSScriptRoot "..\.."
+            Push-Location $gitPath
+            
+            try {
+                # Add the new file
+                git add "test-diagrams/$Filename.mmd"
+                Write-Host "📝 Added file to git" -ForegroundColor Green
+                
+                # Commit with descriptive message
+                $commitMessage = "Add template-based Mermaid diagram: $PageTitle ($DiagramType)"
+                git commit -m $commitMessage
+                Write-Host "💾 Committed to git" -ForegroundColor Green
+                
+                # Push to GitHub
+                git push
+                Write-Host "🚀 Pushed to GitHub successfully!" -ForegroundColor Green
+                
+            } catch {
+                Write-Host "❌ Git operations failed: $($_.Exception.Message)" -ForegroundColor Red
+                throw
+            } finally {
+                Pop-Location
+            }
+        }
+        
+        # Create Confluence page using the working template structure
+        if ($CreatePage) {
+            # Use the working template structure (based on the manual page that works)
+            $pageContent = @"
+<h2>🎯 $PageTitle</h2>
+<p>This page contains an embedded Mermaid diagram generated on $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss').</p>
+
+<h3>📊 Diagram Details:</h3>
+<ul>
+<li><strong>Type:</strong> $DiagramType</li>
+<li><strong>Filename:</strong> $Filename.mmd</li>
+<li><strong>Repository:</strong> GitHub (wellmindhealth/FKmermaid)</li>
+<li><strong>Path:</strong> test-diagrams/$Filename.mmd</li>
+<li><strong>GitHub URL:</strong> <a href="https://github.com/wellmindhealth/FKmermaid/blob/main/test-diagrams/$Filename.mmd" target="_blank">View on GitHub</a></li>
+</ul>
+
+<h3>🎨 Embedded Diagram:</h3>
+<p><em>To view this diagram, please:</em></p>
+<ol>
+<li>Install the <strong>Stratus Add-ons for Confluence</strong> from the Atlassian Marketplace</li>
+<li>In the Stratus add-on configuration, connect your GitHub account via OAuth</li>
+<li>Use the GitHub Repository Explorer (GRE) to navigate to: <code>wellmindhealth/FKmermaid/test-diagrams/</code></li>
+<li>Select the file: <code>$Filename.mmd</code></li>
+</ol>
+
+<h3>📋 Diagram Source:</h3>
+<pre><code>$MermaidContent</code></pre>
+
+<hr>
+<p><em>Generated automatically on $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')</em></p>
+<p><em>Template-based approach to avoid CSP restrictions</em></p>
+"@
+            
+            # Create the Confluence page with parent page ID
+            $parentPageId = if ($ParentPageId) { $ParentPageId } else { $envVars.CONFLUENCE_PAGE_ID }
+            $result = New-ConfluencePage -Title $PageTitle -Content $pageContent -SpaceKey $SpaceKey -ParentPageId $parentPageId -EnvVars $envVars
+            
+            if ($result.Success) {
+                Write-Host "🎉 Template-based Mermaid Page Created!" -ForegroundColor Green
+                Write-Host "📄 Page ID: $($result.PageId)" -ForegroundColor Cyan
+                Write-Host "🔗 URL: $($envVars.CONFLUENCE_BASE_URL)/pages/viewpage.action?pageId=$($result.PageId)" -ForegroundColor Cyan
+                Write-Host "📁 GitHub: https://github.com/wellmindhealth/FKmermaid/blob/main/test-diagrams/$Filename.mmd" -ForegroundColor Cyan
+                
+                return @{
+                    Success = $true
+                    PageId = $result.PageId
+                    PageUrl = "$($envVars.CONFLUENCE_BASE_URL)/pages/viewpage.action?pageId=$($result.PageId)"
+                    Filename = $Filename
+                    MermaidContent = $MermaidContent
+                }
+            } else {
+                Write-Host "❌ Failed to create template-based Mermaid page: $($result.Error)" -ForegroundColor Red
+                return @{
+                    Success = $false
+                    Error = $result.Error
+                }
+            }
+        } else {
+            # Return just the file info for manual insertion
+            return @{
+                Success = $true
+                Filename = $Filename
+                MermaidContent = $MermaidContent
+                GitHubUrl = "https://github.com/wellmindhealth/FKmermaid/blob/main/test-diagrams/$Filename.mmd"
+            }
+        }
+        
+    } catch {
+        Write-Host "❌ Template-based Mermaid page creation failed: $($_.Exception.Message)" -ForegroundColor Red
+        return @{
+            Success = $false
+            Error = $_.Exception.Message
+        }
+    }
 }

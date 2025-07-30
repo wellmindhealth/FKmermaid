@@ -202,31 +202,5 @@
       "D:\\GIT\\farcry\\plugins",
       "D:\\GIT\\farcry\\zfarcrycore"
     ]
-  },
-  "relationshipPatterns": {
-    "directFK": {
-      "description": "Direct foreign key relationships using ftJoin property",
-      "pattern": "<cfproperty[^>]*name=[\"']([^\"']+)[\"'][^>]*ftJoin=[\"']([^\"']+)[\"'][^>]*>",
-      "multiLinePattern": "<cfproperty[^>]*name=[\"']([^\"']+)[\"'][^>]*ftJoin=[\"']([^\"']+)[\"'][^>]*[^>]*\/>",
-      "arrayPattern": "name=[\"']([^\"']+)[\"'].*?type=[\"']array[\"']",
-      "cardinality": "||--||"
-    },
-    "joinTables": {
-      "description": "Many-to-many relationships using join tables",
-      "namingPattern": "{entity}_a{target}",
-      "structure": {
-        "parentid": "UUID",
-        "data": "UUID", 
-        "seq": "int",
-        "typename": "string"
-      }
-    },
-    "exclusions": {
-      "description": "Properties that should be excluded from relationship detection",
-      "patterns": [
-        "ftwizardStep\\s*=[\"']Filter Fields[\"']",
-        "ftFieldset\\s*=[\"']Filter Fields[\"']"
-      ]
-    }
   }
 }

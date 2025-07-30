@@ -8,6 +8,10 @@ logs/
 exports/
 *.mmd
 
+# Allow test diagrams for Stratus add-on
+!test-diagrams/
+!test-diagrams/*.mmd
+
 # Temporary files
 *.tmp
 *.temp
