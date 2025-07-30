@@ -981,12 +981,12 @@ function Generate-MermaidERD {
     # Add styling for special join entities
     if ($farUserExists -or $dmProfileExists) {
         # Check if the focused entity is in the same domain as farUser/dmProfile (partner domain)
-        $focusedEntityInPartnerDomain = $false
+        $focusedEntityInProviderDomain = $false
         if ($lFocus) {
             $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
             foreach ($focused in $focusEntities) {
                 if (Entity-BelongsToDomain -entityName $focused -domainName "partner" -domainsConfig $domainsConfig) {
-                    $focusedEntityInPartnerDomain = $true
+                    $focusedEntityInProviderDomain = $true
                     break
                 }
             }
@@ -994,7 +994,7 @@ function Generate-MermaidERD {
         
         # Style special join entities based on domain relationship
         if (-not $farUserExists) {
-            if ($focusedEntityInPartnerDomain) {
+            if ($focusedEntityInProviderDomain) {
                 # Same domain - style blue (related entity)
                 $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
             } else {
@@ -1003,7 +1003,7 @@ function Generate-MermaidERD {
             }
         }
         if (-not $dmProfileExists) {
-            if ($focusedEntityInPartnerDomain) {
+            if ($focusedEntityInProviderDomain) {
                 # Same domain - style blue (related entity)
                 $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
             } else {
@@ -1377,12 +1377,12 @@ function Generate-MermaidClassDiagram {
     # Add styling for special join entities
     if ($farUserExists -or $dmProfileExists) {
         # Check if the focused entity is in the same domain as farUser/dmProfile (partner domain)
-        $focusedEntityInPartnerDomain = $false
+        $focusedEntityInProviderDomain = $false
         if ($lFocus) {
             $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
             foreach ($focused in $focusEntities) {
                 if (Entity-BelongsToDomain -entityName $focused -domainName "partner" -domainsConfig $domainsConfig) {
-                    $focusedEntityInPartnerDomain = $true
+                    $focusedEntityInProviderDomain = $true
                     break
                 }
             }
@@ -1390,7 +1390,7 @@ function Generate-MermaidClassDiagram {
         
         # Style special join entities based on domain relationship
         if (-not $farUserExists) {
-            if ($focusedEntityInPartnerDomain) {
+            if ($focusedEntityInProviderDomain) {
                 # Same domain - style blue (related entity)
                 $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
             } else {
@@ -1399,7 +1399,7 @@ function Generate-MermaidClassDiagram {
             }
         }
         if (-not $dmProfileExists) {
-            if ($focusedEntityInPartnerDomain) {
+            if ($focusedEntityInProviderDomain) {
                 # Same domain - style blue (related entity)
                 $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
             } else {

@@ -1,11 +1,11 @@
 {
-  "Success": true,
-  "ExclusionsPresent": true,
-  "Timestamp": "2025-07-29 20:23:00",
-  "TestName": "CFC Scan Generation",
-  "ExpectedDirectFKCount": 0,
   "EntityCount": 168,
+  "ExpectedDirectFKCount": 0,
+  "ExclusionsPresent": true,
+  "ExpectedEntityCount": 168,
   "MissingExclusions": [],
+  "Timestamp": "2025-07-30 16:26:21",
   "DirectFKCount": 0,
-  "ExpectedEntityCount": 168
+  "Success": true,
+  "TestName": "CFC Scan Generation"
 }
