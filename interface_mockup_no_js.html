@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFC Diagrams Interface - Confluence Compatible</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1.8em;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .info-section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .domain-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .domain-card {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            border-left: 4px solid #007bff;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .domain-card:hover {
+            border-color: #0056b3;
+            border-left-color: #0056b3;
+            background: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .domain-card.active {
+            border-color: #0056b3;
+            border-left-color: #0056b3;
+            background: #e3f2fd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .domain-card h4 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .domain-card p {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .strata-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .strata-item {
+            padding: 12px 16px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid;
+            flex: 1;
+            min-width: 120px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .strata-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .strata-item.active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            background: #f8f9fa;
+        }
+
+        .strata-core { 
+            border-left-color: #495057; 
+            color: #495057;
+        }
+        .strata-tracking { 
+            border-left-color: #28a745; 
+            color: #28a745;
+        }
+        .strata-programme { 
+            border-left-color: #ffc107; 
+            color: #ffc107;
+        }
+        .strata-content { 
+            border-left-color: #dc3545; 
+            color: #dc3545;
+        }
+        .strata-flow { 
+            border-left-color: #6f42c1; 
+            color: #6f42c1;
+        }
+        .strata-admin { 
+            border-left-color: #fd7e14; 
+            color: #fd7e14;
+        }
+        .strata-resources { 
+            border-left-color: #20c997; 
+            color: #20c997;
+        }
+
+        .strata-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+            font-size: 0.9em;
+        }
+
+        .strata-description {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+
+        .stats {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #1976d2;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #5f6368;
+        }
+
+        /* Domain-specific sections */
+        .domain-section {
+            margin-bottom: 30px;
+        }
+
+        .domain-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid #007bff;
+        }
+
+        .domain-header:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .domain-header h2 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .domain-header .toggle-icon {
+            font-size: 1.2em;
+            transition: transform 0.2s;
+        }
+
+        .domain-header.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .domain-content {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-top: 0;
+        }
+
+        .domain-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .diagrams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .diagram-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .diagram-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            position: relative;
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .card-description {
+            color: #6c757d;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .badges-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 500;
+            cursor: help;
+            position: relative;
+        }
+
+        .domain-badge {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .strata-badge {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .strata-badge.strata-core {
+            background: #f8f9fa;
+            color: #495057;
+        }
+        .strata-badge.strata-tracking {
+            background: #e8f5e8;
+            color: #28a745;
+        }
+        .strata-badge.strata-programme {
+            background: #fff3cd;
+            color: #ffc107;
+        }
+        .strata-badge.strata-content {
+            background: #f8d7da;
+            color: #dc3545;
+        }
+        .strata-badge.strata-flow {
+            background: #e2d9f3;
+            color: #6f42c1;
+        }
+        .strata-badge.strata-admin {
+            background: #ffeaa7;
+            color: #fd7e14;
+        }
+        .strata-badge.strata-resources {
+            background: #d1ecf1;
+            color: #20c997;
+        }
+
+        .primary-domain-indicator {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .preview-container {
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 200px;
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+
+        .btn-outline:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        .navigation {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #495057;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            border-color: #007bff;
+            background: #e3f2fd;
+            color: #007bff;
+        }
+
+        .nav-link.active {
+            border-color: #007bff;
+            background: #007bff;
+            color: white;
+        }
+
+        /* New styles for domain badges */
+        .domain-badge-top {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 500;
+            z-index: 1;
+            cursor: help;
+        }
+
+        /* Tooltip styles */
+        .badge[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            max-width: 250px;
+            line-height: 1.4;
+            white-space: pre-line;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            text-align: left;
+        }
+
+        .badge[title]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #333;
+            z-index: 1000;
+        }
+
+        /* Filter section */
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .filter-title {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>CFC Diagrams Interface</h1>
+            <p>Explore ColdFusion Components across different domains and architectural layers</p>
+        </div>
+
+        <!-- Stats (Fixed Position) -->
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="domains-count">4</div>
+                <div class="stat-label">Domains</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="layers-count">7</div>
+                <div class="stat-label">Layers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="components-count">33</div>
+                <div class="stat-label">Components</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="diagrams-count">165</div>
+                <div class="stat-label">Diagrams</div>
+            </div>
+        </div>
+
+        <!-- Filter by Domain -->
+        <div class="filter-section">
+            <div class="filter-title">Filter by Domain</div>
+            <div class="domain-info">
+                <div class="domain-card">
+                    <h4>🏢 Provider Domain</h4>
+                    <p>Healthcare organizations, business partnerships, and external relationships</p>
+                </div>
+                <div class="domain-card">
+                    <h4>👥 Participant Domain</h4>
+                    <p>User management, profiles, and participant journeys</p>
+                </div>
+                <div class="domain-card">
+                    <h4>📋 Pathway Domain</h4>
+                    <p>Treatment pathways, content delivery, and learning activities</p>
+                </div>
+                <div class="domain-card">
+                    <h4>📍 Site Domain</h4>
+                    <p>Location management and site-specific configurations</p>
+                </div>
+                <div class="domain-card">
+                    <h4>🌐 All Domains</h4>
+                    <p>View all components across all domains</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Architectural Layers -->
+        <div class="info-section">
+            <div class="section-title">Architectural Layers</div>
+            <div class="strata-container">
+                <div class="strata-item strata-core">
+                    <div class="strata-name">Core</div>
+                    <div class="strata-description">Foundation components</div>
+                </div>
+                <div class="strata-item strata-tracking">
+                    <div class="strata-name">Tracking</div>
+                    <div class="strata-description">Progress monitoring</div>
+                </div>
+                <div class="strata-item strata-programme">
+                    <div class="strata-name">Programme</div>
+                    <div class="strata-description">Learning management</div>
+                </div>
+                <div class="strata-item strata-content">
+                    <div class="strata-name">Content</div>
+                    <div class="strata-description">Media & resources</div>
+                </div>
+                <div class="strata-item strata-flow">
+                    <div class="strata-name">Flow</div>
+                    <div class="strata-description">Workflow management</div>
+                </div>
+                <div class="strata-item strata-admin">
+                    <div class="strata-name">Admin</div>
+                    <div class="strata-description">Configuration tools</div>
+                </div>
+                <div class="strata-item strata-resources">
+                    <div class="strata-name">Resources</div>
+                    <div class="strata-description">Asset management</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Provider Domain Section -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <h2>
+                    Provider Domain Diagrams
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="domain-content collapsed" id="provider-content">
+                <div class="diagrams-grid">
+                    <div class="diagram-card">
+                        <div class="card-header">
+                            <div class="card-title">activityDef</div>
+                            <div class="card-description">Activity definition component showing relationships in provider context</div>
+                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships">🏢 Provider</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality">Core</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image">
+                                    📊 PNG Preview Placeholder
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary">View Diagram</a>
+                                <a href="#" class="btn btn-outline">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="diagram-card">
+                        <div class="card-header">
+                            <div class="card-title">partner</div>
+                            <div class="card-description">Healthcare organization management and external relationships</div>
+                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships">🏢 Provider</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality">Core</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image">
+                                    📊 PNG Preview Placeholder
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary">View Diagram</a>
+                                <a href="#" class="btn btn-outline">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Participant Domain Section -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <h2>
+                    Participant Domain Diagrams
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="domain-content collapsed" id="participant-content">
+                <div class="diagrams-grid">
+                    <div class="diagram-card">
+                        <div class="card-header">
+                            <div class="card-title">member</div>
+                            <div class="card-description">Central participant record connecting individuals to digital therapeutic ecosystem</div>
+                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys">👥 Participant</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics">Tracking</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image">
+                                    📊 PNG Preview Placeholder
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary">View Diagram</a>
+                                <a href="#" class="btn btn-outline">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pathway Domain Section -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <h2>
+                    Pathway Domain Diagrams
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="domain-content collapsed" id="pathway-content">
+                <div class="diagrams-grid">
+                    <div class="diagram-card">
+                        <div class="card-header">
+                            <div class="card-title">programme</div>
+                            <div class="card-description">Master treatment template containing activity structure and lifecycle management</div>
+                            <div class="domain-badge-top" title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities">📋 Pathway</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-programme" title="Programme Layer&#10;&#10;Content delivery and learning management">Programme</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image">
+                                    📊 PNG Preview Placeholder
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary">View Diagram</a>
+                                <a href="#" class="btn btn-outline">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Site Domain Section -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <h2>
+                    Site Domain Diagrams
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="domain-content collapsed" id="site-content">
+                <div class="diagrams-grid">
+                    <div class="diagram-card">
+                        <div class="card-header">
+                            <div class="card-title">dmNavigation</div>
+                            <div class="card-description">Website navigation structure and menu organization</div>
+                            <div class="domain-badge-top" title="Site Domain&#10;&#10;Location management and site-specific configurations">📍 Site</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-admin" title="Admin Layer&#10;&#10;Administrative and configuration tools">Admin</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image">
+                                    📊 PNG Preview Placeholder
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary">View Diagram</a>
+                                <a href="#" class="btn btn-outline">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
