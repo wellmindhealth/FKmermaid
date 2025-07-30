@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFC Diagrams - CSS Only Interface (Fixed)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hidden form elements for CSS-only functionality */
+        .css-controls {
+            position: absolute;
+            left: -9999px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #6c757d;
+            font-size: 16px;
+        }
+
+        /* Stats Bar with CSS Counter */
+        .stats-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #007bff;
+            color: white;
+            padding: 8px 20px;
+            font-size: 14px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-bar .stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stats-bar .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stats-bar .stat-count {
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 60px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .filter-section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        /* Domain Cards */
+        .domain-cards {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .domain-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-left: 4px solid #007bff;
+            border-radius: 6px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .domain-card:hover {
+            background: #e3f2fd;
+            border-color: #0056b3;
+            border-left-color: #0056b3;
+        }
+
+        .domain-card .domain-icon {
+            font-size: 16px;
+        }
+
+        /* Layer Cards */
+        .layer-cards {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .layer-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .layer-card:hover {
+            background: #e9ecef;
+        }
+
+        .layer-card.core {
+            border-left: 4px solid #495057;
+        }
+
+        .layer-card.tracking {
+            border-left: 4px solid #28a745;
+        }
+
+        .layer-card.programme {
+            border-left: 4px solid #ffc107;
+        }
+
+        .layer-card.content {
+            border-left: 4px solid #dc3545;
+        }
+
+        .layer-card.flow {
+            border-left: 4px solid #6f42c1;
+        }
+
+        .layer-card.admin {
+            border-left: 4px solid #fd7e14;
+        }
+
+        .layer-card.resources {
+            border-left: 4px solid #20c997;
+        }
+
+        /* Domain Sections */
+        .domain-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .domain-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #007bff;
+            transition: background-color 0.2s;
+        }
+
+        .domain-header:hover {
+            background: #e9ecef;
+        }
+
+        .domain-header h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .domain-header .domain-icon {
+            font-size: 20px;
+            color: #007bff;
+        }
+
+        .domain-content {
+            padding: 20px;
+            display: none;
+        }
+
+        /* Diagram Cards */
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .diagram-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .diagram-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .card-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            position: relative;
+            cursor: help;
+        }
+
+        .domain-badge {
+            background: #007bff;
+            color: white;
+        }
+
+        .layer-badge {
+            background: #6c757d;
+            color: white;
+        }
+
+        .layer-badge.core {
+            background: #495057;
+        }
+
+        .layer-badge.tracking {
+            background: #28a745;
+        }
+
+        .layer-badge.programme {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .layer-badge.content {
+            background: #dc3545;
+        }
+
+        .layer-badge.flow {
+            background: #6f42c1;
+        }
+
+        .layer-badge.admin {
+            background: #fd7e14;
+        }
+
+        .layer-badge.resources {
+            background: #20c997;
+        }
+
+        /* CSS-only Popover */
+        .badge:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .badge:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #333;
+            z-index: 1000;
+            margin-bottom: -5px;
+        }
+
+        .card-description {
+            color: #6c757d;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .card-caption {
+            font-size: 12px;
+            color: #6c757d;
+            font-style: italic;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* CSS-only functionality - FIXED VERSION */
+
+        /* Domain filtering - FIXED SELECTORS */
+        #filter-all:checked ~ .domain-section {
+            display: block;
+        }
+
+        #filter-provider:checked ~ .domain-section:not(.provider) {
+            display: none;
+        }
+
+        #filter-participant:checked ~ .domain-section:not(.participant) {
+            display: none;
+        }
+
+        #filter-pathway:checked ~ .domain-section:not(.pathway) {
+            display: none;
+        }
+
+        #filter-site:checked ~ .domain-section:not(.site) {
+            display: none;
+        }
+
+        /* Layer filtering - FIXED SELECTORS - Target all diagram cards */
+        #filter-layer-all:checked ~ .diagram-card {
+            display: flex;
+        }
+
+        #filter-layer-core:checked ~ .diagram-card:not([data-layer="core"]) {
+            display: none;
+        }
+
+        #filter-layer-tracking:checked ~ .diagram-card:not([data-layer="tracking"]) {
+            display: none;
+        }
+
+        #filter-layer-programme:checked ~ .diagram-card:not([data-layer="programme"]) {
+            display: none;
+        }
+
+        #filter-layer-content:checked ~ .diagram-card:not([data-layer="content"]) {
+            display: none;
+        }
+
+        #filter-layer-flow:checked ~ .diagram-card:not([data-layer="flow"]) {
+            display: none;
+        }
+
+        #filter-layer-admin:checked ~ .diagram-card:not([data-layer="admin"]) {
+            display: none;
+        }
+
+        #filter-layer-resources:checked ~ .diagram-card:not([data-layer="resources"]) {
+            display: none;
+        }
+
+        /* Domain collapse functionality - FIXED with toggle */
+        .domain-content {
+            display: none;
+        }
+
+        #toggle-provider:checked ~ .domain-section.provider .domain-content {
+            display: block;
+        }
+
+        #toggle-participant:checked ~ .domain-section.participant .domain-content {
+            display: block;
+        }
+
+        #toggle-pathway:checked ~ .domain-section.pathway .domain-content {
+            display: block;
+        }
+
+        #toggle-site:checked ~ .domain-section.site .domain-content {
+            display: block;
+        }
+
+        /* Button active states - FIXED */
+        #filter-all:checked ~ .domain-card[for="filter-all"] {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        #filter-provider:checked ~ .domain-card[for="filter-provider"] {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        #filter-participant:checked ~ .domain-card[for="filter-participant"] {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        #filter-pathway:checked ~ .domain-card[for="filter-pathway"] {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        #filter-site:checked ~ .domain-card[for="filter-site"] {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        #filter-layer-all:checked ~ .layer-card[for="filter-layer-all"] {
+            background: #495057;
+            color: white;
+        }
+
+        #filter-layer-core:checked ~ .layer-card[for="filter-layer-core"] {
+            background: #495057;
+            color: white;
+        }
+
+        #filter-layer-tracking:checked ~ .layer-card[for="filter-layer-tracking"] {
+            background: #495057;
+            color: white;
+        }
+
+        #filter-layer-programme:checked ~ .layer-card[for="filter-layer-programme"] {
+            background: #495057;
+            color: white;
+        }
+
+        #filter-layer-content:checked ~ .layer-card[for="filter-layer-content"] {
+            background: #495057;
+            color: white;
+        }
+
+        #filter-layer-flow:checked ~ .layer-card[for="filter-layer-flow"] {
+            background: #495057;
+            color: white;
+        }
+
+        #filter-layer-admin:checked ~ .layer-card[for="filter-layer-admin"] {
+            background: #495057;
+            color: white;
+        }
+
+        #filter-layer-resources:checked ~ .layer-card[for="filter-layer-resources"] {
+            background: #495057;
+            color: white;
+        }
+
+        /* CSS-only Modal - FIXED */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+        }
+
+        .modal:target {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            text-decoration: none;
+            color: #666;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        /* CSS Counters for Dynamic Stats */
+        .stats-bar {
+            counter-reset: domain-counter layer-counter component-counter diagram-counter;
+        }
+
+        /* Count visible domains */
+        #filter-all:checked ~ .stats-bar .domain-counter::after {
+            content: "4";
+        }
+
+        #filter-provider:checked ~ .stats-bar .domain-counter::after {
+            content: "1";
+        }
+
+        #filter-participant:checked ~ .stats-bar .domain-counter::after {
+            content: "1";
+        }
+
+        #filter-pathway:checked ~ .stats-bar .domain-counter::after {
+            content: "1";
+        }
+
+        #filter-site:checked ~ .stats-bar .domain-counter::after {
+            content: "1";
+        }
+
+        /* Count visible layers */
+        #filter-layer-all:checked ~ .stats-bar .layer-counter::after {
+            content: "7";
+        }
+
+        #filter-layer-core:checked ~ .stats-bar .layer-counter::after {
+            content: "1";
+        }
+
+        #filter-layer-tracking:checked ~ .stats-bar .layer-counter::after {
+            content: "1";
+        }
+
+        #filter-layer-programme:checked ~ .stats-bar .layer-counter::after {
+            content: "1";
+        }
+
+        #filter-layer-content:checked ~ .stats-bar .layer-counter::after {
+            content: "1";
+        }
+
+        #filter-layer-flow:checked ~ .stats-bar .layer-counter::after {
+            content: "1";
+        }
+
+        #filter-layer-admin:checked ~ .stats-bar .layer-counter::after {
+            content: "1";
+        }
+
+        #filter-layer-resources:checked ~ .stats-bar .layer-counter::after {
+            content: "1";
+        }
+
+        /* Count visible components */
+        #filter-all:checked ~ .stats-bar .component-counter::after {
+            content: "8";
+        }
+
+        #filter-provider:checked ~ .stats-bar .component-counter::after {
+            content: "2";
+        }
+
+        #filter-participant:checked ~ .stats-bar .component-counter::after {
+            content: "2";
+        }
+
+        #filter-pathway:checked ~ .stats-bar .component-counter::after {
+            content: "2";
+        }
+
+        #filter-site:checked ~ .stats-bar .component-counter::after {
+            content: "2";
+        }
+
+        /* Count visible diagrams */
+        #filter-all:checked ~ .stats-bar .diagram-counter::after {
+            content: "8";
+        }
+
+        #filter-provider:checked ~ .stats-bar .diagram-counter::after {
+            content: "2";
+        }
+
+        #filter-participant:checked ~ .stats-bar .diagram-counter::after {
+            content: "2";
+        }
+
+        #filter-pathway:checked ~ .stats-bar .diagram-counter::after {
+            content: "2";
+        }
+
+        #filter-site:checked ~ .stats-bar .diagram-counter::after {
+            content: "2";
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .diagram-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .domain-cards, .layer-cards {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stats">
+            <div class="stat-item">
+                <span>Domains:</span>
+                <span class="stat-count domain-counter">4</span>
+            </div>
+            <div class="stat-item">
+                <span>Layers:</span>
+                <span class="stat-count layer-counter">7</span>
+            </div>
+            <div class="stat-item">
+                <span>Components:</span>
+                <span class="stat-count component-counter">8</span>
+            </div>
+            <div class="stat-item">
+                <span>Diagrams:</span>
+                <span class="stat-count diagram-counter">8</span>
+            </div>
+        </div>
+        <div class="filter-status">
+            <span>All Domains & Layers</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>CFC Component Diagrams</h1>
+            <p>Interactive visualization of ColdFusion Components across business domains and architectural layers</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <h2>Filter by Domain</h2>
+                <div class="filter-controls">
+                    <div class="domain-cards">
+                        <label for="filter-all" class="domain-card" data-domain="all">
+                            <span class="domain-icon">🌐</span>
+                            All Domains
+                        </label>
+                        <label for="filter-provider" class="domain-card" data-domain="provider">
+                            <span class="domain-icon">🏥</span>
+                            Provider
+                        </label>
+                        <label for="filter-participant" class="domain-card" data-domain="participant">
+                            <span class="domain-icon">👤</span>
+                            Participant
+                        </label>
+                        <label for="filter-pathway" class="domain-card" data-domain="pathway">
+                            <span class="domain-icon">🛤️</span>
+                            Pathway
+                        </label>
+                        <label for="filter-site" class="domain-card" data-domain="site">
+                            <span class="domain-icon">🏢</span>
+                            Site
+                        </label>
+                    </div>
+                    
+                    <div class="layer-cards">
+                        <label for="filter-layer-all" class="layer-card" data-layer="all">
+                            All Layers
+                        </label>
+                        <label for="filter-layer-core" class="layer-card core" data-layer="core">
+                            Core
+                        </label>
+                        <label for="filter-layer-tracking" class="layer-card tracking" data-layer="tracking">
+                            Tracking
+                        </label>
+                        <label for="filter-layer-programme" class="layer-card programme" data-layer="programme">
+                            Programme
+                        </label>
+                        <label for="filter-layer-content" class="layer-card content" data-layer="content">
+                            Content
+                        </label>
+                        <label for="filter-layer-flow" class="layer-card flow" data-layer="flow">
+                            Flow
+                        </label>
+                        <label for="filter-layer-admin" class="layer-card admin" data-layer="admin">
+                            Admin
+                        </label>
+                        <label for="filter-layer-resources" class="layer-card resources" data-layer="resources">
+                            Resources
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden radio inputs for CSS-only functionality - MOVED TO BE DIRECT SIBLINGS -->
+            <!-- Domain filters -->
+            <input type="radio" name="domain-filter" id="filter-all" checked>
+            <input type="radio" name="domain-filter" id="filter-provider">
+            <input type="radio" name="domain-filter" id="filter-participant">
+            <input type="radio" name="domain-filter" id="filter-pathway">
+            <input type="radio" name="domain-filter" id="filter-site">
+            
+            <!-- Layer filters -->
+            <input type="radio" name="layer-filter" id="filter-layer-all" checked>
+            <input type="radio" name="layer-filter" id="filter-layer-core">
+            <input type="radio" name="layer-filter" id="filter-layer-tracking">
+            <input type="radio" name="layer-filter" id="filter-layer-programme">
+            <input type="radio" name="layer-filter" id="filter-layer-content">
+            <input type="radio" name="layer-filter" id="filter-layer-flow">
+            <input type="radio" name="layer-filter" id="filter-layer-admin">
+            <input type="radio" name="layer-filter" id="filter-layer-resources">
+            
+            <!-- Domain toggles - Using checkboxes for toggle functionality -->
+            <input type="checkbox" name="domain-toggle" id="toggle-provider">
+            <input type="checkbox" name="domain-toggle" id="toggle-participant">
+            <input type="checkbox" name="domain-toggle" id="toggle-pathway">
+            <input type="checkbox" name="domain-toggle" id="toggle-site">
+
+            <!-- Domain Sections -->
+            <div class="domain-section provider" data-domain="provider">
+                <label for="toggle-provider" class="domain-header">
+                    <h3>
+                        <span class="domain-icon">🏥</span>
+                        Provider Domain
+                    </h3>
+                    <span class="domain-icon">▼</span>
+                </label>
+                <div class="domain-content" id="provider-content">
+                    <div class="diagram-grid">
+                        <div class="diagram-card core" data-layer="core">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">activityDef</div>
+                                    <div class="card-badges">
+                                        <span class="badge domain-badge" data-tooltip="Provider Domain">Provider</span>
+                                        <span class="badge layer-badge core" data-tooltip="Core Layer">Core</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                Core activity definition component for provider workflows and clinical pathways.
+                            </div>
+                            <div class="card-caption">
+                                Manages clinical activities, assessments, and interventions within healthcare pathways.
+                            </div>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    View Diagram
+                                </a>
+                                <a href="#modal-activityDef" class="btn btn-secondary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="diagram-card tracking" data-layer="tracking">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">provider</div>
+                                    <div class="card-badges">
+                                        <span class="badge domain-badge" data-tooltip="Provider Domain">Provider</span>
+                                        <span class="badge layer-badge tracking" data-tooltip="Tracking Layer">Tracking</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                Provider management and tracking component for healthcare organizations.
+                            </div>
+                            <div class="card-caption">
+                                Manages provider profiles, healthcare facilities, and patient tracking.
+                            </div>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    View Diagram
+                                </a>
+                                <a href="#modal-provider" class="btn btn-secondary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="domain-section participant" data-domain="participant">
+                <label for="toggle-participant" class="domain-header">
+                    <h3>
+                        <span class="domain-icon">👤</span>
+                        Participant Domain
+                    </h3>
+                    <span class="domain-icon">▼</span>
+                </label>
+                <div class="domain-content" id="participant-content">
+                    <div class="diagram-grid">
+                        <div class="diagram-card core" data-layer="core">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">participant</div>
+                                    <div class="card-badges">
+                                        <span class="badge domain-badge" data-tooltip="Participant Domain">Participant</span>
+                                        <span class="badge layer-badge core" data-tooltip="Core Layer">Core</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                Core participant management component for user profiles and engagement tracking.
+                            </div>
+                            <div class="card-caption">
+                                Manages user profiles, engagement metrics, and health record access.
+                            </div>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    View Diagram
+                                </a>
+                                <a href="#modal-participant" class="btn btn-secondary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="diagram-card tracking" data-layer="tracking">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">participantProgress</div>
+                                    <div class="card-badges">
+                                        <span class="badge domain-badge" data-tooltip="Participant Domain">Participant</span>
+                                        <span class="badge layer-badge tracking" data-tooltip="Tracking Layer">Tracking</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                Progress tracking component for participant journey and outcomes monitoring.
+                            </div>
+                            <div class="card-caption">
+                                Monitors participant journey, outcomes, and engagement metrics.
+                            </div>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    View Diagram
+                                </a>
+                                <a href="#modal-participantProgress" class="btn btn-secondary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="domain-section pathway" data-domain="pathway">
+                <label for="toggle-pathway" class="domain-header">
+                    <h3>
+                        <span class="domain-icon">🛤️</span>
+                        Pathway Domain
+                    </h3>
+                    <span class="domain-icon">▼</span>
+                </label>
+                <div class="domain-content" id="pathway-content">
+                    <div class="diagram-grid">
+                        <div class="diagram-card programme" data-layer="programme">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">programme</div>
+                                    <div class="card-badges">
+                                        <span class="badge domain-badge" data-tooltip="Pathway Domain">Pathway</span>
+                                        <span class="badge layer-badge programme" data-tooltip="Programme Layer">Programme</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                Programme management component for pathway creation and clinical workflow orchestration.
+                            </div>
+                            <div class="card-caption">
+                                Orchestrates clinical pathways, workflow steps, and outcome management.
+                            </div>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    View Diagram
+                                </a>
+                                <a href="#modal-programme" class="btn btn-secondary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="diagram-card flow" data-layer="flow">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">pathwayFlow</div>
+                                    <div class="card-badges">
+                                        <span class="badge domain-badge" data-tooltip="Pathway Domain">Pathway</span>
+                                        <span class="badge layer-badge flow" data-tooltip="Flow Layer">Flow</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                Flow control component for pathway navigation and decision tree management.
+                            </div>
+                            <div class="card-caption">
+                                Manages pathway navigation, decision points, and flow logic.
+                            </div>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    View Diagram
+                                </a>
+                                <a href="#modal-pathwayFlow" class="btn btn-secondary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="domain-section site" data-domain="site">
+                <label for="toggle-site" class="domain-header">
+                    <h3>
+                        <span class="domain-icon">🏢</span>
+                        Site Domain
+                    </h3>
+                    <span class="domain-icon">▼</span>
+                </label>
+                <div class="domain-content" id="site-content">
+                    <div class="diagram-grid">
+                        <div class="diagram-card admin" data-layer="admin">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">site</div>
+                                    <div class="card-badges">
+                                        <span class="badge domain-badge" data-tooltip="Site Domain">Site</span>
+                                        <span class="badge layer-badge admin" data-tooltip="Admin Layer">Admin</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                Site management component for multi-site healthcare organization administration.
+                            </div>
+                            <div class="card-caption">
+                                Manages site-specific configurations, user roles, and resource allocation.
+                            </div>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    View Diagram
+                                </a>
+                                <a href="#modal-site" class="btn btn-secondary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="diagram-card resources" data-layer="resources">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">siteResources</div>
+                                    <div class="card-badges">
+                                        <span class="badge domain-badge" data-tooltip="Site Domain">Site</span>
+                                        <span class="badge layer-badge resources" data-tooltip="Resources Layer">Resources</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                Resource management component for site-specific assets and capacity planning.
+                            </div>
+                            <div class="card-caption">
+                                Manages site-specific hardware, software, and personnel capacity.
+                            </div>
+                            <div class="card-actions">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    View Diagram
+                                </a>
+                                <a href="#modal-siteResources" class="btn btn-secondary btn-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSS-only Modal Examples -->
+    <div id="modal-activityDef" class="modal">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            <h2>activityDef Component Details</h2>
+            <p><strong>Domain:</strong> Provider</p>
+            <p><strong>Layer:</strong> Core</p>
+            <p><strong>Description:</strong> Core activity definition component for provider workflows and clinical pathways.</p>
+            <p><strong>Properties:</strong></p>
+            <ul>
+                <li>activityID (string)</li>
+                <li>activityName (string)</li>
+                <li>activityType (string)</li>
+                <li>duration (numeric)</li>
+            </ul>
+            <p><strong>Relationships:</strong></p>
+            <ul>
+                <li>Belongs to: programme</li>
+                <li>Has many: participantProgress</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="modal-provider" class="modal">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            <h2>provider Component Details</h2>
+            <p><strong>Domain:</strong> Provider</p>
+            <p><strong>Layer:</strong> Tracking</p>
+            <p><strong>Description:</strong> Provider management and tracking component for healthcare organizations.</p>
+        </div>
+    </div>
+
+    <div id="modal-participant" class="modal">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            <h2>participant Component Details</h2>
+            <p><strong>Domain:</strong> Participant</p>
+            <p><strong>Layer:</strong> Core</p>
+            <p><strong>Description:</strong> Core participant management component for user profiles and engagement tracking.</p>
+        </div>
+    </div>
+
+    <div id="modal-participantProgress" class="modal">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            <h2>participantProgress Component Details</h2>
+            <p><strong>Domain:</strong> Participant</p>
+            <p><strong>Layer:</strong> Tracking</p>
+            <p><strong>Description:</strong> Progress tracking component for participant journey and outcomes monitoring.</p>
+        </div>
+    </div>
+
+    <div id="modal-programme" class="modal">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            <h2>programme Component Details</h2>
+            <p><strong>Domain:</strong> Pathway</p>
+            <p><strong>Layer:</strong> Programme</p>
+            <p><strong>Description:</strong> Programme management component for pathway creation and clinical workflow orchestration.</p>
+        </div>
+    </div>
+
+    <div id="modal-pathwayFlow" class="modal">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            <h2>pathwayFlow Component Details</h2>
+            <p><strong>Domain:</strong> Pathway</p>
+            <p><strong>Layer:</strong> Flow</p>
+            <p><strong>Description:</strong> Flow control component for pathway navigation and decision tree management.</p>
+        </div>
+    </div>
+
+    <div id="modal-site" class="modal">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            <h2>site Component Details</h2>
+            <p><strong>Domain:</strong> Site</p>
+            <p><strong>Layer:</strong> Admin</p>
+            <p><strong>Description:</strong> Site management component for multi-site healthcare organization administration.</p>
+        </div>
+    </div>
+
+    <div id="modal-siteResources" class="modal">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            <h2>siteResources Component Details</h2>
+            <p><strong>Domain:</strong> Site</p>
+            <p><strong>Layer:</strong> Resources</p>
+            <p><strong>Description:</strong> Resource management component for site-specific assets and capacity planning.</p>
+        </div>
+    </div>
+</body>
+</html> 
