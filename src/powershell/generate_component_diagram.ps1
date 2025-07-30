@@ -1,5 +1,11 @@
 # Generate Component Diagrams for FarCry Pathway Plugin
 # Dynamically scans CFC files and extracts properties, inheritance, and relationships
+# 
+# ⚠️  IMPORTANT: This script shares the cache file with generate_erd_enhanced.ps1
+#     DO NOT overwrite the cache structure - always preserve existing data!
+#     The ER script expects: directFK, joinTables, entities, properties
+#     This script adds: components
+#     See the cache preservation logic below for details.
 param(
     [string]$lDomains = "",
     [string]$lFocus = "",
@@ -462,9 +468,20 @@ if (-not $RefreshCFCs -and (Test-Path $cachePath)) {
     try {
         $cachedData = Get-Content $cachePath -Raw | ConvertFrom-Json
         $components = @{}
-        foreach ($property in $cachedData.PSObject.Properties) {
-            $components[$property.Name] = $property.Value
+        
+        # Check if cache has the new structure with components property
+        if ($cachedData.PSObject.Properties.Name -contains "components") {
+            # New structure: components stored under 'components' property
+            foreach ($property in $cachedData.components.PSObject.Properties) {
+                $components[$property.Name] = $property.Value
+            }
+        } else {
+            # Old structure: components stored directly
+            foreach ($property in $cachedData.PSObject.Properties) {
+                $components[$property.Name] = $property.Value
+            }
         }
+        
         Write-Host "✅ Loaded cached components from: $cachePath" -ForegroundColor Green
         Write-Host "📊 Total components loaded: $($components.Count)" -ForegroundColor Cyan
         # Debug: Check a few components
@@ -493,9 +510,37 @@ if (-not $RefreshCFCs -and (Test-Path $cachePath)) {
         }
     }
     
-    # Save to cache
-    $components | ConvertTo-Json -Depth 10 | Out-File -FilePath $cachePath -Encoding UTF8
-    Write-Host "✅ Saved component cache to: $cachePath" -ForegroundColor Green
+    # ⚠️  CACHE PRESERVATION: This script shares cache with generate_erd_enhanced.ps1
+    #     DO NOT overwrite the cache structure - always preserve existing data!
+    #     The ER script expects: directFK, joinTables, entities, properties
+    #     This script adds: components
+    $existingCache = @{}
+    if (Test-Path $cachePath) {
+        try {
+            $existingData = Get-Content $cachePath -Raw | ConvertFrom-Json
+            # Preserve existing cache structure for ER script compatibility
+            if ($existingData.PSObject.Properties.Name -contains "directFK") {
+                $existingCache.directFK = $existingData.directFK
+            }
+            if ($existingData.PSObject.Properties.Name -contains "joinTables") {
+                $existingCache.joinTables = $existingData.joinTables
+            }
+            if ($existingData.PSObject.Properties.Name -contains "entities") {
+                $existingCache.entities = $existingData.entities
+            }
+            if ($existingData.PSObject.Properties.Name -contains "properties") {
+                $existingCache.properties = $existingData.properties
+            }
+        } catch {
+            Write-Host "⚠️  Could not read existing cache, creating new structure" -ForegroundColor Yellow
+        }
+    }
+    
+    # Add component data to existing cache
+    $existingCache.components = $components
+    
+    $existingCache | ConvertTo-Json -Depth 10 | Out-File -FilePath $cachePath -Encoding UTF8
+    Write-Host "✅ Saved component cache to: $cachePath (preserved existing structure)" -ForegroundColor Green
 }
 
 # Filter components by domains

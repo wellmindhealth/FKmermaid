@@ -62,7 +62,8 @@ param(
     [switch]$Help = $false,
     [string]$ConfigFile = "D:\GIT\farcry\Cursor\FKmermaid\config\cfc_scan_config.json",
     [string]$OutputFile = "",
-    [switch]$Debug
+    [switch]$Debug,
+    [string]$MermaidMode = "edit"
 )
 
 # Import logging modules
@@ -105,6 +106,7 @@ function Show-Help {
     Write-Host "  -OutputFile 'path'       # Custom output file path" -ForegroundColor White
     Write-Host "  -Help                    # Show this help message" -ForegroundColor White
     Write-Host "  -Debug                   # Enable debug mode" -ForegroundColor White
+    Write-Host "  -MermaidMode 'edit|view' # Mermaid.live mode ('edit' or 'view')" -ForegroundColor White
     Write-Host ""
     Write-Host "💡 USAGE EXAMPLES:" -ForegroundColor Cyan
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Green
@@ -113,6 +115,7 @@ function Show-Help {
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'ER' -MermaidMode 'view'" -ForegroundColor Green
     Write-Host ""
     Write-Host "📖 For complete documentation, see: README.md" -ForegroundColor Yellow
     exit 0
@@ -471,7 +474,7 @@ function Get-CFCRelationships {
                                 # Extract entity info
                                 $relationships.entities += @{
                                     name = $entityName
-                                        plugin = $pluginName
+                                    plugin = $pluginName
                                     file = $cfcFile.FullName
                                 }
                                 
@@ -1996,7 +1999,7 @@ Write-Host "🚀 Spawning Mermaid.live directly with content..." -ForegroundColo
 
 # Use the working Node.js tool for proper pako compression
 $nodeScriptPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "src\node\generate_url.js"
-$mermaidLiveUrl = $mermaidContent | node $nodeScriptPath
+$mermaidLiveUrl = $mermaidContent | node $nodeScriptPath $MermaidMode
 
 Write-Host "✅ Generated compressed Mermaid.live URL" -ForegroundColor Green
 
