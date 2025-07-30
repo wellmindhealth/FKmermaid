@@ -1370,88 +1370,42 @@
         let domainsData = null;
         let cfcCacheData = null;
         
-        // Load domains.json
-        async function loadDomainsData() {
-            try {
-                const response = await fetch('config/domains.json');
-                domainsData = await response.json();
-                console.log('Loaded domains data:', domainsData);
-                generateCardsFromRealData();
-            } catch (error) {
-                console.error('Error loading domains.json:', error);
-                // Fallback to hardcoded data
-                loadFallbackData();
-            }
-        }
-        
-        // Load CFC cache data
-        async function loadCFCCacheData() {
+        // Load all data files
+        async function loadAllData() {
             try {
                 // Add cache-busting parameter to force fresh load
                 const timestamp = new Date().getTime();
                 
-                // Load both files
-                const [diagramsResponse, cacheResponse] = await Promise.all([
+                // Load all three files
+                const [domainsResponse, diagramsResponse, cacheResponse] = await Promise.all([
+                    fetch(`config/domains.json?t=${timestamp}`),
                     fetch(`exports/pre_generated/165_diagrams_results.json?t=${timestamp}`),
                     fetch(`config/cfc_cache.json?t=${timestamp}`)
                 ]);
                 
+                // Parse all data
+                domainsData = await domainsResponse.json();
                 const diagramsData = await diagramsResponse.json();
                 const cacheData = await cacheResponse.json();
                 
-                // Store both datasets
+                // Store datasets
+                window.domainsData = domainsData;
                 window.diagramsData = diagramsData;
                 window.cfcCacheData = cacheData;
                 
+                console.log('Loaded domains data:', domainsData);
                 console.log('Loaded diagrams data:', diagramsData);
                 console.log('Loaded CFC cache data:', cacheData);
                 
+                // Generate cards once all data is loaded
                 generateCardsFromRealData();
             } catch (error) {
                 console.error('Error loading data files:', error);
-                // Continue with domains data only
+                // No fallback - we want to see the error!
             }
         }
         
-        // Fallback data if files can't be loaded
-        function loadFallbackData() {
-            domainsData = {
-                "domains": {
-                    "provider": {
-                        "description": "Provider/Business Domain - Business relationships and organizational structure",
-                        "entities": {
-                            "core": ["partner", "referer", "intake", "center", "memberGroup"],
-                            "admin": ["farUser", "farGroup", "farRole", "farPermission", "dmProfile"],
-                            "programme": ["programme", "progRole", "activityDef", "media"]
-                        }
-                    },
-                    "participant": {
-                        "description": "Participant/User Experience Domain - User journeys and personal data",
-                        "entities": {
-                            "core": ["member", "memberGroup", "progMember", "activity", "programme"],
-                            "tracking": ["ssq_stress01", "ssq_pain01", "ssq_arthritis01", "tracker", "trackerDef"],
-                            "programme": ["progRole", "activityDef", "media", "journal", "journalDef", "library", "guide"]
-                        }
-                    },
-                    "pathway": {
-                        "description": "Pathway/Content Domain - Content structure and flow",
-                        "entities": {
-                            "core": ["programme", "progRole", "activityDef"],
-                            "content": ["media", "defaultMediaID", "aCuePointActivities", "aMediaIDs", "guide"],
-                            "flow": ["onEndID", "aCuePointActivities", "aInteract1Activities", "aInteract2Activities", "aInteract3Activities", "aInteract4Activities", "aInteract5Activities"]
-                        }
-                    },
-                    "site": {
-                        "description": "Site/Website Domain - Website content and structure",
-                        "entities": {
-                            "core": ["dmNavigation", "dmHTML", "dmFacts", "dmNews", "dmInclude"],
-                            "resources": ["dmImage", "dmFile"]
-                        }
-                    }
-                }
-            };
-            generateCardsFromRealData();
-        }
+        // No fallback data - we want to see what's missing!
         
         // Generate cards from real data
         function generateCardsFromRealData() {
@@ -1460,6 +1414,14 @@
             // Find the main container where we'll add domain sections
             const mainContainer = document.querySelector('.container');
             if (!mainContainer) return;
+            
+            // Remove ALL diagram cards first (including those inside domain sections)
+            const allCards = document.querySelectorAll('.diagram-card');
+            allCards.forEach(card => card.remove());
+            
+            // Remove any diagrams-grid containers that might contain hardcoded cards
+            const existingGrids = document.querySelectorAll('.diagrams-grid');
+            existingGrids.forEach(grid => grid.remove());
             
             // Remove any existing domain sections (keep header, stats, filters)
             const existingSections = mainContainer.querySelectorAll('.domain-section');
@@ -1537,13 +1499,14 @@
 
         // Get domain icon
         function getDomainIcon(domainKey) {
-            const icons = {
-                'provider': 'fa-hospital',
-                'participant': 'fa-users',
-                'pathway': 'fa-clipboard-list',
-                'site': 'fa-map-marker-alt'
-            };
-            return icons[domainKey] || 'fa-globe';
+            // Try to get domain icon from domains data
+            if (window.domainsData && window.domainsData.domains && window.domainsData.domains[domainKey]) {
+                const domain = window.domainsData.domains[domainKey];
+                if (domain.icon) {
+                    return domain.icon;
+                }
+            }
+            return 'fa-globe';
         }
         
         // Create a component card from real data
@@ -1600,144 +1563,78 @@
         
         // Helper functions for display names and descriptions
         function getDisplayName(componentName) {
-            const displayNames = {
-                'activityDef': 'Activity Definition',
-                'progMember': 'Program Member',
-                'progRole': 'Program Role',
-                'member': 'Member',
-                'partner': 'Partner',
-                'programme': 'Programme',
-                'media': 'Media',
-                'dmNavigation': 'Navigation',
-                'dmHTML': 'HTML Content',
-                'dmFacts': 'Facts Content',
-                'dmNews': 'News Content',
-                'dmInclude': 'Include Content',
-                'dmImage': 'Image Resource',
-                'dmFile': 'File Resource',
-                'farUser': 'Far User',
-                'farGroup': 'Far Group',
-                'farRole': 'Far Role',
-                'farPermission': 'Far Permission',
-                'dmProfile': 'Profile',
-                'referer': 'Referer',
-                'intake': 'Intake',
-                'center': 'Center',
-                'memberGroup': 'Member Group',
-                'activity': 'Activity',
-                'journal': 'Journal',
-                'journalDef': 'Journal Definition',
-                'library': 'Library',
-                'guide': 'Guide',
-                'tracker': 'Tracker',
-                'trackerDef': 'Tracker Definition',
-                'ssq_stress01': 'Stress Tracker',
-                'ssq_pain01': 'Pain Tracker',
-                'ssq_arthritis01': 'Arthritis Tracker',
-                'defaultMediaID': 'Default Media ID',
-                'aCuePointActivities': 'Cue Point Activities',
-                'aMediaIDs': 'Media IDs',
-                'onEndID': 'On End ID',
-                'aInteract1Activities': 'Interact 1 Activities',
-                'aInteract2Activities': 'Interact 2 Activities',
-                'aInteract3Activities': 'Interact 3 Activities',
-                'aInteract4Activities': 'Interact 4 Activities',
-                'aInteract5Activities': 'Interact 5 Activities'
-            };
-            return displayNames[componentName] || componentName;
+            // Try to get display name from CFC cache data
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component && component.displayName) {
+                    return component.displayName;
+                }
+            }
+            // If no display name found, return the raw component name
+            return componentName;
         }
         
         function getComponentDescription(componentName) {
-            const descriptions = {
-                'activityDef': 'Defines activities within programmes with media and interaction points.',
-                'progMember': 'Links members to programmes with roles and progress tracking.',
-                'progRole': 'Defines roles that members can have within programmes.',
-                'member': 'Core user entity with personal data and programme participation.',
-                'partner': 'Business partner with organizational structure and relationships.',
-                'programme': 'Content programmes with activities, media, and flow control.',
-                'media': 'Multimedia content including videos, images, and interactive elements.',
-                'dmNavigation': 'Website navigation structure and menu management.',
-                'dmHTML': 'HTML content blocks for website pages.',
-                'dmFacts': 'Factual content and information display.',
-                'dmNews': 'News and article content management.',
-                'dmInclude': 'Include content for modular page components.',
-                'dmImage': 'Image resource management and optimization.',
-                'dmFile': 'File resource management and delivery.',
-                'farUser': 'FarCry user management and authentication.',
-                'farGroup': 'User group management and permissions.',
-                'farRole': 'Role-based access control definitions.',
-                'farPermission': 'Permission system for fine-grained access control.',
-                'dmProfile': 'User profile management and customization.',
-                'referer': 'Referral tracking and source attribution.',
-                'intake': 'Intake process and initial data collection.',
-                'center': 'Center management and organizational structure.',
-                'memberGroup': 'Group management for member organization.',
-                'activity': 'Activity tracking and progress monitoring.',
-                'journal': 'Journal entries and user reflections.',
-                'journalDef': 'Journal structure and template definitions.',
-                'library': 'Content library and resource management.',
-                'guide': 'User guides and instructional content.',
-                'tracker': 'Progress tracking and measurement tools.',
-                'trackerDef': 'Tracker configuration and definition.',
-                'ssq_stress01': 'Stress assessment and monitoring tool.',
-                'ssq_pain01': 'Pain assessment and monitoring tool.',
-                'ssq_arthritis01': 'Arthritis assessment and monitoring tool.',
-                'defaultMediaID': 'Default media reference for activities.',
-                'aCuePointActivities': 'Activities triggered at specific media cue points.',
-                'aMediaIDs': 'Media references for activity content.',
-                'onEndID': 'Activity triggered when media ends.',
-                'aInteract1Activities': 'First interaction point activities.',
-                'aInteract2Activities': 'Second interaction point activities.',
-                'aInteract3Activities': 'Third interaction point activities.',
-                'aInteract4Activities': 'Fourth interaction point activities.',
-                'aInteract5Activities': 'Fifth interaction point activities.'
-            };
-            return descriptions[componentName] || 'Component for managing data and relationships.';
+            // Try to get hint from CFC cache data FIRST
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component && component.hint) {
+                    return component.hint;
+                }
+            }
+            
+            // Try to get description from diagrams data SECOND
+            if (window.diagramsData && window.diagramsData.generated) {
+                // Look for any diagram that matches this component
+                for (const [key, diagram] of Object.entries(window.diagramsData.generated)) {
+                    if (key.startsWith(componentName + '-') && diagram.Description) {
+                        return diagram.Description;
+                    }
+                }
+            }
+            
+            // No description available
+            return '';
         }
         
         function getLayerDescription(layerKey) {
-            const layerDescriptions = {
-                'core': 'Foundation components and base functionality',
-                'admin': 'Administrative and user management components',
-                'programme': 'Programme and content management components',
-                'tracking': 'Progress tracking and assessment components',
-                'content': 'Content and media management components',
-                'resources': 'Resource and asset management components'
-            };
-            return layerDescriptions[layerKey] || 'Component layer';
+            // Try to get layer description from domains data
+            if (window.domainsData && window.domainsData.domains) {
+                // Look through all domains for layer descriptions
+                for (const domain of Object.values(window.domainsData.domains)) {
+                    if (domain.layers && domain.layers[layerKey] && domain.layers[layerKey].description) {
+                        return domain.layers[layerKey].description;
+                    }
+                }
+            }
+            
+            // No layer description available
+            return '';
         }
         
         function getLayerIcon(layerKey) {
-                    const layerIcons = {
-            'core': 'fa-cube',
-            'admin': 'fa-cogs',
-            'programme': 'fa-graduation-cap',
-            'tracking': 'fa-chart-line',
-            'content': 'fa-file-alt',
-            'flow': 'fa-random',
-            'resources': 'fa-database'
-        };
-            return layerIcons[layerKey] || 'fa-cube';
+            // Try to get layer icon from domains data
+            if (window.domainsData && window.domainsData.domains) {
+                // Look through all domains for layer icons
+                for (const domain of Object.values(window.domainsData.domains)) {
+                    if (domain.layers && domain.layers[layerKey] && domain.layers[layerKey].icon) {
+                        return domain.layers[layerKey].icon;
+                    }
+                }
+            }
+            
+            // Default icon if none found
+            return 'fa-cube';
         }
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            loadDomainsData();
-            loadCFCCacheData();
+            loadAllData();
             
-            // Show all sections open by default
-            document.querySelectorAll('.domain-content').forEach(content => {
-                content.classList.remove('collapsed');
-            });
-            document.querySelectorAll('.domain-header').forEach(header => {
-                header.classList.remove('collapsed');
-                const icon = header.querySelector('.toggle-icon');
-                if (icon) icon.textContent = '▼';
-            });
-            
-            // Initialize filter event listeners after data is loaded
+            // Initialize filter event listeners and modal listeners after data is loaded
             setTimeout(() => {
                 initializeFilters();
+                setupModalEventListeners();
             }, 1000);
         });
 
@@ -1957,11 +1854,11 @@
             // Create component data object using only available data
             const componentData = {
                 title: componentName,
-                description: componentDescription || 'Description not available',
-                file: componentInfo ? componentInfo.file || 'Not available' : 'Not available',
-                plugin: componentInfo ? componentInfo.plugin || 'Not available' : 'Not available',
-                properties: properties.length > 0 ? properties.join(', ') : 'No properties found',
-                dependencies: dependencies.length > 0 ? dependencies.join(', ') : 'No dependencies found',
+                description: componentDescription || '',
+                file: componentInfo ? componentInfo.file || '' : '',
+                plugin: componentInfo ? componentInfo.plugin || '' : '',
+                properties: properties.length > 0 ? properties.join(', ') : '',
+                dependencies: dependencies.length > 0 ? dependencies.join(', ') : '',
                 domain: getDomainDisplayName(domain),
                 layer: getLayerDisplayName(layer)
             };
@@ -2021,19 +1918,25 @@
             document.getElementById('modal').classList.remove('show');
         }
 
-        // Close modal on outside click
-        document.getElementById('modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideModal();
+        // Set up modal event listeners
+        function setupModalEventListeners() {
+            const modal = document.getElementById('modal');
+            if (modal) {
+                // Close modal on outside click
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        hideModal();
+                    }
+                });
             }
-        });
 
-        // Close modal on Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                hideModal();
-            }
-        });
+            // Close modal on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    hideModal();
+                }
+            });
+        }
 
         // Initialize Mermaid
         mermaid.initialize({ 
