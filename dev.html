@@ -18,6 +18,7 @@
             background: #f5f5f5;
             color: #333;
             line-height: 1.6;
+            font-size: 14px;
         }
 
         /* DEV MODE INDICATOR */
@@ -41,21 +42,21 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
         }
 
         .header {
             background: white;
-            padding: 8px 20px;
+            padding: 6px 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .header h1 {
             color: #2c3e50;
             margin-bottom: 3px;
-            font-size: 1.4em;
+            font-size: 1.3em;
         }
 
         .header p {
@@ -65,16 +66,16 @@
 
         .info-section {
             background: white;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .section-title {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: #2c3e50;
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: 600;
         }
 
@@ -88,7 +89,7 @@
         .domain-card {
             flex: 1;
             min-width: 200px;
-            padding: 12px;
+            padding: 10px;
             background: #f8f9fa;
             border-radius: 8px;
             border: 2px solid #e9ecef;
@@ -365,7 +366,7 @@
         }
 
         .card-header {
-            padding: 12px 15px;
+            padding: 10px 12px;
             border-bottom: 1px solid #e9ecef;
             position: relative;
         }
@@ -383,7 +384,7 @@
         }
 
         .card-title {
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 4px;
@@ -474,11 +475,11 @@
         }
 
         .card-body {
-            padding: 12px 15px;
+            padding: 10px 12px;
             display: flex;
             flex-direction: column;
             height: 100%;
-            gap: 12px;
+            gap: 10px;
         }
 
         .card-text {
@@ -676,7 +677,7 @@
 
         .modal-content {
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 8px;
             max-width: 90%;
             max-height: 90%;
@@ -688,9 +689,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-bottom: 1px solid #e9ecef;
-            padding-bottom: 15px;
+            padding-bottom: 12px;
         }
 
         .modal-title {
@@ -739,12 +740,26 @@
 
         /* Component Details Modal Styles */
         .component-details {
-            max-width: 600px;
+            max-width: 800px;
+        }
+        
+        /* Details Modal - Smaller */
+        .modal.details-modal .modal-content {
+            max-width: 900px;
+            max-height: 80vh;
+        }
+        
+        /* Diagram Modal - As large as possible */
+        .modal.diagram-modal .modal-content {
+            max-width: 95vw;
+            max-height: 95vh;
+            width: 95vw;
+            height: 95vh;
         }
 
         .detail-section {
-            margin-bottom: 25px;
-            padding: 15px;
+            margin-bottom: 20px;
+            padding: 12px;
             background: #f8f9fa;
             border-radius: 6px;
             border-left: 4px solid #007bff;
@@ -752,8 +767,8 @@
 
         .detail-section h4 {
             color: #2c3e50;
-            font-size: 1.1em;
-            margin-bottom: 10px;
+            font-size: 1.0em;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -1612,6 +1627,16 @@
             return '';
         }
         
+        function getDomainDisplayName(domainKey) {
+            // Convert domain key to display name (e.g., "provider" -> "Provider")
+            return domainKey.charAt(0).toUpperCase() + domainKey.slice(1);
+        }
+        
+        function getLayerDisplayName(layerKey) {
+            // Convert layer key to display name (e.g., "core" -> "Core")
+            return layerKey.charAt(0).toUpperCase() + layerKey.slice(1);
+        }
+        
         function getLayerIcon(layerKey) {
             // Try to get layer icon from domains data
             if (window.domainsData && window.domainsData.domains) {
@@ -1767,10 +1792,23 @@
         function showModal(title, content, componentName, domainKey, layerKey) {
             const domainDisplayName = getDomainDisplayName(domainKey);
             const layerDisplayName = getLayerDisplayName(layerKey);
-            document.getElementById('modalTitle').innerHTML = `
+            
+            // Get faIcon for the component
+            let faIcon = '';
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component && component.faIcon) {
+                    faIcon = component.faIcon;
+                }
+            }
+            
+            document.getElementById('diagramModalTitle').innerHTML = `
                 <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
-                    <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName}</span>
-                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0;">${domainDisplayName} / ${layerDisplayName} Diagram</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        ${faIcon ? `<i class="fas ${faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
+                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName.toLowerCase()}</span>
+                    </div>
+                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0; margin-left: 20px;">${domainDisplayName} / ${layerDisplayName} Diagram</span>
                 </div>
             `;
             
@@ -1790,7 +1828,7 @@
             
             if (mermaidUrl) {
                 // Use the real Mermaid URL
-                document.getElementById('modalBody').innerHTML = `
+                document.getElementById('diagramModalBody').innerHTML = `
                     <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
                         <iframe src="${mermaidUrl}" 
                                 style="width: 100%; height: 100%; border: none; border-radius: 8px;"
@@ -1800,14 +1838,14 @@
                 `;
             } else {
                 // Fallback to a message if no diagram found
-                document.getElementById('modalBody').innerHTML = `
+                document.getElementById('diagramModalBody').innerHTML = `
                     <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: #6c757d;">
                         <p>No diagram available for ${componentName} in ${domainDisplayName} domain</p>
                     </div>
                 `;
             }
             
-            document.getElementById('modal').classList.add('show');
+            document.getElementById('diagramModal').classList.add('show');
         }
 
 
@@ -1836,11 +1874,13 @@
             }
             
             // Get properties for this component
+            // Get properties from componentMetadata (all properties)
             let properties = [];
-            if (cacheData && cacheData.properties) {
-                properties = cacheData.properties
-                    .filter(prop => prop.entity === componentName)
-                    .map(prop => prop.property);
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component && component.properties) {
+                    properties = component.properties.map(prop => prop.name);
+                }
             }
             
             // Get dependencies (targets from properties)
@@ -1851,47 +1891,73 @@
                     .map(prop => prop.target);
             }
             
+            // Get display name, hint, filePath, description, and faIcon from CFC cache
+            let displayName = componentName;
+            let hint = '';
+            let filePath = '';
+            let description = '';
+            let faIcon = '';
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component) {
+                    if (component.displayName) displayName = component.displayName;
+                    if (component.hint) hint = component.hint;
+                    if (component.filePath) filePath = component.filePath;
+                    if (component.description) description = component.description;
+                    if (component.faIcon) faIcon = component.faIcon;
+                }
+            }
+            
             // Create component data object using only available data
             const componentData = {
                 title: componentName,
-                description: componentDescription || '',
+                displayName: displayName,
+                hint: hint,
+                description: description || componentDescription || '',
                 file: componentInfo ? componentInfo.file || '' : '',
+                filePath: filePath,
                 plugin: componentInfo ? componentInfo.plugin || '' : '',
-                properties: properties.length > 0 ? properties.join(', ') : '',
-                dependencies: dependencies.length > 0 ? dependencies.join(', ') : '',
+                faIcon: faIcon,
+                properties: properties,
+                dependencies: dependencies,
                 domain: getDomainDisplayName(domain),
                 layer: getLayerDisplayName(layer)
             };
             
             // Set modal title
-            document.getElementById('modalTitle').innerHTML = `
+            document.getElementById('detailsModalTitle').innerHTML = `
                 <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
-                    <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentData.title}</span>
-                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0;">Component Details</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        ${componentData.faIcon ? `<i class="fas ${componentData.faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
+                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentData.displayName.toLowerCase()}</span>
+                    </div>
+                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0; margin-left: 20px;">Component Details</span>
                 </div>
             `;
             
             // Set modal content
-            document.getElementById('modalBody').innerHTML = `
+            document.getElementById('detailsModalBody').innerHTML = `
                 <div class="component-details">
                     <div class="detail-section">
-                        <h3>Description</h3>
-                        <p>${componentData.description}</p>
+                        <h3>${componentData.displayName}</h3>
+                        <p>${componentData.hint || 'No hint available'}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h3>Domain</h3>
-                        <p>${componentData.domain}</p>
+                        <h3>Domain / Layer</h3>
+                        <p>${componentData.domain} / ${componentData.layer}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h3>Layer</h3>
-                        <p>${componentData.layer}</p>
+                        <h3>Properties (${componentData.properties.length})</h3>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; padding: 10px; border-radius: 4px; background: #f8f9fa;">
+                            ${componentData.properties.length > 0 ? componentData.properties.join(', ') : 'No properties found'}
+                        </div>
                     </div>
                     
                     <div class="detail-section">
-                        <h3>File</h3>
-                        <p>${componentData.file}</p>
+                        <h3>Dependencies (${componentData.dependencies.length})</h3>
+                        <p>${componentData.dependencies.length > 0 ? componentData.dependencies.join(', ') : 'No dependencies found'}</p>
                     </div>
                     
                     <div class="detail-section">
@@ -1900,40 +1966,56 @@
                     </div>
                     
                     <div class="detail-section">
-                        <h3>Properties</h3>
-                        <p>${componentData.properties}</p>
+                        <h3>File</h3>
+                        <p>${componentData.filePath || componentData.file}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h3>Dependencies</h3>
-                        <p>${componentData.dependencies}</p>
+                        <h3>Description</h3>
+                        <p>${componentData.description || 'No description available'}</p>
                     </div>
                 </div>
             `;
             
-            document.getElementById('modal').classList.add('show');
+            document.getElementById('detailsModal').classList.add('show');
         }
 
-        function hideModal() {
-            document.getElementById('modal').classList.remove('show');
+        function hideDetailsModal() {
+            document.getElementById('detailsModal').classList.remove('show');
+        }
+        
+        function hideDiagramModal() {
+            document.getElementById('diagramModal').classList.remove('show');
         }
 
         // Set up modal event listeners
         function setupModalEventListeners() {
-            const modal = document.getElementById('modal');
-            if (modal) {
-                // Close modal on outside click
-                modal.addEventListener('click', function(e) {
+            const detailsModal = document.getElementById('detailsModal');
+            const diagramModal = document.getElementById('diagramModal');
+            
+            if (detailsModal) {
+                // Close details modal on outside click
+                detailsModal.addEventListener('click', function(e) {
                     if (e.target === this) {
-                        hideModal();
+                        hideDetailsModal();
+                    }
+                });
+            }
+            
+            if (diagramModal) {
+                // Close diagram modal on outside click
+                diagramModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        hideDiagramModal();
                     }
                 });
             }
 
-            // Close modal on Escape key
+            // Close modals on Escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
-                    hideModal();
+                    hideDetailsModal();
+                    hideDiagramModal();
                 }
             });
         }
@@ -1959,13 +2041,24 @@
     </script>
 
     <!-- Modal for Component Details -->
-    <div id="modal" class="modal">
+    <div id="detailsModal" class="modal details-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <div id="modalTitle"></div>
-                <button onclick="hideModal()" class="modal-close">✕</button>
+                <div id="detailsModalTitle"></div>
+                <button onclick="hideDetailsModal()" class="modal-close">✕</button>
             </div>
-            <div id="modalBody" class="modal-body"></div>
+            <div id="detailsModalBody" class="modal-body"></div>
+        </div>
+    </div>
+    
+    <!-- Modal for Diagrams -->
+    <div id="diagramModal" class="modal diagram-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="diagramModalTitle"></div>
+                <button onclick="hideDiagramModal()" class="modal-close">✕</button>
+            </div>
+            <div id="diagramModalBody" class="modal-body"></div>
         </div>
     </div>
 </body>
