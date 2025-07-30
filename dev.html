@@ -22,16 +22,19 @@
         /* DEV MODE INDICATOR */
         .dev-indicator {
             position: fixed;
-            top: 10px;
-            left: 10px;
+            top: 20px;
+            right: 20px;
             background: #ff6b6b;
             color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 15px;
+            border-radius: 8px;
             font-size: 0.8em;
             font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .container {
@@ -212,6 +215,16 @@
             border-color: #20c997;
         }
 
+        /* All Layers button styling */
+        .strata-item[data-layer="all"] {
+            border-left-color: #495057;
+            color: #495057;
+        }
+        .strata-item.active[data-layer="all"] {
+            background: rgba(73, 80, 87, 0.1);
+            border-color: #495057;
+        }
+
         .strata-name {
             font-weight: 600;
             margin-bottom: 3px;
@@ -228,7 +241,7 @@
         .stats {
             position: fixed;
             top: 20px;
-            right: 20px;
+            left: 20px;
             background: white;
             padding: 15px;
             border-radius: 8px;
@@ -237,6 +250,8 @@
             flex-direction: column;
             gap: 10px;
             z-index: 100;
+            min-width: 200px;
+            max-width: 180px;
         }
 
         .stat-item {
@@ -424,7 +439,7 @@
         }
 
         .strata-badge.strata-core {
-            background: #495057;
+            background: #6f42c1;
             color: white;
         }
         .strata-badge.strata-tracking {
@@ -518,23 +533,26 @@
         }
 
         .btn-primary {
-            background: #007bff;
+            background: #4a90e2;
             color: white;
+            justify-content: center;
         }
 
         .btn-primary:hover {
-            background: #0056b3;
+            background: #357abd;
         }
 
         .btn-outline {
-            background: transparent;
-            color: #007bff;
-            border: 1px solid #007bff;
+            background: #6c757d; /* Darker grey */
+            color: white;
+            border: 1px solid #6c757d;
+            justify-content: center; /* Centered icon+text */
         }
 
         .btn-outline:hover {
-            background: #007bff;
+            background: #5a6268;
             color: white;
+            border-color: #545b62;
         }
 
         .navigation {
@@ -940,17 +958,18 @@
 </head>
 <body>
     <!-- DEV MODE INDICATOR -->
-    <div class="dev-indicator">🚧 DEV MODE - Local Development</div>
+    <div class="dev-indicator">
+        <div style="font-size: 1.2em; color: white; margin-bottom: 5px;">🚧 DEV MODE</div>
+        <div style="font-size: 0.7em; color: rgba(255,255,255,0.8);">Local Development</div>
+    </div>
 
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>CFC Diagrams Interface</h1>
-            <p>Interactive Entity Relationship Explorer - DEV MODE for layout/styling/interaction tweaks</p>
-        </div>
-
         <!-- Stats (Fixed Position) -->
         <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" style="font-size: 1.2em; color: #2c3e50; margin-bottom: 5px;">Wellmind Health Platform Component Explorer</div>
+                <div class="stat-label" style="font-size: 0.7em; color: #6c757d; margin-bottom: 15px;">Interactive Entity Relationship Explorer</div>
+            </div>
             <div class="stat-item">
                 <div class="stat-number" id="domains-count" title="Total number of architectural domains">4</div>
                 <div class="stat-label" title="Total number of architectural domains">Domains</div>
@@ -1020,10 +1039,7 @@
                     <div class="strata-name" title="Content Layer&#10;&#10;Media and resource management"><i class="fas fa-file-alt"></i>&nbsp;Content</div>
                     <div class="strata-description" title="Content Layer&#10;&#10;Media and resource management">Media & resources</div>
                 </div>
-                <div class="strata-item strata-flow" data-layer="flow">
-                    <div class="strata-name" title="Flow Layer&#10;&#10;Workflow management and process control"><i class="fas fa-project-diagram"></i>&nbsp;Flow</div>
-                    <div class="strata-description" title="Flow Layer&#10;&#10;Workflow management and process control">Workflow management</div>
-                </div>
+
                 <div class="strata-item strata-admin" data-layer="admin">
                     <div class="strata-name" title="Admin Layer&#10;&#10;Administrative and configuration tools"><i class="fas fa-cogs"></i>&nbsp;Admin</div>
                     <div class="strata-description" title="Admin Layer&#10;&#10;Administrative and configuration tools">Configuration tools</div>
@@ -1557,7 +1573,7 @@
                         <button class="btn btn-primary btn-sm" onclick="showModal('${mermaidUrl}', '${componentName}')">
                             <i class="fas fa-project-diagram"></i>&nbsp;View Diagram
                         </button>
-                        <button class="btn btn-secondary btn-sm" onclick="showComponentDetails('${componentName}', '${domainKey}', '${layerKey}')">
+                                                        <button class="btn btn-outline btn-sm" onclick="showComponentDetails('${componentName}', '${domainKey}', '${layerKey}')">
                             <i class="fas fa-info-circle"></i>&nbsp;View Details
                         </button>
                     </div>
