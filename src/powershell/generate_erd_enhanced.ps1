@@ -1623,17 +1623,31 @@ Write-Host "🎯 Focus: $lFocus | 📊 Type: $DiagramType | 🌍 Domains: $lDoma
 
 # Determine whether to use fresh scan or cached data
 if ($RefreshCFCs -or !(Test-Path $cacheFile)) {
-    Write-Host "Scanning CFC files for relationships..."
-    $relationships = Get-CFCRelationships -basePath $pluginsPath
-    Save-RelationshipsToCache -relationships $relationships -cacheFile $cacheFile
-} else {
-    Write-Host "Loading cached relationships from: $cacheFile"
-    $relationships = Load-CachedRelationships -cacheFile $cacheFile
-    if ($null -eq $relationships) {
-        Write-Host "Cache file corrupted or empty, scanning CFC files..."
+    Write-Host "Regenerating cache using dedicated cache generation script..."
+    $cacheScriptPath = Join-Path $PSScriptRoot "regenerate_cache_only.ps1"
+    if (Test-Path $cacheScriptPath) {
+        & $cacheScriptPath
+        Write-Host "Cache regeneration completed via dedicated script"
+    } else {
+        Write-Host "Warning: Cache generation script not found, falling back to internal generation..."
         $relationships = Get-CFCRelationships -basePath $pluginsPath
         Save-RelationshipsToCache -relationships $relationships -cacheFile $cacheFile
     }
+}
+
+Write-Host "Loading cached relationships from: $cacheFile"
+$relationships = Load-CachedRelationships -cacheFile $cacheFile
+if ($null -eq $relationships) {
+    Write-Host "Cache file corrupted or empty, regenerating..."
+    $cacheScriptPath = Join-Path $PSScriptRoot "regenerate_cache_only.ps1"
+    if (Test-Path $cacheScriptPath) {
+        & $cacheScriptPath
+    } else {
+        Write-Host "Warning: Cache generation script not found, falling back to internal generation..."
+        $relationships = Get-CFCRelationships -basePath $pluginsPath
+        Save-RelationshipsToCache -relationships $relationships -cacheFile $cacheFile
+    }
+    $relationships = Load-CachedRelationships -cacheFile $cacheFile
 }
 
 Write-Host "Found $($relationships.entities.Count) entities"
