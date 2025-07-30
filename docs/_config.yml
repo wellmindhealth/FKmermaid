@@ -1,0 +1,25 @@
+# GitHub Pages Configuration
+# This file enables GitHub Pages for this repository
+
+# Site settings
+title: FKmermaid ER Explorer
+description: Interactive Entity Relationship Explorer for Wellmind Health
+baseurl: "/FKmermaid"
+url: "https://wellmindhealth.github.io"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+relative_links:
+  enabled: true
+  collections: true
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/

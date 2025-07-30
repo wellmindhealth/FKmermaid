@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FKmermaid ER Explorer - GitHub Pages POC</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .header p { font-size: 1.1rem; opacity: 0.9; }
+        
+        .controls { background: white; padding: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin: 1rem; border-radius: 8px; }
+        .filter-group { display: inline-block; margin-right: 2rem; }
+        .filter-group label { font-weight: bold; margin-right: 0.5rem; }
+        .filter-btn { padding: 0.5rem 1rem; margin: 0.25rem; border: 2px solid #667eea; background: white; color: #667eea; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
+        .filter-btn:hover { background: #667eea; color: white; }
+        .filter-btn.active { background: #667eea; color: white; }
+        
+        .stats { background: white; padding: 1rem; margin: 1rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .stats span { font-weight: bold; color: #667eea; }
+        
+        .content { padding: 1rem; }
+        .domain-section { background: white; margin: 1rem 0; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .domain-header { background: #f8f9fa; padding: 1rem; cursor: pointer; border-bottom: 1px solid #dee2e6; }
+        .domain-header:hover { background: #e9ecef; }
+        .domain-content { padding: 1rem; display: none; }
+        .domain-content.show { display: block; }
+        
+        .diagram-card { background: #f8f9fa; margin: 1rem 0; padding: 1rem; border-radius: 4px; border-left: 4px solid #667eea; }
+        .diagram-title { font-weight: bold; color: #333; margin-bottom: 0.5rem; }
+        .diagram-description { color: #666; margin-bottom: 1rem; }
+        .view-btn { background: #667eea; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; }
+        .view-btn:hover { background: #5a6fd8; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 2rem; border-radius: 8px; max-width: 80%; max-height: 80%; overflow: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
+        .close-btn:hover { color: #333; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔍 FKmermaid ER Explorer</h1>
+        <p>Interactive Entity Relationship Explorer - GitHub Pages POC</p>
+    </div>
+
+    <div class="controls">
+        <div class="filter-group">
+            <label>Domain:</label>
+            <button class="filter-btn active" data-filter="domain" data-value="all">All Domains</button>
+            <button class="filter-btn" data-filter="domain" data-value="provider">Provider</button>
+            <button class="filter-btn" data-filter="domain" data-value="participant">Participant</button>
+            <button class="filter-btn" data-filter="domain" data-value="pathway">Pathway</button>
+            <button class="filter-btn" data-filter="domain" data-value="site">Site</button>
+        </div>
+        
+        <div class="filter-group">
+            <label>Layer:</label>
+            <button class="filter-btn active" data-filter="layer" data-value="all">All Layers</button>
+            <button class="filter-btn" data-filter="layer" data-value="core">Core</button>
+            <button class="filter-btn" data-filter="layer" data-value="tracking">Tracking</button>
+            <button class="filter-btn" data-filter="layer" data-value="programme">Programme</button>
+            <button class="filter-btn" data-filter="layer" data-value="content">Content</button>
+            <button class="filter-btn" data-filter="layer" data-value="flow">Flow</button>
+            <button class="filter-btn" data-filter="layer" data-value="admin">Admin</button>
+            <button class="filter-btn" data-filter="layer" data-value="resources">Resources</button>
+        </div>
+    </div>
+
+    <div class="stats">
+        <strong>Active Filters:</strong> <span id="activeFilters">All Domains & Layers</span> | 
+        <strong>Visible Components:</strong> <span id="visibleCount">0</span>
+    </div>
+
+    <div class="content">
+        <div class="domain-section" data-domain="provider">
+            <div class="domain-header" onclick="toggleDomain(this)">
+                <h3>🏥 Provider Domain</h3>
+            </div>
+            <div class="domain-content">
+                <div class="diagram-card" data-layer="core">
+                    <div class="diagram-title">Provider Core ER</div>
+                    <div class="diagram-description">Core provider relationships and data structures</div>
+                    <button class="view-btn" onclick="showModal('Provider Core ER', 'This would show the actual Mermaid diagram for provider core relationships...')">View Details</button>
+                </div>
+                <div class="diagram-card" data-layer="tracking">
+                    <div class="diagram-title">Provider Tracking</div>
+                    <div class="diagram-description">Provider activity and engagement tracking</div>
+                    <button class="view-btn" onclick="showModal('Provider Tracking', 'This would show the actual Mermaid diagram for provider tracking...')">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="domain-section" data-domain="participant">
+            <div class="domain-header" onclick="toggleDomain(this)">
+                <h3>👤 Participant Domain</h3>
+            </div>
+            <div class="domain-content">
+                <div class="diagram-card" data-layer="core">
+                    <div class="diagram-title">Participant Core ER</div>
+                    <div class="diagram-description">Core participant data and relationships</div>
+                    <button class="view-btn" onclick="showModal('Participant Core ER', 'This would show the actual Mermaid diagram for participant core relationships...')">View Details</button>
+                </div>
+                <div class="diagram-card" data-layer="programme">
+                    <div class="diagram-title">Participant Programmes</div>
+                    <div class="diagram-description">Programme enrollment and progress tracking</div>
+                    <button class="view-btn" onclick="showModal('Participant Programmes', 'This would show the actual Mermaid diagram for participant programmes...')">View Details</button>
+                </div>
+                <div class="diagram-card" data-layer="content">
+                    <div class="diagram-title">Participant Content</div>
+                    <div class="diagram-description">Content consumption and engagement</div>
+                    <button class="view-btn" onclick="showModal('Participant Content', 'This would show the actual Mermaid diagram for participant content...')">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="domain-section" data-domain="pathway">
+            <div class="domain-header" onclick="toggleDomain(this)">
+                <h3>🛤️ Pathway Domain</h3>
+            </div>
+            <div class="domain-content">
+                <div class="diagram-card" data-layer="flow">
+                    <div class="diagram-title">Pathway Flow</div>
+                    <div class="diagram-description">Pathway progression and flow logic</div>
+                    <button class="view-btn" onclick="showModal('Pathway Flow', 'This would show the actual Mermaid diagram for pathway flow...')">View Details</button>
+                </div>
+                <div class="diagram-card" data-layer="content">
+                    <div class="diagram-title">Pathway Content</div>
+                    <div class="diagram-description">Content organization within pathways</div>
+                    <button class="view-btn" onclick="showModal('Pathway Content', 'This would show the actual Mermaid diagram for pathway content...')">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="domain-section" data-domain="site">
+            <div class="domain-header" onclick="toggleDomain(this)">
+                <h3>🏢 Site Domain</h3>
+            </div>
+            <div class="domain-content">
+                <div class="diagram-card" data-layer="admin">
+                    <div class="diagram-title">Site Administration</div>
+                    <div class="diagram-description">Site management and configuration</div>
+                    <button class="view-btn" onclick="showModal('Site Administration', 'This would show the actual Mermaid diagram for site administration...')">View Details</button>
+                </div>
+                <div class="diagram-card" data-layer="resources">
+                    <div class="diagram-title">Site Resources</div>
+                    <div class="diagram-description">Resource management and allocation</div>
+                    <button class="view-btn" onclick="showModal('Site Resources', 'This would show the actual Mermaid diagram for site resources...')">View Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Modal Title</h2>
+                <button class="close-btn" onclick="hideModal()">&times;</button>
+            </div>
+            <div id="modalBody">
+                Modal content will go here...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Filter state
+        let activeFilters = {
+            domain: 'all',
+            layer: 'all'
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFilters();
+            updateVisibleCount();
+        });
+
+        // Filter button clicks
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filterType = this.dataset.filter;
+                const filterValue = this.dataset.value;
+                
+                // Update active state
+                document.querySelectorAll(`[data-filter="${filterType}"]`).forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update filter state
+                activeFilters[filterType] = filterValue;
+                
+                // Apply filters
+                updateFilters();
+                updateVisibleCount();
+                updateActiveFiltersText();
+            });
+        });
+
+        function updateFilters() {
+            const domainSections = document.querySelectorAll('.domain-section');
+            const diagramCards = document.querySelectorAll('.diagram-card');
+            
+            domainSections.forEach(section => {
+                const domain = section.dataset.domain;
+                const shouldShowDomain = activeFilters.domain === 'all' || domain === activeFilters.domain;
+                
+                if (shouldShowDomain) {
+                    section.classList.remove('hidden');
+                    
+                    // Show domain content if filtered
+                    if (activeFilters.domain !== 'all') {
+                        const content = section.querySelector('.domain-content');
+                        content.classList.add('show');
+                    }
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+            
+            diagramCards.forEach(card => {
+                const layer = card.dataset.layer;
+                const domain = card.closest('.domain-section').dataset.domain;
+                
+                const shouldShowCard = 
+                    (activeFilters.domain === 'all' || domain === activeFilters.domain) &&
+                    (activeFilters.layer === 'all' || layer === activeFilters.layer);
+                
+                if (shouldShowCard) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function updateVisibleCount() {
+            const visibleCards = document.querySelectorAll('.diagram-card:not(.hidden)').length;
+            document.getElementById('visibleCount').textContent = visibleCards;
+        }
+
+        function updateActiveFiltersText() {
+            const domainText = activeFilters.domain === 'all' ? 'All Domains' : activeFilters.domain.charAt(0).toUpperCase() + activeFilters.domain.slice(1);
+            const layerText = activeFilters.layer === 'all' ? 'All Layers' : activeFilters.layer.charAt(0).toUpperCase() + activeFilters.layer.slice(1);
+            
+            document.getElementById('activeFilters').textContent = `${domainText} & ${layerText}`;
+        }
+
+        function toggleDomain(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('show');
+        }
+
+        function showModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = `
+                <p>${content}</p>
+                <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+                    <strong>Mermaid Diagram would render here:</strong><br>
+                    <code>graph TD<br>
+                    A[Entity A] --> B[Entity B]<br>
+                    B --> C[Entity C]<br>
+                    C --> D[Entity D]</code>
+                </div>
+            `;
+            document.getElementById('modal').classList.add('show');
+        }
+
+        function hideModal() {
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        // Close modal on outside click
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideModal();
+            }
+        });
+    </script>
+</body>
+</html> 
