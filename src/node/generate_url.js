@@ -5,6 +5,9 @@ const { Buffer } = require('buffer');
 // Read from stdin instead of a file
 const getStdin = require('get-stdin').default;
 
+// Get mode from command line argument (default to 'edit')
+const mode = process.argv[2] || 'edit';
+
 getStdin().then(data => {
     const mermaidCode = data;
 
@@ -18,7 +21,9 @@ getStdin().then(data => {
     const jsonStr = JSON.stringify(json);
     const compressed = pako.deflate(jsonStr, { level: 9 });
     const encoded = Buffer.from(compressed).toString('base64');
-    const url = `https://mermaid.live/edit#pako:${encoded}`;
+    
+    // Generate URL with specified mode
+    const url = `https://mermaid.live/${mode}#pako:${encoded}`;
 
     console.log(url);
 }); 

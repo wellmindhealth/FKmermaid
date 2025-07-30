@@ -63,7 +63,9 @@ param(
     [string]$ConfigFile = "D:\GIT\farcry\Cursor\FKmermaid\config\cfc_scan_config.json",
     [string]$OutputFile = "",
     [switch]$Debug,
-    [string]$MermaidMode = "edit"
+    [string]$MermaidMode = "edit",
+    [switch]$NoBrowser = $false,
+    [string]$JsonOutputFile = ""
 )
 
 # Import logging modules
@@ -107,6 +109,7 @@ function Show-Help {
     Write-Host "  -Help                    # Show this help message" -ForegroundColor White
     Write-Host "  -Debug                   # Enable debug mode" -ForegroundColor White
     Write-Host "  -MermaidMode 'edit|view' # Mermaid.live mode ('edit' or 'view')" -ForegroundColor White
+    Write-Host "  -NoBrowser              # Suppress browser opening (for automation)" -ForegroundColor White
     Write-Host ""
     Write-Host "💡 USAGE EXAMPLES:" -ForegroundColor Cyan
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Green
@@ -2003,14 +2006,34 @@ $mermaidLiveUrl = $mermaidContent | node $nodeScriptPath $MermaidMode
 
 Write-Host "✅ Generated compressed Mermaid.live URL" -ForegroundColor Green
 
-# Non-blocking browser launch to prevent hanging
-try {
-    # Use Start-Job to make it truly non-blocking
-    Start-Job -ScriptBlock { param($url) Start-Process $url -WindowStyle Hidden } -ArgumentList $mermaidLiveUrl | Out-Null
-    Write-Host "🌐 Opened Mermaid.live directly with content" -ForegroundColor Green
-} catch {
-    Write-Host "⚠️  Could not open browser automatically. Please copy this URL:" -ForegroundColor Yellow
-    Write-Host $mermaidLiveUrl -ForegroundColor Cyan
+# JSON output if specified
+if ($JsonOutputFile -ne "") {
+    $jsonOutput = @{
+        Focus = $lFocus
+        Domains = $lDomains
+        DiagramType = $DiagramType
+        MermaidUrl = $mermaidLiveUrl
+        GeneratedAt = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+        Status = "Success"
+    }
+    
+    $jsonOutput | ConvertTo-Json -Depth 10 | Set-Content -Path $JsonOutputFile
+    Write-Host "📄 JSON output written to: $JsonOutputFile" -ForegroundColor Green
+}
+
+# Browser launch (controlled by NoBrowser parameter)
+if (-not $NoBrowser) {
+    try {
+        # Use Start-Job to make it truly non-blocking
+        Start-Job -ScriptBlock { param($url) Start-Process $url -WindowStyle Hidden } -ArgumentList $mermaidLiveUrl | Out-Null
+        Write-Host "🌐 Opened Mermaid.live directly with content" -ForegroundColor Green
+    } catch {
+        Write-Host "⚠️  Could not open browser automatically. Please copy this URL:" -ForegroundColor Yellow
+        Write-Host $mermaidLiveUrl -ForegroundColor Cyan
+    }
+} else {
+    Write-Host "🚫 Browser opening suppressed (NoBrowser parameter)" -ForegroundColor Yellow
+    Write-Host "🔗 Mermaid.live URL: $mermaidLiveUrl" -ForegroundColor Cyan
 }
 
 Write-Host "✅ Enhanced ERD generation complete!"

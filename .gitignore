@@ -1,5 +1,11 @@
 # FKmermaid Project .gitignore
 
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # Logs
 logs/
 *.log
@@ -7,6 +13,10 @@ logs/
 # Generated exports
 exports/
 *.mmd
+
+# Allow PNG previews for Confluence
+!exports/pre_generated/png_previews/
+!exports/pre_generated/png_previews/*.png
 
 # Allow test diagrams for Stratus add-on
 !test-diagrams/
