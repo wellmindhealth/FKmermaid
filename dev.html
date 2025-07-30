@@ -805,6 +805,11 @@
             padding: 20px;
         }
 
+        /* Prevent body scroll when modal is open */
+        body.modal-open {
+            overflow: hidden;
+        }
+
         .modal-content {
             background: white;
             border-radius: 8px;
@@ -1672,18 +1677,17 @@
             };
             return layerDescriptions[layerKey] || 'Component layer';
         }
-        
+
         function getLayerIcon(layerKey) {
             const layerIcons = {
                 'core': 'fa-cube',
-                'admin': 'fa-users-cog',
-                'programme': 'fa-play-circle',
+                'admin': 'fa-cogs',
+                'programme': 'fa-graduation-cap',
                 'tracking': 'fa-chart-line',
                 'content': 'fa-file-alt',
-                'flow': 'fa-random',
-                'resources': 'fa-folder'
+                'resources': 'fa-database'
             };
-            return layerIcons[layerKey] || 'fa-cube';
+            return layerIcons[layerKey] || 'fa-layer-group';
         }
         
         // Initialize
@@ -1785,7 +1789,21 @@
 
         function applyFilters() {
             const diagramCards = document.querySelectorAll('.diagram-card');
+            const domainSections = document.querySelectorAll('.domain-section');
             
+            // Hide/show domain sections based on domain filter
+            domainSections.forEach(section => {
+                const sectionDomain = section.dataset.domain;
+                const shouldShowSection = activeFilters.domain === 'all' || sectionDomain === activeFilters.domain;
+                
+                if (shouldShowSection) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Hide/show individual cards based on layer filter
             diagramCards.forEach(card => {
                 const cardDomain = card.closest('.domain-section').dataset.domain;
                 const cardLayer = card.dataset.layer;
@@ -1800,6 +1818,8 @@
                     card.classList.add('hidden');
                 }
             });
+            
+            updateStats();
         }
 
         function updateStats() {
@@ -1832,6 +1852,7 @@
                 </div>
             `;
             document.getElementById('modal').classList.add('show');
+            document.body.classList.add('modal-open');
         }
 
         function showComponentDetails(componentName, domain, layer) {
@@ -1976,10 +1997,12 @@
             `;
             
             document.getElementById('modal').classList.add('show');
+            document.body.classList.add('modal-open');
         }
 
         function hideModal() {
             document.getElementById('modal').classList.remove('show');
+            document.body.classList.remove('modal-open');
         }
 
         // Close modal on outside click
