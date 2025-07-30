@@ -15,7 +15,7 @@ Write-Host "🖼️  Generating PNG Previews" -ForegroundColor Cyan
 Write-Host "=========================" -ForegroundColor Cyan
 
 # Load the results from the 165 diagrams generation
-$resultsFile = Join-Path $PSScriptRoot "..\..\exports\pre_generated\165_diagrams_results.json"
+$resultsFile = Join-Path $PSScriptRoot "..\..\config\165_diagrams_results.json"
 $results = Get-Content $resultsFile -Raw | ConvertFrom-Json
 
 # Create PNG output directory

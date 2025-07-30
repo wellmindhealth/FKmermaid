@@ -63,7 +63,7 @@ $domainsConfigPath = Join-Path $PSScriptRoot "..\..\config\domains.json"
 $domainsConfig = Get-Content $domainsConfigPath | ConvertFrom-Json
 
 # Load real diagram data
-$diagramsDataPath = Join-Path $PSScriptRoot "..\..\exports\pre_generated\165_diagrams_results.json"
+$diagramsDataPath = Join-Path $PSScriptRoot "..\..\config\165_diagrams_results.json"
 $diagramsData = Get-Content $diagramsDataPath | ConvertFrom-Json
 
 # Domain definitions and descriptions

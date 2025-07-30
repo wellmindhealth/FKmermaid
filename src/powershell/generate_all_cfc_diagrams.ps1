@@ -153,7 +153,7 @@ foreach ($cfcName in $uniqueCfcNames) {
 }
 
 # Save results to JSON file
-$resultsFile = Join-Path $PSScriptRoot "..\..\exports\pre_generated\165_diagrams_results.json"
+$resultsFile = Join-Path $PSScriptRoot "..\..\config\165_diagrams_results.json"
 $diagramResults | ConvertTo-Json -Depth 10 | Set-Content -Path $resultsFile
 
 # Summary

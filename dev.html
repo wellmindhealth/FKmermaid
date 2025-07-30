@@ -1408,7 +1408,7 @@
                 // Load all three files
                 const [domainsResponse, diagramsResponse, cacheResponse] = await Promise.all([
                     fetch(`config/domains.json?t=${timestamp}`),
-                    fetch(`exports/pre_generated/165_diagrams_results.json?t=${timestamp}`),
+                    fetch(`config/165_diagrams_results.json?t=${timestamp}`),
                     fetch(`config/cfc_cache.json?t=${timestamp}`)
                 ]);
                 
