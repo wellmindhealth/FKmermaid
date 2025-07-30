@@ -41,8 +41,8 @@ foreach ($mmdFile in $mmdFiles) {
             "-i", $mmdFile.FullName,
             "-o", $pngFilePath,
             "-b", "transparent",
-            "-s", "3.0",
-            "-w", "2000"
+            "-s", "2.0",
+            "-w", "1200"
         )
         
         # Run from the FKmermaid root directory where package.json is located
