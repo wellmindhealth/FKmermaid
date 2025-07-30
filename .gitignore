@@ -33,7 +33,7 @@ tests/results/test_report_*.json
 tests/results/*.json
 
 # Cache files
-config/cfc_cache.json
+# config/cfc_cache.json - Required for GitHub Pages
 
 # Environment files
 .env
