@@ -425,7 +425,7 @@
 
         /* CSS-only functionality - FIXED VERSION */
 
-        /* Domain filtering - FIXED SELECTORS */
+        /* Domain filtering - FIXED SELECTORS with auto-expand */
         #filter-all:checked ~ .domain-section {
             display: block;
         }
@@ -444,6 +444,23 @@
 
         #filter-site:checked ~ .domain-section:not(.site) {
             display: none;
+        }
+
+        /* Auto-expand domain content when filtered */
+        #filter-provider:checked ~ .domain-section.provider .domain-content {
+            display: block;
+        }
+
+        #filter-participant:checked ~ .domain-section.participant .domain-content {
+            display: block;
+        }
+
+        #filter-pathway:checked ~ .domain-section.pathway .domain-content {
+            display: block;
+        }
+
+        #filter-site:checked ~ .domain-section.site .domain-content {
+            display: block;
         }
 
         /* Layer filtering - FIXED SELECTORS - Target all diagram cards */
@@ -476,6 +493,35 @@
         }
 
         #filter-layer-resources:checked ~ .diagram-card:not([data-layer="resources"]) {
+            display: none;
+        }
+
+        /* Ensure layer filters work with domain filters */
+        #filter-layer-core:checked ~ .domain-section .diagram-card:not([data-layer="core"]) {
+            display: none;
+        }
+
+        #filter-layer-tracking:checked ~ .domain-section .diagram-card:not([data-layer="tracking"]) {
+            display: none;
+        }
+
+        #filter-layer-programme:checked ~ .domain-section .diagram-card:not([data-layer="programme"]) {
+            display: none;
+        }
+
+        #filter-layer-content:checked ~ .domain-section .diagram-card:not([data-layer="content"]) {
+            display: none;
+        }
+
+        #filter-layer-flow:checked ~ .domain-section .diagram-card:not([data-layer="flow"]) {
+            display: none;
+        }
+
+        #filter-layer-admin:checked ~ .domain-section .diagram-card:not([data-layer="admin"]) {
+            display: none;
+        }
+
+        #filter-layer-resources:checked ~ .domain-section .diagram-card:not([data-layer="resources"]) {
             display: none;
         }
 
@@ -613,7 +659,65 @@
             color: #333;
         }
 
-        /* CSS Counters for Dynamic Stats */
+        /* Dynamic Status Text */
+        .filter-status {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        #filter-all:checked ~ .stats-bar .filter-status span::after {
+            content: "All Domains & Layers";
+        }
+
+        #filter-provider:checked ~ .stats-bar .filter-status span::after {
+            content: "Provider Domain Only";
+        }
+
+        #filter-participant:checked ~ .stats-bar .filter-status span::after {
+            content: "Participant Domain Only";
+        }
+
+        #filter-pathway:checked ~ .stats-bar .filter-status span::after {
+            content: "Pathway Domain Only";
+        }
+
+        #filter-site:checked ~ .stats-bar .filter-status span::after {
+            content: "Site Domain Only";
+        }
+
+        #filter-layer-all:checked ~ .stats-bar .filter-status span::after {
+            content: "All Layers";
+        }
+
+        #filter-layer-core:checked ~ .stats-bar .filter-status span::after {
+            content: "Core Layer Only";
+        }
+
+        #filter-layer-tracking:checked ~ .stats-bar .filter-status span::after {
+            content: "Tracking Layer Only";
+        }
+
+        #filter-layer-programme:checked ~ .stats-bar .filter-status span::after {
+            content: "Programme Layer Only";
+        }
+
+        #filter-layer-content:checked ~ .stats-bar .filter-status span::after {
+            content: "Content Layer Only";
+        }
+
+        #filter-layer-flow:checked ~ .stats-bar .filter-status span::after {
+            content: "Flow Layer Only";
+        }
+
+        #filter-layer-admin:checked ~ .stats-bar .filter-status span::after {
+            content: "Admin Layer Only";
+        }
+
+        #filter-layer-resources:checked ~ .stats-bar .filter-status span::after {
+            content: "Resources Layer Only";
+        }
+
+        /* CSS Counters for Dynamic Stats - FIXED */
         .stats-bar {
             counter-reset: domain-counter layer-counter component-counter diagram-counter;
         }
@@ -757,7 +861,7 @@
             </div>
         </div>
         <div class="filter-status">
-            <span>All Domains & Layers</span>
+            <span></span>
         </div>
     </div>
 
