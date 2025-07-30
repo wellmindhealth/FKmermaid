@@ -1,8 +1,13 @@
 classDiagram
     %% Parameters:
 %%   Focus: member
-%%   Domains: participant, programme
+%%   Domains: participant, pathway
 %%   Chart Type: Class
+    class pathway_activityDef {
+        +UUID ObjectID
+        +string name
+    }
+
     class pathway_center {
         +UUID ObjectID
         +string name
@@ -73,6 +78,7 @@ classDiagram
         +string name
     }
 
+    pathway_activityDef --> pathway_progRole : role
     pathway_center --> pathway_partner : partnerID
     pathway_center --> pathway_memberGroup : memberGroupID
     pathway_intake --> pathway_memberGroup : memberGroupID
@@ -82,6 +88,7 @@ classDiagram
     pathway_member --> pathway_partner : partnerID
     pathway_member --> pathway_center : centerID
     pathway_member --> pathway_referer : refererID
+    pathway_member --> pathway_activityDef : activityDefID
     pathway_member --> pathway_progRole : roleID
     pathway_memberGroup --> pathway_partner : partnerID
     pathway_progMember --> pathway_member : memberID
@@ -98,17 +105,20 @@ classDiagram
     pathway_SSQ_stress01 --> pathway_progMember : progMemberID
     pathway_SSQ_stress01 --> pathway_member : memberID
     pathway_testimonial --> pathway_member : memberID
+    pathway_testimonial --> pathway_activityDef : activityDefID
     pathway_center --> pathway_referer : aReferers
     pathway_intake --> pathway_member : aMembers
     pathway_partner --> pathway_center : aCenters
     pathway_partner --> pathway_referer : aReferers
     pathway_report --> pathway_memberGroup : aMemberGroupID
+    pathway_activityDef --> pathway_activityDef : onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
 
     %% Special Joins
     %% End Special Joins
 
 
     %% Entity Styling
+    style pathway_activityDef fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_intake fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_member fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff

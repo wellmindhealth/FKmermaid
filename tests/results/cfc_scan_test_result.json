@@ -4,7 +4,7 @@
   "ExclusionsPresent": true,
   "ExpectedEntityCount": 168,
   "MissingExclusions": [],
-  "Timestamp": "2025-07-30 16:26:21",
+  "Timestamp": "2025-07-30 17:11:48",
   "DirectFKCount": 0,
   "Success": true,
   "TestName": "CFC Scan Generation"

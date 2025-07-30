@@ -1,7 +1,7 @@
 erDiagram
     %% Parameters:
 %%   Focus: programme
-%%   Domains: partner, participant, programme, site
+%%   Domains: provider, participant, pathway, site
 %%   Chart Type: ER
     "pathway_dmImage" {
         UUID ObjectID
@@ -176,6 +176,7 @@ erDiagram
     "pathway_member" ||--|| "pathway_partner" : partnerID
     "pathway_member" ||--|| "pathway_center" : centerID
     "pathway_member" ||--|| "pathway_referer" : refererID
+    "pathway_member" ||--|| "pathway_activityDef" : activityDefID
     "pathway_member" ||--|| "pathway_progRole" : roleID
     "pathway_memberGroup" ||--|| "pathway_partner" : partnerID
     "pathway_memberGroup" ||--|| "pathway_dmImage" : Logo
@@ -220,6 +221,7 @@ erDiagram
     "zfarcrycore_dmHTML" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmInclude" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmProfile" ||--|| "pathway_memberGroup" : memberGroupID
+    "zfarcrycore_dmProfile" ||--|| "zfarcrycore_farGroup" : lGroups
     "zfarcrycore_farPermission" ||--|| "zfarcrycore_farRole" : aRoles
     "zfarcrycore_farUser" ||--|| "zfarcrycore_farGroup" : lGroups
     %% End Direct FK Relationships
@@ -228,15 +230,15 @@ erDiagram
     "zfarcrycore_farUser" ||--|| "zfarcrycore_dmProfile" : userID_to_userName_userDirectory
     %% End Special Joins
 
-    %% Self-Referencing Relationships for activityDef
-    %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
-    "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
-    %% End Self-Referencing Relationships for activityDef
-
     %% Self-Referencing Relationships for farPermission
     %% Self-refs include: aRelatedtypes
     "zfarcrycore_farPermission" ||--|| "zfarcrycore_farPermission" : self_refs
     %% End Self-Referencing Relationships for farPermission
+
+    %% Self-Referencing Relationships for activityDef
+    %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+    "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
+    %% End Self-Referencing Relationships for activityDef
 
     %% Join Table Relationships
     "pathway_activityDef" }o--|| "pathway_media" : aMediaIDs
@@ -250,6 +252,7 @@ erDiagram
     "pathway_programme" }o--|| "pathway_trackerDef" : aTrackerIDs
     "pathway_programme" }o--|| "zfarcrycore_dmFile" : aObjectIDs
     "pathway_report" }o--|| "pathway_memberGroup" : aMemberGroupID
+    "zfarcrycore_dmProfile" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farPermission" : aPermissions
     "zfarcrycore_farUser" }o--|| "zfarcrycore_farGroup" : aGroups

@@ -54,11 +54,11 @@ $baselineTests = @(
         Description = "Tests site domain entities only (should be minimal, isolated domain)"
     },
     @{
-        Name = "Edge_Case_Programme_Domain_Only"
+        Name = "Edge_Case_Pathway_Domain_Only"
         Focus = "activityDef"
-        Domains = "programme"
+        Domains = "pathway"
         DiagramType = "ER"
-        Description = "Tests programme domain entities only (should be programme-specific)"
+        Description = "Tests pathway domain entities only (should be pathway-specific)"
     },
     @{
         Name = "Edge_Case_Invalid_Domain"
@@ -77,19 +77,19 @@ $baselineTests = @(
     @{
         Name = "Edge_Case_Class_Diagram_Complex"
         Focus = "member"
-        Domains = "participant,programme"
+        Domains = "participant,pathway"
         DiagramType = "Class"
         Description = "Tests Class diagram with complex relationships (different diagram type)"
     },
     @{
-        Name = "Edge_Case_Partner_Site_Only"
+        Name = "Edge_Case_Provider_Site_Only"
         Focus = "partner"
         Domains = "site"
         DiagramType = "ER"
         Description = "Tests partner focus with site domain only (should be minimal - partner not in site domain)"
     },
     @{
-        Name = "Edge_Case_Programme_Site_Only"
+        Name = "Edge_Case_Pathway_Site_Only"
         Focus = "programme"
         Domains = "site"
         DiagramType = "ER"
@@ -98,9 +98,9 @@ $baselineTests = @(
     @{
         Name = "Edge_Case_Member_Partner_Only"
         Focus = "member"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
-        Description = "Tests member focus with partner domain only (should be minimal - member not in partner domain)"
+        Description = "Tests member focus with provider domain only (should be minimal - member not in provider domain)"
     },
     @{
         Name = "Edge_Case_Multiple_Focus_Entities"
@@ -147,30 +147,30 @@ $baselineTests = @(
     @{
         Name = "Edge_Case_ER_Diagram_Media_Focus"
         Focus = "media"
-        Domains = "programme"
+        Domains = "pathway"
         DiagramType = "ER"
-        Description = "Tests media entity focus with programme domain (media is in multiple domains)"
+        Description = "Tests media entity focus with pathway domain (media is in multiple domains)"
     },
     @{
         Name = "Edge_Case_Class_Diagram_Media_Focus"
         Focus = "media"
-        Domains = "programme"
+        Domains = "pathway"
         DiagramType = "Class"
-        Description = "Tests Class diagram with media entity focus and programme domain"
+        Description = "Tests Class diagram with media entity focus and pathway domain"
     },
     @{
         Name = "Edge_Case_ER_Diagram_ProgRole_Focus"
         Focus = "progRole"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
-        Description = "Tests progRole focus with partner domain (progRole is in multiple domains)"
+        Description = "Tests progRole focus with provider domain (progRole is in multiple domains)"
     },
     @{
         Name = "Edge_Case_Class_Diagram_ProgRole_Focus"
         Focus = "progRole"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "Class"
-        Description = "Tests Class diagram with progRole focus and partner domain"
+        Description = "Tests Class diagram with progRole focus and provider domain"
     },
     @{
         Name = "Edge_Case_ER_Diagram_ActivityDef_Focus"
@@ -189,30 +189,30 @@ $baselineTests = @(
     @{
         Name = "Edge_Case_ER_Diagram_Guide_Focus"
         Focus = "guide"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
-        Description = "Tests guide focus with partner domain (guide is in participant/programme domains)"
+        Description = "Tests guide focus with provider domain (guide is in participant/pathway domains)"
     },
     @{
         Name = "Edge_Case_Class_Diagram_Guide_Focus"
         Focus = "guide"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "Class"
-        Description = "Tests Class diagram with guide focus and partner domain"
+        Description = "Tests Class diagram with guide focus and provider domain"
     },
     @{
         Name = "Edge_Case_ER_Diagram_Journal_Focus"
         Focus = "journal"
-        Domains = "programme"
+        Domains = "pathway"
         DiagramType = "ER"
-        Description = "Tests journal focus with programme domain (journal is in participant domain)"
+        Description = "Tests journal focus with pathway domain (journal is in participant domain)"
     },
     @{
         Name = "Edge_Case_Class_Diagram_Journal_Focus"
         Focus = "journal"
-        Domains = "programme"
+        Domains = "pathway"
         DiagramType = "Class"
-        Description = "Tests Class diagram with journal focus and programme domain"
+        Description = "Tests Class diagram with journal focus and pathway domain"
     },
     @{
         Name = "Single_Domain_Test"
@@ -238,14 +238,14 @@ $baselineTests = @(
     @{
         Name = "Class_Diagram_Test"
         Focus = "dmImage"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "Class"
-        Description = "Class diagram test - dmImage focus, partner domain, Class type"
+        Description = "Class diagram test - dmImage focus, provider domain, Class type"
     },
     @{
         Name = "Perfect_5-Tier_Test"
         Focus = "partner,member,programme"
-        Domains = "partner,participant,programme"
+        Domains = "provider,participant,pathway"
         DiagramType = "ER"
         Description = "Perfect 5-tier semantic styling test - multiple focus entities across domains"
     }

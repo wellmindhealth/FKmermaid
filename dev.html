@@ -1303,13 +1303,7 @@
             card.setAttribute('data-component', componentName);
             
             // Get CFC cache data for this component if available
-            // Map new domain names to old ones for cache lookup
-            const domainMapping = {
-                'provider': 'partner',
-                'pathway': 'programme'
-            };
-            const oldDomainKey = domainMapping[domainKey] || domainKey;
-            const cacheKey = `${componentName}-${oldDomainKey}`;
+            const cacheKey = `${componentName}-${domainKey}`;
             const cacheData = cfcCacheData?.generated?.[cacheKey];
             
             // Get display name and description from README or cache

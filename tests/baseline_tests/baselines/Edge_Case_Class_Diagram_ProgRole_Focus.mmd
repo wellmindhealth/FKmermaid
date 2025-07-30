@@ -1,7 +1,7 @@
 classDiagram
     %% Parameters:
 %%   Focus: progRole
-%%   Domains: partner
+%%   Domains: provider
 %%   Chart Type: Class
     class pathway_activityDef {
         +UUID ObjectID
@@ -33,6 +33,7 @@ classDiagram
     pathway_activityDef --> pathway_media : defaultMediaID
     pathway_media --> pathway_programme : programmeID
     pathway_media --> pathway_progRole : roleID
+    pathway_member --> pathway_activityDef : activityDefID
     pathway_member --> pathway_progRole : roleID
     pathway_programme --> pathway_activityDef : firstActivityDefID
     pathway_programme --> pathway_activityDef : lastActivityDefID

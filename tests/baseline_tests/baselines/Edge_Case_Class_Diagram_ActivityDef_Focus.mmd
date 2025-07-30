@@ -33,6 +33,11 @@ classDiagram
         +string name
     }
 
+    class pathway_member {
+        +UUID ObjectID
+        +string name
+    }
+
     class pathway_programme {
         +UUID ObjectID
         +string name
@@ -72,10 +77,13 @@ classDiagram
     pathway_media --> pathway_guide : guideID
     pathway_media --> pathway_programme : programmeID
     pathway_media --> pathway_progRole : roleID
+    pathway_member --> pathway_activityDef : activityDefID
+    pathway_member --> pathway_progRole : roleID
     pathway_programme --> pathway_dmImage : Logo
     pathway_programme --> pathway_activityDef : firstActivityDefID
     pathway_programme --> pathway_activityDef : lastActivityDefID
     pathway_progRole --> pathway_programme : programmeID
+    pathway_testimonial --> pathway_member : memberID
     pathway_testimonial --> pathway_activityDef : activityDefID
     pathway_trackerDef --> pathway_programme : programmeID
     pathway_activityDef --> pathway_media : aMediaIDs
@@ -94,6 +102,7 @@ classDiagram
     style pathway_guide fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_journalDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_media fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_member fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_programme fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_progRole fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_testimonial fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff

@@ -1,7 +1,7 @@
 erDiagram
     %% Parameters:
 %%   Focus: guide
-%%   Domains: partner
+%%   Domains: provider
 %%   Chart Type: ER
     "pathway_dmImage" {
         UUID ObjectID
@@ -102,6 +102,7 @@ erDiagram
     "pathway_referer" ||--|| "pathway_memberGroup" : memberGroupID
     "pathway_referer" ||--|| "pathway_center" : centerID
     "zfarcrycore_dmProfile" ||--|| "pathway_memberGroup" : memberGroupID
+    "zfarcrycore_dmProfile" ||--|| "zfarcrycore_farGroup" : lGroups
     "zfarcrycore_farPermission" ||--|| "zfarcrycore_farRole" : aRoles
     "zfarcrycore_farUser" ||--|| "zfarcrycore_farGroup" : lGroups
     %% End Direct FK Relationships
@@ -110,15 +111,15 @@ erDiagram
     "zfarcrycore_farUser" ||--|| "zfarcrycore_dmProfile" : userID_to_userName_userDirectory
     %% End Special Joins
 
-    %% Self-Referencing Relationships for activityDef
-    %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
-    "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
-    %% End Self-Referencing Relationships for activityDef
-
     %% Self-Referencing Relationships for farPermission
     %% Self-refs include: aRelatedtypes
     "zfarcrycore_farPermission" ||--|| "zfarcrycore_farPermission" : self_refs
     %% End Self-Referencing Relationships for farPermission
+
+    %% Self-Referencing Relationships for activityDef
+    %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+    "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
+    %% End Self-Referencing Relationships for activityDef
 
     %% Join Table Relationships
     "pathway_activityDef" }o--|| "pathway_media" : aMediaIDs
@@ -128,6 +129,7 @@ erDiagram
     "pathway_partner" }o--|| "pathway_center" : aCenters
     "pathway_partner" }o--|| "pathway_referer" : aReferers
     "pathway_programme" }o--|| "pathway_activityDef" : aFollowupActivityDefIDs
+    "zfarcrycore_dmProfile" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farPermission" : aPermissions
     "zfarcrycore_farUser" }o--|| "zfarcrycore_farGroup" : aGroups
