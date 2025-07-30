@@ -425,7 +425,7 @@
 
         /* CSS-only functionality - FIXED VERSION */
 
-        /* Domain filtering - FIXED SELECTORS with auto-expand */
+        /* Domain filtering - FIXED SELECTORS with auto-expand for checkboxes */
         #filter-all:checked ~ .domain-section {
             display: block;
         }
@@ -446,7 +446,11 @@
             display: none;
         }
 
-        /* Auto-expand domain content when filtered */
+        /* Auto-expand domain content when filtered - including "all" */
+        #filter-all:checked ~ .domain-section .domain-content {
+            display: block;
+        }
+
         #filter-provider:checked ~ .domain-section.provider .domain-content {
             display: block;
         }
@@ -463,7 +467,7 @@
             display: block;
         }
 
-        /* Layer filtering - FIXED SELECTORS - Target all diagram cards */
+        /* Layer filtering - FIXED SELECTORS for checkboxes */
         #filter-layer-all:checked ~ .diagram-card {
             display: flex;
         }
@@ -546,7 +550,7 @@
             display: block;
         }
 
-        /* Button active states - FIXED */
+        /* Button active states - FIXED for checkboxes */
         #filter-all:checked ~ .domain-card[for="filter-all"] {
             background: #007bff;
             color: white;
@@ -659,10 +663,14 @@
             color: #333;
         }
 
-        /* Dynamic Status Text */
+        /* Dynamic Status Text - FIXED */
         .filter-status {
             font-size: 14px;
             opacity: 0.9;
+        }
+
+        .filter-status span::after {
+            content: "All Domains & Layers";
         }
 
         #filter-all:checked ~ .stats-bar .filter-status span::after {
@@ -723,6 +731,10 @@
         }
 
         /* Count visible domains */
+        .domain-counter::after {
+            content: "4";
+        }
+
         #filter-all:checked ~ .stats-bar .domain-counter::after {
             content: "4";
         }
@@ -744,6 +756,10 @@
         }
 
         /* Count visible layers */
+        .layer-counter::after {
+            content: "7";
+        }
+
         #filter-layer-all:checked ~ .stats-bar .layer-counter::after {
             content: "7";
         }
@@ -777,6 +793,10 @@
         }
 
         /* Count visible components */
+        .component-counter::after {
+            content: "8";
+        }
+
         #filter-all:checked ~ .stats-bar .component-counter::after {
             content: "8";
         }
@@ -798,6 +818,10 @@
         }
 
         /* Count visible diagrams */
+        .diagram-counter::after {
+            content: "8";
+        }
+
         #filter-all:checked ~ .stats-bar .diagram-counter::after {
             content: "8";
         }
@@ -930,22 +954,22 @@
             </div>
 
             <!-- Hidden radio inputs for CSS-only functionality - MOVED TO BE DIRECT SIBLINGS -->
-            <!-- Domain filters -->
-            <input type="radio" name="domain-filter" id="filter-all" checked>
-            <input type="radio" name="domain-filter" id="filter-provider">
-            <input type="radio" name="domain-filter" id="filter-participant">
-            <input type="radio" name="domain-filter" id="filter-pathway">
-            <input type="radio" name="domain-filter" id="filter-site">
+            <!-- Domain filters - Changed to checkboxes for toggle functionality -->
+            <input type="checkbox" name="domain-filter" id="filter-all" checked>
+            <input type="checkbox" name="domain-filter" id="filter-provider">
+            <input type="checkbox" name="domain-filter" id="filter-participant">
+            <input type="checkbox" name="domain-filter" id="filter-pathway">
+            <input type="checkbox" name="domain-filter" id="filter-site">
             
-            <!-- Layer filters -->
-            <input type="radio" name="layer-filter" id="filter-layer-all" checked>
-            <input type="radio" name="layer-filter" id="filter-layer-core">
-            <input type="radio" name="layer-filter" id="filter-layer-tracking">
-            <input type="radio" name="layer-filter" id="filter-layer-programme">
-            <input type="radio" name="layer-filter" id="filter-layer-content">
-            <input type="radio" name="layer-filter" id="filter-layer-flow">
-            <input type="radio" name="layer-filter" id="filter-layer-admin">
-            <input type="radio" name="layer-filter" id="filter-layer-resources">
+            <!-- Layer filters - Changed to checkboxes for toggle functionality -->
+            <input type="checkbox" name="layer-filter" id="filter-layer-all" checked>
+            <input type="checkbox" name="layer-filter" id="filter-layer-core">
+            <input type="checkbox" name="layer-filter" id="filter-layer-tracking">
+            <input type="checkbox" name="layer-filter" id="filter-layer-programme">
+            <input type="checkbox" name="layer-filter" id="filter-layer-content">
+            <input type="checkbox" name="layer-filter" id="filter-layer-flow">
+            <input type="checkbox" name="layer-filter" id="filter-layer-admin">
+            <input type="checkbox" name="layer-filter" id="filter-layer-resources">
             
             <!-- Domain toggles - Using checkboxes for toggle functionality -->
             <input type="checkbox" name="domain-toggle" id="toggle-provider">
