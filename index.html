@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CFC Diagrams Interface</title>
+    <title>Wellmind Health Platform Component Explorer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -17,74 +18,78 @@
             background: #f5f5f5;
             color: #333;
             line-height: 1.6;
+            font-size: 14px;
         }
 
         /* DEV MODE INDICATOR */
         .dev-indicator {
             position: fixed;
-            top: 10px;
-            left: 10px;
+            top: 20px;
+            right: 20px;
             background: #ff6b6b;
             color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 15px;
+            border-radius: 8px;
             font-size: 0.8em;
             font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
         }
 
         .header {
             background: white;
-            padding: 15px 30px;
+            padding: 6px 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .header h1 {
             color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 1.8em;
+            margin-bottom: 3px;
+            font-size: 1.3em;
         }
 
         .header p {
             color: #7f8c8d;
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
 
         .info-section {
             background: white;
-            padding: 25px;
+            padding: 8px 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            margin-bottom: 12px;
         }
 
         .section-title {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: #2c3e50;
-            font-size: 1.3em;
+            font-size: 1.1em;
             font-weight: 600;
         }
 
         .domain-info {
             display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
         .domain-card {
             flex: 1;
-            min-width: 200px;
-            padding: 15px;
+            min-width: 180px;
+            padding: 10px;
             background: #f8f9fa;
             border-radius: 8px;
             border: 2px solid #e9ecef;
@@ -124,15 +129,16 @@
 
         .strata-container {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-top: 15px;
+            margin-top: 10px;
         }
 
         .strata-item {
-            padding: 12px 16px;
+            padding: 10px 14px;
             background: white;
             border-radius: 6px;
+            border: 2px solid #e9ecef;
             border-left: 4px solid;
             flex: 1;
             min-width: 120px;
@@ -150,11 +156,12 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
             background: #f8f9fa;
             border-left-width: 6px;
+            border-color: #007bff;
         }
 
         .strata-core { 
-            border-left-color: #495057; 
-            color: #495057;
+            border-left-color: #6f42c1; 
+            color: #6f42c1;
         }
         .strata-tracking { 
             border-left-color: #28a745; 
@@ -168,10 +175,6 @@
             border-left-color: #dc3545; 
             color: #dc3545;
         }
-        .strata-flow { 
-            border-left-color: #6f42c1; 
-            color: #6f42c1;
-        }
         .strata-admin { 
             border-left-color: #fd7e14; 
             color: #fd7e14;
@@ -179,6 +182,49 @@
         .strata-resources { 
             border-left-color: #20c997; 
             color: #20c997;
+        }
+
+        .strata-item.active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            background: #f8f9fa;
+            border-left-width: 6px;
+            border-color: #007bff;
+        }
+
+        .strata-item.active.strata-core {
+            background: rgba(111, 66, 193, 0.1);
+            border-color: #6f42c1;
+        }
+        .strata-item.active.strata-tracking {
+            background: rgba(40, 167, 69, 0.1);
+            border-color: #28a745;
+        }
+        .strata-item.active.strata-programme {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #ffc107;
+        }
+        .strata-item.active.strata-content {
+            background: rgba(220, 53, 69, 0.1);
+            border-color: #dc3545;
+        }
+        .strata-item.active.strata-admin {
+            background: rgba(253, 126, 20, 0.1);
+            border-color: #fd7e14;
+        }
+        .strata-item.active.strata-resources {
+            background: rgba(32, 201, 151, 0.1);
+            border-color: #20c997;
+        }
+
+        /* All Layers button styling */
+        .strata-item[data-layer="all"] {
+            border-left-color: #495057;
+            color: #495057;
+        }
+        .strata-item.active[data-layer="all"] {
+            background: rgba(73, 80, 87, 0.1);
+            border-color: #495057;
         }
 
         .strata-name {
@@ -197,7 +243,7 @@
         .stats {
             position: fixed;
             top: 20px;
-            right: 20px;
+            left: 20px;
             background: white;
             padding: 15px;
             border-radius: 8px;
@@ -206,6 +252,8 @@
             flex-direction: column;
             gap: 10px;
             z-index: 100;
+            min-width: 200px;
+            max-width: 180px;
         }
 
         .stat-item {
@@ -227,12 +275,12 @@
 
         /* Domain-specific sections */
         .domain-section {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .domain-header {
             background: white;
-            padding: 20px;
+            padding: 15px 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 0;
@@ -248,10 +296,17 @@
         .domain-header h2 {
             color: #2c3e50;
             margin-bottom: 8px;
-            font-size: 1.4em;
+            font-size: 1.2em;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
+        }
+
+        .domain-header h2 .header-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .domain-header .toggle-icon {
@@ -284,14 +339,15 @@
 
         .diagrams-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 12px;
+            padding: 12px;
         }
 
         .diagram-card {
             background: white;
             border-radius: 8px;
+            border: 2px solid #dee2e6;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -310,17 +366,37 @@
         }
 
         .card-header {
-            padding: 20px;
+            padding: 10px 12px;
             border-bottom: 1px solid #e9ecef;
             position: relative;
         }
 
+        .card-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .card-title-section {
+            flex: 1;
+            min-width: 0;
+        }
+
         .card-title {
-            font-size: 1.3em;
+            font-size: 1.1em;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             cursor: help;
+            line-height: 1.3;
+        }
+
+        .card-display-name {
+            font-weight: 500;
+            color: #6c757d;
+            font-size: 0.8em;
+            line-height: 1.2;
         }
 
         .card-description {
@@ -330,20 +406,28 @@
             cursor: help;
         }
 
-        .badges-container {
+        .card-badges {
             display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-end;
+            flex-shrink: 0;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
         }
 
         .badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8em;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 0.75em;
             font-weight: 500;
             cursor: help;
             position: relative;
+            white-space: nowrap;
         }
 
         .domain-badge {
@@ -357,7 +441,7 @@
         }
 
         .strata-badge.strata-core {
-            background: #495057;
+            background: #6f42c1;
             color: white;
         }
         .strata-badge.strata-tracking {
@@ -391,10 +475,19 @@
         }
 
         .card-body {
-            padding: 20px;
+            padding: 10px 12px;
             display: flex;
             flex-direction: column;
             height: 100%;
+            gap: 10px;
+        }
+
+        .card-text {
+            color: #6c757d;
+            font-size: 0.9em;
+            line-height: 1.4;
+            margin: 0;
+            flex-grow: 1;
         }
 
         .preview-container {
@@ -417,8 +510,14 @@
 
         .action-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-top: auto;
+        }
+
+        .action-buttons .btn {
+            flex: 1;
+            font-size: 0.85em;
+            padding: 6px 10px;
         }
 
         .btn {
@@ -436,23 +535,26 @@
         }
 
         .btn-primary {
-            background: #007bff;
+            background: #4a90e2;
             color: white;
+            justify-content: center;
         }
 
         .btn-primary:hover {
-            background: #0056b3;
+            background: #357abd;
         }
 
         .btn-outline {
-            background: transparent;
-            color: #007bff;
-            border: 1px solid #007bff;
+            background: #6c757d; /* Darker grey */
+            color: white;
+            border: 1px solid #6c757d;
+            justify-content: center; /* Centered icon+text */
         }
 
         .btn-outline:hover {
-            background: #007bff;
+            background: #5a6268;
             color: white;
+            border-color: #545b62;
         }
 
         .navigation {
@@ -575,7 +677,7 @@
 
         .modal-content {
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 8px;
             max-width: 90%;
             max-height: 90%;
@@ -587,9 +689,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-bottom: 1px solid #e9ecef;
-            padding-bottom: 15px;
+            padding-bottom: 12px;
         }
 
         .modal-title {
@@ -598,18 +700,7 @@
             color: #2c3e50;
         }
 
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #6c757d;
-            padding: 5px;
-        }
 
-        .close-btn:hover {
-            color: #333;
-        }
 
         .modal-body {
             line-height: 1.6;
@@ -629,14 +720,60 @@
             font-style: italic;
         }
 
+        /* Mermaid diagram styling */
+        .mermaid {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mermaid svg {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
         /* Component Details Modal Styles */
         .component-details {
-            max-width: 600px;
+            max-width: 800px;
+        }
+        
+        /* Details Modal - Smaller */
+        .modal.details-modal .modal-content {
+            max-width: 900px;
+            max-height: 80vh;
+        }
+        
+        /* Diagram Modal - As large as possible */
+        .modal.diagram-modal .modal-content {
+            max-width: 98vw;
+            max-height: 98vh;
+            width: 98vw;
+            height: 98vh;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+        }
+        
+        .modal.diagram-modal .modal-header {
+            padding: 8px 12px;
+            border-bottom: 1px solid #dee2e6;
+            min-height: 40px;
+        }
+        
+        .modal.diagram-modal .modal-body {
+            padding: 0;
+            height: calc(98vh - 60px);
         }
 
         .detail-section {
-            margin-bottom: 25px;
-            padding: 15px;
+            margin-bottom: 20px;
+            padding: 12px;
             background: #f8f9fa;
             border-radius: 6px;
             border-left: 4px solid #007bff;
@@ -644,8 +781,8 @@
 
         .detail-section h4 {
             color: #2c3e50;
-            font-size: 1.1em;
-            margin-bottom: 10px;
+            font-size: 1.0em;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -701,6 +838,77 @@
             color: #495057;
             line-height: 1.6;
             font-size: 0.95em;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-width: 95%;
+            max-height: 95%;
+            width: 95vw;
+            height: 95vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 20px 25px 15px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-close {
+            background: #dc3545 !important;
+            border: none !important;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: white !important;
+            padding: 8px 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .modal-close:hover {
+            background-color: #c82333 !important;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .modal-body {
+            padding: 20px 25px 25px;
+            overflow-y: auto;
+            flex: 1;
         }
 
         /* Enhanced tooltip styles */
@@ -790,17 +998,19 @@
     </style>
 </head>
 <body>
-    
+    <!-- DEV MODE INDICATOR -->
+    <div class="dev-indicator">
+        <div style="font-size: 1.2em; color: white; margin-bottom: 5px;">🚧 DEV MODE</div>
+        <div style="font-size: 0.7em; color: rgba(255,255,255,0.8);">Local Development</div>
+    </div>
 
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>CFC Diagrams Interface</h1>
-            <p>Interactive Entity Relationship Explorer - DEV MODE for layout/styling/interaction tweaks</p>
-        </div>
-
         <!-- Stats (Fixed Position) -->
         <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" style="font-size: 1.2em; color: #2c3e50; margin-bottom: 5px;">Wellmind Health Platform Component Explorer</div>
+                <div class="stat-label" style="font-size: 0.7em; color: #6c757d; margin-bottom: 15px;">Interactive Entity Relationship Explorer</div>
+            </div>
             <div class="stat-item">
                 <div class="stat-number" id="domains-count" title="Total number of architectural domains">4</div>
                 <div class="stat-label" title="Total number of architectural domains">Domains</div>
@@ -824,62 +1034,59 @@
             <div class="filter-title">Filter by Domain</div>
             <div class="domain-info">
                 <div class="domain-card active" data-domain="all">
-                    <h4 title="All Domains&#10;&#10;View all components across all domains"><i class="fas fa-globe"></i> All Domains</h4>
+                    <h4 title="All Domains&#10;&#10;View all components across all domains"><i class="fas fa-globe"></i>&nbsp;All Domains</h4>
                     <p title="All Domains&#10;&#10;View all components across all domains">View all components across all domains</p>
                 </div>
                 <div class="domain-card" data-domain="provider">
-                    <h4 title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider Domain</h4>
+                    <h4 title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i>&nbsp;Provider Domain</h4>
                     <p title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships">Healthcare organizations, business partnerships, and external relationships</p>
                 </div>
                 <div class="domain-card" data-domain="participant">
-                    <h4 title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant Domain</h4>
+                    <h4 title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i>&nbsp;Participant Domain</h4>
                     <p title="Participant Domain&#10;&#10;User management, profiles, and participant journeys">User management, profiles, and participant journeys</p>
                 </div>
                 <div class="domain-card" data-domain="pathway">
-                    <h4 title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i> Pathway Domain</h4>
+                    <h4 title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i>&nbsp;Pathway Domain</h4>
                     <p title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities">Treatment pathways, content delivery, and learning activities</p>
                 </div>
                 <div class="domain-card" data-domain="site">
-                    <h4 title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i> Site Domain</h4>
+                    <h4 title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i>&nbsp;Site Domain</h4>
                     <p title="Site Domain&#10;&#10;Location management and site-specific configurations">Location management and site-specific configurations</p>
                 </div>
             </div>
         </div>
 
-        <!-- Architectural Layers -->
+        <!-- Filter by Layer -->
         <div class="info-section">
-            <div class="section-title">Architectural Layers</div>
+            <div class="section-title">Filter by Layer</div>
             <div class="strata-container">
                 <div class="strata-item active strata-core" data-layer="all">
-                    <div class="strata-name" title="All Layers&#10;&#10;View all architectural layers">All Layers</div>
+                    <div class="strata-name" title="All Layers&#10;&#10;View all architectural layers"><i class="fas fa-th-large"></i>&nbsp;All Layers</div>
                     <div class="strata-description" title="All Layers&#10;&#10;View all architectural layers">View all architectural layers</div>
                 </div>
                 <div class="strata-item strata-core" data-layer="core">
-                    <div class="strata-name" title="Core Layer&#10;&#10;Foundation components and base functionality">Core</div>
+                    <div class="strata-name" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</div>
                     <div class="strata-description" title="Core Layer&#10;&#10;Foundation components and base functionality">Foundation components</div>
                 </div>
                 <div class="strata-item strata-tracking" data-layer="tracking">
-                    <div class="strata-name" title="Tracking Layer&#10;&#10;Progress monitoring and analytics">Tracking</div>
+                    <div class="strata-name" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</div>
                     <div class="strata-description" title="Tracking Layer&#10;&#10;Progress monitoring and analytics">Progress monitoring</div>
                 </div>
                 <div class="strata-item strata-programme" data-layer="programme">
-                    <div class="strata-name" title="Programme Layer&#10;&#10;Content delivery and learning management">Programme</div>
+                    <div class="strata-name" title="Programme Layer&#10;&#10;Content delivery and learning management"><i class="fas fa-graduation-cap"></i>&nbsp;Programme</div>
                     <div class="strata-description" title="Programme Layer&#10;&#10;Content delivery and learning management">Learning management</div>
                 </div>
                 <div class="strata-item strata-content" data-layer="content">
-                    <div class="strata-name" title="Content Layer&#10;&#10;Media and resource management">Content</div>
+                    <div class="strata-name" title="Content Layer&#10;&#10;Media and resource management"><i class="fas fa-file-alt"></i>&nbsp;Content</div>
                     <div class="strata-description" title="Content Layer&#10;&#10;Media and resource management">Media & resources</div>
                 </div>
-                <div class="strata-item strata-flow" data-layer="flow">
-                    <div class="strata-name" title="Flow Layer&#10;&#10;Workflow management and process control">Flow</div>
-                    <div class="strata-description" title="Flow Layer&#10;&#10;Workflow management and process control">Workflow management</div>
-                </div>
+
                 <div class="strata-item strata-admin" data-layer="admin">
-                    <div class="strata-name" title="Admin Layer&#10;&#10;Administrative and configuration tools">Admin</div>
+                    <div class="strata-name" title="Admin Layer&#10;&#10;Administrative and configuration tools"><i class="fas fa-cogs"></i>&nbsp;Admin</div>
                     <div class="strata-description" title="Admin Layer&#10;&#10;Administrative and configuration tools">Configuration tools</div>
                 </div>
                 <div class="strata-item strata-resources" data-layer="resources">
-                    <div class="strata-name" title="Resources Layer&#10;&#10;Asset management and resource allocation">Resources</div>
+                    <div class="strata-name" title="Resources Layer&#10;&#10;Asset management and resource allocation"><i class="fas fa-database"></i>&nbsp;Resources</div>
                     <div class="strata-description" title="Resources Layer&#10;&#10;Asset management and resource allocation">Asset management</div>
                 </div>
             </div>
@@ -889,7 +1096,10 @@
         <div class="domain-section" data-domain="provider">
             <div class="domain-header">
                 <h2>
-                    <i class="fas fa-hospital"></i> Provider Domain Diagrams
+                    <div class="header-content">
+                        <i class="fas fa-hospital"></i>
+                        <span>Provider Domain</span>
+                    </div>
                     <span class="toggle-icon">▼</span>
                 </h2>
             </div>
@@ -897,11 +1107,14 @@
                 <div class="diagrams-grid">
                     <div class="diagram-card" data-layer="core">
                         <div class="card-header">
-                            <div class="card-title" title="activityDef&#10;&#10;Treatment step templates defining interaction patterns, media requirements, and progression logic">activityDef</div>
+                            <div class="card-title" title="activityDef&#10;&#10;Treatment step templates defining interaction patterns, media requirements, and progression logic">
+                                activityDef
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Activity Definition</div>
+                            </div>
                             <div class="card-description" title="activityDef&#10;&#10;Treatment step templates defining interaction patterns, media requirements, and progression logic">Treatment step templates defining interaction patterns, media requirements, and progression logic</div>
                             <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
                             <div class="badges-container">
-                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality">Core</span>
+                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -919,11 +1132,14 @@
 
                     <div class="diagram-card" data-layer="core">
                         <div class="card-header">
-                            <div class="card-title" title="partner&#10;&#10;Healthcare organization managing participant access and program delivery across populations">partner</div>
+                            <div class="card-title" title="partner&#10;&#10;Healthcare organization managing participant access and program delivery across populations">
+                                partner
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Partner Organization</div>
+                            </div>
                             <div class="card-description" title="partner&#10;&#10;Healthcare organization managing participant access and program delivery across populations">Healthcare organization managing participant access and program delivery across populations</div>
                             <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
                             <div class="badges-container">
-                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality">Core</span>
+                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -941,11 +1157,14 @@
 
                     <div class="diagram-card" data-layer="tracking">
                         <div class="card-header">
-                            <div class="card-title" title="providerActivity&#10;&#10;Provider activity tracking and engagement monitoring">providerActivity</div>
+                            <div class="card-title" title="providerActivity&#10;&#10;Provider activity tracking and engagement monitoring">
+                                providerActivity
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Provider Activity</div>
+                            </div>
                             <div class="card-description" title="providerActivity&#10;&#10;Provider activity tracking and engagement monitoring">Provider activity tracking and engagement monitoring</div>
                             <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
                             <div class="badges-container">
-                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics">Tracking</span>
+                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -968,7 +1187,7 @@
         <div class="domain-section" data-domain="participant">
             <div class="domain-header">
                 <h2>
-                    <i class="fas fa-users"></i> Participant Domain Diagrams
+                    <i class="fas fa-users"></i> Participant Domain
                     <span class="toggle-icon">▼</span>
                 </h2>
             </div>
@@ -976,11 +1195,14 @@
                 <div class="diagrams-grid">
                     <div class="diagram-card" data-layer="core">
                         <div class="card-header">
-                            <div class="card-title" title="member&#10;&#10;Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships">member</div>
+                            <div class="card-title" title="member&#10;&#10;Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships">
+                                member
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Member Profile</div>
+                            </div>
                             <div class="card-description" title="member&#10;&#10;Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships">Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships</div>
                             <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
                             <div class="badges-container">
-                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality">Core</span>
+                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -998,11 +1220,14 @@
 
                     <div class="diagram-card" data-layer="tracking">
                         <div class="card-header">
-                            <div class="card-title" title="memberProgress&#10;&#10;Participant progress tracking and milestone monitoring">memberProgress</div>
+                            <div class="card-title" title="memberProgress&#10;&#10;Participant progress tracking and milestone monitoring">
+                                memberProgress
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Member Progress</div>
+                            </div>
                             <div class="card-description" title="memberProgress&#10;&#10;Participant progress tracking and milestone monitoring">Participant progress tracking and milestone monitoring</div>
                             <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
                             <div class="badges-container">
-                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics">Tracking</span>
+                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -1020,11 +1245,14 @@
 
                     <div class="diagram-card" data-layer="programme">
                         <div class="card-header">
-                            <div class="card-title" title="progMember&#10;&#10;Active enrollment tracking participant's journey through structured treatment programs with progress monitoring">progMember</div>
+                            <div class="card-title" title="progMember&#10;&#10;Active enrollment tracking participant's journey through structured treatment programs with progress monitoring">
+                                progMember
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Program Member</div>
+                            </div>
                             <div class="card-description" title="progMember&#10;&#10;Active enrollment tracking participant's journey through structured treatment programs with progress monitoring">Active enrollment tracking participant's journey through structured treatment programs with progress monitoring</div>
                             <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
                             <div class="badges-container">
-                                <span class="badge strata-badge strata-programme" title="Programme Layer&#10;&#10;Content delivery and learning management">Programme</span>
+                                <span class="badge strata-badge strata-programme" title="Programme Layer&#10;&#10;Content delivery and learning management"><i class="fas fa-graduation-cap"></i>&nbsp;Programme</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -1047,7 +1275,7 @@
         <div class="domain-section" data-domain="pathway">
             <div class="domain-header">
                 <h2>
-                    <i class="fas fa-clipboard-list"></i> Pathway Domain Diagrams
+                    <i class="fas fa-clipboard-list"></i> Pathway Domain
                     <span class="toggle-icon">▼</span>
                 </h2>
             </div>
@@ -1104,7 +1332,7 @@
         <div class="domain-section" data-domain="site">
             <div class="domain-header">
                 <h2>
-                    <i class="fas fa-map-marker-alt"></i> Site Domain Diagrams
+                    <i class="fas fa-map-marker-alt"></i> Site Domain
                     <span class="toggle-icon">▼</span>
                 </h2>
             </div>
@@ -1158,18 +1386,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Modal Title</h2>
-                <button class="close-btn" onclick="hideModal()">&times;</button>
-            </div>
-            <div class="modal-body" id="modalBody">
-                Modal content will go here...
-            </div>
-        </div>
-    </div>
+
 
     <script>
         // State management
@@ -1178,38 +1395,312 @@
             layer: 'all'
         };
 
+        // Dynamic data loading
+        let domainsData = null;
+        let cfcCacheData = null;
+        
+        // Load all data files
+        async function loadAllData() {
+            try {
+                // Add cache-busting parameter to force fresh load
+                const timestamp = new Date().getTime();
+                
+                // Load all three files
+                const [domainsResponse, diagramsResponse, cacheResponse] = await Promise.all([
+                    fetch(`config/domains.json?t=${timestamp}`),
+                    fetch(`exports/pre_generated/165_diagrams_results.json?t=${timestamp}`),
+                    fetch(`config/cfc_cache.json?t=${timestamp}`)
+                ]);
+                
+                // Parse all data
+                domainsData = await domainsResponse.json();
+                const diagramsData = await diagramsResponse.json();
+                const cacheData = await cacheResponse.json();
+                
+                // Store datasets
+                window.domainsData = domainsData;
+                window.diagramsData = diagramsData;
+                window.cfcCacheData = cacheData;
+                
+                console.log('Loaded domains data:', domainsData);
+                console.log('Loaded diagrams data:', diagramsData);
+                console.log('Loaded CFC cache data:', cacheData);
+                
+                // Generate cards once all data is loaded
+                generateCardsFromRealData();
+            } catch (error) {
+                console.error('Error loading data files:', error);
+                // No fallback - we want to see the error!
+            }
+        }
+        
+        // No fallback data - we want to see what's missing!
+        
+        // Generate cards from real data
+        function generateCardsFromRealData() {
+            if (!domainsData) return;
+            
+            // Find the main container where we'll add domain sections
+            const mainContainer = document.querySelector('.container');
+            if (!mainContainer) return;
+            
+            // Remove ALL diagram cards first (including those inside domain sections)
+            const allCards = document.querySelectorAll('.diagram-card');
+            allCards.forEach(card => card.remove());
+            
+            // Remove any diagrams-grid containers that might contain hardcoded cards
+            const existingGrids = document.querySelectorAll('.diagrams-grid');
+            existingGrids.forEach(grid => grid.remove());
+            
+            // Remove any existing domain sections (keep header, stats, filters)
+            const existingSections = mainContainer.querySelectorAll('.domain-section');
+            existingSections.forEach(section => section.remove());
+            
+            // Generate domain sections for each domain
+            Object.entries(domainsData.domains).forEach(([domainKey, domainInfo]) => {
+                const domainSection = createDomainSection(domainKey, domainInfo);
+                mainContainer.appendChild(domainSection);
+            });
+            
+            updateStats();
+        }
+        
+        // Create a domain section with header and content
+        function createDomainSection(domainKey, domainInfo) {
+            const domainSection = document.createElement('div');
+            domainSection.className = 'domain-section';
+            domainSection.setAttribute('data-domain', domainKey);
+            
+            // Create domain header
+            const domainHeader = document.createElement('div');
+            domainHeader.className = 'domain-header';
+            domainHeader.innerHTML = `
+                <h2>
+                    <div class="header-content">
+                        <i class="fas ${getDomainIcon(domainKey)}"></i>
+                        <span>${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)} Domain</span>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            `;
+            
+            // Create domain content container
+            const domainContent = document.createElement('div');
+            domainContent.className = 'domain-content';
+            
+            // Create diagrams grid
+            const diagramsGrid = document.createElement('div');
+            diagramsGrid.className = 'diagrams-grid';
+            
+            // Generate cards for each layer/component combination
+            Object.entries(domainInfo.entities).forEach(([layerKey, components]) => {
+                components.forEach(componentName => {
+                    // Check if this component should be excluded from this domain/layer
+                    if (!shouldExcludeComponent(componentName, domainKey, layerKey)) {
+                        const card = createComponentCard(componentName, domainKey, layerKey, domainInfo.description);
+                        diagramsGrid.appendChild(card);
+                    }
+                });
+            });
+            
+            domainContent.appendChild(diagramsGrid);
+            domainSection.appendChild(domainHeader);
+            domainSection.appendChild(domainContent);
+            
+            return domainSection;
+        }
+        
+        // Check if a component should be excluded from display
+        function shouldExcludeComponent(componentName, domainKey, layerKey) {
+            // Global exclusions - apply to all domains and layers
+            const globalExclusions = [
+                'defaultMediaID', 'aCuePointActivities', 'aMediaIDs',
+                'onEndID', 'aInteract1Activities', 'aInteract2Activities', 
+                'aInteract3Activities', 'aInteract4Activities', 'aInteract5Activities'
+            ];
+            if (globalExclusions.includes(componentName)) {
+                return true;
+            }
+            
+            // Add more exclusion rules here as needed
+            return false;
+        }
+
+        // Get domain icon
+        function getDomainIcon(domainKey) {
+            // Try to get domain icon from domains data
+            if (window.domainsData && window.domainsData.domains && window.domainsData.domains[domainKey]) {
+                const domain = window.domainsData.domains[domainKey];
+                if (domain.icon) {
+                    return domain.icon;
+                }
+            }
+            return 'fa-globe';
+        }
+        
+        // Create a component card from real data
+        function createComponentCard(componentName, domainKey, layerKey, domainDescription) {
+            const card = document.createElement('div');
+            card.className = 'diagram-card';
+            card.setAttribute('data-domain', domainKey);
+            card.setAttribute('data-layer', layerKey);
+            card.setAttribute('data-component', componentName);
+            
+            // Get CFC cache data for this component if available
+            const cacheKey = `${componentName}-${domainKey}`;
+            const cacheData = cfcCacheData?.generated?.[cacheKey];
+            
+            // Get display name and description from README or cache
+            const displayName = getDisplayName(componentName);
+            const description = getComponentDescription(componentName);
+            const mermaidUrl = cacheData?.MermaidUrl || '#';
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="card-header-content">
+                        <div class="card-title-section">
+                            <h3 class="card-title">${componentName}</h3>
+                            <div class="card-display-name">${displayName}</div>
+                        </div>
+                        <div class="card-badges">
+                            <div class="badge-row">
+                                <span class="badge domain-badge" title="${domainDescription}">
+                                    <i class="fas fa-globe"></i>&nbsp;${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
+                                </span>
+                                <span class="badge strata-badge strata-${layerKey}" title="${getLayerDescription(layerKey)}">
+                                    <i class="fas ${getLayerIcon(layerKey)}"></i>&nbsp;${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">${description}</p>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-sm" onclick="showModal('${componentName}', '', '${componentName}', '${domainKey}', '${layerKey}')">
+                            <i class="fas fa-project-diagram"></i>&nbsp;View Diagram
+                        </button>
+                                                        <button class="btn btn-outline btn-sm" onclick="showComponentDetails('${componentName}', '${domainKey}', '${layerKey}')">
+                            <i class="fas fa-info-circle"></i>&nbsp;View Details
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Helper functions for display names and descriptions
+        function getDisplayName(componentName) {
+            // Try to get display name from CFC cache data
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component && component.displayName) {
+                    return component.displayName;
+                }
+            }
+            // If no display name found, return the raw component name
+            return componentName;
+        }
+        
+        function getComponentDescription(componentName) {
+            // Try to get hint from CFC cache data FIRST
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component && component.hint) {
+                    return component.hint;
+                }
+            }
+            
+            // Try to get description from diagrams data SECOND
+            if (window.diagramsData && window.diagramsData.generated) {
+                // Look for any diagram that matches this component
+                for (const [key, diagram] of Object.entries(window.diagramsData.generated)) {
+                    if (key.startsWith(componentName + '-') && diagram.Description) {
+                        return diagram.Description;
+                    }
+                }
+            }
+            
+            // No description available
+            return '';
+        }
+        
+        function getLayerDescription(layerKey) {
+            // Try to get layer description from domains data
+            if (window.domainsData && window.domainsData.domains) {
+                // Look through all domains for layer descriptions
+                for (const domain of Object.values(window.domainsData.domains)) {
+                    if (domain.layers && domain.layers[layerKey] && domain.layers[layerKey].description) {
+                        return domain.layers[layerKey].description;
+                    }
+                }
+            }
+            
+            // No layer description available
+            return '';
+        }
+        
+        function getDomainDisplayName(domainKey) {
+            // Convert domain key to display name (e.g., "provider" -> "Provider")
+            return domainKey.charAt(0).toUpperCase() + domainKey.slice(1);
+        }
+        
+        function getLayerDisplayName(layerKey) {
+            // Convert layer key to display name (e.g., "core" -> "Core")
+            return layerKey.charAt(0).toUpperCase() + layerKey.slice(1);
+        }
+        
+        function getLayerIcon(layerKey) {
+            // Try to get layer icon from domains data
+            if (window.domainsData && window.domainsData.domains) {
+                // Look through all domains for layer icons
+                for (const domain of Object.values(window.domainsData.domains)) {
+                    if (domain.layers && domain.layers[layerKey] && domain.layers[layerKey].icon) {
+                        return domain.layers[layerKey].icon;
+                    }
+                }
+            }
+            
+            // Default icon if none found
+            return 'fa-cube';
+        }
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            initializeInterface();
-            updateCounts();
+            loadAllData();
             
-            // Show all sections open by default
-            document.querySelectorAll('.domain-content').forEach(content => {
-                content.classList.remove('collapsed');
-            });
-            document.querySelectorAll('.domain-header').forEach(header => {
-                header.classList.remove('collapsed');
-                const icon = header.querySelector('.toggle-icon');
-                if (icon) icon.textContent = '▼';
-            });
+            // Initialize filter event listeners and modal listeners after data is loaded
+            setTimeout(() => {
+                initializeFilters();
+                setupModalEventListeners();
+            }, 1000);
         });
 
-        function initializeInterface() {
+        function initializeFilters() {
             // Domain filter clicks
             document.querySelectorAll('.domain-card').forEach(card => {
                 card.addEventListener('click', function() {
                     const domain = this.dataset.domain;
                     
-                    // Update active state
-                    document.querySelectorAll('.domain-card').forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update filter state
-                    activeFilters.domain = domain;
+                    // Toggle active state
+                    if (this.classList.contains('active')) {
+                        this.classList.remove('active');
+                        // If this was the last active domain filter, show nothing
+                        const activeDomainCards = document.querySelectorAll('.domain-card.active');
+                        if (activeDomainCards.length === 0) {
+                            activeFilters.domain = 'none';
+                        } else {
+                            activeFilters.domain = 'all';
+                        }
+                    } else {
+                        document.querySelectorAll('.domain-card').forEach(c => c.classList.remove('active'));
+                        this.classList.add('active');
+                        activeFilters.domain = domain;
+                    }
                     
                     // Apply filters
                     applyFilters();
-                    updateCounts();
                 });
             });
 
@@ -1218,16 +1709,24 @@
                 item.addEventListener('click', function() {
                     const layer = this.dataset.layer;
                     
-                    // Update active state
-                    document.querySelectorAll('.strata-item').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update filter state
-                    activeFilters.layer = layer;
+                    // Toggle active state
+                    if (this.classList.contains('active')) {
+                        this.classList.remove('active');
+                        // If this was the last active layer filter, show nothing
+                        const activeLayerItems = document.querySelectorAll('.strata-item.active');
+                        if (activeLayerItems.length === 0) {
+                            activeFilters.layer = 'none';
+                        } else {
+                            activeFilters.layer = 'all';
+                        }
+                    } else {
+                        document.querySelectorAll('.strata-item').forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                        activeFilters.layer = layer;
+                    }
                     
                     // Apply filters
                     applyFilters();
-                    updateCounts();
                 });
             });
 
@@ -1258,6 +1757,7 @@
                         const header = domainSection.querySelector('.domain-header');
                         const icon = header.querySelector('.toggle-icon');
                         
+                        // Always expand the domain section when domain card is clicked
                         content.classList.remove('collapsed');
                         header.classList.remove('collapsed');
                         icon.textContent = '▼';
@@ -1273,6 +1773,12 @@
                 const cardDomain = card.closest('.domain-section').dataset.domain;
                 const cardLayer = card.dataset.layer;
                 
+                // If either filter is set to 'none', show nothing
+                if (activeFilters.domain === 'none' || activeFilters.layer === 'none') {
+                    card.classList.add('hidden');
+                    return;
+                }
+                
                 const shouldShowCard = 
                     (activeFilters.domain === 'all' || cardDomain === activeFilters.domain) &&
                     (activeFilters.layer === 'all' || cardLayer === activeFilters.layer);
@@ -1285,10 +1791,10 @@
             });
         }
 
-        function updateCounts() {
+        function updateStats() {
             const visibleCards = document.querySelectorAll('.diagram-card:not(.hidden)').length;
             const totalCards = document.querySelectorAll('.diagram-card').length;
-            const totalDomains = document.querySelectorAll('.domain-section').length;
+            const totalDomains = Object.keys(domainsData?.domains || {}).length;
             const totalLayers = document.querySelectorAll('.strata-item').length - 1; // Subtract "All Layers"
             
             document.getElementById('domains-count').textContent = totalDomains;
@@ -1297,174 +1803,242 @@
             document.getElementById('diagrams-count').textContent = totalCards;
         }
 
-        function showModal(title, content) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalBody').innerHTML = `
-                <p>${content}</p>
-                <div class="mermaid-container">
-                    <div class="mermaid-placeholder">
-                        <strong>Mermaid Diagram would render here:</strong><br>
-                        <code>graph TD<br>
-                        A[Entity A] --> B[Entity B]<br>
-                        B --> C[Entity C]<br>
-                        C --> D[Entity D]</code>
+        function showModal(title, content, componentName, domainKey, layerKey) {
+            const domainDisplayName = getDomainDisplayName(domainKey);
+            const layerDisplayName = getLayerDisplayName(layerKey);
+            
+            // Get faIcon for the component
+            let faIcon = '';
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component && component.faIcon) {
+                    faIcon = component.faIcon;
+                }
+            }
+            
+            document.getElementById('diagramModalTitle').innerHTML = `
+                <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        ${faIcon ? `<i class="fas ${faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
+                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName}</span>
                     </div>
+                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0; margin-left: 20px;">${domainDisplayName} / ${layerDisplayName} Diagram</span>
                 </div>
             `;
-            document.getElementById('modal').classList.add('show');
+            
+            // Find the matching diagram from the loaded data
+            const diagramsData = window.diagramsData;
+            let mermaidUrl = '';
+            
+            if (diagramsData && diagramsData.generated) {
+                // Look for a diagram that matches the component and domain
+                const diagramKey = `${componentName}-${domainKey}`;
+                const diagram = diagramsData.generated[diagramKey];
+                
+                if (diagram && diagram.MermaidUrl) {
+                    mermaidUrl = diagram.MermaidUrl.replace('/edit', '/view');
+                }
+            }
+            
+            if (mermaidUrl) {
+                // Use the real Mermaid URL
+                document.getElementById('diagramModalBody').innerHTML = `
+                    <iframe src="${mermaidUrl}" 
+                            style="width: 100%; height: 100%; border: none; border-radius: 0;"
+                            title="Mermaid Diagram">
+                    </iframe>
+                `;
+            } else {
+                // Fallback to a message if no diagram found
+                document.getElementById('diagramModalBody').innerHTML = `
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: #6c757d;">
+                        <p>No diagram available for ${componentName} in ${domainDisplayName} domain</p>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('diagramModal').classList.add('show');
         }
+
+
 
         function showComponentDetails(componentName, domain, layer) {
-            const componentData = {
-                'activityDef': {
-                    title: 'activityDef',
-                    description: 'Treatment step templates defining interaction patterns, media requirements, and progression logic',
-                    fullPath: 'packages/types/activityDef.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'mediaID', 'interactionType', 'progressionRules'],
-                    dependencies: ['media', 'programme', 'progRole'],
-                    longDescription: 'ActivityDefs represent the definition of individual treatment steps within a program. These are the building blocks that define how participants interact with therapeutic content, complete exercises, or engage with educational materials. Each activityDef defines the structure, media requirements, interaction patterns, and progression logic for a specific treatment step.'
-                },
-                'partner': {
-                    title: 'partner',
-                    description: 'Healthcare organization managing participant access and program delivery across populations',
-                    fullPath: 'packages/types/partner.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'organizationType', 'accessLevel', 'memberGroups'],
-                    dependencies: ['memberGroup', 'center', 'referer', 'intake'],
-                    longDescription: 'Partners represent healthcare organizations, enterprises, or institutions that provide Wellmind Health programs to their populations. These could be hospitals, health systems, employers, insurance companies, or other healthcare entities. The partner entity manages organizational relationships, access controls, and administrative oversight.'
-                },
-                'member': {
-                    title: 'member',
-                    description: 'Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships',
-                    fullPath: 'packages/types/member.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['firstName', 'lastName', 'email', 'preferences', 'progressStatus'],
-                    dependencies: ['partner', 'memberGroup', 'progMember', 'activity'],
-                    longDescription: 'The member represents an individual participant in Wellmind Health\'s digital therapeutic programs. This is the central entity that connects the human participant to the digital treatment ecosystem with personal preferences, progress tracking, and connections to the healthcare provider hierarchy.'
-                },
-                'progMember': {
-                    title: 'progMember',
-                    description: 'Active enrollment tracking participant\'s journey through structured treatment programs with progress monitoring',
-                    fullPath: 'packages/types/progMember.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['enrollmentDate', 'completionStatus', 'progressPercentage', 'currentActivity'],
-                    dependencies: ['member', 'programme', 'activity'],
-                    longDescription: 'progMember represents the active enrollment of a participant in a specific treatment program. This is where the rubber meets the road - where a participant\'s journey through a structured therapeutic intervention is tracked, measured, and managed.'
-                },
-                'programme': {
-                    title: 'programme',
-                    description: 'Master treatment template containing activity structure, pacing, and lifecycle management',
-                    fullPath: 'packages/types/programme.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'duration', 'activityCount', 'targetAudience'],
-                    dependencies: ['activityDef', 'media', 'progRole'],
-                    longDescription: 'The programme entity represents the overarching treatment program structure that contains activity definitions, pacing logic, communication templates, educational resources, and lifecycle management. This is the master template that defines how a specific therapeutic intervention is structured and delivered.'
-                },
-                'media': {
-                    title: 'media',
-                    description: 'Therapeutic content delivery system for videos, audio, and educational materials',
-                    fullPath: 'packages/types/media.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'mediaType', 'duration', 'filePath'],
-                    dependencies: ['activityDef', 'programme'],
-                    longDescription: 'Media represents the video, audio, and document content that delivers therapeutic interventions and educational materials to participants. This includes educational videos, interactive exercises, guided meditations, and supporting documentation that form the core content of digital therapeutic programs.'
-                },
-                'dmNavigation': {
-                    title: 'dmNavigation',
-                    description: 'Website navigation structure and menu organization for user experience architecture',
-                    fullPath: 'packages/types/dmNavigation.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'menuStructure', 'pageOrder', 'accessLevel'],
-                    dependencies: ['dmHTML', 'dmFacts'],
-                    longDescription: 'dmNavigation represents the website navigation structure and user experience architecture that guides users through the platform\'s features, content, and functionality. This system manages the user interface structure, menu hierarchies, and navigation pathways.'
-                },
-                'dmImage': {
-                    title: 'dmImage',
-                    description: 'Image resource management system for visual assets and graphic content delivery',
-                    fullPath: 'packages/types/dmImage.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'imageType', 'filePath', 'altText'],
-                    dependencies: ['dmHTML', 'dmFacts'],
-                    longDescription: 'dmImage represents the image resource management system for website graphics and visual content that supports the platform\'s visual design, user experience, and content delivery requirements. This system manages the storage, organization, optimization, and delivery of visual assets.'
+            // Get component data from diagrams data
+            const diagramsData = window.diagramsData;
+            let componentDescription = '';
+            
+            if (diagramsData && diagramsData.generated) {
+                // Look for a diagram that matches the component and domain
+                const diagramKey = `${componentName}-${domain}`;
+                const diagram = diagramsData.generated[diagramKey];
+                
+                if (diagram && diagram.Description) {
+                    componentDescription = diagram.Description;
                 }
-            };
-
-            const data = componentData[componentName] || {
+            }
+            
+            // Get component data from cache
+            const cacheData = window.cfcCacheData;
+            let componentInfo = null;
+            
+            if (cacheData && cacheData.entities) {
+                componentInfo = cacheData.entities.find(entity => entity.name === componentName);
+            }
+            
+            // Get properties for this component
+            // Get properties from componentMetadata (all properties)
+            let properties = [];
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component && component.properties && Array.isArray(component.properties)) {
+                    properties = component.properties.map(prop => prop.name);
+                }
+            }
+            
+            // Get dependencies (targets from properties)
+            let dependencies = [];
+            if (cacheData && cacheData.properties) {
+                dependencies = cacheData.properties
+                    .filter(prop => prop.entity === componentName && prop.target)
+                    .map(prop => prop.target);
+            }
+            
+            // Get display name, hint, filePath, description, and faIcon from CFC cache
+            let displayName = componentName;
+            let hint = '';
+            let filePath = '';
+            let description = '';
+            let faIcon = '';
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                if (component) {
+                    if (component.displayName) displayName = component.displayName;
+                    if (component.hint) hint = component.hint;
+                    if (component.filePath) filePath = component.filePath;
+                    if (component.description) description = component.description;
+                    if (component.faIcon) faIcon = component.faIcon;
+                }
+            }
+            
+            // Create component data object using only available data
+            const componentData = {
                 title: componentName,
-                description: 'Component description not available',
-                fullPath: 'packages/types/' + componentName + '.cfc',
-                inheritance: 'farcry.core.types.versions',
-                properties: ['title', 'description'],
-                dependencies: [],
-                longDescription: 'Detailed description not available for this component.'
+                displayName: displayName,
+                hint: hint,
+                description: description || componentDescription || '',
+                file: componentInfo ? componentInfo.file || '' : '',
+                filePath: filePath,
+                plugin: componentInfo ? componentInfo.plugin || '' : '',
+                faIcon: faIcon,
+                properties: properties,
+                dependencies: dependencies,
+                domain: getDomainDisplayName(domain),
+                layer: getLayerDisplayName(layer)
             };
-
-            document.getElementById('modalTitle').innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="color: #6c757d; font-size: 0.8em;">Component Details</span>
-                    <span style="color: #2c3e50; font-size: 1.2em;">${data.title}</span>
+            
+            // Set modal title
+            document.getElementById('detailsModalTitle').innerHTML = `
+                <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        ${componentData.faIcon ? `<i class="fas ${componentData.faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
+                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName}</span>
+                    </div>
+                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0; margin-left: 20px;">Component Details</span>
                 </div>
             `;
             
-            document.getElementById('modalBody').innerHTML = `
+            // Set modal content
+            document.getElementById('detailsModalBody').innerHTML = `
                 <div class="component-details">
                     <div class="detail-section">
-                        <h4><i class="fas fa-info-circle"></i> Description</h4>
-                        <p>${data.description}</p>
+                        <h3>${componentData.displayName}</h3>
+                        <p>${componentData.hint || 'No hint available'}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h4><i class="fas fa-folder"></i> File Path</h4>
-                        <code>${data.fullPath}</code>
+                        <h3>Domain / Layer</h3>
+                        <p>${componentData.domain} / ${componentData.layer}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h4><i class="fas fa-sitemap"></i> Inheritance</h4>
-                        <code>${data.inheritance}</code>
-                    </div>
-                    
-                    <div class="detail-section">
-                        <h4><i class="fas fa-cogs"></i> Properties</h4>
-                        <div class="property-list">
-                            ${data.properties.map(prop => `<span class="property-tag">${prop}</span>`).join('')}
+                        <h3>Properties (${componentData.properties.length})</h3>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; padding: 10px; border-radius: 4px; background: #f8f9fa;">
+                            ${componentData.properties.length > 0 ? componentData.properties.join(', ') : 'No properties found'}
                         </div>
                     </div>
                     
                     <div class="detail-section">
-                        <h4><i class="fas fa-link"></i> Dependencies</h4>
-                        <div class="dependency-list">
-                            ${data.dependencies.map(dep => `<span class="dependency-tag">${dep}</span>`).join('')}
-                        </div>
+                        <h3>Dependencies (${componentData.dependencies.length})</h3>
+                        <p>${componentData.dependencies.length > 0 ? componentData.dependencies.join(', ') : 'No dependencies found'}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h4><i class="fas fa-info"></i> Detailed Description</h4>
-                        <div class="long-description">
-                            <p>${data.longDescription}</p>
-                        </div>
+                        <h3>Plugin</h3>
+                        <p>${componentData.plugin}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>File</h3>
+                        <p>${componentData.filePath || componentData.file}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Description</h3>
+                        <p>${componentData.description || 'No description available'}</p>
                     </div>
                 </div>
             `;
             
-            document.getElementById('modal').classList.add('show');
+            document.getElementById('detailsModal').classList.add('show');
         }
 
-        function hideModal() {
-            document.getElementById('modal').classList.remove('show');
+        function hideDetailsModal() {
+            document.getElementById('detailsModal').classList.remove('show');
+        }
+        
+        function hideDiagramModal() {
+            document.getElementById('diagramModal').classList.remove('show');
         }
 
-        // Close modal on outside click
-        document.getElementById('modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideModal();
+        // Set up modal event listeners
+        function setupModalEventListeners() {
+            const detailsModal = document.getElementById('detailsModal');
+            const diagramModal = document.getElementById('diagramModal');
+            
+            if (detailsModal) {
+                // Close details modal on outside click
+                detailsModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        hideDetailsModal();
+                    }
+                });
             }
-        });
+            
+            if (diagramModal) {
+                // Close diagram modal on outside click
+                diagramModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        hideDiagramModal();
+                    }
+                });
+            }
 
-        // Close modal on Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                hideModal();
+            // Close modals on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    hideDetailsModal();
+                    hideDiagramModal();
+                }
+            });
+        }
+
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true
             }
         });
 
@@ -1477,5 +2051,27 @@
         // Initialize dev experiments
         devExperiment();
     </script>
+
+    <!-- Modal for Component Details -->
+    <div id="detailsModal" class="modal details-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="detailsModalTitle"></div>
+                <button onclick="hideDetailsModal()" class="modal-close">✕</button>
+            </div>
+            <div id="detailsModalBody" class="modal-body"></div>
+        </div>
+    </div>
+    
+    <!-- Modal for Diagrams -->
+    <div id="diagramModal" class="modal diagram-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="diagramModalTitle"></div>
+                <button onclick="hideDiagramModal()" class="modal-close">✕</button>
+            </div>
+            <div id="diagramModalBody" class="modal-body"></div>
+        </div>
+    </div>
 </body>
 </html> 

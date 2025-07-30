@@ -751,10 +751,24 @@
         
         /* Diagram Modal - As large as possible */
         .modal.diagram-modal .modal-content {
-            max-width: 95vw;
-            max-height: 95vh;
-            width: 95vw;
-            height: 95vh;
+            max-width: 98vw;
+            max-height: 98vh;
+            width: 98vw;
+            height: 98vh;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+        }
+        
+        .modal.diagram-modal .modal-header {
+            padding: 8px 12px;
+            border-bottom: 1px solid #dee2e6;
+            min-height: 40px;
+        }
+        
+        .modal.diagram-modal .modal-body {
+            padding: 0;
+            height: calc(98vh - 60px);
         }
 
         .detail-section {
@@ -1806,7 +1820,7 @@
                 <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         ${faIcon ? `<i class="fas ${faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
-                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName.toLowerCase()}</span>
+                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName}</span>
                     </div>
                     <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0; margin-left: 20px;">${domainDisplayName} / ${layerDisplayName} Diagram</span>
                 </div>
@@ -1822,19 +1836,17 @@
                 const diagram = diagramsData.generated[diagramKey];
                 
                 if (diagram && diagram.MermaidUrl) {
-                    mermaidUrl = diagram.MermaidUrl;
+                    mermaidUrl = diagram.MermaidUrl.replace('/edit', '/view');
                 }
             }
             
             if (mermaidUrl) {
                 // Use the real Mermaid URL
                 document.getElementById('diagramModalBody').innerHTML = `
-                    <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
-                        <iframe src="${mermaidUrl}" 
-                                style="width: 100%; height: 100%; border: none; border-radius: 8px;"
-                                title="Mermaid Diagram">
-                        </iframe>
-                    </div>
+                    <iframe src="${mermaidUrl}" 
+                            style="width: 100%; height: 100%; border: none; border-radius: 0;"
+                            title="Mermaid Diagram">
+                    </iframe>
                 `;
             } else {
                 // Fallback to a message if no diagram found
@@ -1929,7 +1941,7 @@
                 <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         ${componentData.faIcon ? `<i class="fas ${componentData.faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
-                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentData.displayName.toLowerCase()}</span>
+                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName}</span>
                     </div>
                     <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0; margin-left: 20px;">Component Details</span>
                 </div>
