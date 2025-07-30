@@ -1,7 +1,7 @@
 {
   "domains": {
-    "partner": {
-      "description": "Partner/Business Domain - Business relationships and organizational structure",
+    "provider": {
+      "description": "Provider/Business Domain - Business relationships and organizational structure",
       "entities": {
         "core": ["partner", "referer", "intake", "center", "memberGroup"],
         "admin": ["farUser", "farGroup", "farRole", "farPermission", "dmProfile"],
@@ -16,8 +16,8 @@
         "programme": ["progRole", "activityDef", "media", "journal", "journalDef","library", "guide"]
       }
     },
-    "programme": {
-      "description": "Programme/Content Domain - Content structure and flow",
+    "pathway": {
+      "description": "Pathway/Content Domain - Content structure and flow",
       "entities": {
         "core": ["programme", "progRole", "activityDef"],
         "content": ["media", "defaultMediaID", "aCuePointActivities", "aMediaIDs", "guide"],

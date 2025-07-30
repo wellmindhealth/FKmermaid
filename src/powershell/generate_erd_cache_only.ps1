@@ -13,8 +13,8 @@
     REQUIRED: Choose between "ER" or "Class" diagrams
     
 .PARAMETER lDomains
-    REQUIRED: Array of domains to filter relationships (e.g., "pathway", "participant", "provider", "site")
-    Multiple domains can be specified as comma-separated values: "pathway,participant"
+    REQUIRED: Array of domains to filter relationships (e.g., "programme", "participant", "partner", "site")
+    Multiple domains can be specified as comma-separated values: "programme,participant"
     
 .PARAMETER RefreshCFCs
     OPTIONAL: Switch to force fresh CFC scanning (bypasses cache)
@@ -29,13 +29,13 @@
     OPTIONAL: Switch to enable debug mode
     
 .EXAMPLE
-    .\generate_erd_enhanced.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "pathway"
+    .\generate_erd_enhanced.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "programme"
     
 .EXAMPLE
     .\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "Class" -lDomains "participant" -RefreshCFCs
     
 .EXAMPLE
-    .\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "pathway,participant" -OutputFile "custom.mmd"
+    .\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "programme,participant" -OutputFile "custom.mmd"
     
 .EXAMPLE
     .\generate_erd_enhanced.ps1 -lFocus "dmImage" -DiagramType "ER" -lDomains "site" -OutputFile "custom.mmd"
@@ -99,7 +99,7 @@ function Show-Help {
     Write-Host "🔴 REQUIRED PARAMETERS:" -ForegroundColor Red
     Write-Host "  -lFocus 'entityName'     # Focus entity (e.g., 'activityDef', 'progRole', 'member')" -ForegroundColor White
     Write-Host "  -DiagramType 'ER|Class'  # Diagram type ('ER' or 'Class')" -ForegroundColor White
-    Write-Host "  -lDomains 'domain1,domain2' # Domains to include (e.g., 'pathway,participant')" -ForegroundColor White
+    Write-Host "  -lDomains 'domain1,domain2' # Domains to include (e.g., 'programme,participant')" -ForegroundColor White
     Write-Host "                           # Use 'all' or omit for all domains" -ForegroundColor White
     Write-Host ""
     Write-Host "🟡 OPTIONAL PARAMETERS:" -ForegroundColor Yellow
@@ -112,9 +112,9 @@ function Show-Help {
     Write-Host "  -NoBrowser              # Suppress browser opening (for automation)" -ForegroundColor White
     Write-Host ""
     Write-Host "💡 USAGE EXAMPLES:" -ForegroundColor Cyan
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'pathway'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Green
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'pathway,participant'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'site' -OutputFile 'custom.mmd'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Green

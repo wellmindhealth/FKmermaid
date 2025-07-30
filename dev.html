@@ -1236,8 +1236,8 @@
         function loadFallbackData() {
             domainsData = {
                 "domains": {
-                    "partner": {
-                        "description": "Partner/Business Domain - Business relationships and organizational structure",
+                    "provider": {
+                        "description": "Provider/Business Domain - Business relationships and organizational structure",
                         "entities": {
                             "core": ["partner", "referer", "intake", "center", "memberGroup"],
                             "admin": ["farUser", "farGroup", "farRole", "farPermission", "dmProfile"],
@@ -1252,8 +1252,8 @@
                             "programme": ["progRole", "activityDef", "media", "journal", "journalDef", "library", "guide"]
                         }
                     },
-                    "programme": {
-                        "description": "Programme/Content Domain - Content structure and flow",
+                    "pathway": {
+                        "description": "Pathway/Content Domain - Content structure and flow",
                         "entities": {
                             "core": ["programme", "progRole", "activityDef"],
                             "content": ["media", "defaultMediaID", "aCuePointActivities", "aMediaIDs", "guide"],
@@ -1303,7 +1303,13 @@
             card.setAttribute('data-component', componentName);
             
             // Get CFC cache data for this component if available
-            const cacheKey = `${componentName}-${domainKey}`;
+            // Map new domain names to old ones for cache lookup
+            const domainMapping = {
+                'provider': 'partner',
+                'pathway': 'programme'
+            };
+            const oldDomainKey = domainMapping[domainKey] || domainKey;
+            const cacheKey = `${componentName}-${oldDomainKey}`;
             const cacheData = cfcCacheData?.generated?.[cacheKey];
             
             // Get display name and description from README or cache

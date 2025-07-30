@@ -497,8 +497,8 @@ Domain definitions are stored in `config/domains.json`:
 ```json
 {
   "domains": {
-    "partner": {
-      "description": "Partner/Business Domain - Business relationships and organizational structure",
+    "provider": {
+      "description": "Provider/Business Domain - Business relationships and organizational structure",
       "entities": {
         "core": ["partner", "referer", "intake", "center", "memberGroup"],
         "admin": ["farUser", "farGroup", "farRole", "farPermission", "dmProfile"],
