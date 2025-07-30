@@ -1878,7 +1878,7 @@
             let properties = [];
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
                 const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
-                if (component && component.properties) {
+                if (component && component.properties && Array.isArray(component.properties)) {
                     properties = component.properties.map(prop => prop.name);
                 }
             }
