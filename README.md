@@ -18,7 +18,7 @@ A comprehensive PowerShell-based tool for analyzing ColdFusion Components (CFCs)
 - **ER Diagrams**: Entity-Relationship diagrams with 5-tier semantic styling
 - **Component Diagrams**: Class diagrams showing inheritance and relationships
 - **Dynamic CFC Scanning**: Real-time analysis of ColdFusion Components
-- **Domain-Based Filtering**: Focus on specific business domains (partner, participant, programme, site)
+- **Domain-Based Filtering**: Focus on specific business domains (provider, participant, pathway, site)
 
 ### ✅ **Advanced Features**
 - **5-Tier Semantic Styling**: Color-coded relationship prioritization
@@ -46,7 +46,7 @@ A comprehensive PowerShell-based tool for analyzing ColdFusion Components (CFCs)
 Visualize database relationships and foreign key connections with advanced styling:
 
 ```powershell
-.\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "ER" -lDomains "participant,partner"
+.\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "ER" -lDomains "participant,provider"
 ```
 
 **Features:**
@@ -60,7 +60,7 @@ Visualize database relationships and foreign key connections with advanced styli
 Show ColdFusion Component inheritance and relationships:
 
 ```powershell
-.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,partner"
+.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,provider"
 ```
 
 **Features:**
@@ -96,7 +96,7 @@ Show ColdFusion Component inheritance and relationships:
 
 The system uses **4 domains** for diagram generation to preserve cross-domain relationships:
 
-#### **`partner`** - Business relationships and organizational structure
+#### **`provider`** - Business relationships and organizational structure
 - **Core**: partner, referer, intake, center, memberGroup
 - **Admin**: farUser, farGroup, farRole, farPermission, dmProfile
 - **Programme**: programme, progRole, activityDef, media
@@ -106,7 +106,7 @@ The system uses **4 domains** for diagram generation to preserve cross-domain re
 - **Tracking**: ssq_stress01, ssq_pain01, ssq_arthritis01, tracker, trackerDef
 - **Programme**: progRole, activityDef, media, journal, journalDef, library, guide
 
-#### **`programme`** - Content structure and flow
+#### **`pathway`** - Content structure and flow
 - **Core**: programme, progRole, activityDef
 - **Content**: media, defaultMediaID, aCuePointActivities, aMediaIDs, guide
 - **Flow**: onEndID, aCuePointActivities, aInteract1Activities, etc.
@@ -425,25 +425,25 @@ Success Rate: 100%
 ### **ER Diagram Generation**
 ```powershell
 # Basic ER diagram with focus entity
-.\generate_erd_enhanced.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "programme"
+.\generate_erd_enhanced.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "pathway"
 
 # Multiple domains with fresh scan
-.\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "ER" -lDomains "participant,partner" -RefreshCFCs
+.\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "ER" -lDomains "participant,provider" -RefreshCFCs
 
 # Custom output file
-.\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "programme" -OutputFile "custom_diagram.mmd"
+.\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "pathway" -OutputFile "custom_diagram.mmd"
 ```
 
 ### **Component Diagram Generation**
 ```powershell
 # Basic component diagram
-.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,partner"
+.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,provider"
 
 # With inheritance and relationships
-.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,partner" -ShowInheritance -ShowRelationships
+.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,provider" -ShowInheritance -ShowRelationships
 
 # Force refresh of CFC scanning
-.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,partner" -RefreshCFCs
+.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,provider" -RefreshCFCs
 ```
 
 ### **Configuration Management**
@@ -598,7 +598,7 @@ This ensures that excluded entities never appear in generated diagrams, even if 
 ```powershell
 # Enable debug logging
 .\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "ER" -lDomains "participant" -Debug
-.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,partner" -Debug
+.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,provider" -Debug
 ```
 
 ## 📝 **N.B. CFC Documentation Enhancement**

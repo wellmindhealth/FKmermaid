@@ -805,11 +805,6 @@
             padding: 20px;
         }
 
-        /* Prevent body scroll when modal is open */
-        body.modal-open {
-            overflow: hidden;
-        }
-
         .modal-content {
             background: white;
             border-radius: 8px;
@@ -1025,7 +1020,10 @@
                     <div class="strata-name" title="Content Layer&#10;&#10;Media and resource management"><i class="fas fa-file-alt"></i>&nbsp;Content</div>
                     <div class="strata-description" title="Content Layer&#10;&#10;Media and resource management">Media & resources</div>
                 </div>
-
+                <div class="strata-item strata-flow" data-layer="flow">
+                    <div class="strata-name" title="Flow Layer&#10;&#10;Workflow management and process control"><i class="fas fa-project-diagram"></i>&nbsp;Flow</div>
+                    <div class="strata-description" title="Flow Layer&#10;&#10;Workflow management and process control">Workflow management</div>
+                </div>
                 <div class="strata-item strata-admin" data-layer="admin">
                     <div class="strata-name" title="Admin Layer&#10;&#10;Administrative and configuration tools"><i class="fas fa-cogs"></i>&nbsp;Admin</div>
                     <div class="strata-description" title="Admin Layer&#10;&#10;Administrative and configuration tools">Configuration tools</div>
@@ -1037,13 +1035,298 @@
             </div>
         </div>
 
+        <!-- Provider Domain Section -->
+        <div class="domain-section" data-domain="provider">
+            <div class="domain-header">
+                <h2>
+                    <div class="header-content">
+                        <i class="fas fa-hospital"></i>
+                        <span>Provider Domain</span>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="domain-content">
+                <div class="diagrams-grid">
+                    <div class="diagram-card" data-layer="core">
+                        <div class="card-header">
+                            <div class="card-title" title="activityDef&#10;&#10;Treatment step templates defining interaction patterns, media requirements, and progression logic">
+                                activityDef
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Activity Definition</div>
+                            </div>
+                            <div class="card-description" title="activityDef&#10;&#10;Treatment step templates defining interaction patterns, media requirements, and progression logic">Treatment step templates defining interaction patterns, media requirements, and progression logic</div>
+                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('activityDef - Provider Core', 'This would show the actual Mermaid diagram for activityDef in the provider core context...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('activityDef - Provider Core', 'This would show the actual Mermaid diagram for activityDef in the provider core context...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('activityDef', 'Provider', 'Core')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="diagram-card" data-layer="core">
+                        <div class="card-header">
+                            <div class="card-title" title="partner&#10;&#10;Healthcare organization managing participant access and program delivery across populations">
+                                partner
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Partner Organization</div>
+                            </div>
+                            <div class="card-description" title="partner&#10;&#10;Healthcare organization managing participant access and program delivery across populations">Healthcare organization managing participant access and program delivery across populations</div>
+                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('partner - Provider Core', 'This would show the actual Mermaid diagram for partner relationships...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('partner - Provider Core', 'This would show the actual Mermaid diagram for partner relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('partner', 'Provider', 'Core')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="diagram-card" data-layer="tracking">
+                        <div class="card-header">
+                            <div class="card-title" title="providerActivity&#10;&#10;Provider activity tracking and engagement monitoring">
+                                providerActivity
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Provider Activity</div>
+                            </div>
+                            <div class="card-description" title="providerActivity&#10;&#10;Provider activity tracking and engagement monitoring">Provider activity tracking and engagement monitoring</div>
+                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('providerActivity - Provider Tracking', 'This would show the actual Mermaid diagram for provider activity tracking...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('providerActivity - Provider Tracking', 'This would show the actual Mermaid diagram for provider activity tracking...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('providerActivity', 'Provider', 'Tracking')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Participant Domain Section -->
+        <div class="domain-section" data-domain="participant">
+            <div class="domain-header">
+                <h2>
+                    <i class="fas fa-users"></i> Participant Domain
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="domain-content">
+                <div class="diagrams-grid">
+                    <div class="diagram-card" data-layer="core">
+                        <div class="card-header">
+                            <div class="card-title" title="member&#10;&#10;Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships">
+                                member
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Member Profile</div>
+                            </div>
+                            <div class="card-description" title="member&#10;&#10;Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships">Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships</div>
+                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('member - Participant Core', 'This would show the actual Mermaid diagram for member relationships...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('member - Participant Core', 'This would show the actual Mermaid diagram for member relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('member', 'Participant', 'Core')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="diagram-card" data-layer="tracking">
+                        <div class="card-header">
+                            <div class="card-title" title="memberProgress&#10;&#10;Participant progress tracking and milestone monitoring">
+                                memberProgress
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Member Progress</div>
+                            </div>
+                            <div class="card-description" title="memberProgress&#10;&#10;Participant progress tracking and milestone monitoring">Participant progress tracking and milestone monitoring</div>
+                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('memberProgress - Participant Tracking', 'This would show the actual Mermaid diagram for member progress tracking...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('memberProgress - Participant Tracking', 'This would show the actual Mermaid diagram for member progress tracking...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('memberProgress', 'Participant', 'Tracking')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="diagram-card" data-layer="programme">
+                        <div class="card-header">
+                            <div class="card-title" title="progMember&#10;&#10;Active enrollment tracking participant's journey through structured treatment programs with progress monitoring">
+                                progMember
+                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Program Member</div>
+                            </div>
+                            <div class="card-description" title="progMember&#10;&#10;Active enrollment tracking participant's journey through structured treatment programs with progress monitoring">Active enrollment tracking participant's journey through structured treatment programs with progress monitoring</div>
+                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-programme" title="Programme Layer&#10;&#10;Content delivery and learning management"><i class="fas fa-graduation-cap"></i>&nbsp;Programme</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('progMember - Participant Programme', 'This would show the actual Mermaid diagram for progMember relationships...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('progMember - Participant Programme', 'This would show the actual Mermaid diagram for progMember relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('progMember', 'Participant', 'Programme')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Pathway Domain Section -->
+        <div class="domain-section" data-domain="pathway">
+            <div class="domain-header">
+                <h2>
+                    <i class="fas fa-clipboard-list"></i> Pathway Domain
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="domain-content">
+                <div class="diagrams-grid">
+                    <div class="diagram-card" data-layer="programme">
+                        <div class="card-header">
+                            <div class="card-title" title="programme&#10;&#10;Master treatment template containing activity structure, pacing, and lifecycle management">programme</div>
+                            <div class="card-description" title="programme&#10;&#10;Master treatment template containing activity structure, pacing, and lifecycle management">Master treatment template containing activity structure, pacing, and lifecycle management</div>
+                            <div class="domain-badge-top" title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i> Pathway</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-programme" title="Programme Layer&#10;&#10;Content delivery and learning management">Programme</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('programme - Pathway Programme', 'This would show the actual Mermaid diagram for programme structure...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('programme - Pathway Programme', 'This would show the actual Mermaid diagram for programme structure...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('programme', 'Pathway', 'Programme')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="diagram-card" data-layer="content">
+                        <div class="card-header">
+                            <div class="card-title" title="media&#10;&#10;Therapeutic content delivery system for videos, audio, and educational materials">media</div>
+                            <div class="card-description" title="media&#10;&#10;Therapeutic content delivery system for videos, audio, and educational materials">Therapeutic content delivery system for videos, audio, and educational materials</div>
+                            <div class="domain-badge-top" title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i> Pathway</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-content" title="Content Layer&#10;&#10;Media and resource management">Content</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('media - Pathway Content', 'This would show the actual Mermaid diagram for media relationships...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('media - Pathway Content', 'This would show the actual Mermaid diagram for media relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('media', 'Pathway', 'Content')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Site Domain Section -->
+        <div class="domain-section" data-domain="site">
+            <div class="domain-header">
+                <h2>
+                    <i class="fas fa-map-marker-alt"></i> Site Domain
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            </div>
+            <div class="domain-content">
+                <div class="diagrams-grid">
+                    <div class="diagram-card" data-layer="admin">
+                        <div class="card-header">
+                            <div class="card-title" title="dmNavigation&#10;&#10;Website navigation structure and menu organization for user experience architecture">dmNavigation</div>
+                            <div class="card-description" title="dmNavigation&#10;&#10;Website navigation structure and menu organization for user experience architecture">Website navigation structure and menu organization for user experience architecture</div>
+                            <div class="domain-badge-top" title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i> Site</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-admin" title="Admin Layer&#10;&#10;Administrative and configuration tools">Admin</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('dmNavigation - Site Admin', 'This would show the actual Mermaid diagram for navigation structure...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('dmNavigation - Site Admin', 'This would show the actual Mermaid diagram for navigation structure...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('dmNavigation', 'Site', 'Admin')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="diagram-card" data-layer="resources">
+                        <div class="card-header">
+                            <div class="card-title" title="dmImage&#10;&#10;Image resource management system for visual assets and graphic content delivery">dmImage</div>
+                            <div class="card-description" title="dmImage&#10;&#10;Image resource management system for visual assets and graphic content delivery">Image resource management system for visual assets and graphic content delivery</div>
+                            <div class="domain-badge-top" title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i> Site</div>
+                            <div class="badges-container">
+                                <span class="badge strata-badge strata-resources" title="Resources Layer&#10;&#10;Asset management and resource allocation">Resources</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="preview-container">
+                                <div class="preview-image" onclick="showModal('dmImage - Site Resources', 'This would show the actual Mermaid diagram for image resources...')">
+                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-primary" onclick="showModal('dmImage - Site Resources', 'This would show the actual Mermaid diagram for image resources...')"><i class="fas fa-chart-network"></i> View Diagram</a>
+                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('dmImage', 'Site', 'Resources')"><i class="fas fa-info-circle"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal -->
@@ -1207,14 +1490,14 @@
         
         // Check if a component should be excluded from display
         function shouldExcludeComponent(componentName, domainKey, layerKey) {
-            // Exclude activityDef self-references from Pathway domain flow layer
-            if (domainKey === 'pathway' && layerKey === 'flow') {
-                const activityDefSelfRefs = [
-                    'onEndID', 'aCuePointActivities', 'aInteract1Activities', 
-                    'aInteract2Activities', 'aInteract3Activities', 'aInteract4Activities', 
-                    'aInteract5Activities'
-                ];
-                return activityDefSelfRefs.includes(componentName);
+            // Global exclusions - apply to all domains and layers
+            const globalExclusions = [
+                'defaultMediaID', 'aCuePointActivities', 'aMediaIDs',
+                'onEndID', 'aInteract1Activities', 'aInteract2Activities', 
+                'aInteract3Activities', 'aInteract4Activities', 'aInteract5Activities'
+            ];
+            if (globalExclusions.includes(componentName)) {
+                return true;
             }
             
             // Add more exclusion rules here as needed
@@ -1392,17 +1675,18 @@
             };
             return layerDescriptions[layerKey] || 'Component layer';
         }
-
+        
         function getLayerIcon(layerKey) {
             const layerIcons = {
                 'core': 'fa-cube',
-                'admin': 'fa-cogs',
-                'programme': 'fa-graduation-cap',
+                'admin': 'fa-users-cog',
+                'programme': 'fa-play-circle',
                 'tracking': 'fa-chart-line',
                 'content': 'fa-file-alt',
-                'resources': 'fa-database'
+                'flow': 'fa-random',
+                'resources': 'fa-folder'
             };
-            return layerIcons[layerKey] || 'fa-layer-group';
+            return layerIcons[layerKey] || 'fa-cube';
         }
         
         // Initialize
@@ -1435,7 +1719,13 @@
                     // Toggle active state
                     if (this.classList.contains('active')) {
                         this.classList.remove('active');
-                        activeFilters.domain = 'all';
+                        // If this was the last active domain filter, show nothing
+                        const activeDomainCards = document.querySelectorAll('.domain-card.active');
+                        if (activeDomainCards.length === 0) {
+                            activeFilters.domain = 'none';
+                        } else {
+                            activeFilters.domain = 'all';
+                        }
                     } else {
                         document.querySelectorAll('.domain-card').forEach(c => c.classList.remove('active'));
                         this.classList.add('active');
@@ -1455,7 +1745,13 @@
                     // Toggle active state
                     if (this.classList.contains('active')) {
                         this.classList.remove('active');
-                        activeFilters.layer = 'all';
+                        // If this was the last active layer filter, show nothing
+                        const activeLayerItems = document.querySelectorAll('.strata-item.active');
+                        if (activeLayerItems.length === 0) {
+                            activeFilters.layer = 'none';
+                        } else {
+                            activeFilters.layer = 'all';
+                        }
                     } else {
                         document.querySelectorAll('.strata-item').forEach(i => i.classList.remove('active'));
                         this.classList.add('active');
@@ -1494,6 +1790,7 @@
                         const header = domainSection.querySelector('.domain-header');
                         const icon = header.querySelector('.toggle-icon');
                         
+                        // Always expand the domain section when domain card is clicked
                         content.classList.remove('collapsed');
                         header.classList.remove('collapsed');
                         icon.textContent = '▼';
@@ -1504,24 +1801,16 @@
 
         function applyFilters() {
             const diagramCards = document.querySelectorAll('.diagram-card');
-            const domainSections = document.querySelectorAll('.domain-section');
             
-            // Hide/show domain sections based on domain filter
-            domainSections.forEach(section => {
-                const sectionDomain = section.dataset.domain;
-                const shouldShowSection = activeFilters.domain === 'all' || sectionDomain === activeFilters.domain;
-                
-                if (shouldShowSection) {
-                    section.style.display = 'block';
-                } else {
-                    section.style.display = 'none';
-                }
-            });
-            
-            // Hide/show individual cards based on layer filter
             diagramCards.forEach(card => {
                 const cardDomain = card.closest('.domain-section').dataset.domain;
                 const cardLayer = card.dataset.layer;
+                
+                // If either filter is set to 'none', show nothing
+                if (activeFilters.domain === 'none' || activeFilters.layer === 'none') {
+                    card.classList.add('hidden');
+                    return;
+                }
                 
                 const shouldShowCard = 
                     (activeFilters.domain === 'all' || cardDomain === activeFilters.domain) &&
@@ -1533,8 +1822,6 @@
                     card.classList.add('hidden');
                 }
             });
-            
-            updateStats();
         }
 
         function updateStats() {
@@ -1567,7 +1854,6 @@
                 </div>
             `;
             document.getElementById('modal').classList.add('show');
-            document.body.classList.add('modal-open');
         }
 
         function showComponentDetails(componentName, domain, layer) {
@@ -1712,12 +1998,10 @@
             `;
             
             document.getElementById('modal').classList.add('show');
-            document.body.classList.add('modal-open');
         }
 
         function hideModal() {
             document.getElementById('modal').classList.remove('show');
-            document.body.classList.remove('modal-open');
         }
 
         // Close modal on outside click
