@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wellmind Health Platform Component Explorer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -698,18 +699,7 @@
             color: #2c3e50;
         }
 
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #6c757d;
-            padding: 5px;
-        }
 
-        .close-btn:hover {
-            color: #333;
-        }
 
         .modal-body {
             line-height: 1.6;
@@ -727,6 +717,24 @@
             text-align: center;
             color: #6c757d;
             font-style: italic;
+        }
+
+        /* Mermaid diagram styling */
+        .mermaid {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mermaid svg {
+            max-width: 100%;
+            max-height: 100%;
         }
 
         /* Component Details Modal Styles */
@@ -827,9 +835,10 @@
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            max-width: 90%;
-            max-height: 90%;
-            width: 800px;
+            max-width: 95%;
+            max-height: 95%;
+            width: 95vw;
+            height: 95vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -844,24 +853,27 @@
         }
 
         .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
+            background: #dc3545 !important;
+            border: none !important;
+            font-size: 1.2em;
             cursor: pointer;
-            color: #6c757d;
-            padding: 0;
-            width: 30px;
-            height: 30px;
+            color: white !important;
+            padding: 8px 12px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 4px;
+            border-radius: 6px;
             transition: all 0.2s;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .modal-close:hover {
-            background: #f8f9fa;
-            color: #495057;
+            background-color: #c82333 !important;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         .modal-body {
@@ -1345,18 +1357,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Modal Title</h2>
-                <button class="close-btn" onclick="hideModal()">&times;</button>
-            </div>
-            <div class="modal-body" id="modalBody">
-                Modal content will go here...
-            </div>
-        </div>
-    </div>
+
 
     <script>
         // State management
@@ -1388,12 +1389,26 @@
             try {
                 // Add cache-busting parameter to force fresh load
                 const timestamp = new Date().getTime();
-                const response = await fetch(`exports/pre_generated/165_diagrams_results.json?t=${timestamp}`);
-                cfcCacheData = await response.json();
-                console.log('Loaded CFC cache data:', cfcCacheData);
+                
+                // Load both files
+                const [diagramsResponse, cacheResponse] = await Promise.all([
+                    fetch(`exports/pre_generated/165_diagrams_results.json?t=${timestamp}`),
+                    fetch(`config/cfc_cache.json?t=${timestamp}`)
+                ]);
+                
+                const diagramsData = await diagramsResponse.json();
+                const cacheData = await cacheResponse.json();
+                
+                // Store both datasets
+                window.diagramsData = diagramsData;
+                window.cfcCacheData = cacheData;
+                
+                console.log('Loaded diagrams data:', diagramsData);
+                console.log('Loaded CFC cache data:', cacheData);
+                
                 generateCardsFromRealData();
             } catch (error) {
-                console.error('Error loading CFC cache data:', error);
+                console.error('Error loading data files:', error);
                 // Continue with domains data only
             }
         }
@@ -1570,7 +1585,7 @@
                 <div class="card-body">
                     <p class="card-text">${description}</p>
                     <div class="action-buttons">
-                        <button class="btn btn-primary btn-sm" onclick="showModal('${mermaidUrl}', '${componentName}')">
+                        <button class="btn btn-primary btn-sm" onclick="showModal('${componentName}', '', '${componentName}', '${domainKey}', '${layerKey}')">
                             <i class="fas fa-project-diagram"></i>&nbsp;View Diagram
                         </button>
                                                         <button class="btn btn-outline btn-sm" onclick="showComponentDetails('${componentName}', '${domainKey}', '${layerKey}')">
@@ -1693,15 +1708,15 @@
         }
         
         function getLayerIcon(layerKey) {
-            const layerIcons = {
-                'core': 'fa-cube',
-                'admin': 'fa-users-cog',
-                'programme': 'fa-play-circle',
-                'tracking': 'fa-chart-line',
-                'content': 'fa-file-alt',
-                'flow': 'fa-random',
-                'resources': 'fa-folder'
-            };
+                    const layerIcons = {
+            'core': 'fa-cube',
+            'admin': 'fa-cogs',
+            'programme': 'fa-graduation-cap',
+            'tracking': 'fa-chart-line',
+            'content': 'fa-file-alt',
+            'flow': 'fa-random',
+            'resources': 'fa-database'
+        };
             return layerIcons[layerKey] || 'fa-cube';
         }
         
@@ -1852,163 +1867,149 @@
             document.getElementById('diagrams-count').textContent = totalCards;
         }
 
-        function showModal(title, content) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalBody').innerHTML = `
-                <p>${content}</p>
-                <div class="mermaid-container">
-                    <div class="mermaid-placeholder">
-                        <strong>Sample Mermaid Diagram:</strong><br>
-                        <code>graph TD<br>
-                        A[activityDef] --> B[media]<br>
-                        A --> C[programme]<br>
-                        B --> D[dmImage]<br>
-                        C --> E[progMember]<br>
-                        E --> F[member]<br>
-                        F --> G[partner]</code>
-                    </div>
-                </div>
-            `;
-            document.getElementById('modal').classList.add('show');
-        }
-
-        function showComponentDetails(componentName, domain, layer) {
-            const componentData = {
-                'activityDef': {
-                    title: 'activityDef',
-                    displayName: 'Activity Definition',
-                    description: 'Treatment step templates defining interaction patterns, media requirements, and progression logic',
-                    fullPath: 'packages/types/activityDef.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'mediaID', 'interactionType', 'progressionRules'],
-                    dependencies: ['media', 'programme', 'progRole'],
-                    longDescription: 'ActivityDefs represent the definition of individual treatment steps within a program. These are the building blocks that define how participants interact with therapeutic content, complete exercises, or engage with educational materials. Each activityDef defines the structure, media requirements, interaction patterns, and progression logic for a specific treatment step.'
-                },
-                'partner': {
-                    title: 'partner',
-                    displayName: 'Partner Organization',
-                    description: 'Healthcare organization managing participant access and program delivery across populations',
-                    fullPath: 'packages/types/partner.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'organizationType', 'accessLevel', 'memberGroups'],
-                    dependencies: ['memberGroup', 'center', 'referer', 'intake'],
-                    longDescription: 'Partners represent healthcare organizations, enterprises, or institutions that provide Wellmind Health programs to their populations. These could be hospitals, health systems, employers, insurance companies, or other healthcare entities. The partner entity manages organizational relationships, access controls, and administrative oversight.'
-                },
-                'member': {
-                    title: 'member',
-                    displayName: 'Member Profile',
-                    description: 'Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships',
-                    fullPath: 'packages/types/member.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['firstName', 'lastName', 'email', 'preferences', 'progressStatus'],
-                    dependencies: ['partner', 'memberGroup', 'progMember', 'activity'],
-                    longDescription: 'The member represents an individual participant in Wellmind Health\'s digital therapeutic programs. This is the central entity that connects the human participant to the digital treatment ecosystem with personal preferences, progress tracking, and connections to the healthcare provider hierarchy.'
-                },
-                'progMember': {
-                    title: 'progMember',
-                    displayName: 'Program Member',
-                    description: 'Active enrollment tracking participant\'s journey through structured treatment programs with progress monitoring',
-                    fullPath: 'packages/types/progMember.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['enrollmentDate', 'completionStatus', 'progressPercentage', 'currentActivity'],
-                    dependencies: ['member', 'programme', 'activity'],
-                    longDescription: 'progMember represents the active enrollment of a participant in a specific treatment program. This is where the rubber meets the road - where a participant\'s journey through a structured therapeutic intervention is tracked, measured, and managed.'
-                },
-                'programme': {
-                    title: 'programme',
-                    displayName: 'Treatment Programme',
-                    description: 'Master treatment template containing activity structure, pacing, and lifecycle management',
-                    fullPath: 'packages/types/programme.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'duration', 'activityCount', 'targetAudience'],
-                    dependencies: ['activityDef', 'media', 'progRole'],
-                    longDescription: 'The programme entity represents the overarching treatment program structure that contains activity definitions, pacing logic, communication templates, educational resources, and lifecycle management. This is the master template that defines how a specific therapeutic intervention is structured and delivered.'
-                },
-                'media': {
-                    title: 'media',
-                    displayName: 'Media Content',
-                    description: 'Therapeutic content delivery system for videos, audio, and educational materials',
-                    fullPath: 'packages/types/media.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'mediaType', 'duration', 'filePath'],
-                    dependencies: ['activityDef', 'programme'],
-                    longDescription: 'Media represents the video, audio, and document content that delivers therapeutic interventions and educational materials to participants. This includes educational videos, interactive exercises, guided meditations, and supporting documentation that form the core content of digital therapeutic programs.'
-                },
-                'dmNavigation': {
-                    title: 'dmNavigation',
-                    displayName: 'Navigation System',
-                    description: 'Website navigation structure and menu organization for user experience architecture',
-                    fullPath: 'packages/types/dmNavigation.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'menuStructure', 'pageOrder', 'accessLevel'],
-                    dependencies: ['dmHTML', 'dmFacts'],
-                    longDescription: 'dmNavigation represents the website navigation structure and user experience architecture that guides users through the platform\'s features, content, and functionality. This system manages the user interface structure, menu hierarchies, and navigation pathways.'
-                },
-                'dmImage': {
-                    title: 'dmImage',
-                    displayName: 'Image Management',
-                    description: 'Image resource management system for visual assets and graphic content delivery',
-                    fullPath: 'packages/types/dmImage.cfc',
-                    inheritance: 'farcry.core.types.versions',
-                    properties: ['title', 'description', 'imageType', 'filePath', 'altText'],
-                    dependencies: ['dmHTML', 'dmFacts'],
-                    longDescription: 'dmImage represents the image resource management system for website graphics and visual content that supports the platform\'s visual design, user experience, and content delivery requirements. This system manages the storage, organization, optimization, and delivery of visual assets.'
-                }
-            };
-
-            const data = componentData[componentName] || {
-                title: componentName,
-                description: 'Component description not available',
-                fullPath: 'packages/types/' + componentName + '.cfc',
-                inheritance: 'farcry.core.types.versions',
-                properties: ['title', 'description'],
-                dependencies: [],
-                longDescription: 'Detailed description not available for this component.'
-            };
-
+        function showModal(title, content, componentName, domainKey, layerKey) {
+            const domainDisplayName = getDomainDisplayName(domainKey);
+            const layerDisplayName = getLayerDisplayName(layerKey);
             document.getElementById('modalTitle').innerHTML = `
-                <div style="display: flex; align-items: baseline; justify-content: space-between;">
-                    <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600;">${data.title}</span>
-                    <span style="color: #6c757d; font-size: 0.9em;">Component Details</span>
+                <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
+                    <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName}</span>
+                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0;">${domainDisplayName} / ${layerDisplayName} Diagram</span>
                 </div>
             `;
             
+            // Find the matching diagram from the loaded data
+            const diagramsData = window.diagramsData;
+            let mermaidUrl = '';
+            
+            if (diagramsData && diagramsData.generated) {
+                // Look for a diagram that matches the component and domain
+                const diagramKey = `${componentName}-${domainKey}`;
+                const diagram = diagramsData.generated[diagramKey];
+                
+                if (diagram && diagram.MermaidUrl) {
+                    mermaidUrl = diagram.MermaidUrl;
+                }
+            }
+            
+            if (mermaidUrl) {
+                // Use the real Mermaid URL
+                document.getElementById('modalBody').innerHTML = `
+                    <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+                        <iframe src="${mermaidUrl}" 
+                                style="width: 100%; height: 100%; border: none; border-radius: 8px;"
+                                title="Mermaid Diagram">
+                        </iframe>
+                    </div>
+                `;
+            } else {
+                // Fallback to a message if no diagram found
+                document.getElementById('modalBody').innerHTML = `
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: #6c757d;">
+                        <p>No diagram available for ${componentName} in ${domainDisplayName} domain</p>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('modal').classList.add('show');
+        }
+
+
+
+        function showComponentDetails(componentName, domain, layer) {
+            // Get component data from diagrams data
+            const diagramsData = window.diagramsData;
+            let componentDescription = '';
+            
+            if (diagramsData && diagramsData.generated) {
+                // Look for a diagram that matches the component and domain
+                const diagramKey = `${componentName}-${domain}`;
+                const diagram = diagramsData.generated[diagramKey];
+                
+                if (diagram && diagram.Description) {
+                    componentDescription = diagram.Description;
+                }
+            }
+            
+            // Get component data from cache
+            const cacheData = window.cfcCacheData;
+            let componentInfo = null;
+            
+            if (cacheData && cacheData.entities) {
+                componentInfo = cacheData.entities.find(entity => entity.name === componentName);
+            }
+            
+            // Get properties for this component
+            let properties = [];
+            if (cacheData && cacheData.properties) {
+                properties = cacheData.properties
+                    .filter(prop => prop.entity === componentName)
+                    .map(prop => prop.property);
+            }
+            
+            // Get dependencies (targets from properties)
+            let dependencies = [];
+            if (cacheData && cacheData.properties) {
+                dependencies = cacheData.properties
+                    .filter(prop => prop.entity === componentName && prop.target)
+                    .map(prop => prop.target);
+            }
+            
+            // Create component data object using only available data
+            const componentData = {
+                title: componentName,
+                description: componentDescription || 'Description not available',
+                file: componentInfo ? componentInfo.file || 'Not available' : 'Not available',
+                plugin: componentInfo ? componentInfo.plugin || 'Not available' : 'Not available',
+                properties: properties.length > 0 ? properties.join(', ') : 'No properties found',
+                dependencies: dependencies.length > 0 ? dependencies.join(', ') : 'No dependencies found',
+                domain: getDomainDisplayName(domain),
+                layer: getLayerDisplayName(layer)
+            };
+            
+            // Set modal title
+            document.getElementById('modalTitle').innerHTML = `
+                <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
+                    <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentData.title}</span>
+                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0;">Component Details</span>
+                </div>
+            `;
+            
+            // Set modal content
             document.getElementById('modalBody').innerHTML = `
                 <div class="component-details">
                     <div class="detail-section">
-                        <h4><i class="fas fa-info-circle"></i> Description</h4>
-                        <p>${data.description}</p>
+                        <h3>Description</h3>
+                        <p>${componentData.description}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h4><i class="fas fa-folder"></i> File Path</h4>
-                        <code>${data.fullPath}</code>
+                        <h3>Domain</h3>
+                        <p>${componentData.domain}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h4><i class="fas fa-sitemap"></i> Inheritance</h4>
-                        <code>${data.inheritance}</code>
+                        <h3>Layer</h3>
+                        <p>${componentData.layer}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h4><i class="fas fa-cogs"></i> Properties</h4>
-                        <div class="property-list">
-                            ${data.properties.map(prop => `<span class="property-tag">${prop}</span>`).join('')}
-                        </div>
+                        <h3>File</h3>
+                        <p>${componentData.file}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h4><i class="fas fa-link"></i> Dependencies</h4>
-                        <div class="dependency-list">
-                            ${data.dependencies.map(dep => `<span class="dependency-tag">${dep}</span>`).join('')}
-                        </div>
+                        <h3>Plugin</h3>
+                        <p>${componentData.plugin}</p>
                     </div>
                     
                     <div class="detail-section">
-                        <h4><i class="fas fa-info"></i> Detailed Description</h4>
-                        <div class="long-description">
-                            <p>${data.longDescription}</p>
-                        </div>
+                        <h3>Properties</h3>
+                        <p>${componentData.properties}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Dependencies</h3>
+                        <p>${componentData.dependencies}</p>
                     </div>
                 </div>
             `;
@@ -2034,6 +2035,16 @@
             }
         });
 
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true
+            }
+        });
+
         // DEV MODE: Add experimental features here
         function devExperiment() {
             // Add experimental JavaScript features here
@@ -2049,7 +2060,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div id="modalTitle"></div>
-                <button onclick="hideModal()" class="modal-close">&times;</button>
+                <button onclick="hideModal()" class="modal-close">✕</button>
             </div>
             <div id="modalBody" class="modal-body"></div>
         </div>

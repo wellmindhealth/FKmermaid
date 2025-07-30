@@ -1,21 +1,21 @@
 {
-  "MissingExclusionsInConfig": [],
   "Success": true,
-  "ExcludedInKnownTables": [],
   "ExpectedExcludedEntities": [
     "farFilter",
     "farTask",
     "address"
   ],
+  "TestName": "Entity Exclusions",
   "KnownTablesValid": true,
+  "ExcludedInKnownTables": [],
   "CacheValid": true,
-  "Timestamp": "2025-07-30 17:11:52",
-  "ConfigExclusionsValid": true,
-  "ExcludedInCache": [],
   "ExpectedExclusions": [
     "farFilter.cfc",
     "farTask.cfc",
     "address.cfc"
   ],
-  "TestName": "Entity Exclusions"
+  "MissingExclusionsInConfig": [],
+  "ConfigExclusionsValid": true,
+  "Timestamp": "2025-07-30 21:16:30",
+  "ExcludedInCache": []
 }

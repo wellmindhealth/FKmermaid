@@ -1,2335 +1,4163 @@
 {
-  "joinTables": [
-    {
-      "property": "aFacts",
-      "joinTable": "",
-      "target": "dmFacts",
-      "source": "ruleFacts",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aObjects",
-      "joinTable": "",
-      "target": "dmHTML",
-      "source": "ruleFacts",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aFiles",
-      "joinTable": "",
-      "target": "dmFile",
-      "source": "ruleFileListing",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aTestimonials",
-      "joinTable": "",
-      "target": "testimonial",
-      "source": "ruleLatesttestimonial",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aObjs",
-      "joinTable": "",
-      "target": "dmHTML",
-      "source": "ruleRelated",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aObjects",
-      "joinTable": "",
-      "target": "dmHTML",
-      "source": "ruleRelated",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aCuePointActivities",
-      "joinTable": "",
-      "target": "activityDef",
-      "source": "activityDef",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aMediaIDs",
-      "joinTable": "",
-      "target": "media",
-      "source": "activityDef",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aInteract1Activities",
-      "joinTable": "",
-      "target": "activityDef",
-      "source": "activityDef",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aInteract2Activities",
-      "joinTable": "",
-      "target": "activityDef",
-      "source": "activityDef",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aInteract3Activities",
-      "joinTable": "",
-      "target": "activityDef",
-      "source": "activityDef",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aInteract4Activities",
-      "joinTable": "",
-      "target": "activityDef",
-      "source": "activityDef",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aInteract5Activities",
-      "joinTable": "",
-      "target": "activityDef",
-      "source": "activityDef",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aUsers",
-      "joinTable": "",
-      "target": "dmProfile",
-      "source": "center",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aReferers",
-      "joinTable": "",
-      "target": "referer",
-      "source": "center",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aMembers",
-      "joinTable": "",
-      "target": "member",
-      "source": "intake",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aOrderIDs",
-      "joinTable": "",
-      "target": "orderMaster",
-      "source": "member",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aAddresses",
-      "joinTable": "",
-      "target": "address",
-      "source": "member",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aFarcryUsers",
-      "joinTable": "",
-      "target": "farUser",
-      "source": "memberGroup",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aCenters",
-      "joinTable": "",
-      "target": "center",
-      "source": "partner",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aReferers",
-      "joinTable": "",
-      "target": "referer",
-      "source": "partner",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aFollowupActivityDefIDs",
-      "joinTable": "",
-      "target": "activityDef",
-      "source": "programme",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aTrackerIDs",
-      "joinTable": "",
-      "target": "trackerDef",
-      "source": "programme",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aObjectIDs",
-      "joinTable": "",
-      "target": "dmFile",
-      "source": "programme",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aMemberGroupID",
-      "joinTable": "",
-      "target": "memberGroup",
-      "source": "report",
-      "sourcePlugin": "pathway"
-    },
-    {
-      "property": "aObjectIDs",
-      "joinTable": "",
-      "target": "dmImage,dmFile,activitydef,media",
-      "source": "dmHTML",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aRelatedIDs",
-      "joinTable": "",
-      "target": "dmnavigation,dmfile,dmhtml",
-      "source": "dmHTML",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aObjectIDs",
-      "joinTable": "",
-      "target": "dmHTML,dmInclude,landingPage,dmNews,dmFacts,media,activityDef,shopItem,report",
-      "source": "dmNavigation",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aGroups",
-      "joinTable": "",
-      "target": "farGroup",
-      "source": "dmProfile",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aRelated",
-      "joinTable": "",
-      "target": "dmNavigation",
-      "source": "farFilterProperty",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aRelatedtypes",
-      "joinTable": "",
-      "target": "farPermission",
-      "source": "farPermission",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aGroups",
-      "joinTable": "",
-      "target": "farGroup",
-      "source": "farRole",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aPermissions",
-      "joinTable": "",
-      "target": "farPermission",
-      "source": "farRole",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aRoles",
-      "joinTable": "",
-      "target": "farRole",
-      "source": "farTaskDef",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aGroups",
-      "joinTable": "",
-      "target": "farGroup",
-      "source": "farUser",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aRoles",
-      "joinTable": "",
-      "target": "farRole",
-      "source": "farWebtopDashboard",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aTaskIDs",
-      "joinTable": "",
-      "target": "farTask",
-      "source": "farWorkflow",
-      "sourcePlugin": "zfarcrycore"
-    },
-    {
-      "property": "aTaskDefs",
-      "joinTable": "",
-      "target": "farTaskDef",
-      "source": "farWorkflowDef",
-      "sourcePlugin": "zfarcrycore"
-    }
-  ],
-  "directFK": [
-    {
-      "property": "memberTypeID",
-      "target": "memberType",
-      "source": "ruleSelfRegistration",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberGroupID",
-      "target": "memberGroup",
-      "source": "ruleSelfRegistration",
-      "plugin": "pathway"
-    },
-    {
-      "property": "partnerID",
-      "target": "partner",
-      "source": "ruleSelfRegistration",
-      "plugin": "pathway"
-    },
-    {
-      "property": "centerID",
-      "target": "center",
-      "source": "ruleSelfRegistration",
-      "plugin": "pathway"
-    },
-    {
-      "property": "refererID",
-      "target": "referer",
-      "source": "ruleSelfRegistration",
-      "plugin": "pathway"
-    },
-    {
-      "property": "sourceImageID",
-      "target": "dmImage",
-      "source": "dmNavigation",
-      "plugin": "pathway"
-    },
-    {
-      "property": "progMemberID",
-      "target": "progMember",
-      "source": "activity",
-      "plugin": "pathway"
-    },
-    {
-      "property": "activityDefID",
-      "target": "activityDef",
-      "source": "activity",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "teaserImage",
-      "target": "dmImage",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "guideID",
-      "target": "guide",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "role",
-      "target": "progRole",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "onEndID",
-      "target": "activityDef",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "defaultMediaID",
-      "target": "media",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "journalID",
-      "target": "journalDef",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "tracker01ID",
-      "target": "trackerDef",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "tracker02ID",
-      "target": "trackerDef",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "tracker03ID",
-      "target": "trackerDef",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "tracker04ID",
-      "target": "trackerDef",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "tracker05ID",
-      "target": "trackerDef",
-      "source": "activityDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "Logo",
-      "target": "dmImage",
-      "source": "center",
-      "plugin": "pathway"
-    },
-    {
-      "property": "dmProfileID",
-      "target": "dmProfile",
-      "source": "center",
-      "plugin": "pathway"
-    },
-    {
-      "property": "partnerID",
-      "target": "partner",
-      "source": "center",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberGroupID",
-      "target": "memberGroup",
-      "source": "center",
-      "plugin": "pathway"
-    },
-    {
-      "property": "picture",
-      "target": "dmImage",
-      "source": "guide",
-      "plugin": "pathway"
-    },
-    {
-      "property": "partnerID",
-      "target": "partner",
-      "source": "guide",
-      "plugin": "pathway"
-    },
-    {
-      "property": "centerID",
-      "target": "center",
-      "source": "guide",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberGroupID",
-      "target": "memberGroup",
-      "source": "intake",
-      "plugin": "pathway"
-    },
-    {
-      "property": "centerID",
-      "target": "center",
-      "source": "intake",
-      "plugin": "pathway"
-    },
-    {
-      "property": "progMemberID",
-      "target": "progMember",
-      "source": "journal",
-      "plugin": "pathway"
-    },
-    {
-      "property": "journalDefID",
-      "target": "journalDef",
-      "source": "journal",
-      "plugin": "pathway"
-    },
-    {
-      "property": "activityID",
-      "target": "activity",
-      "source": "journal",
-      "plugin": "pathway"
-    },
-    {
-      "property": "tracker01ID",
-      "target": "trackerDef",
-      "source": "journalDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "tracker02ID",
-      "target": "trackerDef",
-      "source": "journalDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "journalDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "progMemberID",
-      "target": "progMember",
-      "source": "library",
-      "plugin": "pathway"
-    },
-    {
-      "property": "activityID",
-      "target": "activity",
-      "source": "library",
-      "plugin": "pathway"
-    },
-    {
-      "property": "mediaID",
-      "target": "media",
-      "source": "library",
-      "plugin": "pathway"
-    },
-    {
-      "property": "guideID",
-      "target": "guide",
-      "source": "media",
-      "plugin": "pathway"
-    },
-    {
-      "property": "partnerID",
-      "target": "partner",
-      "source": "media",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "media",
-      "plugin": "pathway"
-    },
-    {
-      "property": "roleID",
-      "target": "progRole",
-      "source": "media",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberTypeID",
-      "target": "memberType",
-      "source": "member",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberGroupID",
-      "target": "memberGroup",
-      "source": "member",
-      "plugin": "pathway"
-    },
-    {
-      "property": "partnerID",
-      "target": "partner",
-      "source": "member",
-      "plugin": "pathway"
-    },
-    {
-      "property": "centerID",
-      "target": "center",
-      "source": "member",
-      "plugin": "pathway"
-    },
-    {
-      "property": "refererID",
-      "target": "referer",
-      "source": "member",
-      "plugin": "pathway"
-    },
-    {
-      "property": "activityDefID",
-      "target": "activityDef",
-      "source": "member",
-      "plugin": "pathway"
-    },
-    {
-      "property": "roleID",
-      "target": "progRole",
-      "source": "member",
-      "plugin": "pathway"
-    },
-    {
-      "property": "partnerID",
-      "target": "partner",
-      "source": "memberGroup",
-      "plugin": "pathway"
-    },
-    {
-      "property": "Logo",
-      "target": "dmImage",
-      "source": "memberGroup",
-      "plugin": "pathway"
-    },
-    {
-      "property": "resourcePosterID",
-      "target": "dmFile",
-      "source": "memberGroup",
-      "plugin": "pathway"
-    },
-    {
-      "property": "resourceHandoutID",
-      "target": "dmFile",
-      "source": "memberGroup",
-      "plugin": "pathway"
-    },
-    {
-      "property": "supportPage",
-      "target": "dmHTML",
-      "source": "memberGroup",
-      "plugin": "pathway"
-    },
-    {
-      "property": "selfRegNavID",
-      "target": "dmNavigation",
-      "source": "memberGroup",
-      "plugin": "pathway"
-    },
-    {
-      "property": "selfRegQrFileID",
-      "target": "dmFile",
-      "source": "memberGroup",
-      "plugin": "pathway"
-    },
-    {
-      "property": "Logo",
-      "target": "dmImage",
-      "source": "partner",
-      "plugin": "pathway"
-    },
-    {
-      "property": "dmProfileID",
-      "target": "dmProfile",
-      "source": "partner",
-      "plugin": "pathway"
-    },
-    {
-      "property": "seniorSupportID",
-      "target": "dmProfile",
-      "source": "partner",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "progMember",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberID",
-      "target": "member",
-      "source": "progMember",
-      "plugin": "pathway"
-    },
-    {
-      "property": "currActivityID",
-      "target": "activity",
-      "source": "progMember",
-      "plugin": "pathway"
-    },
-    {
-      "property": "partnerID",
-      "target": "partner",
-      "source": "programme",
-      "plugin": "pathway"
-    },
-    {
-      "property": "Logo",
-      "target": "dmImage",
-      "source": "programme",
-      "plugin": "pathway"
-    },
-    {
-      "property": "firstActivityDefID",
-      "target": "activityDef",
-      "source": "programme",
-      "plugin": "pathway"
-    },
-    {
-      "property": "lastActivityDefID",
-      "target": "activityDef",
-      "source": "programme",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "progRole",
-      "plugin": "pathway"
-    },
-    {
-      "property": "picture",
-      "target": "dmImage",
-      "source": "referer",
-      "plugin": "pathway"
-    },
-    {
-      "property": "dmProfileID",
-      "target": "dmProfile",
-      "source": "referer",
-      "plugin": "pathway"
-    },
-    {
-      "property": "partnerID",
-      "target": "partner",
-      "source": "referer",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberGroupID",
-      "target": "memberGroup",
-      "source": "referer",
-      "plugin": "pathway"
-    },
-    {
-      "property": "centerID",
-      "target": "center",
-      "source": "referer",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "report",
-      "plugin": "pathway"
-    },
-    {
-      "property": "partnerID",
-      "target": "partner",
-      "source": "report",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberID",
-      "target": "member",
-      "source": "report",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberTypeID",
-      "target": "memberType",
-      "source": "report",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "SSQ_arthritis01",
-      "plugin": "pathway"
-    },
-    {
-      "property": "progMemberID",
-      "target": "progMember",
-      "source": "SSQ_arthritis01",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberID",
-      "target": "member",
-      "source": "SSQ_arthritis01",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "SSQ_pain01",
-      "plugin": "pathway"
-    },
-    {
-      "property": "progMemberID",
-      "target": "progMember",
-      "source": "SSQ_pain01",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberID",
-      "target": "member",
-      "source": "SSQ_pain01",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "SSQ_stress01",
-      "plugin": "pathway"
-    },
-    {
-      "property": "progMemberID",
-      "target": "progMember",
-      "source": "SSQ_stress01",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberID",
-      "target": "member",
-      "source": "SSQ_stress01",
-      "plugin": "pathway"
-    },
-    {
-      "property": "memberID",
-      "target": "member",
-      "source": "testimonial",
-      "plugin": "pathway"
-    },
-    {
-      "property": "activityDefID",
-      "target": "activityDef",
-      "source": "testimonial",
-      "plugin": "pathway"
-    },
-    {
-      "property": "progMemberID",
-      "target": "progMember",
-      "source": "tracker",
-      "plugin": "pathway"
-    },
-    {
-      "property": "trackerDefID",
-      "target": "trackerDef",
-      "source": "tracker",
-      "plugin": "pathway"
-    },
-    {
-      "property": "activityID",
-      "target": "activity",
-      "source": "tracker",
-      "plugin": "pathway"
-    },
-    {
-      "property": "programmeID",
-      "target": "programme",
-      "source": "trackerDef",
-      "plugin": "pathway"
-    },
-    {
-      "property": "teaserImage",
-      "target": "dmImage",
-      "source": "dmFile",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "teaserImage",
-      "target": "dmImage",
-      "source": "dmHTML",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "teaserImage",
-      "target": "dmImage",
-      "source": "dmInclude",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "internalRedirectID",
-      "target": "dmNavigation",
-      "source": "dmNavigation",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "ExternalLink",
-      "target": "dmNavigation",
-      "source": "dmNavigation",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "memberGroupID",
-      "target": "memberGroup",
-      "source": "dmProfile",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "lGroups",
-      "target": "farGroup",
-      "source": "dmProfile",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "roleid",
-      "target": "farRole",
-      "source": "farBarnacle",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "permissionid",
-      "target": "farPermission",
-      "source": "farBarnacle",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "referenceid",
-      "target": "dmNavigation,farCoapi",
-      "source": "farBarnacle",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "filterID",
-      "target": "farFilter",
-      "source": "farFilterProperty",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "aRoles",
-      "target": "farRole",
-      "source": "farPermission",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "lGroups",
-      "target": "farGroup",
-      "source": "farUser",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "lRoles",
-      "target": "farRole",
-      "source": "farWebtopDashboard",
-      "plugin": "zfarcrycore"
-    },
-    {
-      "property": "workflowDefID",
-      "target": "farWorkflowDef",
-      "source": "farWorkflow",
-      "plugin": "zfarcrycore"
-    }
-  ],
-  "entities": [
-    {
+  "componentMetadata": [
+    {
+      "fuAlias": "",
+      "displayName": "API Access Key",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/api/packages/types/apiAccessKey.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "apiAccessKey",
+      "bRefObjects": "",
+      "displayTitle": "API Access Key",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\api\\packages\\types\\apiAccessKey.cfc",
-      "plugin": "api"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Reference label for key",
+      "plugin": "api",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "oauth2",
+      "ObjectBrokerMaxObjects": "0",
+      "bAudit": "false",
+      "filePath": "/farcry/plugins/pathway/packages/oauth2/oauth2.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "oauth2",
+      "bRefObjects": "false",
+      "displayTitle": "oauth2",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\oauth2\\oauth2.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "false",
+      "bUseInTree": "0",
+      "faIcon": "",
+      "hint": "",
+      "plugin": "pathway",
+      "inheritance": ""
     },
     {
+      "fuAlias": "",
+      "displayName": "Did You Know Fact Rule",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/rules/ruleDidYouKnowFact.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "ruleDidYouKnowFact",
+      "bRefObjects": "",
+      "displayTitle": "Did You Know Fact Rule",
+      "bSystem": "",
+      "bFriendly": "false",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleDidYouKnowFact.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "false",
+      "faIcon": "fa-list",
+      "hint": "Randomly show webtop didyouknows",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.rules.rules"
     },
     {
+      "fuAlias": "",
+      "displayName": "Facts Rule",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/rules/ruleFacts.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "ruleFacts",
+      "bRefObjects": "",
+      "displayTitle": "Facts Rule",
+      "bSystem": "",
+      "bFriendly": "false",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleFacts.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "false",
+      "faIcon": "fa-list",
+      "hint": "Teaser skin",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.rules.rules"
     },
     {
+      "fuAlias": "",
+      "displayName": "dmFile Listing",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/rules/ruleFileListing.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "ruleFileListing",
+      "bRefObjects": "",
+      "displayTitle": "dmFile Listing",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleFileListing.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-list",
+      "hint": "Optional. Intro text",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.rules.rules"
     },
     {
+      "fuAlias": "",
+      "displayName": "Testimonials Rule",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/rules/ruleLatesttestimonial.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "ruleLatesttestimonial",
+      "bRefObjects": "",
+      "displayTitle": "Testimonials Rule",
+      "bSystem": "",
+      "bFriendly": "false",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleLatesttestimonial.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "false",
+      "faIcon": "",
+      "hint": "Teaser skin",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.rules.rules"
     },
     {
+      "fuAlias": "",
+      "displayName": "Random Fact Rule",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/rules/ruleRandomFact.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "ruleRandomFact",
+      "bRefObjects": "",
+      "displayTitle": "Random Fact Rule",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleRandomFact.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Randomly show fun facts",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.rules.rules"
     },
     {
+      "fuAlias": "",
+      "displayName": "Related Objs Rule",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/rules/ruleRelated.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "ruleRelated",
+      "bRefObjects": "",
+      "displayTitle": "Related Objs Rule",
+      "bSystem": "",
+      "bFriendly": "false",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleRelated.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "false",
+      "faIcon": "",
+      "hint": "Teaser skin",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.rules.rules"
     },
     {
+      "fuAlias": "",
+      "displayName": "Product / Reviews Schema",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/rules/ruleReviewsAndRatingsSchemaFromTestimonials.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "ruleReviewsAndRatingsSchemaFromTestimonials",
+      "bRefObjects": "",
+      "displayTitle": "Product / Reviews Schema",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleReviewsAndRatingsSchemaFromTestimonials.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Creates JSON schema from all testimonials",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.rules.rules"
     },
     {
+      "fuAlias": "",
+      "displayName": "Self-Registration Form",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/rules/ruleSelfRegistration.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "ruleSelfRegistration",
+      "bRefObjects": "",
+      "displayTitle": "Self-Registration Form",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleSelfRegistration.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-flag",
+      "hint": "Allows certain partners to enable members to self-signup",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.rules.rules"
     },
     {
+      "fuAlias": "",
+      "displayName": "dmImage",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/system/dmImage.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dmImage",
+      "bRefObjects": "",
+      "displayTitle": "dmImage",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\system\\dmImage.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.dmImage"
     },
     {
+      "fuAlias": "",
+      "displayName": "dmNavigation",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/system/dmNavigation.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dmNavigation",
+      "bRefObjects": "",
+      "displayTitle": "dmNavigation",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\system\\dmNavigation.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Choose a source image from the library.",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.dmNavigation"
     },
     {
+      "fuAlias": "",
+      "displayName": "dmNews",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/system/dmNews.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dmNews",
+      "bRefObjects": "",
+      "displayTitle": "dmNews",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\system\\dmNews.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Display method to render.",
+      "plugin": "pathway",
+      "inheritance": "farcry.plugins.farcrycms.packages.types.dmNews"
     },
     {
+      "fuAlias": "",
+      "displayName": "Activity Instance",
+      "ObjectBrokerMaxObjects": "100000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/activity.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "activity",
+      "bRefObjects": "true",
+      "displayTitle": "Activity Instance",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\activity.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-puzzle-piece",
+      "hint": "Personalized treatment step instances derived from activityDef templates for participant interaction",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Farcry Activity Definition",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/activityDef.cfc",
+      "bCustomType": "true",
+      "description": "Treatment Step Templates\r\n\r\nBusiness Context: ActivityDefs represent the definition of individual treatment steps within a program. These are the building blocks that define how participants interact with therapeutic content, complete exercises, or engage with educational materials.\r\n\r\nTechnical Role: ActivityDefs serve as templates that define the structure and requirements for individual treatment steps. They contain the logic for media integration, interaction patterns, progression rules, and content structure that will be instantiated for each participant.\r\n\r\nKey Relationships: ActivityDefs belong to programmes and may reference multiple media resources, creating a template system that supports both consistency and flexibility in treatment delivery.",
+      "bArchive": "true",
       "name": "activityDef",
+      "bRefObjects": "true",
+      "displayTitle": "Farcry Activity Definition",
+      "bSystem": "false",
+      "bFriendly": "1",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\activityDef.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "1",
+      "faIcon": "fa-road",
+      "hint": "Treatment step templates defining interaction patterns, media requirements, and progression logic",
+      "plugin": "pathway",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Center",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/center.cfc",
+      "bCustomType": "true",
+      "description": "Service Delivery Points\r\n\r\nBusiness Context: Centers represent the physical or virtual locations where healthcare services are delivered and participants receive care. While traditionally physical locations, centers can also represent virtual service delivery points or categorical service groupings.\r\n\r\nTechnical Role: Centers manage service delivery logistics, participant access, and local resource allocation. They serve as the operational units that connect participants to specific service delivery models and local care teams.\r\n\r\nKey Relationships: Centers belong to partner organizations and may have multiple referrers or intakes associated with them, creating a service delivery network.",
+      "bArchive": "true",
       "name": "center",
+      "bRefObjects": "true",
+      "displayTitle": "Center",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\center.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-hospital-o",
+      "hint": "Physical or virtual service delivery points connecting participants to local care teams",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Device",
+      "ObjectBrokerMaxObjects": "0",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/device.cfc",
+      "bCustomType": "true",
+      "description": "Device Content Type",
+      "bArchive": "true",
       "name": "device",
+      "bRefObjects": "true",
+      "displayTitle": "Device",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\device.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "false",
+      "bUseInTree": "0",
+      "faIcon": "fa-laptop-mobile",
+      "hint": "FarUser.UserID (or Member.email?)",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "member_aAddresses Extended Array Table",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/plugins/pathway/packages/types/dont_use___member_aAddresses.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dont_use___member_aAddresses",
+      "bRefObjects": "",
+      "displayTitle": "member_aAddresses Extended Array Table",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\dont_use___member_aAddresses.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "member Extended Array Table",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.arrayTable"
     },
     {
+      "fuAlias": "",
+      "displayName": "Guide",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/guide.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "guide",
+      "bRefObjects": "true",
+      "displayTitle": "Guide",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\guide.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-file",
+      "hint": "Healthcare professional profile system for content attribution and credibility establishment",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Intake",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/intake.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "intake",
+      "bRefObjects": "true",
+      "displayTitle": "Intake",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\intake.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-ticket",
+      "hint": "Capacity management system controlling participant access to programs with entitlement tracking",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Journal Instance",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/journal.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "journal",
+      "bRefObjects": "true",
+      "displayTitle": "Journal Instance",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\journal.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-file",
+      "hint": "Private participant personal documentation system for therapeutic reflection and clinical insights",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Journal Definition",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/journalDef.cfc",
+      "bCustomType": "true",
+      "description": "Journal Template Definitions & Therapeutic Reflection Framework\r\n\r\nBusiness Context: journalDef represents the template definition system for structured participant reflection and documentation activities that support treatment engagement and progress tracking. These templates define the prompts, structure, guidance, and therapeutic framework for participant journaling activities.\r\n\r\nTechnical Role: journalDef manages the complete metadata and configuration framework for journaling activities including prompts, structure, guidance, and therapeutic frameworks that ensure consistent and therapeutic journaling experiences across different programs and participants.\r\n\r\nKey Relationships: journalDef establishes critical connections to journal entities for comprehensive data collection and therapeutic insight generation, while supporting integration with activityDefs to define journaling requirements and integrate reflection activities into treatment programs.",
+      "bArchive": "true",
       "name": "journalDef",
+      "bRefObjects": "true",
+      "displayTitle": "Journal Definition",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\journalDef.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-file",
+      "hint": "Journal template definition system for structured reflection prompts and therapeutic guidance",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "JWT App",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/JWTapp.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "JWTapp",
+      "bRefObjects": "",
+      "displayTitle": "JWT App",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\JWTapp.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": ".. in request headers",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Library Instance",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/library.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "library",
+      "bRefObjects": "true",
+      "displayTitle": "Library Instance",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\library.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-file",
+      "hint": "Content library system for therapeutic resources, educational materials, and supplementary content",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Media",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/media.cfc",
+      "bCustomType": "true",
+      "description": "Content Delivery System\r\n\r\nBusiness Context: Media represents the video, audio, and document content that delivers therapeutic interventions and educational materials to participants. This includes educational videos, interactive exercises, guided meditations, and supporting documentation.\r\n\r\nTechnical Role: Media entities manage content storage, delivery, and integration with treatment activities. They support multiple content types and delivery formats while maintaining the quality and accessibility standards required for therapeutic content.\r\n\r\nKey Relationships: Media resources are referenced by activityDefs and programmes, creating a content management system that supports both structured treatment delivery and flexible content reuse across multiple programs.",
+      "bArchive": "true",
       "name": "media",
+      "bRefObjects": "true",
+      "displayTitle": "Media",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\media.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-fast-forward",
+      "hint": "Therapeutic content delivery system for videos, audio, and educational materials",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "/fuapi/member",
+      "displayName": "Member",
+      "ObjectBrokerMaxObjects": "100000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/member.cfc",
+      "bCustomType": "true",
+      "description": "Participant Management Core\r\n\r\nBusiness Context: The member represents an individual participant in Wellmind Health's digital therapeutic programs. This is the central entity that connects the human participant to the digital treatment ecosystem with personal preferences, progress tracking, and connections to the healthcare provider hierarchy.\r\n\r\nTechnical Role: The member entity serves as the primary participant record, containing personal details, treatment preferences, and critical relationships to the healthcare provider network (partner organizations, member groups, centers, and referrers).\r\n\r\nKey Relationships: Member connects to the healthcare provider hierarchy through partner organizations, member groups, centers, and referrers, enabling both personalized care and organizational oversight.",
+      "bArchive": "true",
       "name": "member",
+      "bRefObjects": "true",
+      "displayTitle": "Member",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\member.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-users",
+      "hint": "Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Member Group",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/memberGroup.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "memberGroup",
+      "bRefObjects": "true",
+      "displayTitle": "Member Group",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\memberGroup.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-users-rectangle",
+      "hint": "Participant cohorts for segmentation, analysis, and organizational structure",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "MemberType",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/memberType.cfc",
+      "bCustomType": "true",
+      "description": "MemberType Content Type",
+      "bArchive": "true",
       "name": "memberType",
+      "bRefObjects": "true",
+      "displayTitle": "MemberType",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\memberType.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-wrench-simple",
+      "hint": "Title of object.  *perhaps this should be deprecated for object label*",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "oAuth Service",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/oAuth2service.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "oAuth2service",
+      "bRefObjects": "",
+      "displayTitle": "oAuth Service",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\oAuth2service.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Not a Pathway partner",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Partner",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/partner.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "partner",
+      "bRefObjects": "true",
+      "displayTitle": "Partner",
+      "bSystem": "false",
+      "bFriendly": "1",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\partner.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-building",
+      "hint": "Healthcare organization managing participant access and program delivery across populations",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Program Member",
+      "ObjectBrokerMaxObjects": "100000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/progMember.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "progMember",
+      "bRefObjects": "true",
+      "displayTitle": "Program Member",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\progMember.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-cubes",
+      "hint": "Active enrollment tracking participant's journey through structured treatment programs with progress monitoring",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Programme",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/programme.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "programme",
+      "bRefObjects": "true",
+      "displayTitle": "Programme",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\programme.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-file",
+      "hint": "Master treatment template containing activity structure, pacing, and lifecycle management",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Program Role",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/progRole.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "progRole",
+      "bRefObjects": "true",
+      "displayTitle": "Program Role",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\progRole.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-file",
+      "hint": "Program-specific role definitions for participant access control and content delivery",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Referrer",
+      "ObjectBrokerMaxObjects": "10000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/referer.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "referer",
+      "bRefObjects": "true",
+      "displayTitle": "Referrer",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\referer.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-id-badge",
+      "hint": "Healthcare professionals responsible for participant referrals and ongoing care coordination",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Report",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/report.cfc",
+      "bCustomType": "true",
+      "description": "Member Content Type",
+      "bArchive": "true",
       "name": "report",
+      "bRefObjects": "true",
+      "displayTitle": "Report",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\report.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-file",
+      "hint": "ID of Programme that this report belongs to",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "SSQ_arthritis01",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/SSQ_arthritis01.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "SSQ_arthritis01",
+      "bRefObjects": "true",
+      "displayTitle": "SSQ_arthritis01",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\SSQ_arthritis01.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-list ssq",
+      "hint": "Standardized arthritis assessment questionnaire for musculoskeletal health and quality of life evaluation",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "SSQ_pain01",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/SSQ_pain01.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "SSQ_pain01",
+      "bRefObjects": "true",
+      "displayTitle": "SSQ_pain01",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\SSQ_pain01.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-list ssq",
+      "hint": "Standardized pain assessment questionnaire for chronic pain and functional limitation evaluation",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "SSQ_stress01",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/SSQ_stress01.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "SSQ_stress01",
+      "bRefObjects": "true",
+      "displayTitle": "SSQ_stress01",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\SSQ_stress01.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-list ssq",
+      "hint": "Standardized stress assessment questionnaire for anxiety and psychological well-being evaluation",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "test",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/test.cfc",
+      "bCustomType": "true",
+      "description": "Member Content Type",
+      "bArchive": "true",
       "name": "test",
+      "bRefObjects": "true",
+      "displayTitle": "test",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\test.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-users",
+      "hint": "",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Testimonial Instance",
+      "ObjectBrokerMaxObjects": "10000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/testimonial.cfc",
+      "bCustomType": "true",
+      "description": "Testimonial Content Type",
+      "bArchive": "true",
       "name": "testimonial",
+      "bRefObjects": "true",
+      "displayTitle": "Testimonial Instance",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\testimonial.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-comment",
+      "hint": "",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Token",
+      "ObjectBrokerMaxObjects": "0",
+      "bAudit": "false",
+      "filePath": "/farcry/plugins/pathway/packages/types/token.cfc",
+      "bCustomType": "true",
+      "description": "Token Content Type",
+      "bArchive": "false",
       "name": "token",
+      "bRefObjects": "false",
+      "displayTitle": "Token",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\token.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "false",
+      "bUseInTree": "0",
+      "faIcon": "fa-key",
+      "hint": "FarUser.UserID (or Member.email?)",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Tracker Instance",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/tracker.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "tracker",
+      "bRefObjects": "true",
+      "displayTitle": "Tracker Instance",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\tracker.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-file",
+      "hint": "Simple confidence touchpoint system for single-slider assessments with gradual improvement tracking",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Tracker Definition",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/trackerDef.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "trackerDef",
+      "bRefObjects": "true",
+      "displayTitle": "Tracker Definition",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\trackerDef.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-file",
+      "hint": "Touchpoint template system for quick confidence and satisfaction check-ins throughout treatment",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Xealth Notification",
+      "ObjectBrokerMaxObjects": "0",
+      "bAudit": "false",
+      "filePath": "/farcry/plugins/pathway/packages/types/xealth_notification.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "xealth_notification",
+      "bRefObjects": "false",
+      "displayTitle": "Xealth Notification",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\xealth_notification.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "false",
+      "bUseInTree": "0",
+      "faIcon": "",
+      "hint": "",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Xealth Order",
+      "ObjectBrokerMaxObjects": "0",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/xealth_order.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "false",
       "name": "xealth_order",
+      "bRefObjects": "false",
+      "displayTitle": "Xealth Order",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\xealth_order.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "false",
+      "bUseInTree": "0",
+      "faIcon": "",
+      "hint": "",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Xealth Patient",
+      "ObjectBrokerMaxObjects": "0",
+      "bAudit": "true",
+      "filePath": "/farcry/plugins/pathway/packages/types/xealth_patient.cfc",
+      "bCustomType": "true",
+      "description": "",
+      "bArchive": "true",
       "name": "xealth_patient",
+      "bRefObjects": "false",
+      "displayTitle": "Xealth Patient",
+      "bSystem": "false",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\xealth_patient.cfc",
-      "plugin": "pathway"
+      "bObjectBroker": "false",
+      "bUseInTree": "0",
+      "faIcon": "",
+      "hint": "",
+      "plugin": "pathway",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "device",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/lib/device.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "device",
+      "bRefObjects": "",
+      "displayTitle": "device",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\lib\\device.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Returns true if device detection is enabled",
+      "plugin": "zfarcrycore",
+      "inheritance": ""
     },
     {
+      "fuAlias": "container",
+      "displayName": "Container Management",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/rules/container.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "container",
+      "bRefObjects": "false",
+      "displayTitle": "Container Management",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\rules\\container.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "",
+      "faIcon": "fa-wrench",
+      "hint": "Manages all core functions for container instance management.",
+      "plugin": "zfarcrycore",
+      "inheritance": "farcry.core.packages.fourq.fourq"
     },
     {
+      "fuAlias": "",
+      "displayName": "Plain Text Block",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/rules/ruleText.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "ruleText",
+      "bRefObjects": "",
+      "displayTitle": "Plain Text Block",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\rules\\ruleText.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-font",
+      "hint": "Display a plain text block; does not allow embeds or media.",
+      "plugin": "zfarcrycore",
+      "inheritance": "farcry.core.packages.rules.rules"
     },
     {
+      "fuAlias": "",
+      "displayName": "Nested Tree Objects",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/schema/nested_tree_objects.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "nested_tree_objects",
+      "bRefObjects": "",
+      "displayTitle": "Nested Tree Objects",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\schema\\nested_tree_objects.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Definition of tree reference table",
+      "plugin": "zfarcrycore",
+      "inheritance": "schema"
     },
     {
+      "fuAlias": "",
+      "displayName": "Category References",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/schema/refCategories.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "refCategories",
+      "bRefObjects": "",
+      "displayTitle": "Category References",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\schema\\refCategories.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Category-Object associations",
+      "plugin": "zfarcrycore",
+      "inheritance": "schema"
     },
     {
+      "fuAlias": "",
+      "displayName": "Object-Container Reference",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/schema/refContainers.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "refContainers",
+      "bRefObjects": "",
+      "displayTitle": "Object-Container Reference",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\schema\\refContainers.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Definition of the refContainers table",
+      "plugin": "zfarcrycore",
+      "inheritance": "schema"
     },
     {
+      "fuAlias": "",
+      "displayName": "Object Reference",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/schema/refObjects.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "refObjects",
+      "bRefObjects": "",
+      "displayTitle": "Object Reference",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\schema\\refObjects.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Definition of the refObjects table",
+      "plugin": "zfarcrycore",
+      "inheritance": "schema"
     },
     {
+      "fuAlias": "",
+      "displayName": "Content Archive",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "false",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmArchive.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "false",
       "name": "dmArchive",
+      "bRefObjects": "false",
+      "displayTitle": "Content Archive",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmArchive.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-archive",
+      "hint": "Archive: universal container for archived and deleted content items.",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Category",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmCategory.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dmCategory",
+      "bRefObjects": "",
+      "displayTitle": "Category",
+      "bSystem": "true",
+      "bFriendly": "1",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmCategory.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Set of functions to perform metadata characterisation",
+      "plugin": "zfarcrycore",
+      "inheritance": "category"
     },
     {
+      "fuAlias": "",
+      "displayName": "Scheduled Tasks",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmCron.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dmCron",
+      "bRefObjects": "",
+      "displayTitle": "Scheduled Tasks",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmCron.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-tasks",
+      "hint": "Scheduled tasks can be created to run periodic maintenance tasks unattended. Select from a list of available tasks and schedule when they should run.",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "CSS",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmCSS.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dmCSS",
+      "bRefObjects": "",
+      "displayTitle": "CSS",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmCSS.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "CSS objects influence the look and feel of the website",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "File",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmFile.cfc",
+      "bCustomType": "",
+      "description": "Document Resource Management & Digital Asset System\r\n\r\nBusiness Context: dmFile represents the file resource management system for downloadable documents and secure digital asset storage that supports bulk data access, user needs, platform functionality, and organizational communication requirements. This system manages the storage, organization, versioning, and delivery of downloadable documents and resources.\r\n\r\nTechnical Role: dmFile manages the complete lifecycle of document resources including upload, storage, versioning, delivery, and integration with content management frameworks. The system implements asset management including secure file delivery and version control.\r\n\r\nKey Relationships: dmFile establishes comprehensive connections to various content entities to provide downloadable resources that enhance user experience and platform functionality, while supporting integration with library entities to support educational resource delivery.",
+      "bArchive": "true",
       "name": "dmFile",
+      "bRefObjects": "",
+      "displayTitle": "File",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmFile.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-file-text",
+      "hint": "File resource management system for downloadable documents and secure digital asset storage",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Flash",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmFlash.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dmFlash",
+      "bRefObjects": "",
+      "displayTitle": "Flash",
+      "bSystem": "",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmFlash.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-bolt",
+      "hint": "A global Flash content library.  Flash items need to be embedded in your content appropriately, and the library allows you to nominae the correct Flash Player version and other settings.",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "html",
+      "displayName": "Web Pages",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmHTML.cfc",
+      "bCustomType": "",
+      "description": "Dynamic Content Management & Web Experience Platform\r\n\r\nBusiness Context: dmHTML represents the HTML content management system for website pages and content delivery that supports the platform's information architecture and user communication needs. This system manages the creation, editing, versioning, and delivery of web content.\r\n\r\nTechnical Role: dmHTML manages the complete lifecycle of web content including creation, editing, versioning, delivery, and integration with user experience frameworks. The system implements content management including responsive design support and accessibility compliance.\r\n\r\nKey Relationships: dmHTML establishes direct connections to dmNavigation for content organization and user experience optimization, while supporting integration with various content entities to support rich, dynamic web experiences.",
+      "bArchive": "true",
       "name": "dmHTML",
+      "bRefObjects": "true",
+      "displayTitle": "Web Pages",
+      "bSystem": "",
+      "bFriendly": "1",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmHTML.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "1",
+      "faIcon": "fa-file-o",
+      "hint": "HTML content management system for dynamic web page creation and delivery",
+      "plugin": "zfarcrycore",
+      "inheritance": "versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Image",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmImage.cfc",
+      "bCustomType": "",
+      "description": "Visual Resource Management & Digital Asset System\r\n\r\nBusiness Context: dmImage represents the image resource management system for website graphics and visual content that supports the platform's visual design, user experience, and content delivery requirements. This system manages the storage, organization, optimization, and delivery of visual assets.\r\n\r\nTechnical Role: dmImage manages the complete lifecycle of visual assets including upload, storage, optimization, delivery, and integration with content management frameworks. The system implements asset management including responsive image delivery and accessibility compliance.\r\n\r\nKey Relationships: dmImage establishes comprehensive connections to various content entities to provide visual assets that enhance user experience and content effectiveness, while supporting integration with media entities to support therapeutic content delivery.",
+      "bArchive": "true",
       "name": "dmImage",
+      "bRefObjects": "true",
+      "displayTitle": "Image",
+      "bSystem": "",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmImage.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-picture-o",
+      "hint": "Image resource management system for visual assets and graphic content delivery",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Include",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmInclude.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "dmInclude",
+      "bRefObjects": "",
+      "displayTitle": "Include",
+      "bSystem": "",
+      "bFriendly": "true",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmInclude.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "true",
+      "faIcon": "fa-sign-in",
+      "hint": "Include content management system for reusable website components and modular elements",
+      "plugin": "zfarcrycore",
+      "inheritance": "versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Navigation",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmNavigation.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "dmNavigation",
+      "bRefObjects": "",
+      "displayTitle": "Navigation",
+      "bSystem": "",
+      "bFriendly": "1",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmNavigation.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "1",
+      "faIcon": "fa-folder-open",
+      "hint": "Website navigation structure and menu organization for user experience architecture",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "User Profile",
+      "ObjectBrokerMaxObjects": "10000",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmProfile.cfc",
+      "bCustomType": "false",
+      "description": "",
+      "bArchive": "true",
       "name": "dmProfile",
+      "bRefObjects": "true",
+      "displayTitle": "User Profile",
+      "bSystem": "true",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmProfile.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-id-badge",
+      "hint": "User profile management system with personalized settings, preferences, and administrative configurations",
+      "plugin": "zfarcrycore",
+      "inheritance": "versions"
     },
     {
+      "fuAlias": "",
+      "displayName": "Webskin Ancestors",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "false",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmWebskinAncestor.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dmWebskinAncestor",
+      "bRefObjects": "false",
+      "displayTitle": "Webskin Ancestors",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmWebskinAncestor.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Holds all the ancestor webskins of each webskin.",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Wizard",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "false",
+      "filePath": "/farcry/zfarcrycore/packages/types/dmWizard.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "dmWizard",
+      "bRefObjects": "false",
+      "displayTitle": "Wizard",
+      "bSystem": "true",
+      "bFriendly": "false",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmWizard.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "wizard",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Barnacle",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/farBarnacle.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "farBarnacle",
+      "bRefObjects": "false",
+      "displayTitle": "Barnacle",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farBarnacle.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Used to grant an item specific permissions.",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "coapi",
+      "displayName": "FarCry COAPI",
+      "ObjectBrokerMaxObjects": "10000",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/farCoapi.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "farCoapi",
+      "bRefObjects": "false",
+      "displayTitle": "FarCry COAPI",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farCoapi.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Contains a record per coapi package",
+      "plugin": "zfarcrycore",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Configuration",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/farConfig.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "farConfig",
+      "bRefObjects": "",
+      "displayTitle": "Configuration",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farConfig.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-cog",
+      "hint": "Many aspects of the application can be configured to behave specifically as you need them.  Modify the setup by tweaking the configuration just the way you need it.",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Filter Property Definition",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/farFilterProperty.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "farFilterProperty",
+      "bRefObjects": "false",
+      "displayTitle": "Filter Property Definition",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farFilterProperty.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "",
+      "hint": "Stores the definition of a specific filter on a property",
+      "plugin": "zfarcrycore",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "fu",
+      "displayName": "FarCry Friendly URL Table",
+      "ObjectBrokerMaxObjects": "10000",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/farFU.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "farFU",
+      "bRefObjects": "",
+      "displayTitle": "FarCry Friendly URL Table",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farFU.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "true",
+      "faIcon": "fa-link",
+      "hint": "Manages FarCry Friendly URL's",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Group",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/farGroup.cfc",
+      "bCustomType": "",
+      "description": "Permission Group Organization & Access Management\r\n\r\nBusiness Context: farGroup represents the strategic organization of system permissions and access rights into logical, manageable groupings that align with organizational structure and operational requirements. These groups serve as the foundation for efficient access control administration.\r\n\r\nTechnical Role: farGroup implements an organizational layer within the permission system that groups related permissions into meaningful collections, supporting the principle of least privilege while maintaining administrative efficiency. The system provides sophisticated group management capabilities including nested group structures and dynamic group membership.\r\n\r\nKey Relationships: farGroup establishes hierarchical relationships with farRole entities to create comprehensive permission frameworks, while supporting assignment to farUser accounts through flexible membership models.",
+      "bArchive": "true",
       "name": "farGroup",
+      "bRefObjects": "true",
+      "displayTitle": "Group",
+      "bSystem": "true",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farGroup.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-group",
+      "hint": "Strategic permission organization with hierarchical access control and administrative efficiency",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "fc-log",
+      "displayName": "FarCry Log",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/farLog.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "farLog",
+      "bRefObjects": "false",
+      "displayTitle": "FarCry Log",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farLog.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "false",
+      "bUseInTree": "",
+      "faIcon": "fa-list",
+      "hint": "Manages FarCry Event logs",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Permission",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/farPermission.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "farPermission",
+      "bRefObjects": "true",
+      "displayTitle": "Permission",
+      "bSystem": "true",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farPermission.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "fa-key",
+      "hint": "Granular security controls implementing least-privilege access with healthcare-specific permissions",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Queue Result",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "false",
+      "filePath": "/farcry/zfarcrycore/packages/types/farQueueResult.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "false",
       "name": "farQueueResult",
+      "bRefObjects": "false",
+      "displayTitle": "Queue Result",
+      "bSystem": "true",
+      "bFriendly": "false",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farQueueResult.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "false",
+      "bUseInTree": "",
+      "faIcon": "fa-cogs",
+      "hint": "Result for a background task",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Queued Task",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "false",
+      "filePath": "/farcry/zfarcrycore/packages/types/farQueueTask.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "false",
       "name": "farQueueTask",
+      "bRefObjects": "false",
+      "displayTitle": "Queued Task",
+      "bSystem": "true",
+      "bFriendly": "false",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farQueueTask.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "false",
+      "bUseInTree": "",
+      "faIcon": "fa-cogs",
+      "hint": "Tasks queued for background processing",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Role",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/farRole.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "farRole",
+      "bRefObjects": "true",
+      "displayTitle": "Role",
+      "bSystem": "true",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farRole.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "false",
+      "bUseInTree": "0",
+      "faIcon": "fa-group",
+      "hint": "Comprehensive RBAC framework defining user access profiles and operational capabilities",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "fc-task-def",
+      "displayName": "FarCry Task Definition",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/farTaskDef.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "farTaskDef",
+      "bRefObjects": "",
+      "displayTitle": "FarCry Task Definition",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farTaskDef.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-ban",
+      "hint": "Task definitions are used as template to create task instances",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "user",
+      "displayName": "FarCry User",
+      "ObjectBrokerMaxObjects": "0",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/farUser.cfc",
+      "bCustomType": "false",
+      "description": "",
+      "bArchive": "true",
       "name": "farUser",
+      "bRefObjects": "true",
+      "displayTitle": "FarCry User",
+      "bSystem": "true",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farUser.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "false",
+      "bUseInTree": "0",
+      "faIcon": "fa-id-card",
+      "hint": "Enterprise user management system for healthcare staff with authentication, authorization, and session control",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Webfeed",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/farWebfeed.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "farWebfeed",
+      "bRefObjects": "",
+      "displayTitle": "Webfeed",
+      "bSystem": "true",
+      "bFriendly": "true",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farWebfeed.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-ban",
+      "hint": "DEPRECATED: Use a type webskin instead.",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "",
+      "displayName": "Webtop Dashboard Configuration",
+      "ObjectBrokerMaxObjects": "1000",
+      "bAudit": "true",
+      "filePath": "/farcry/zfarcrycore/packages/types/farWebtopDashboard.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "true",
       "name": "farWebtopDashboard",
+      "bRefObjects": "true",
+      "displayTitle": "Webtop Dashboard Configuration",
+      "bSystem": "",
+      "bFriendly": "0",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farWebtopDashboard.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "true",
+      "bUseInTree": "0",
+      "faIcon": "",
+      "hint": "Select the security roles that will be permitted to see this webtop dashboard",
+      "plugin": "zfarcrycore",
+      "inheritance": "farcry.core.packages.types.types"
     },
     {
+      "fuAlias": "fc-workflow",
+      "displayName": "FarCry Workflow Instance",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/farWorkflow.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "farWorkflow",
+      "bRefObjects": "",
+      "displayTitle": "FarCry Workflow Instance",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farWorkflow.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-cogs",
+      "hint": "Workflow instance contains details of the work to be performed",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     },
     {
+      "fuAlias": "fc-workflow-def",
+      "displayName": "FarCry Task Definition",
+      "ObjectBrokerMaxObjects": "",
+      "bAudit": "",
+      "filePath": "/farcry/zfarcrycore/packages/types/farWorkflowDef.cfc",
+      "bCustomType": "",
+      "description": "",
+      "bArchive": "",
       "name": "farWorkflowDef",
+      "bRefObjects": "",
+      "displayTitle": "FarCry Task Definition",
+      "bSystem": "true",
+      "bFriendly": "",
       "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farWorkflowDef.cfc",
-      "plugin": "zfarcrycore"
+      "bObjectBroker": "",
+      "bUseInTree": "",
+      "faIcon": "fa-cogs",
+      "hint": "Workflow definitions are used as template to create workflow instances",
+      "plugin": "zfarcrycore",
+      "inheritance": "types"
     }
   ],
   "properties": [
     {
-      "property": "aFacts",
       "target": "dmFacts",
       "isArray": true,
+      "entity": "ruleFacts",
       "plugin": "pathway",
-      "entity": "ruleFacts"
+      "property": "aFacts"
     },
     {
-      "property": "aObjects",
       "target": "dmHTML",
       "isArray": true,
+      "entity": "ruleFacts",
       "plugin": "pathway",
-      "entity": "ruleFacts"
+      "property": "aObjects"
     },
     {
-      "property": "aFiles",
       "target": "dmFile",
       "isArray": true,
+      "entity": "ruleFileListing",
       "plugin": "pathway",
-      "entity": "ruleFileListing"
+      "property": "aFiles"
     },
     {
-      "property": "aTestimonials",
       "target": "testimonial",
       "isArray": true,
+      "entity": "ruleLatesttestimonial",
       "plugin": "pathway",
-      "entity": "ruleLatesttestimonial"
+      "property": "aTestimonials"
     },
     {
-      "property": "aObjs",
       "target": "dmHTML",
       "isArray": true,
+      "entity": "ruleRelated",
       "plugin": "pathway",
-      "entity": "ruleRelated"
+      "property": "aObjs"
     },
     {
-      "property": "aObjects",
       "target": "dmHTML",
       "isArray": true,
+      "entity": "ruleRelated",
       "plugin": "pathway",
-      "entity": "ruleRelated"
+      "property": "aObjects"
     },
     {
-      "property": "memberTypeID",
       "target": "memberType",
       "isArray": false,
+      "entity": "ruleSelfRegistration",
       "plugin": "pathway",
-      "entity": "ruleSelfRegistration"
+      "property": "memberTypeID"
     },
     {
-      "property": "memberGroupID",
       "target": "memberGroup",
       "isArray": false,
+      "entity": "ruleSelfRegistration",
       "plugin": "pathway",
-      "entity": "ruleSelfRegistration"
+      "property": "memberGroupID"
     },
     {
-      "property": "partnerID",
       "target": "partner",
       "isArray": false,
+      "entity": "ruleSelfRegistration",
       "plugin": "pathway",
-      "entity": "ruleSelfRegistration"
+      "property": "partnerID"
     },
     {
-      "property": "centerID",
       "target": "center",
       "isArray": false,
+      "entity": "ruleSelfRegistration",
       "plugin": "pathway",
-      "entity": "ruleSelfRegistration"
+      "property": "centerID"
     },
     {
-      "property": "refererID",
       "target": "referer",
       "isArray": false,
+      "entity": "ruleSelfRegistration",
       "plugin": "pathway",
-      "entity": "ruleSelfRegistration"
+      "property": "refererID"
     },
     {
-      "property": "sourceImageID",
       "target": "dmImage",
       "isArray": false,
+      "entity": "dmNavigation",
       "plugin": "pathway",
-      "entity": "dmNavigation"
+      "property": "sourceImageID"
     },
     {
-      "property": "progMemberID",
       "target": "progMember",
       "isArray": false,
+      "entity": "activity",
       "plugin": "pathway",
-      "entity": "activity"
+      "property": "progMemberID"
     },
     {
-      "property": "activityDefID",
       "target": "activityDef",
       "isArray": false,
+      "entity": "activity",
       "plugin": "pathway",
-      "entity": "activity"
+      "property": "activityDefID"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "programmeID"
     },
     {
-      "property": "teaserImage",
       "target": "dmImage",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "teaserImage"
     },
     {
-      "property": "guideID",
       "target": "guide",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "guideID"
     },
     {
-      "property": "role",
       "target": "progRole",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "role"
     },
     {
-      "property": "onEndID",
       "target": "activityDef",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "onEndID"
     },
     {
-      "property": "defaultMediaID",
       "target": "media",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "defaultMediaID"
     },
     {
-      "property": "aCuePointActivities",
       "target": "activityDef",
       "isArray": true,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "aCuePointActivities"
     },
     {
-      "property": "aMediaIDs",
       "target": "media",
       "isArray": true,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "aMediaIDs"
     },
     {
-      "property": "aInteract1Activities",
       "target": "activityDef",
       "isArray": true,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "aInteract1Activities"
     },
     {
-      "property": "aInteract2Activities",
       "target": "activityDef",
       "isArray": true,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "aInteract2Activities"
     },
     {
-      "property": "aInteract3Activities",
       "target": "activityDef",
       "isArray": true,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "aInteract3Activities"
     },
     {
-      "property": "aInteract4Activities",
       "target": "activityDef",
       "isArray": true,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "aInteract4Activities"
     },
     {
-      "property": "aInteract5Activities",
       "target": "activityDef",
       "isArray": true,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "aInteract5Activities"
     },
     {
-      "property": "journalID",
       "target": "journalDef",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "journalID"
     },
     {
-      "property": "tracker01ID",
       "target": "trackerDef",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "tracker01ID"
     },
     {
-      "property": "tracker02ID",
       "target": "trackerDef",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "tracker02ID"
     },
     {
-      "property": "tracker03ID",
       "target": "trackerDef",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "tracker03ID"
     },
     {
-      "property": "tracker04ID",
       "target": "trackerDef",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "tracker04ID"
     },
     {
-      "property": "tracker05ID",
       "target": "trackerDef",
       "isArray": false,
+      "entity": "activityDef",
       "plugin": "pathway",
-      "entity": "activityDef"
+      "property": "tracker05ID"
     },
     {
-      "property": "Logo",
       "target": "dmImage",
       "isArray": false,
+      "entity": "center",
       "plugin": "pathway",
-      "entity": "center"
+      "property": "Logo"
     },
     {
-      "property": "aUsers",
       "target": "dmProfile",
       "isArray": true,
+      "entity": "center",
       "plugin": "pathway",
-      "entity": "center"
+      "property": "aUsers"
     },
     {
-      "property": "dmProfileID",
       "target": "dmProfile",
       "isArray": false,
+      "entity": "center",
       "plugin": "pathway",
-      "entity": "center"
+      "property": "dmProfileID"
     },
     {
-      "property": "partnerID",
       "target": "partner",
       "isArray": false,
+      "entity": "center",
       "plugin": "pathway",
-      "entity": "center"
+      "property": "partnerID"
     },
     {
-      "property": "memberGroupID",
       "target": "memberGroup",
       "isArray": false,
+      "entity": "center",
       "plugin": "pathway",
-      "entity": "center"
+      "property": "memberGroupID"
     },
     {
-      "property": "aReferers",
       "target": "referer",
       "isArray": true,
+      "entity": "center",
       "plugin": "pathway",
-      "entity": "center"
+      "property": "aReferers"
     },
     {
-      "property": "picture",
       "target": "dmImage",
       "isArray": false,
+      "entity": "guide",
       "plugin": "pathway",
-      "entity": "guide"
+      "property": "picture"
     },
     {
-      "property": "partnerID",
       "target": "partner",
       "isArray": false,
+      "entity": "guide",
       "plugin": "pathway",
-      "entity": "guide"
+      "property": "partnerID"
     },
     {
-      "property": "centerID",
       "target": "center",
       "isArray": false,
+      "entity": "guide",
       "plugin": "pathway",
-      "entity": "guide"
+      "property": "centerID"
     },
     {
-      "property": "memberGroupID",
       "target": "memberGroup",
       "isArray": false,
+      "entity": "intake",
       "plugin": "pathway",
-      "entity": "intake"
+      "property": "memberGroupID"
     },
     {
-      "property": "centerID",
       "target": "center",
       "isArray": false,
+      "entity": "intake",
       "plugin": "pathway",
-      "entity": "intake"
+      "property": "centerID"
     },
     {
-      "property": "aMembers",
       "target": "member",
       "isArray": true,
+      "entity": "intake",
       "plugin": "pathway",
-      "entity": "intake"
+      "property": "aMembers"
     },
     {
-      "property": "progMemberID",
       "target": "progMember",
       "isArray": false,
+      "entity": "journal",
       "plugin": "pathway",
-      "entity": "journal"
+      "property": "progMemberID"
     },
     {
-      "property": "journalDefID",
       "target": "journalDef",
       "isArray": false,
+      "entity": "journal",
       "plugin": "pathway",
-      "entity": "journal"
+      "property": "journalDefID"
     },
     {
-      "property": "activityID",
       "target": "activity",
       "isArray": false,
+      "entity": "journal",
       "plugin": "pathway",
-      "entity": "journal"
+      "property": "activityID"
     },
     {
-      "property": "tracker01ID",
       "target": "trackerDef",
       "isArray": false,
+      "entity": "journalDef",
       "plugin": "pathway",
-      "entity": "journalDef"
+      "property": "tracker01ID"
     },
     {
-      "property": "tracker02ID",
       "target": "trackerDef",
       "isArray": false,
+      "entity": "journalDef",
       "plugin": "pathway",
-      "entity": "journalDef"
+      "property": "tracker02ID"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "journalDef",
       "plugin": "pathway",
-      "entity": "journalDef"
+      "property": "programmeID"
     },
     {
-      "property": "progMemberID",
       "target": "progMember",
       "isArray": false,
+      "entity": "library",
       "plugin": "pathway",
-      "entity": "library"
+      "property": "progMemberID"
     },
     {
-      "property": "activityID",
       "target": "activity",
       "isArray": false,
+      "entity": "library",
       "plugin": "pathway",
-      "entity": "library"
+      "property": "activityID"
     },
     {
-      "property": "mediaID",
       "target": "media",
       "isArray": false,
+      "entity": "library",
       "plugin": "pathway",
-      "entity": "library"
+      "property": "mediaID"
     },
     {
-      "property": "guideID",
       "target": "guide",
       "isArray": false,
+      "entity": "media",
       "plugin": "pathway",
-      "entity": "media"
+      "property": "guideID"
     },
     {
-      "property": "partnerID",
       "target": "partner",
       "isArray": false,
+      "entity": "media",
       "plugin": "pathway",
-      "entity": "media"
+      "property": "partnerID"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "media",
       "plugin": "pathway",
-      "entity": "media"
+      "property": "programmeID"
     },
     {
-      "property": "roleID",
       "target": "progRole",
       "isArray": false,
+      "entity": "media",
       "plugin": "pathway",
-      "entity": "media"
+      "property": "roleID"
     },
     {
-      "property": "memberTypeID",
       "target": "memberType",
       "isArray": false,
+      "entity": "member",
       "plugin": "pathway",
-      "entity": "member"
+      "property": "memberTypeID"
     },
     {
-      "property": "memberGroupID",
       "target": "memberGroup",
       "isArray": false,
+      "entity": "member",
       "plugin": "pathway",
-      "entity": "member"
+      "property": "memberGroupID"
     },
     {
-      "property": "partnerID",
       "target": "partner",
       "isArray": false,
+      "entity": "member",
       "plugin": "pathway",
-      "entity": "member"
+      "property": "partnerID"
     },
     {
-      "property": "centerID",
       "target": "center",
       "isArray": false,
+      "entity": "member",
       "plugin": "pathway",
-      "entity": "member"
+      "property": "centerID"
     },
     {
-      "property": "refererID",
       "target": "referer",
       "isArray": false,
+      "entity": "member",
       "plugin": "pathway",
-      "entity": "member"
+      "property": "refererID"
     },
     {
-      "property": "aOrderIDs",
       "target": "orderMaster",
       "isArray": true,
+      "entity": "member",
       "plugin": "pathway",
-      "entity": "member"
+      "property": "aOrderIDs"
     },
     {
-      "property": "aAddresses",
       "target": "address",
       "isArray": true,
+      "entity": "member",
       "plugin": "pathway",
-      "entity": "member"
+      "property": "aAddresses"
     },
     {
-      "property": "activityDefID",
       "target": "activityDef",
       "isArray": false,
+      "entity": "member",
       "plugin": "pathway",
-      "entity": "member"
+      "property": "activityDefID"
     },
     {
-      "property": "roleID",
       "target": "progRole",
       "isArray": false,
+      "entity": "member",
       "plugin": "pathway",
-      "entity": "member"
+      "property": "roleID"
     },
     {
-      "property": "partnerID",
       "target": "partner",
       "isArray": false,
+      "entity": "memberGroup",
       "plugin": "pathway",
-      "entity": "memberGroup"
+      "property": "partnerID"
     },
     {
-      "property": "aFarcryUsers",
       "target": "farUser",
       "isArray": true,
+      "entity": "memberGroup",
       "plugin": "pathway",
-      "entity": "memberGroup"
+      "property": "aFarcryUsers"
     },
     {
-      "property": "Logo",
       "target": "dmImage",
       "isArray": false,
+      "entity": "memberGroup",
       "plugin": "pathway",
-      "entity": "memberGroup"
+      "property": "Logo"
     },
     {
-      "property": "resourcePosterID",
       "target": "dmFile",
       "isArray": false,
+      "entity": "memberGroup",
       "plugin": "pathway",
-      "entity": "memberGroup"
+      "property": "resourcePosterID"
     },
     {
-      "property": "resourceHandoutID",
       "target": "dmFile",
       "isArray": false,
+      "entity": "memberGroup",
       "plugin": "pathway",
-      "entity": "memberGroup"
+      "property": "resourceHandoutID"
     },
     {
-      "property": "supportPage",
       "target": "dmHTML",
       "isArray": false,
+      "entity": "memberGroup",
       "plugin": "pathway",
-      "entity": "memberGroup"
+      "property": "supportPage"
     },
     {
-      "property": "selfRegNavID",
       "target": "dmNavigation",
       "isArray": false,
+      "entity": "memberGroup",
       "plugin": "pathway",
-      "entity": "memberGroup"
+      "property": "selfRegNavID"
     },
     {
-      "property": "selfRegQrFileID",
       "target": "dmFile",
       "isArray": false,
+      "entity": "memberGroup",
       "plugin": "pathway",
-      "entity": "memberGroup"
+      "property": "selfRegQrFileID"
     },
     {
-      "property": "Logo",
       "target": "dmImage",
       "isArray": false,
+      "entity": "partner",
       "plugin": "pathway",
-      "entity": "partner"
+      "property": "Logo"
     },
     {
-      "property": "dmProfileID",
       "target": "dmProfile",
       "isArray": false,
+      "entity": "partner",
       "plugin": "pathway",
-      "entity": "partner"
+      "property": "dmProfileID"
     },
     {
-      "property": "seniorSupportID",
       "target": "dmProfile",
       "isArray": false,
+      "entity": "partner",
       "plugin": "pathway",
-      "entity": "partner"
+      "property": "seniorSupportID"
     },
     {
-      "property": "aCenters",
       "target": "center",
       "isArray": true,
+      "entity": "partner",
       "plugin": "pathway",
-      "entity": "partner"
+      "property": "aCenters"
     },
     {
-      "property": "aReferers",
       "target": "referer",
       "isArray": true,
+      "entity": "partner",
       "plugin": "pathway",
-      "entity": "partner"
+      "property": "aReferers"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "progMember",
       "plugin": "pathway",
-      "entity": "progMember"
+      "property": "programmeID"
     },
     {
-      "property": "memberID",
       "target": "member",
       "isArray": false,
+      "entity": "progMember",
       "plugin": "pathway",
-      "entity": "progMember"
+      "property": "memberID"
     },
     {
-      "property": "currActivityID",
       "target": "activity",
       "isArray": false,
+      "entity": "progMember",
       "plugin": "pathway",
-      "entity": "progMember"
+      "property": "currActivityID"
     },
     {
-      "property": "partnerID",
       "target": "partner",
       "isArray": false,
+      "entity": "programme",
       "plugin": "pathway",
-      "entity": "programme"
+      "property": "partnerID"
     },
     {
-      "property": "Logo",
       "target": "dmImage",
       "isArray": false,
+      "entity": "programme",
       "plugin": "pathway",
-      "entity": "programme"
+      "property": "Logo"
     },
     {
-      "property": "firstActivityDefID",
       "target": "activityDef",
       "isArray": false,
+      "entity": "programme",
       "plugin": "pathway",
-      "entity": "programme"
+      "property": "firstActivityDefID"
     },
     {
-      "property": "lastActivityDefID",
       "target": "activityDef",
       "isArray": false,
+      "entity": "programme",
       "plugin": "pathway",
-      "entity": "programme"
+      "property": "lastActivityDefID"
     },
     {
-      "property": "aFollowupActivityDefIDs",
       "target": "activityDef",
       "isArray": true,
+      "entity": "programme",
       "plugin": "pathway",
-      "entity": "programme"
+      "property": "aFollowupActivityDefIDs"
     },
     {
-      "property": "aTrackerIDs",
       "target": "trackerDef",
       "isArray": true,
+      "entity": "programme",
       "plugin": "pathway",
-      "entity": "programme"
+      "property": "aTrackerIDs"
     },
     {
-      "property": "aObjectIDs",
       "target": "dmFile",
       "isArray": true,
+      "entity": "programme",
       "plugin": "pathway",
-      "entity": "programme"
+      "property": "aObjectIDs"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "progRole",
       "plugin": "pathway",
-      "entity": "progRole"
+      "property": "programmeID"
     },
     {
-      "property": "picture",
       "target": "dmImage",
       "isArray": false,
+      "entity": "referer",
       "plugin": "pathway",
-      "entity": "referer"
+      "property": "picture"
     },
     {
-      "property": "dmProfileID",
       "target": "dmProfile",
       "isArray": false,
+      "entity": "referer",
       "plugin": "pathway",
-      "entity": "referer"
+      "property": "dmProfileID"
     },
     {
-      "property": "partnerID",
       "target": "partner",
       "isArray": false,
+      "entity": "referer",
       "plugin": "pathway",
-      "entity": "referer"
+      "property": "partnerID"
     },
     {
-      "property": "memberGroupID",
       "target": "memberGroup",
       "isArray": false,
+      "entity": "referer",
       "plugin": "pathway",
-      "entity": "referer"
+      "property": "memberGroupID"
     },
     {
-      "property": "centerID",
       "target": "center",
       "isArray": false,
+      "entity": "referer",
       "plugin": "pathway",
-      "entity": "referer"
+      "property": "centerID"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "report",
       "plugin": "pathway",
-      "entity": "report"
+      "property": "programmeID"
     },
     {
-      "property": "partnerID",
       "target": "partner",
       "isArray": false,
+      "entity": "report",
       "plugin": "pathway",
-      "entity": "report"
+      "property": "partnerID"
     },
     {
-      "property": "memberID",
       "target": "member",
       "isArray": false,
+      "entity": "report",
       "plugin": "pathway",
-      "entity": "report"
+      "property": "memberID"
     },
     {
-      "property": "memberTypeID",
       "target": "memberType",
       "isArray": false,
+      "entity": "report",
       "plugin": "pathway",
-      "entity": "report"
+      "property": "memberTypeID"
     },
     {
-      "property": "aMemberGroupID",
       "target": "memberGroup",
       "isArray": true,
+      "entity": "report",
       "plugin": "pathway",
-      "entity": "report"
+      "property": "aMemberGroupID"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "SSQ_arthritis01",
       "plugin": "pathway",
-      "entity": "SSQ_arthritis01"
+      "property": "programmeID"
     },
     {
-      "property": "progMemberID",
       "target": "progMember",
       "isArray": false,
+      "entity": "SSQ_arthritis01",
       "plugin": "pathway",
-      "entity": "SSQ_arthritis01"
+      "property": "progMemberID"
     },
     {
-      "property": "memberID",
       "target": "member",
       "isArray": false,
+      "entity": "SSQ_arthritis01",
       "plugin": "pathway",
-      "entity": "SSQ_arthritis01"
+      "property": "memberID"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "SSQ_pain01",
       "plugin": "pathway",
-      "entity": "SSQ_pain01"
+      "property": "programmeID"
     },
     {
-      "property": "progMemberID",
       "target": "progMember",
       "isArray": false,
+      "entity": "SSQ_pain01",
       "plugin": "pathway",
-      "entity": "SSQ_pain01"
+      "property": "progMemberID"
     },
     {
-      "property": "memberID",
       "target": "member",
       "isArray": false,
+      "entity": "SSQ_pain01",
       "plugin": "pathway",
-      "entity": "SSQ_pain01"
+      "property": "memberID"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "SSQ_stress01",
       "plugin": "pathway",
-      "entity": "SSQ_stress01"
+      "property": "programmeID"
     },
     {
-      "property": "progMemberID",
       "target": "progMember",
       "isArray": false,
+      "entity": "SSQ_stress01",
       "plugin": "pathway",
-      "entity": "SSQ_stress01"
+      "property": "progMemberID"
     },
     {
-      "property": "memberID",
       "target": "member",
       "isArray": false,
+      "entity": "SSQ_stress01",
       "plugin": "pathway",
-      "entity": "SSQ_stress01"
+      "property": "memberID"
     },
     {
-      "property": "memberID",
       "target": "member",
       "isArray": false,
+      "entity": "testimonial",
       "plugin": "pathway",
-      "entity": "testimonial"
+      "property": "memberID"
     },
     {
-      "property": "activityDefID",
       "target": "activityDef",
       "isArray": false,
+      "entity": "testimonial",
       "plugin": "pathway",
-      "entity": "testimonial"
+      "property": "activityDefID"
     },
     {
-      "property": "progMemberID",
       "target": "progMember",
       "isArray": false,
+      "entity": "tracker",
       "plugin": "pathway",
-      "entity": "tracker"
+      "property": "progMemberID"
     },
     {
-      "property": "trackerDefID",
       "target": "trackerDef",
       "isArray": false,
+      "entity": "tracker",
       "plugin": "pathway",
-      "entity": "tracker"
+      "property": "trackerDefID"
     },
     {
-      "property": "activityID",
       "target": "activity",
       "isArray": false,
+      "entity": "tracker",
       "plugin": "pathway",
-      "entity": "tracker"
+      "property": "activityID"
     },
     {
-      "property": "programmeID",
       "target": "programme",
       "isArray": false,
+      "entity": "trackerDef",
       "plugin": "pathway",
-      "entity": "trackerDef"
+      "property": "programmeID"
     },
     {
-      "property": "teaserImage",
       "target": "dmImage",
       "isArray": false,
+      "entity": "dmFile",
       "plugin": "zfarcrycore",
-      "entity": "dmFile"
+      "property": "teaserImage"
     },
     {
-      "property": "teaserImage",
       "target": "dmImage",
       "isArray": false,
+      "entity": "dmHTML",
       "plugin": "zfarcrycore",
-      "entity": "dmHTML"
+      "property": "teaserImage"
     },
     {
-      "property": "aObjectIDs",
       "target": "dmImage,dmFile,activitydef,media",
       "isArray": true,
+      "entity": "dmHTML",
       "plugin": "zfarcrycore",
-      "entity": "dmHTML"
+      "property": "aObjectIDs"
     },
     {
-      "property": "aRelatedIDs",
       "target": "dmnavigation,dmfile,dmhtml",
       "isArray": true,
+      "entity": "dmHTML",
       "plugin": "zfarcrycore",
-      "entity": "dmHTML"
+      "property": "aRelatedIDs"
     },
     {
-      "property": "teaserImage",
       "target": "dmImage",
       "isArray": false,
+      "entity": "dmInclude",
       "plugin": "zfarcrycore",
-      "entity": "dmInclude"
+      "property": "teaserImage"
     },
     {
-      "property": "aObjectIDs",
       "target": "dmHTML,dmInclude,landingPage,dmNews,dmFacts,media,activityDef,shopItem,report",
       "isArray": true,
+      "entity": "dmNavigation",
       "plugin": "zfarcrycore",
-      "entity": "dmNavigation"
+      "property": "aObjectIDs"
     },
     {
-      "property": "internalRedirectID",
       "target": "dmNavigation",
       "isArray": false,
+      "entity": "dmNavigation",
       "plugin": "zfarcrycore",
-      "entity": "dmNavigation"
+      "property": "internalRedirectID"
     },
     {
-      "property": "ExternalLink",
       "target": "dmNavigation",
       "isArray": false,
+      "entity": "dmNavigation",
       "plugin": "zfarcrycore",
-      "entity": "dmNavigation"
+      "property": "ExternalLink"
     },
     {
-      "property": "memberGroupID",
       "target": "memberGroup",
       "isArray": false,
+      "entity": "dmProfile",
       "plugin": "zfarcrycore",
-      "entity": "dmProfile"
+      "property": "memberGroupID"
     },
     {
-      "property": "aGroups",
       "target": "farGroup",
       "isArray": true,
+      "entity": "dmProfile",
       "plugin": "zfarcrycore",
-      "entity": "dmProfile"
+      "property": "aGroups"
     },
     {
-      "property": "lGroups",
       "target": "farGroup",
       "isArray": false,
+      "entity": "dmProfile",
       "plugin": "zfarcrycore",
-      "entity": "dmProfile"
+      "property": "lGroups"
     },
     {
-      "property": "roleid",
       "target": "farRole",
       "isArray": false,
+      "entity": "farBarnacle",
       "plugin": "zfarcrycore",
-      "entity": "farBarnacle"
+      "property": "roleid"
     },
     {
-      "property": "permissionid",
       "target": "farPermission",
       "isArray": false,
+      "entity": "farBarnacle",
       "plugin": "zfarcrycore",
-      "entity": "farBarnacle"
+      "property": "permissionid"
     },
     {
-      "property": "referenceid",
       "target": "dmNavigation,farCoapi",
       "isArray": false,
+      "entity": "farBarnacle",
       "plugin": "zfarcrycore",
-      "entity": "farBarnacle"
+      "property": "referenceid"
     },
     {
-      "property": "filterID",
       "target": "farFilter",
       "isArray": false,
+      "entity": "farFilterProperty",
       "plugin": "zfarcrycore",
-      "entity": "farFilterProperty"
+      "property": "filterID"
     },
     {
-      "property": "aRelated",
       "target": "dmNavigation",
       "isArray": true,
+      "entity": "farFilterProperty",
       "plugin": "zfarcrycore",
-      "entity": "farFilterProperty"
+      "property": "aRelated"
     },
     {
-      "property": "aRelatedtypes",
       "target": "farPermission",
       "isArray": true,
+      "entity": "farPermission",
       "plugin": "zfarcrycore",
-      "entity": "farPermission"
+      "property": "aRelatedtypes"
     },
     {
-      "property": "aRoles",
       "target": "farRole",
       "isArray": false,
+      "entity": "farPermission",
       "plugin": "zfarcrycore",
-      "entity": "farPermission"
+      "property": "aRoles"
     },
     {
-      "property": "aGroups",
       "target": "farGroup",
       "isArray": true,
+      "entity": "farRole",
       "plugin": "zfarcrycore",
-      "entity": "farRole"
+      "property": "aGroups"
     },
     {
-      "property": "aPermissions",
       "target": "farPermission",
       "isArray": true,
+      "entity": "farRole",
       "plugin": "zfarcrycore",
-      "entity": "farRole"
+      "property": "aPermissions"
     },
     {
-      "property": "aRoles",
       "target": "farRole",
       "isArray": true,
+      "entity": "farTaskDef",
       "plugin": "zfarcrycore",
-      "entity": "farTaskDef"
+      "property": "aRoles"
     },
     {
-      "property": "aGroups",
       "target": "farGroup",
       "isArray": true,
+      "entity": "farUser",
       "plugin": "zfarcrycore",
-      "entity": "farUser"
+      "property": "aGroups"
     },
     {
-      "property": "lGroups",
       "target": "farGroup",
       "isArray": false,
+      "entity": "farUser",
       "plugin": "zfarcrycore",
-      "entity": "farUser"
+      "property": "lGroups"
     },
     {
-      "property": "aRoles",
       "target": "farRole",
       "isArray": true,
+      "entity": "farWebtopDashboard",
       "plugin": "zfarcrycore",
-      "entity": "farWebtopDashboard"
+      "property": "aRoles"
     },
     {
-      "property": "lRoles",
       "target": "farRole",
       "isArray": false,
+      "entity": "farWebtopDashboard",
       "plugin": "zfarcrycore",
-      "entity": "farWebtopDashboard"
+      "property": "lRoles"
     },
     {
-      "property": "aTaskIDs",
       "target": "farTask",
       "isArray": true,
+      "entity": "farWorkflow",
       "plugin": "zfarcrycore",
-      "entity": "farWorkflow"
+      "property": "aTaskIDs"
     },
     {
-      "property": "workflowDefID",
       "target": "farWorkflowDef",
       "isArray": false,
+      "entity": "farWorkflow",
       "plugin": "zfarcrycore",
-      "entity": "farWorkflow"
+      "property": "workflowDefID"
     },
     {
-      "property": "aTaskDefs",
       "target": "farTaskDef",
       "isArray": true,
+      "entity": "farWorkflowDef",
       "plugin": "zfarcrycore",
-      "entity": "farWorkflowDef"
+      "property": "aTaskDefs"
+    }
+  ],
+  "entities": [
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\api\\packages\\types\\apiAccessKey.cfc",
+      "name": "apiAccessKey",
+      "plugin": "api"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\oauth2\\oauth2.cfc",
+      "name": "oauth2",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleDidYouKnowFact.cfc",
+      "name": "ruleDidYouKnowFact",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleFacts.cfc",
+      "name": "ruleFacts",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleFileListing.cfc",
+      "name": "ruleFileListing",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleLatesttestimonial.cfc",
+      "name": "ruleLatesttestimonial",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleRandomFact.cfc",
+      "name": "ruleRandomFact",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleRelated.cfc",
+      "name": "ruleRelated",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleReviewsAndRatingsSchemaFromTestimonials.cfc",
+      "name": "ruleReviewsAndRatingsSchemaFromTestimonials",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\rules\\ruleSelfRegistration.cfc",
+      "name": "ruleSelfRegistration",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\system\\dmImage.cfc",
+      "name": "dmImage",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\system\\dmNavigation.cfc",
+      "name": "dmNavigation",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\system\\dmNews.cfc",
+      "name": "dmNews",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\activity.cfc",
+      "name": "activity",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\activityDef.cfc",
+      "name": "activityDef",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\center.cfc",
+      "name": "center",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\device.cfc",
+      "name": "device",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\dont_use___member_aAddresses.cfc",
+      "name": "dont_use___member_aAddresses",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\guide.cfc",
+      "name": "guide",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\intake.cfc",
+      "name": "intake",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\journal.cfc",
+      "name": "journal",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\journalDef.cfc",
+      "name": "journalDef",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\JWTapp.cfc",
+      "name": "JWTapp",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\library.cfc",
+      "name": "library",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\media.cfc",
+      "name": "media",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\member.cfc",
+      "name": "member",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\memberGroup.cfc",
+      "name": "memberGroup",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\memberType.cfc",
+      "name": "memberType",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\oAuth2service.cfc",
+      "name": "oAuth2service",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\partner.cfc",
+      "name": "partner",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\progMember.cfc",
+      "name": "progMember",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\programme.cfc",
+      "name": "programme",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\progRole.cfc",
+      "name": "progRole",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\referer.cfc",
+      "name": "referer",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\report.cfc",
+      "name": "report",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\SSQ_arthritis01.cfc",
+      "name": "SSQ_arthritis01",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\SSQ_pain01.cfc",
+      "name": "SSQ_pain01",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\SSQ_stress01.cfc",
+      "name": "SSQ_stress01",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\test.cfc",
+      "name": "test",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\testimonial.cfc",
+      "name": "testimonial",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\token.cfc",
+      "name": "token",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\tracker.cfc",
+      "name": "tracker",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\trackerDef.cfc",
+      "name": "trackerDef",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\xealth_notification.cfc",
+      "name": "xealth_notification",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\xealth_order.cfc",
+      "name": "xealth_order",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\plugins\\pathway\\packages\\types\\xealth_patient.cfc",
+      "name": "xealth_patient",
+      "plugin": "pathway"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\lib\\device.cfc",
+      "name": "device",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\rules\\container.cfc",
+      "name": "container",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\rules\\ruleText.cfc",
+      "name": "ruleText",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\schema\\nested_tree_objects.cfc",
+      "name": "nested_tree_objects",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\schema\\refCategories.cfc",
+      "name": "refCategories",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\schema\\refContainers.cfc",
+      "name": "refContainers",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\schema\\refObjects.cfc",
+      "name": "refObjects",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmArchive.cfc",
+      "name": "dmArchive",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmCategory.cfc",
+      "name": "dmCategory",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmCron.cfc",
+      "name": "dmCron",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmCSS.cfc",
+      "name": "dmCSS",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmFile.cfc",
+      "name": "dmFile",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmFlash.cfc",
+      "name": "dmFlash",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmHTML.cfc",
+      "name": "dmHTML",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmImage.cfc",
+      "name": "dmImage",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmInclude.cfc",
+      "name": "dmInclude",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmNavigation.cfc",
+      "name": "dmNavigation",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmProfile.cfc",
+      "name": "dmProfile",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmWebskinAncestor.cfc",
+      "name": "dmWebskinAncestor",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\dmWizard.cfc",
+      "name": "dmWizard",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farBarnacle.cfc",
+      "name": "farBarnacle",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farCoapi.cfc",
+      "name": "farCoapi",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farConfig.cfc",
+      "name": "farConfig",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farFilterProperty.cfc",
+      "name": "farFilterProperty",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farFU.cfc",
+      "name": "farFU",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farGroup.cfc",
+      "name": "farGroup",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farLog.cfc",
+      "name": "farLog",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farPermission.cfc",
+      "name": "farPermission",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farQueueResult.cfc",
+      "name": "farQueueResult",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farQueueTask.cfc",
+      "name": "farQueueTask",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farRole.cfc",
+      "name": "farRole",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farTaskDef.cfc",
+      "name": "farTaskDef",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farUser.cfc",
+      "name": "farUser",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farWebfeed.cfc",
+      "name": "farWebfeed",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farWebtopDashboard.cfc",
+      "name": "farWebtopDashboard",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farWorkflow.cfc",
+      "name": "farWorkflow",
+      "plugin": "zfarcrycore"
+    },
+    {
+      "file": "D:\\GIT\\farcry\\zfarcrycore\\packages\\types\\farWorkflowDef.cfc",
+      "name": "farWorkflowDef",
+      "plugin": "zfarcrycore"
+    }
+  ],
+  "joinTables": [
+    {
+      "target": "dmFacts",
+      "source": "ruleFacts",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aFacts"
+    },
+    {
+      "target": "dmHTML",
+      "source": "ruleFacts",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aObjects"
+    },
+    {
+      "target": "dmFile",
+      "source": "ruleFileListing",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aFiles"
+    },
+    {
+      "target": "testimonial",
+      "source": "ruleLatesttestimonial",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aTestimonials"
+    },
+    {
+      "target": "dmHTML",
+      "source": "ruleRelated",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aObjs"
+    },
+    {
+      "target": "dmHTML",
+      "source": "ruleRelated",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aObjects"
+    },
+    {
+      "target": "activityDef",
+      "source": "activityDef",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aCuePointActivities"
+    },
+    {
+      "target": "media",
+      "source": "activityDef",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aMediaIDs"
+    },
+    {
+      "target": "activityDef",
+      "source": "activityDef",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aInteract1Activities"
+    },
+    {
+      "target": "activityDef",
+      "source": "activityDef",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aInteract2Activities"
+    },
+    {
+      "target": "activityDef",
+      "source": "activityDef",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aInteract3Activities"
+    },
+    {
+      "target": "activityDef",
+      "source": "activityDef",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aInteract4Activities"
+    },
+    {
+      "target": "activityDef",
+      "source": "activityDef",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aInteract5Activities"
+    },
+    {
+      "target": "dmProfile",
+      "source": "center",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aUsers"
+    },
+    {
+      "target": "referer",
+      "source": "center",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aReferers"
+    },
+    {
+      "target": "member",
+      "source": "intake",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aMembers"
+    },
+    {
+      "target": "orderMaster",
+      "source": "member",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aOrderIDs"
+    },
+    {
+      "target": "address",
+      "source": "member",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aAddresses"
+    },
+    {
+      "target": "farUser",
+      "source": "memberGroup",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aFarcryUsers"
+    },
+    {
+      "target": "center",
+      "source": "partner",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aCenters"
+    },
+    {
+      "target": "referer",
+      "source": "partner",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aReferers"
+    },
+    {
+      "target": "activityDef",
+      "source": "programme",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aFollowupActivityDefIDs"
+    },
+    {
+      "target": "trackerDef",
+      "source": "programme",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aTrackerIDs"
+    },
+    {
+      "target": "dmFile",
+      "source": "programme",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aObjectIDs"
+    },
+    {
+      "target": "memberGroup",
+      "source": "report",
+      "joinTable": "",
+      "sourcePlugin": "pathway",
+      "property": "aMemberGroupID"
+    },
+    {
+      "target": "dmImage,dmFile,activitydef,media",
+      "source": "dmHTML",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aObjectIDs"
+    },
+    {
+      "target": "dmnavigation,dmfile,dmhtml",
+      "source": "dmHTML",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aRelatedIDs"
+    },
+    {
+      "target": "dmHTML,dmInclude,landingPage,dmNews,dmFacts,media,activityDef,shopItem,report",
+      "source": "dmNavigation",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aObjectIDs"
+    },
+    {
+      "target": "farGroup",
+      "source": "dmProfile",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aGroups"
+    },
+    {
+      "target": "dmNavigation",
+      "source": "farFilterProperty",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aRelated"
+    },
+    {
+      "target": "farPermission",
+      "source": "farPermission",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aRelatedtypes"
+    },
+    {
+      "target": "farGroup",
+      "source": "farRole",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aGroups"
+    },
+    {
+      "target": "farPermission",
+      "source": "farRole",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aPermissions"
+    },
+    {
+      "target": "farRole",
+      "source": "farTaskDef",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aRoles"
+    },
+    {
+      "target": "farGroup",
+      "source": "farUser",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aGroups"
+    },
+    {
+      "target": "farRole",
+      "source": "farWebtopDashboard",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aRoles"
+    },
+    {
+      "target": "farTask",
+      "source": "farWorkflow",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aTaskIDs"
+    },
+    {
+      "target": "farTaskDef",
+      "source": "farWorkflowDef",
+      "joinTable": "",
+      "sourcePlugin": "zfarcrycore",
+      "property": "aTaskDefs"
+    }
+  ],
+  "directFK": [
+    {
+      "target": "memberType",
+      "source": "ruleSelfRegistration",
+      "plugin": "pathway",
+      "property": "memberTypeID"
+    },
+    {
+      "target": "memberGroup",
+      "source": "ruleSelfRegistration",
+      "plugin": "pathway",
+      "property": "memberGroupID"
+    },
+    {
+      "target": "partner",
+      "source": "ruleSelfRegistration",
+      "plugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "target": "center",
+      "source": "ruleSelfRegistration",
+      "plugin": "pathway",
+      "property": "centerID"
+    },
+    {
+      "target": "referer",
+      "source": "ruleSelfRegistration",
+      "plugin": "pathway",
+      "property": "refererID"
+    },
+    {
+      "target": "dmImage",
+      "source": "dmNavigation",
+      "plugin": "pathway",
+      "property": "sourceImageID"
+    },
+    {
+      "target": "progMember",
+      "source": "activity",
+      "plugin": "pathway",
+      "property": "progMemberID"
+    },
+    {
+      "target": "activityDef",
+      "source": "activity",
+      "plugin": "pathway",
+      "property": "activityDefID"
+    },
+    {
+      "target": "programme",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "dmImage",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "teaserImage"
+    },
+    {
+      "target": "guide",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "guideID"
+    },
+    {
+      "target": "progRole",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "role"
+    },
+    {
+      "target": "activityDef",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "onEndID"
+    },
+    {
+      "target": "media",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "defaultMediaID"
+    },
+    {
+      "target": "journalDef",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "journalID"
+    },
+    {
+      "target": "trackerDef",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "tracker01ID"
+    },
+    {
+      "target": "trackerDef",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "tracker02ID"
+    },
+    {
+      "target": "trackerDef",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "tracker03ID"
+    },
+    {
+      "target": "trackerDef",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "tracker04ID"
+    },
+    {
+      "target": "trackerDef",
+      "source": "activityDef",
+      "plugin": "pathway",
+      "property": "tracker05ID"
+    },
+    {
+      "target": "dmImage",
+      "source": "center",
+      "plugin": "pathway",
+      "property": "Logo"
+    },
+    {
+      "target": "dmProfile",
+      "source": "center",
+      "plugin": "pathway",
+      "property": "dmProfileID"
+    },
+    {
+      "target": "partner",
+      "source": "center",
+      "plugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "target": "memberGroup",
+      "source": "center",
+      "plugin": "pathway",
+      "property": "memberGroupID"
+    },
+    {
+      "target": "dmImage",
+      "source": "guide",
+      "plugin": "pathway",
+      "property": "picture"
+    },
+    {
+      "target": "partner",
+      "source": "guide",
+      "plugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "target": "center",
+      "source": "guide",
+      "plugin": "pathway",
+      "property": "centerID"
+    },
+    {
+      "target": "memberGroup",
+      "source": "intake",
+      "plugin": "pathway",
+      "property": "memberGroupID"
+    },
+    {
+      "target": "center",
+      "source": "intake",
+      "plugin": "pathway",
+      "property": "centerID"
+    },
+    {
+      "target": "progMember",
+      "source": "journal",
+      "plugin": "pathway",
+      "property": "progMemberID"
+    },
+    {
+      "target": "journalDef",
+      "source": "journal",
+      "plugin": "pathway",
+      "property": "journalDefID"
+    },
+    {
+      "target": "activity",
+      "source": "journal",
+      "plugin": "pathway",
+      "property": "activityID"
+    },
+    {
+      "target": "trackerDef",
+      "source": "journalDef",
+      "plugin": "pathway",
+      "property": "tracker01ID"
+    },
+    {
+      "target": "trackerDef",
+      "source": "journalDef",
+      "plugin": "pathway",
+      "property": "tracker02ID"
+    },
+    {
+      "target": "programme",
+      "source": "journalDef",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "progMember",
+      "source": "library",
+      "plugin": "pathway",
+      "property": "progMemberID"
+    },
+    {
+      "target": "activity",
+      "source": "library",
+      "plugin": "pathway",
+      "property": "activityID"
+    },
+    {
+      "target": "media",
+      "source": "library",
+      "plugin": "pathway",
+      "property": "mediaID"
+    },
+    {
+      "target": "guide",
+      "source": "media",
+      "plugin": "pathway",
+      "property": "guideID"
+    },
+    {
+      "target": "partner",
+      "source": "media",
+      "plugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "target": "programme",
+      "source": "media",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "progRole",
+      "source": "media",
+      "plugin": "pathway",
+      "property": "roleID"
+    },
+    {
+      "target": "memberType",
+      "source": "member",
+      "plugin": "pathway",
+      "property": "memberTypeID"
+    },
+    {
+      "target": "memberGroup",
+      "source": "member",
+      "plugin": "pathway",
+      "property": "memberGroupID"
+    },
+    {
+      "target": "partner",
+      "source": "member",
+      "plugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "target": "center",
+      "source": "member",
+      "plugin": "pathway",
+      "property": "centerID"
+    },
+    {
+      "target": "referer",
+      "source": "member",
+      "plugin": "pathway",
+      "property": "refererID"
+    },
+    {
+      "target": "activityDef",
+      "source": "member",
+      "plugin": "pathway",
+      "property": "activityDefID"
+    },
+    {
+      "target": "progRole",
+      "source": "member",
+      "plugin": "pathway",
+      "property": "roleID"
+    },
+    {
+      "target": "partner",
+      "source": "memberGroup",
+      "plugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "target": "dmImage",
+      "source": "memberGroup",
+      "plugin": "pathway",
+      "property": "Logo"
+    },
+    {
+      "target": "dmFile",
+      "source": "memberGroup",
+      "plugin": "pathway",
+      "property": "resourcePosterID"
+    },
+    {
+      "target": "dmFile",
+      "source": "memberGroup",
+      "plugin": "pathway",
+      "property": "resourceHandoutID"
+    },
+    {
+      "target": "dmHTML",
+      "source": "memberGroup",
+      "plugin": "pathway",
+      "property": "supportPage"
+    },
+    {
+      "target": "dmNavigation",
+      "source": "memberGroup",
+      "plugin": "pathway",
+      "property": "selfRegNavID"
+    },
+    {
+      "target": "dmFile",
+      "source": "memberGroup",
+      "plugin": "pathway",
+      "property": "selfRegQrFileID"
+    },
+    {
+      "target": "dmImage",
+      "source": "partner",
+      "plugin": "pathway",
+      "property": "Logo"
+    },
+    {
+      "target": "dmProfile",
+      "source": "partner",
+      "plugin": "pathway",
+      "property": "dmProfileID"
+    },
+    {
+      "target": "dmProfile",
+      "source": "partner",
+      "plugin": "pathway",
+      "property": "seniorSupportID"
+    },
+    {
+      "target": "programme",
+      "source": "progMember",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "member",
+      "source": "progMember",
+      "plugin": "pathway",
+      "property": "memberID"
+    },
+    {
+      "target": "activity",
+      "source": "progMember",
+      "plugin": "pathway",
+      "property": "currActivityID"
+    },
+    {
+      "target": "partner",
+      "source": "programme",
+      "plugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "target": "dmImage",
+      "source": "programme",
+      "plugin": "pathway",
+      "property": "Logo"
+    },
+    {
+      "target": "activityDef",
+      "source": "programme",
+      "plugin": "pathway",
+      "property": "firstActivityDefID"
+    },
+    {
+      "target": "activityDef",
+      "source": "programme",
+      "plugin": "pathway",
+      "property": "lastActivityDefID"
+    },
+    {
+      "target": "programme",
+      "source": "progRole",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "dmImage",
+      "source": "referer",
+      "plugin": "pathway",
+      "property": "picture"
+    },
+    {
+      "target": "dmProfile",
+      "source": "referer",
+      "plugin": "pathway",
+      "property": "dmProfileID"
+    },
+    {
+      "target": "partner",
+      "source": "referer",
+      "plugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "target": "memberGroup",
+      "source": "referer",
+      "plugin": "pathway",
+      "property": "memberGroupID"
+    },
+    {
+      "target": "center",
+      "source": "referer",
+      "plugin": "pathway",
+      "property": "centerID"
+    },
+    {
+      "target": "programme",
+      "source": "report",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "partner",
+      "source": "report",
+      "plugin": "pathway",
+      "property": "partnerID"
+    },
+    {
+      "target": "member",
+      "source": "report",
+      "plugin": "pathway",
+      "property": "memberID"
+    },
+    {
+      "target": "memberType",
+      "source": "report",
+      "plugin": "pathway",
+      "property": "memberTypeID"
+    },
+    {
+      "target": "programme",
+      "source": "SSQ_arthritis01",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "progMember",
+      "source": "SSQ_arthritis01",
+      "plugin": "pathway",
+      "property": "progMemberID"
+    },
+    {
+      "target": "member",
+      "source": "SSQ_arthritis01",
+      "plugin": "pathway",
+      "property": "memberID"
+    },
+    {
+      "target": "programme",
+      "source": "SSQ_pain01",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "progMember",
+      "source": "SSQ_pain01",
+      "plugin": "pathway",
+      "property": "progMemberID"
+    },
+    {
+      "target": "member",
+      "source": "SSQ_pain01",
+      "plugin": "pathway",
+      "property": "memberID"
+    },
+    {
+      "target": "programme",
+      "source": "SSQ_stress01",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "progMember",
+      "source": "SSQ_stress01",
+      "plugin": "pathway",
+      "property": "progMemberID"
+    },
+    {
+      "target": "member",
+      "source": "SSQ_stress01",
+      "plugin": "pathway",
+      "property": "memberID"
+    },
+    {
+      "target": "member",
+      "source": "testimonial",
+      "plugin": "pathway",
+      "property": "memberID"
+    },
+    {
+      "target": "activityDef",
+      "source": "testimonial",
+      "plugin": "pathway",
+      "property": "activityDefID"
+    },
+    {
+      "target": "progMember",
+      "source": "tracker",
+      "plugin": "pathway",
+      "property": "progMemberID"
+    },
+    {
+      "target": "trackerDef",
+      "source": "tracker",
+      "plugin": "pathway",
+      "property": "trackerDefID"
+    },
+    {
+      "target": "activity",
+      "source": "tracker",
+      "plugin": "pathway",
+      "property": "activityID"
+    },
+    {
+      "target": "programme",
+      "source": "trackerDef",
+      "plugin": "pathway",
+      "property": "programmeID"
+    },
+    {
+      "target": "dmImage",
+      "source": "dmFile",
+      "plugin": "zfarcrycore",
+      "property": "teaserImage"
+    },
+    {
+      "target": "dmImage",
+      "source": "dmHTML",
+      "plugin": "zfarcrycore",
+      "property": "teaserImage"
+    },
+    {
+      "target": "dmImage",
+      "source": "dmInclude",
+      "plugin": "zfarcrycore",
+      "property": "teaserImage"
+    },
+    {
+      "target": "dmNavigation",
+      "source": "dmNavigation",
+      "plugin": "zfarcrycore",
+      "property": "internalRedirectID"
+    },
+    {
+      "target": "dmNavigation",
+      "source": "dmNavigation",
+      "plugin": "zfarcrycore",
+      "property": "ExternalLink"
+    },
+    {
+      "target": "memberGroup",
+      "source": "dmProfile",
+      "plugin": "zfarcrycore",
+      "property": "memberGroupID"
+    },
+    {
+      "target": "farGroup",
+      "source": "dmProfile",
+      "plugin": "zfarcrycore",
+      "property": "lGroups"
+    },
+    {
+      "target": "farRole",
+      "source": "farBarnacle",
+      "plugin": "zfarcrycore",
+      "property": "roleid"
+    },
+    {
+      "target": "farPermission",
+      "source": "farBarnacle",
+      "plugin": "zfarcrycore",
+      "property": "permissionid"
+    },
+    {
+      "target": "dmNavigation,farCoapi",
+      "source": "farBarnacle",
+      "plugin": "zfarcrycore",
+      "property": "referenceid"
+    },
+    {
+      "target": "farFilter",
+      "source": "farFilterProperty",
+      "plugin": "zfarcrycore",
+      "property": "filterID"
+    },
+    {
+      "target": "farRole",
+      "source": "farPermission",
+      "plugin": "zfarcrycore",
+      "property": "aRoles"
+    },
+    {
+      "target": "farGroup",
+      "source": "farUser",
+      "plugin": "zfarcrycore",
+      "property": "lGroups"
+    },
+    {
+      "target": "farRole",
+      "source": "farWebtopDashboard",
+      "plugin": "zfarcrycore",
+      "property": "lRoles"
+    },
+    {
+      "target": "farWorkflowDef",
+      "source": "farWorkflow",
+      "plugin": "zfarcrycore",
+      "property": "workflowDefID"
     }
   ]
 }
