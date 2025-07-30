@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CFC Diagrams Interface - DEV MODE</title>
+    <title>Wellmind Health Platform Component Explorer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -42,16 +42,16 @@
 
         .header {
             background: white;
-            padding: 10px 20px;
+            padding: 8px 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .header h1 {
             color: #2c3e50;
             margin-bottom: 3px;
-            font-size: 1.6em;
+            font-size: 1.4em;
         }
 
         .header p {
@@ -61,10 +61,10 @@
 
         .info-section {
             background: white;
-            padding: 15px 20px;
+            padding: 10px 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .section-title {
@@ -155,8 +155,8 @@
         }
 
         .strata-core { 
-            border-left-color: #17a2b8; 
-            color: #17a2b8;
+            border-left-color: #6f42c1; 
+            color: #6f42c1;
         }
         .strata-tracking { 
             border-left-color: #28a745; 
@@ -170,10 +170,6 @@
             border-left-color: #dc3545; 
             color: #dc3545;
         }
-        .strata-flow { 
-            border-left-color: #6f42c1; 
-            color: #6f42c1;
-        }
         .strata-admin { 
             border-left-color: #fd7e14; 
             color: #fd7e14;
@@ -181,6 +177,39 @@
         .strata-resources { 
             border-left-color: #20c997; 
             color: #20c997;
+        }
+
+        .strata-item.active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            background: #f8f9fa;
+            border-left-width: 6px;
+            border-color: #007bff;
+        }
+
+        .strata-item.active.strata-core {
+            background: rgba(111, 66, 193, 0.1);
+            border-color: #6f42c1;
+        }
+        .strata-item.active.strata-tracking {
+            background: rgba(40, 167, 69, 0.1);
+            border-color: #28a745;
+        }
+        .strata-item.active.strata-programme {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #ffc107;
+        }
+        .strata-item.active.strata-content {
+            background: rgba(220, 53, 69, 0.1);
+            border-color: #dc3545;
+        }
+        .strata-item.active.strata-admin {
+            background: rgba(253, 126, 20, 0.1);
+            border-color: #fd7e14;
+        }
+        .strata-item.active.strata-resources {
+            background: rgba(32, 201, 151, 0.1);
+            border-color: #20c997;
         }
 
         .strata-name {
@@ -250,10 +279,17 @@
         .domain-header h2 {
             color: #2c3e50;
             margin-bottom: 8px;
-            font-size: 1.3em;
+            font-size: 1.2em;
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .domain-header h2 .header-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .domain-header .toggle-icon {
@@ -286,15 +322,15 @@
 
         .diagrams-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 15px;
-            padding: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 12px;
+            padding: 12px;
         }
 
         .diagram-card {
             background: white;
             border-radius: 8px;
-            border: 1px solid #dee2e6;
+            border: 2px solid #dee2e6;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -313,17 +349,37 @@
         }
 
         .card-header {
-            padding: 15px;
+            padding: 12px 15px;
             border-bottom: 1px solid #e9ecef;
             position: relative;
         }
 
+        .card-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .card-title-section {
+            flex: 1;
+            min-width: 0;
+        }
+
         .card-title {
-            font-size: 1.3em;
+            font-size: 1.2em;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             cursor: help;
+            line-height: 1.3;
+        }
+
+        .card-display-name {
+            font-weight: 500;
+            color: #6c757d;
+            font-size: 0.8em;
+            line-height: 1.2;
         }
 
         .card-description {
@@ -333,20 +389,28 @@
             cursor: help;
         }
 
-        .badges-container {
+        .card-badges {
             display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-end;
+            flex-shrink: 0;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
         }
 
         .badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8em;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 0.75em;
             font-weight: 500;
             cursor: help;
             position: relative;
+            white-space: nowrap;
         }
 
         .domain-badge {
@@ -394,10 +458,19 @@
         }
 
         .card-body {
-            padding: 15px;
+            padding: 12px 15px;
             display: flex;
             flex-direction: column;
             height: 100%;
+            gap: 12px;
+        }
+
+        .card-text {
+            color: #6c757d;
+            font-size: 0.9em;
+            line-height: 1.4;
+            margin: 0;
+            flex-grow: 1;
         }
 
         .preview-container {
@@ -422,7 +495,12 @@
             display: flex;
             gap: 8px;
             margin-top: auto;
-            justify-content: space-between;
+        }
+
+        .action-buttons .btn {
+            flex: 1;
+            font-size: 0.85em;
+            padding: 6px 10px;
         }
 
         .btn {
@@ -707,6 +785,73 @@
             font-size: 0.95em;
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+            max-height: 90%;
+            width: 800px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 20px 25px 15px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6c757d;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f8f9fa;
+            color: #495057;
+        }
+
+        .modal-body {
+            padding: 20px 25px 25px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
         /* Enhanced tooltip styles */
         .badge[title]:hover::after {
             content: attr(title);
@@ -894,7 +1039,10 @@
         <div class="domain-section" data-domain="provider">
             <div class="domain-header">
                 <h2>
-                    <i class="fas fa-hospital"></i> Provider Domain
+                    <div class="header-content">
+                        <i class="fas fa-hospital"></i>
+                        <span>Provider Domain</span>
+                    </div>
                     <span class="toggle-icon">▼</span>
                 </h2>
             </div>
@@ -1222,7 +1370,9 @@
         // Load CFC cache data
         async function loadCFCCacheData() {
             try {
-                const response = await fetch('exports/pre_generated/165_diagrams_results.json');
+                // Add cache-busting parameter to force fresh load
+                const timestamp = new Date().getTime();
+                const response = await fetch(`exports/pre_generated/165_diagrams_results.json?t=${timestamp}`);
                 cfcCacheData = await response.json();
                 console.log('Loaded CFC cache data:', cfcCacheData);
                 generateCardsFromRealData();
@@ -1276,22 +1426,74 @@
         function generateCardsFromRealData() {
             if (!domainsData) return;
             
-            const cardsContainer = document.querySelector('.diagrams-grid');
-            if (!cardsContainer) return;
+            // Find the main container where we'll add domain sections
+            const mainContainer = document.querySelector('.container');
+            if (!mainContainer) return;
             
-            cardsContainer.innerHTML = '';
+            // Remove any existing domain sections (keep header, stats, filters)
+            const existingSections = mainContainer.querySelectorAll('.domain-section');
+            existingSections.forEach(section => section.remove());
             
-            // Generate cards for each domain/layer/component combination
+            // Generate domain sections for each domain
             Object.entries(domainsData.domains).forEach(([domainKey, domainInfo]) => {
-                Object.entries(domainInfo.entities).forEach(([layerKey, components]) => {
-                    components.forEach(componentName => {
-                        const card = createComponentCard(componentName, domainKey, layerKey, domainInfo.description);
-                        cardsContainer.appendChild(card);
-                    });
-                });
+                const domainSection = createDomainSection(domainKey, domainInfo);
+                mainContainer.appendChild(domainSection);
             });
             
             updateStats();
+        }
+        
+        // Create a domain section with header and content
+        function createDomainSection(domainKey, domainInfo) {
+            const domainSection = document.createElement('div');
+            domainSection.className = 'domain-section';
+            domainSection.setAttribute('data-domain', domainKey);
+            
+            // Create domain header
+            const domainHeader = document.createElement('div');
+            domainHeader.className = 'domain-header';
+            domainHeader.innerHTML = `
+                <h2>
+                    <div class="header-content">
+                        <i class="fas ${getDomainIcon(domainKey)}"></i>
+                        <span>${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)} Domain</span>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </h2>
+            `;
+            
+            // Create domain content container
+            const domainContent = document.createElement('div');
+            domainContent.className = 'domain-content';
+            
+            // Create diagrams grid
+            const diagramsGrid = document.createElement('div');
+            diagramsGrid.className = 'diagrams-grid';
+            
+            // Generate cards for each layer/component combination
+            Object.entries(domainInfo.entities).forEach(([layerKey, components]) => {
+                components.forEach(componentName => {
+                    const card = createComponentCard(componentName, domainKey, layerKey, domainInfo.description);
+                    diagramsGrid.appendChild(card);
+                });
+            });
+            
+            domainContent.appendChild(diagramsGrid);
+            domainSection.appendChild(domainHeader);
+            domainSection.appendChild(domainContent);
+            
+            return domainSection;
+        }
+        
+        // Get domain icon
+        function getDomainIcon(domainKey) {
+            const icons = {
+                'provider': 'fa-hospital',
+                'participant': 'fa-users',
+                'pathway': 'fa-clipboard-list',
+                'site': 'fa-map-marker-alt'
+            };
+            return icons[domainKey] || 'fa-globe';
         }
         
         // Create a component card from real data
@@ -1313,15 +1515,21 @@
             
             card.innerHTML = `
                 <div class="card-header">
-                    <h3 class="card-title">${componentName}</h3>
-                    <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">${displayName}</div>
-                    <div class="card-badges">
-                        <span class="badge domain-badge" title="${domainDescription}">
-                            <i class="fas fa-globe"></i>&nbsp;${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
-                        </span>
-                        <span class="badge strata-badge strata-${layerKey}" title="${getLayerDescription(layerKey)}&#10;&#10;${getLayerDescription(layerKey)}">
-                            <i class="fas ${getLayerIcon(layerKey)}"></i>&nbsp;${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}
-                        </span>
+                    <div class="card-header-content">
+                        <div class="card-title-section">
+                            <h3 class="card-title">${componentName}</h3>
+                            <div class="card-display-name">${displayName}</div>
+                        </div>
+                        <div class="card-badges">
+                            <div class="badge-row">
+                                <span class="badge domain-badge" title="${domainDescription}">
+                                    <i class="fas fa-globe"></i>&nbsp;${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
+                                </span>
+                                <span class="badge strata-badge strata-${layerKey}" title="${getLayerDescription(layerKey)}">
+                                    <i class="fas ${getLayerIcon(layerKey)}"></i>&nbsp;${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -1344,8 +1552,8 @@
         function getDisplayName(componentName) {
             const displayNames = {
                 'activityDef': 'Activity Definition',
-                'progMember': 'Programme Member',
-                'progRole': 'Programme Role',
+                'progMember': 'Program Member',
+                'progRole': 'Program Role',
                 'member': 'Member',
                 'partner': 'Partner',
                 'programme': 'Programme',
@@ -1490,12 +1698,15 @@
                 card.addEventListener('click', function() {
                     const domain = this.dataset.domain;
                     
-                    // Update active state
-                    document.querySelectorAll('.domain-card').forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update filter state
-                    activeFilters.domain = domain;
+                    // Toggle active state
+                    if (this.classList.contains('active')) {
+                        this.classList.remove('active');
+                        activeFilters.domain = 'all';
+                    } else {
+                        document.querySelectorAll('.domain-card').forEach(c => c.classList.remove('active'));
+                        this.classList.add('active');
+                        activeFilters.domain = domain;
+                    }
                     
                     // Apply filters
                     applyFilters();
@@ -1507,12 +1718,15 @@
                 item.addEventListener('click', function() {
                     const layer = this.dataset.layer;
                     
-                    // Update active state
-                    document.querySelectorAll('.strata-item').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update filter state
-                    activeFilters.layer = layer;
+                    // Toggle active state
+                    if (this.classList.contains('active')) {
+                        this.classList.remove('active');
+                        activeFilters.layer = 'all';
+                    } else {
+                        document.querySelectorAll('.strata-item').forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                        activeFilters.layer = layer;
+                    }
                     
                     // Apply filters
                     applyFilters();
@@ -1700,9 +1914,9 @@
             };
 
             document.getElementById('modalTitle').innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="color: #2c3e50; font-size: 1.2em;">${data.title}</span>
-                    <span style="color: #6c757d; font-size: 0.8em;">Component Details</span>
+                <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                    <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600;">${data.title}</span>
+                    <span style="color: #6c757d; font-size: 0.9em;">Component Details</span>
                 </div>
             `;
             
@@ -1776,5 +1990,16 @@
         // Initialize dev experiments
         devExperiment();
     </script>
+
+    <!-- Modal for Component Details -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="modalTitle"></div>
+                <button onclick="hideModal()" class="modal-close">&times;</button>
+            </div>
+            <div id="modalBody" class="modal-body"></div>
+        </div>
+    </div>
 </body>
 </html> 
