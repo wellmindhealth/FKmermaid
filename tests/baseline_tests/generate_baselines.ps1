@@ -345,3 +345,157 @@ if (Test-Path $updateScriptPath) {
 } else {
     Write-Host "⚠️  Update script not found: $updateScriptPath" -ForegroundColor Yellow
 }
+
+# Cross-check baselines against generated diagrams
+Write-Host "`n🔍 Cross-checking baselines against generated diagrams..." -ForegroundColor Cyan
+& {
+    # Function to analyze Mermaid diagram
+    function Analyze-MermaidDiagram {
+        param([string]$content, [string]$diagramType)
+        
+        $analysis = @{
+            EntityCount = 0
+            RelationshipCount = 0
+            StyleCount = 0
+            ColorDistribution = @{}
+            SyntaxValid = $true
+            Errors = @()
+        }
+        
+        # Count entities based on diagram type
+        if ($diagramType -eq "Class") {
+            $analysis.EntityCount = ($content -split "`n" | Where-Object { $_ -match '^\s*class\s+\w+' }).Count
+        } else {
+            $analysis.EntityCount = ($content -split "`n" | Where-Object { $_ -match '^\s*"\w+"\s*{' }).Count
+        }
+        
+        # Count relationships
+        if ($diagramType -eq "Class") {
+            # Class diagram syntax: entity --> entity : relationship
+            $analysis.RelationshipCount = ($content -split "`n" | Where-Object { $_ -match '\w+\s+-->\s+\w+' }).Count
+        } else {
+            # ER diagram syntax: ||--||
+            $analysis.RelationshipCount = ($content -split "`n" | Where-Object { $_ -match '\|\|--\|\|' }).Count
+        }
+        
+        # Count styles
+        $analysis.StyleCount = ($content -split "`n" | Where-Object { $_ -match "style.*fill:#" }).Count
+        
+        # Analyze color distribution
+        $colorMatches = [regex]::Matches($content, 'fill:(#[0-9a-fA-F]{6})')
+        foreach ($match in $colorMatches) {
+            $color = $match.Groups[1].Value
+            if ($analysis.ColorDistribution.ContainsKey($color)) {
+                $analysis.ColorDistribution[$color]++
+            } else {
+                $analysis.ColorDistribution[$color] = 1
+            }
+        }
+        
+        # Basic syntax validation
+        if (-not ($content -match 'erDiagram|classDiagram')) {
+            $analysis.SyntaxValid = $false
+            $analysis.Errors += "Missing diagram declaration"
+        }
+        
+        if ($analysis.EntityCount -eq 0) {
+            $analysis.SyntaxValid = $false
+            $analysis.Errors += "No entities found"
+        }
+        
+        return $analysis
+    }
+    
+    # Cross-check function
+    function Cross-CheckBaselines {
+        param([array]$baselineResults)
+        
+        Write-Host "🔍 Cross-checking $($baselineResults.Count) baselines..." -ForegroundColor Yellow
+        
+        $crossCheckResults = @()
+        $totalIssues = 0
+        
+        foreach ($baseline in $baselineResults) {
+            $baselineFile = $baseline.FilePath
+            if (-not (Test-Path $baselineFile)) {
+                Write-Host "❌ Baseline file not found: $baselineFile" -ForegroundColor Red
+                continue
+            }
+            
+            $content = Get-Content $baselineFile -Raw
+            $analysis = Analyze-MermaidDiagram -content $content -diagramType $baseline.DiagramType
+            
+            # Compare with expected values
+            $issues = @()
+            
+            if ($analysis.EntityCount -ne $baseline.EntityCount) {
+                $issues += "Entity count mismatch: Expected $($baseline.EntityCount), Got $($analysis.EntityCount)"
+            }
+            
+            if ($analysis.StyleCount -ne $baseline.StyleCount) {
+                $issues += "Style count mismatch: Expected $($baseline.StyleCount), Got $($analysis.StyleCount)"
+            }
+            
+            if (-not $analysis.SyntaxValid) {
+                $issues += "Syntax errors: $($analysis.Errors -join ', ')"
+            }
+            
+            if ($analysis.EntityCount -eq 0) {
+                $issues += "No entities found - possible empty diagram"
+            }
+            
+            if ($analysis.RelationshipCount -eq 0 -and $analysis.EntityCount -gt 1) {
+                $issues += "Multiple entities but no relationships - possible disconnected diagram"
+            }
+            
+            $crossCheckResult = @{
+                TestName = $baseline.TestName
+                FilePath = $baselineFile
+                Analysis = $analysis
+                Issues = $issues
+                HasIssues = $issues.Count -gt 0
+            }
+            
+            $crossCheckResults += $crossCheckResult
+            $totalIssues += $issues.Count
+            
+            # Report results
+            if ($issues.Count -eq 0) {
+                Write-Host "✅ $($baseline.TestName): Valid" -ForegroundColor Green
+            } else {
+                Write-Host "❌ $($baseline.TestName): $($issues.Count) issues" -ForegroundColor Red
+                foreach ($issue in $issues) {
+                    Write-Host "   ⚠️  $issue" -ForegroundColor Yellow
+                }
+            }
+        }
+        
+        # Summary
+        Write-Host "`n📊 Cross-check Summary:" -ForegroundColor Cyan
+        Write-Host "   Total Baselines: $($crossCheckResults.Count)" -ForegroundColor White
+        Write-Host "   Valid: $($crossCheckResults | Where-Object { -not $_.HasIssues } | Measure-Object).Count" -ForegroundColor Green
+        Write-Host "   Issues Found: $totalIssues" -ForegroundColor $(if ($totalIssues -eq 0) { "Green" } else { "Red" })
+        
+        # Save cross-check results
+        $crossCheckMetadata = @{
+            CrossCheckedAt = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+            TotalBaselines = $crossCheckResults.Count
+            ValidBaselines = ($crossCheckResults | Where-Object { -not $_.HasIssues }).Count
+            TotalIssues = $totalIssues
+            Results = $crossCheckResults
+        }
+        
+        $crossCheckMetadata | ConvertTo-Json -Depth 10 | Out-File "$baselinePath\cross_check_results.json"
+        
+        if ($totalIssues -eq 0) {
+            Write-Host "🎉 All baselines validated successfully!" -ForegroundColor Green
+        } else {
+            Write-Host "⚠️  Cross-check completed with $totalIssues issues found" -ForegroundColor Yellow
+        }
+        
+        return $crossCheckResults
+    }
+    
+    # Run cross-check
+    $crossCheckResults = Cross-CheckBaselines -baselineResults $baselineResults
+}

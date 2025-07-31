@@ -90,6 +90,13 @@ Show ColdFusion Component inheritance and relationships:
 - **Export Formats**: MMD, HTML, PNG, SVG, PDF
 - **Change Tracking**: Version comparison and diff visualization
 
+### **4. Quality Assurance & Cross-Checking**
+- **Automated Baseline Validation**: Cross-check system validates all generated baselines
+- **Dynamic Compatibility**: Works with any diagram count (5, 43, 156, etc.)
+- **Comprehensive Analysis**: Entity counts, relationship counts, styling validation
+- **Issue Detection**: Identifies disconnected diagrams, syntax errors, count mismatches
+- **Quality Reporting**: Detailed JSON reports with issue categorization
+
 ## 🌍 Domain System
 
 ### **How We Organize Components**
