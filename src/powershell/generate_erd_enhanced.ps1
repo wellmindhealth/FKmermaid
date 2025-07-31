@@ -16,6 +16,13 @@
     REQUIRED: Array of domains to filter relationships (e.g., "pathway", "participant", "provider", "site")
     Multiple domains can be specified as comma-separated values: "pathway,participant"
     
+.PARAMETER ApplyDomainFilterAt
+    OPTIONAL: Level at which domain filtering applies (default: 2)
+    - Level 1: Focus entity only
+    - Level 2+: Domain filtering applies (entities must be in domains.json)
+    - Use 1 to show focus + all relationships regardless of domains.json
+    - Use 3+ to show more levels before domain filtering kicks in
+    
 .PARAMETER RefreshCFCs
     OPTIONAL: Switch to force fresh CFC scanning (bypasses cache)
     
@@ -65,7 +72,8 @@ param(
     [switch]$Debug,
     [string]$MermaidMode = "edit",
     [switch]$NoBrowser = $false,
-    [string]$JsonOutputFile = ""
+    [string]$JsonOutputFile = "",
+    [int]$ApplyDomainFilterAt = 2
 )
 
 # Import logging modules
@@ -574,9 +582,87 @@ function Clean-OldFiles {
     }
 }
 
+# Function to calculate relationship levels for entities
+function Get-EntityRelationshipLevels {
+    param($relationships, [string]$lFocus, [int]$ApplyDomainFilterAt)
+    
+    $entityLevels = @{}
+    $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
+    
+    # Level 0: Focus entities
+    foreach ($focusEntity in $focusEntities) {
+        $entityLevels[$focusEntity] = 0
+    }
+    
+    # Level 1: Direct relationships to focus entities
+    $level1Entities = @()
+    foreach ($focusEntity in $focusEntities) {
+        # Direct FK relationships
+        foreach ($fk in $relationships.directFK) {
+            if ($fk.source -eq $focusEntity) {
+                $entityLevels[$fk.target] = 1
+                $level1Entities += $fk.target
+            }
+            if ($fk.target -eq $focusEntity) {
+                $entityLevels[$fk.source] = 1
+                $level1Entities += $fk.source
+            }
+        }
+        # Join table relationships
+        foreach ($join in $relationships.joinTables) {
+            if ($join.source -eq $focusEntity) {
+                $entityLevels[$join.target] = 1
+                $level1Entities += $join.target
+            }
+            if ($join.target -eq $focusEntity) {
+                $entityLevels[$join.source] = 1
+                $level1Entities += $join.source
+            }
+        }
+    }
+    
+    # Level 2+: Further relationships (recursive)
+    $currentLevel = 2
+    $previousLevelEntities = $level1Entities
+    
+    while ($previousLevelEntities.Count -gt 0 -and $currentLevel -le 10) { # Max 10 levels to prevent infinite loops
+        $currentLevelEntities = @()
+        
+        foreach ($entity in $previousLevelEntities) {
+            # Direct FK relationships
+            foreach ($fk in $relationships.directFK) {
+                if ($fk.source -eq $entity -and -not $entityLevels.ContainsKey($fk.target)) {
+                    $entityLevels[$fk.target] = $currentLevel
+                    $currentLevelEntities += $fk.target
+                }
+                if ($fk.target -eq $entity -and -not $entityLevels.ContainsKey($fk.source)) {
+                    $entityLevels[$fk.source] = $currentLevel
+                    $currentLevelEntities += $fk.source
+                }
+            }
+            # Join table relationships
+            foreach ($join in $relationships.joinTables) {
+                if ($join.source -eq $entity -and -not $entityLevels.ContainsKey($join.target)) {
+                    $entityLevels[$join.target] = $currentLevel
+                    $currentLevelEntities += $join.target
+                }
+                if ($join.target -eq $entity -and -not $entityLevels.ContainsKey($join.source)) {
+                    $entityLevels[$join.source] = $currentLevel
+                    $currentLevelEntities += $join.source
+                }
+            }
+        }
+        
+        $previousLevelEntities = $currentLevelEntities
+        $currentLevel++
+    }
+    
+    return $entityLevels
+}
+
 # Function to generate Mermaid ER diagram
 function Generate-MermaidERD {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{})
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{}, [int]$ApplyDomainFilterAt = 2)
     
     $mermaidContent = "erDiagram`n"
     
@@ -592,7 +678,10 @@ function Generate-MermaidERD {
     # Use validated domains
     $domainList = $validatedDomains
     
-    # Filter entities based on parameters
+    # Calculate relationship levels for all entities
+    $entityLevels = Get-EntityRelationshipLevels -relationships $relationships -lFocus $lFocus -ApplyDomainFilterAt $ApplyDomainFilterAt
+    
+    # Filter entities based on parameters and relationship levels
     $filteredEntities = $relationships.entities | Where-Object {
         $entity = $_
         $entityName = $entity.name
@@ -605,31 +694,39 @@ function Generate-MermaidERD {
             # Split focus entities if comma-separated
             $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
             
-            # Check if this entity is one of the focus entities
+            # Check if this entity is one of the focus entities (Level 0)
             if ($focusEntities -contains $entityName) {
                 $includeEntity = $true
             } else {
-            # Also include entities that have relationships with any focus entity
-            $hasRelationship = $false
-            $hasJoinRelationship = $false
-            
-            foreach ($focusEntity in $focusEntities) {
-                $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
-                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
-                })
-                $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
-                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
-                    ($_.joinTable -eq $entityName)
-                })
-            }
-                $includeEntity = ($hasRelationship -or $hasJoinRelationship)
+                # Check if entity has a relationship level assigned
+                if ($entityLevels.ContainsKey($entityName)) {
+                    $entityLevel = $entityLevels[$entityName]
+                    
+                    # If entity level is below ApplyDomainFilterAt, include it (no domain filtering)
+                    if ($entityLevel -lt $ApplyDomainFilterAt) {
+                        $includeEntity = $true
+                    } else {
+                        # Entity level is at or above ApplyDomainFilterAt - apply domain filtering
+                        if ($domainList.Count -gt 0) {
+                            $domainMatch = $false
+                            foreach ($domain in $domainList) {
+                                if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
+                                    $domainMatch = $true
+                                    break
+                                }
+                            }
+                            $includeEntity = $domainMatch
+                        } else {
+                            # No domains specified, include all entities at this level
+                            $includeEntity = $true
+                        }
+                    }
+                }
             }
         }
         
-        # If domains are specified, also check domain membership
-        if ($domainList.Count -gt 0) {
+        # If no focus specified, use domain filtering only
+        if (-not $lFocus -and $domainList.Count -gt 0) {
             $domainMatch = $false
             foreach ($domain in $domainList) {
                 if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
@@ -637,14 +734,7 @@ function Generate-MermaidERD {
                     break
                 }
             }
-            
-            # If both focus and domains are specified, entity must match EITHER focus OR domain criteria
-            if ($lFocus -and $lFocus -ne "") {
-                $includeEntity = $includeEntity -or $domainMatch
-            } else {
-                # If only domains specified, just check domain membership
-                $includeEntity = $domainMatch
-            }
+            $includeEntity = $domainMatch
         }
         
         # If no filters, include all entities
@@ -1049,7 +1139,7 @@ function Group-SelfReferences {
 
 # Function to generate Mermaid Class diagram with full styling
 function Generate-MermaidClassDiagram {
-    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{})
+    param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{}, [int]$ApplyDomainFilterAt = 2)
     
     $mermaidContent = "classDiagram`n"
     
@@ -1065,52 +1155,71 @@ function Generate-MermaidClassDiagram {
     # Use validated domains
     $domainList = $validatedDomains
     
-    # Filter entities based on parameters (same logic as ER diagram)
+    # Calculate relationship levels for all entities
+    $entityLevels = Get-EntityRelationshipLevels -relationships $relationships -lFocus $lFocus -ApplyDomainFilterAt $ApplyDomainFilterAt
+    
+    # Filter entities based on parameters and relationship levels (same logic as ER diagram)
     $filteredEntities = $relationships.entities | Where-Object {
         $entity = $_
         $entityName = $entity.name
         $pluginName = $entity.plugin
         
-        # If focus entity is specified, only include it and its related entities
+        $includeEntity = $false
+        
+        # If focus entity is specified, check if this entity is focus or related
         if ($lFocus -and $lFocus -ne "") {
             # Split focus entities if comma-separated
             $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
             
-            # Check if this entity is one of the focus entities
+            # Check if this entity is one of the focus entities (Level 0)
             if ($focusEntities -contains $entityName) {
-                return $true
-            }
-            
-            # Also include entities that have relationships with any focus entity
-            $hasRelationship = $false
-            $hasJoinRelationship = $false
-            
-            foreach ($focusEntity in $focusEntities) {
-                $hasRelationship = $hasRelationship -or ($relationships.directFK | Where-Object { 
-                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) 
-                })
-                $hasJoinRelationship = $hasJoinRelationship -or ($relationships.joinTables | Where-Object {
-                    ($_.source -eq $focusEntity -and $_.target -eq $entityName) -or 
-                    ($_.target -eq $focusEntity -and $_.source -eq $entityName) -or
-                    ($_.joinTable -eq $entityName)
-                })
-            }
-            return ($hasRelationship -or $hasJoinRelationship)
-        }
-        
-        # If domains are specified, only include entities from those domains
-        if ($domainList.Count -gt 0) {
-            foreach ($domain in $domainList) {
-                if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
-                    return $true
+                $includeEntity = $true
+            } else {
+                # Check if entity has a relationship level assigned
+                if ($entityLevels.ContainsKey($entityName)) {
+                    $entityLevel = $entityLevels[$entityName]
+                    
+                    # If entity level is below ApplyDomainFilterAt, include it (no domain filtering)
+                    if ($entityLevel -lt $ApplyDomainFilterAt) {
+                        $includeEntity = $true
+                    } else {
+                        # Entity level is at or above ApplyDomainFilterAt - apply domain filtering
+                        if ($domainList.Count -gt 0) {
+                            $domainMatch = $false
+                            foreach ($domain in $domainList) {
+                                if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
+                                    $domainMatch = $true
+                                    break
+                                }
+                            }
+                            $includeEntity = $domainMatch
+                        } else {
+                            # No domains specified, include all entities at this level
+                            $includeEntity = $true
+                        }
+                    }
                 }
             }
-            return $false
+        }
+        
+        # If no focus specified, use domain filtering only
+        if (-not $lFocus -and $domainList.Count -gt 0) {
+            $domainMatch = $false
+            foreach ($domain in $domainList) {
+                if (Entity-BelongsToDomain -entityName $entityName -domainName $domain -domainsConfig $domainsConfig) {
+                    $domainMatch = $true
+                    break
+                }
+            }
+            $includeEntity = $domainMatch
         }
         
         # If no filters, include all entities
-        return $true
+        if (-not $lFocus -and $domainList.Count -eq 0) {
+            $includeEntity = $true
+        }
+        
+        return $includeEntity
     }
     
     # Consolidate duplicate entities (same entity name in different plugins) - same logic as ER diagram
@@ -1148,6 +1257,7 @@ function Generate-MermaidClassDiagram {
     Write-Host "📊 Filtered to $($filteredEntities.Count) entities based on parameters:" -ForegroundColor Cyan
     if ($lFocus) { Write-Host "   Focus: $lFocus" -ForegroundColor Yellow }
     if ($domainList.Count -gt 0) { Write-Host "   Domains: $($domainList -join ', ')" -ForegroundColor Yellow }
+    Write-Host "   ApplyDomainFilterAt: $ApplyDomainFilterAt" -ForegroundColor Yellow
     
     # Add entities with proper attributes
     foreach ($entity in $filteredEntities) {
@@ -1656,9 +1766,9 @@ Write-Host "Found $($relationships.joinTables.Count) join table relationships"
 
 # Generate Mermaid diagrams based on type
 if ($DiagramType -eq "ER") {
-    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig -cssStyles $cssStyles
+    $mermaidContent = Generate-MermaidERD -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig -cssStyles $cssStyles -ApplyDomainFilterAt $ApplyDomainFilterAt
 } else {
-    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig -cssStyles $cssStyles
+    $mermaidContent = Generate-MermaidClassDiagram -relationships $relationships -knownTables $knownTables -lFocus $lFocus -validatedDomains $validatedDomains -domainsConfig $domainsConfig -cssStyles $cssStyles -ApplyDomainFilterAt $ApplyDomainFilterAt
 }
 
 # Ensure exports directory exists
@@ -2073,10 +2183,14 @@ if ($logFiles) {
 
 # Log completion
 if (Test-Path $loggerPath) {
+    # Count entities in the generated content
+    $entityCount = ($mermaidContent -split "`n" | Where-Object { $_ -match '^\s*"[^"]+"\s*{' }).Count
+    $relationshipCount = ($mermaidContent -split "`n" | Where-Object { $_ -match '\|\|--\|\||\}o--\|\|' }).Count
+    
     Write-InfoLog "ER diagram generation completed successfully" -Context "Diagram_Generation" -Data @{
         OutputFile = $outputFile
-        EntityCount = $filteredEntities.Count
-        RelationshipCount = $allRelationships.Count
+        EntityCount = $entityCount
+        RelationshipCount = $relationshipCount
         DiagramType = $DiagramType
     }
 }

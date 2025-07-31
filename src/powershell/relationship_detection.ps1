@@ -113,6 +113,15 @@ function Get-RelationshipsFromContent {
             }
         }
         
+        # Skip problematic string/longchar ftJoin properties
+        if ($attributes -and $attributes.ContainsKey("ftJoin")) {
+            $problematicTypes = @("longchar", "string")
+            if ($attributes.ContainsKey("type") -and $problematicTypes -contains $attributes["type"]) {
+                Write-Host "⚠️  Excluding problematic ftJoin: $propertyName (type: $($attributes['type']))" -ForegroundColor Yellow
+                continue
+            }
+        }
+        
         # Check if this is an array relationship (must have both type="array" AND ftJoin)
         if ($attributes -and $attributes.ContainsKey("type") -and $attributes["type"] -eq "array" -and $attributes.ContainsKey("ftJoin")) {
             $targetEntity = $attributes["ftJoin"]

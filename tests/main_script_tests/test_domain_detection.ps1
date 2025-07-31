@@ -135,14 +135,14 @@ foreach ($testCase in $testCases) {
     Write-Host "Description: $($testCase.Description)" -ForegroundColor Gray
 
     # Generate test diagram
-    $testOutput = "domain_detection_test.mmd"
+    $testOutput = Join-Path $exportsPath "domain_detection_test.mmd"
     $result = & ".\generate_erd_enhanced.ps1" -lFocus $testCase.Focus -DiagramType $testCase.DiagramType -lDomains $testCase.Domains -OutputFile $testOutput 2>&1
 
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✅ Diagram generated successfully" -ForegroundColor Green
         
-        # Analyze the generated file - the main script now creates unique filenames
-        $generatedFile = "$exportsPath\$testOutput"
+        # Analyze the generated file
+        $generatedFile = $testOutput
         if (Test-Path $generatedFile) {
             $content = Get-Content $generatedFile -Raw
             
@@ -212,7 +212,7 @@ foreach ($testCase in $testCases) {
                 Description = $testCase.Description
                 ExpectedTiers = $testCase.ExpectedTiers
                 Analysis = $analysis
-                GeneratedFile = $testOutput
+                GeneratedFile = "domain_detection_test.mmd"
                 ValidationIssues = $validationIssues
                 TestPassed = $testPassed
                 Status = "COMPREHENSIVE 5-TIER TEST"

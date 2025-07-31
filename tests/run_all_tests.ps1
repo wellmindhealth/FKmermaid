@@ -138,11 +138,32 @@ foreach ($test in $testSuite) {
 }
 
 # Generate test report
+$passedCount = ($testResults | Where-Object { $_.Success }).Count
+$failedCount = 0
+foreach ($result in $testResults) {
+    if (-not $result.Success) {
+        $failedCount++
+    }
+}
+
+# Debug output (only show if there are issues)
+if ($failedCount -gt 0) {
+    Write-Host "`n🔍 DEBUG: Test Results Analysis" -ForegroundColor Magenta
+    Write-Host "Total test results: $($testResults.Count)" -ForegroundColor White
+    Write-Host "Passed count: $passedCount" -ForegroundColor Green
+    Write-Host "Failed count: $failedCount" -ForegroundColor Red
+    Write-Host "Individual test results:" -ForegroundColor White
+    foreach ($result in $testResults) {
+        $status = if ($result.Success) { "✅ PASS" } else { "❌ FAIL" }
+        Write-Host "  $($result.TestName): $status (ExitCode: $($result.ExitCode), Success: $($result.Success))" -ForegroundColor $(if ($result.Success) { "Green" } else { "Red" })
+    }
+}
+
 $report = @{
     Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     TotalTests = $testResults.Count
-    PassedTests = ($testResults | Where-Object { $_.Success }).Count
-    FailedTests = ($testResults | Where-Object { -not $_.Success }).Count
+    PassedTests = $passedCount
+    FailedTests = $failedCount
     OverallSuccess = $overallSuccess
     TestResults = $testResults
 }
