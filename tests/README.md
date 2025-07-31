@@ -14,24 +14,25 @@ This directory contains comprehensive tests for the FKmermaid ER diagram generat
 ### 2. Main Script Tests (`main_script_tests/`)
 - **Purpose**: Test the main ER diagram generation script
 - **Scripts**:
-  - `test_4_color_system.ps1` - Tests semantic styling system
-  - `test_parameter_combinations.ps1` - Tests various parameter combinations
-  - `test_diagram_types.ps1` - Tests ER vs Class diagrams
+  - `test_5_tier_system.ps1` - Tests 5-tier semantic styling system
+  - `test_domain_detection.ps1` - Tests domain detection and filtering
+  - `test_manual_verification.ps1` - Tests manual verification outputs
 - **Expected Outputs**: Generated `.mmd` files with known styling patterns
 
 ### 3. Baseline Tests (`baseline_tests/`)
 - **Purpose**: Create baseline outputs for regression testing
 - **Scripts**:
-  - `generate_baselines.ps1` - Creates baseline outputs
-  - `compare_baselines.ps1` - Compares current vs baseline outputs
+  - `generate_baselines.ps1` - Creates baseline outputs (26 edge cases)
+  - `test_edge_cases.ps1` - Tests all 26 edge case baselines
 - **Expected Outputs**: Stored baseline files for future comparison
 
-### 4. Integration Tests (`integration_tests/`)
-- **Purpose**: Test end-to-end workflows
+### 4. Quick Test Scripts
+- **Purpose**: Fast testing and development iteration
 - **Scripts**:
-  - `test_full_workflow.ps1` - Tests complete workflow from CFC scan to diagram
-  - `test_mermaid_live_integration.ps1` - Tests Mermaid.live integration
-- **Expected Outputs**: Complete workflow validation
+  - `generate_all_cfc_diagrams_test.ps1` - Generates 6 test diagrams (3 CFCs × 2 domains)
+  - `update_test_expectations.ps1` - Updates ExpectedEntityCount values after baseline changes
+  - `test_cfc_cache_generation.ps1` - Tests CFC cache generation with inheritance support
+- **Expected Outputs**: Quick validation and automated test maintenance
 
 ## Test Execution
 
@@ -43,21 +44,27 @@ This directory contains comprehensive tests for the FKmermaid ER diagram generat
 ### Running Specific Test Categories
 ```powershell
 .\tests\cfc_scan_tests\test_cfc_scan_generation.ps1
-.\tests\main_script_tests\test_4_color_system.ps1
+.\tests\main_script_tests\test_5_tier_system.ps1
+```
+
+### Quick Testing
+```powershell
+.\tests\generate_all_cfc_diagrams_test.ps1 -RefreshCFCs
 ```
 
 ### Baseline Generation
 ```powershell
-.\tests\baseline_tests\generate_baselines.ps1
+.\tests\baseline_tests\generate_baselines.ps1 -Force
 ```
 
 ## Test Outputs
 
 ### Expected Results
-- **CFC Scan**: 84 entities, 109 direct FK relationships
-- **4-Color System**: Orange (focus), Blue (related), Blue-grey (same domain), Dark grey (other domains)
+- **CFC Scan**: 168 entities, comprehensive direct FK relationships
+- **5-Tier System**: Orange (focus), Blue (related), Blue-grey (same domain), Dark grey (other domains), Green (inheritance)
 - **Exclusions**: `farFilter`, `farTask`, `address` should not appear in outputs
 - **Parameter Combinations**: Various combinations should produce predictable entity counts
+- **Quick Test**: 6 diagrams (member, activityDef, progRole × provider, participant)
 
 ### Baseline Files
 - Stored in `tests/baseline_tests/baselines/`

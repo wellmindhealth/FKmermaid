@@ -1,0 +1,31 @@
+{
+  "excludeFiles": [
+    "participant.cfc",
+    "module.cfc", 
+    "moduleDef.cfc",
+    "farFilter.cfc",
+    "farTask.cfc",
+    "ruleActivityDefListing.cfc",
+    "ruleImageGallerySlick.cfc",
+    "shopItem.cfc",
+    "orderItem.cfc",
+    "orderMaster.cfc",
+    "address.cfc",
+    "promotion.cfc"
+  ],
+  "scanDirectories": [
+    "D:\\GIT\\farcry\\plugins\\pathway",
+    "D:\\GIT\\farcry\\plugins\\api",
+    "D:\\GIT\\farcry\\plugins\\farcrycms",
+    "D:\\GIT\\farcry\\zfarcrycore\\packages\\types",
+    "D:\\GIT\\farcry\\zfarcrycore\\packages\\farcry",
+    "D:\\GIT\\farcry\\zfarcrycore\\packages\\lib",
+    "D:\\GIT\\farcry\\zfarcrycore\\packages\\forms",
+    "D:\\GIT\\farcry\\zfarcrycore\\packages\\security"
+  ],
+  "metadata": {
+    "description": "Centralized scan configuration for FKmermaid system",
+    "lastUpdated": "2025-07-31",
+    "notes": "Explicit scan directories for safety and clarity. Only excludeFiles are relevant now."
+  }
+} 

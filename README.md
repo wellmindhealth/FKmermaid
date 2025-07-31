@@ -601,6 +601,254 @@ This ensures that excluded entities never appear in generated diagrams, even if 
 .\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,provider" -Debug
 ```
 
+## 🔧 **Unified CFC Cache System**
+
+The project uses a unified cache generation system to ensure all scripts work with the same component metadata:
+
+### **Primary Cache Generator:**
+- **`generate_cfc_cache.ps1`** - The main cache generation script
+  - Creates rich `componentMetadata` with `displayName`, `hint`, `description`, `faIcon`
+  - Extracts full property details with `ftType`, `ftLabel`, `hint`
+  - Preserves existing `cfc_cache.json` structure for backward compatibility
+  - Used by all diagram generation scripts and the dev.html interface
+
+### **Configuration Generator:**
+- **`generate_cfc_scan_config.ps1`** - Creates the scan configuration (database-based)
+  - Analyzes database structure from `config/dbdump.sql` (SQL Server schema dump)
+  - Maps entities to plugins based on folder locations
+  - Creates `cfc_scan_config.json` with `knownTables` and `entityPluginMapping`
+  - **When to use**: After database changes or when adding new plugins
+  - **Source**: `config/dbdump.sql` contains SQL Server CREATE TABLE statements for `farcrybemindfulonline_new` database
+
+- **`generate_cfc_scan_config.ps1`** - Creates the scan configuration (CFC-based)
+  - Analyzes CFC files to extract table names and entity mappings
+  - No database dependency - completely self-contained
+  - Creates `cfc_scan_config.json` with `knownTables` and `entityPluginMapping`
+  - **When to use**: When CFCs change or when you want to eliminate database dependency
+  - **Source**: CFC files with `@tableName`, `tableName` property, or filename-based extraction
+  - **Exclusions**: Uses centralized `config/exclusions.json` for consistent filtering
+
+## 📋 **Centralized Configuration:**
+
+### **Configuration "Oracle":**
+- **`config/cfc_scan_config.json`** - The central "oracle" of known tables and relationships
+  - **Purpose**: Defines which CFCs are scanned and how they're categorized
+  - **Source**: Generated from CFC analysis (not manually edited)
+  - **Contains**: `knownTables`, `entityPluginMapping`, scan settings
+  - **Usage**: All scripts reference this as the authoritative source
+
+### **Exclusions Management:**
+- **`config/exclusions.json`** - Centralized exclusions configuration (MANUALLY EDITABLE)
+  - `excludeFiles`: CFC files to exclude from scanning
+  - `excludeFolders`: Plugin folders to exclude
+  - `workspaceFolders`: Active workspace folders
+  - **Benefits**: Single source of truth, no hardcoded exclusions
+  - **Note**: Edit this file to change exclusions, NOT `cfc_scan_config.json`
+
+### **Usage:**
+```powershell
+# Generate configuration from database structure
+.\generate_cfc_scan_config.ps1
+
+# Generate unified CFC cache
+.\generate_cfc_cache.ps1
+
+# All other scripts will use the same cache file
+.\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "ER" -lDomains "participant"
+.\generate_component_diagram.ps1 -Focus "member" -lDomains "participant,provider"
+```
+
+## 🔄 **Workflow for Changes**
+
+### **When CFCs or domains.json changes:**
+```powershell
+# Option 1: Regenerate everything with fresh cache (RECOMMENDED)
+.\generate_all_cfc_diagrams.ps1 -RefreshCFCs
+
+# Option 2: Manual cache refresh first
+.\generate_cfc_cache.ps1
+.\generate_all_cfc_diagrams.ps1
+```
+
+### **For dev.html interface:**
+- Always run cache refresh before opening dev.html after changes
+- dev.html reads from `config/cfc_cache.json`
+- Smart detection checks cache timestamps vs CFC files
+
+## 📋 **Change Impact Analysis:**
+
+### **When CFCs change:**
+- **Need**: `generate_cfc_cache.ps1` (updates component metadata)
+- **Need**: `generate_cfc_scan_config_from_cfcs.ps1` (updates table mappings - CFC-based)
+- **Need**: `generate_all_cfc_diagrams.ps1` (regenerates all diagrams)
+- **Need**: `generate_baselines.ps1` (updates test expectations)
+- **Workflow**: 
+  ```powershell
+  .\src\powershell\generate_cfc_scan_config_from_cfcs.ps1
+  .\generate_all_cfc_diagrams.ps1 -RefreshCFCs
+  .\tests\baseline_tests\generate_baselines.ps1 -Force
+  .\tests\update_test_expectations.ps1
+  .\tests\run_all_tests.ps1
+  ```
+
+### **When domains.json changes:**
+- **Need**: `generate_all_cfc_diagrams.ps1` (regenerates all diagrams)
+- **Need**: `generate_baselines.ps1` (updates test expectations - domains affect diagram content)
+- **Don't need**: `generate_cfc_cache.ps1` (CFC metadata unchanged)
+- **Workflow**: 
+  ```powershell
+  .\generate_all_cfc_diagrams.ps1 -RefreshCFCs
+  .\tests\baseline_tests\generate_baselines.ps1 -Force
+  .\tests\run_all_tests.ps1
+  ```
+
+### **Cache Generation Details:**
+- **`generate_cfc_cache.ps1`** generates ALL sections of the cache on every run:
+  - `componentMetadata` (component info, hints, descriptions)
+  - `directFK` (foreign key relationships)
+  - `joinTables` (many-to-many relationships)
+  - `entities` (entity definitions)
+  - `properties` (property details)
+- **Full regeneration**: Always regenerates complete cache structure
+- **Backward compatible**: Preserves existing cache format
+
+## 🔄 **Complete Workflow Consolidation:**
+
+### **Development Workflow:**
+```powershell
+# 1. Quick testing (6 diagrams)
+.\generate_all_cfc_diagrams_test.ps1 -RefreshCFCs
+
+# 2. Full generation (165 diagrams)
+.\generate_all_cfc_diagrams.ps1 -RefreshCFCs
+
+# 3. Update test baselines
+.\tests\baseline_tests\generate_baselines.ps1 -Force
+
+# 4. Run test suite
+.\tests\run_all_tests.ps1
+```
+
+### **File Management:**
+- **`all_diagrams_results.json`**: Full 165 diagrams (production)
+- **`all_diagrams_results_test.json`**: 6 test diagrams (development)
+- **Cleanup**: Remove old `165_diagrams_results.json` after migration
+
+## 🧪 **Testing Workflow:**
+
+### **Quick Testing:**
+```powershell
+# Generate 6 test diagrams (3 CFCs × 2 domains) for quick testing
+.\tests\generate_all_cfc_diagrams_test.ps1 -RefreshCFCs
+
+# Run comprehensive test suite
+.\tests\run_all_tests.ps1
+```
+
+### **Baseline Regeneration (After CFC or domains.json Changes):**
+```powershell
+# 1. Regenerate all test baselines
+.\tests\baseline_tests\generate_baselines.ps1 -Force
+
+# 2. Update test expectations with new entity counts
+# (Manual step: Update ExpectedEntityCount values in test_edge_cases.ps1)
+
+# 3. Run tests to verify baselines are correct
+.\tests\run_all_tests.ps1
+```
+
+### **When to Regenerate Baselines:**
+- **After CFC changes**: Component metadata, relationships, or properties change
+- **After domains.json changes**: Domain definitions or entity mappings change (CRITICAL - affects diagram content)
+- **After styling changes**: Diagram appearance or formatting changes
+- **Before major releases**: Ensure all tests pass with current codebase
+
+### **Test Expectation Updates:**
+After baseline regeneration, automatically update `ExpectedEntityCount` values:
+```powershell
+# Automated update of test expectations
+.\tests\update_test_expectations.ps1
+```
+
+This script analyzes generated baseline files and updates:
+- `tests/baseline_tests/test_edge_cases.ps1` (26 edge case tests)
+- `tests/main_script_tests/test_5_tier_system.ps1` (5-tier styling tests)
+- `tests/main_script_tests/test_manual_verification.ps1` (manual verification tests)
+
+**Note**: The `update_test_expectations.ps1` script is automatically called by `generate_baselines.ps1` after baseline generation.
+
+### **Test Coverage:**
+- **26 edge case baselines**: Comprehensive validation of diagram generation
+- **5-tier semantic styling**: Visual consistency and hierarchy testing
+- **Domain detection**: Filtering and relationship accuracy
+- **Manual verification**: Output quality and completeness checks
+
+## 🎯 **Complete Workflow Summary:**
+
+### **For CFC Changes:**
+```powershell
+# 1. Quick test (6 diagrams)
+.\tests\generate_all_cfc_diagrams_test.ps1 -RefreshCFCs
+
+# 2. Full generation (165 diagrams)
+.\generate_all_cfc_diagrams.ps1 -RefreshCFCs
+
+# 3. Regenerate baselines
+.\tests\baseline_tests\generate_baselines.ps1 -Force
+
+# 4. Update test expectations (automated)
+.\tests\update_test_expectations.ps1
+
+# 5. Run test suite
+.\tests\run_all_tests.ps1
+```
+
+### **For domains.json Changes:**
+```powershell
+# 1. Full generation (domains affect all diagrams)
+.\generate_all_cfc_diagrams.ps1 -RefreshCFCs
+
+# 2. Regenerate baselines (CRITICAL - domains affect content)
+.\tests\baseline_tests\generate_baselines.ps1 -Force
+
+# 3. Update test expectations (automated)
+.\tests\update_test_expectations.ps1
+
+# 4. Run test suite
+.\tests\run_all_tests.ps1
+```
+
+### **For Development/Testing:**
+```powershell
+# Quick iteration
+.\tests\generate_all_cfc_diagrams_test.ps1 -RefreshCFCs
+
+# Full validation
+.\tests\run_all_tests.ps1
+```
+
+### **Cache Structure:**
+```json
+{
+  "directFK": [...],
+  "joinTables": [...],
+  "entities": [...],
+  "componentMetadata": [
+    {
+      "name": "apiAccessKey",
+      "displayName": "API Access Key",
+      "hint": "Reference label for key",
+      "description": "",
+      "faIcon": "",
+      "inheritance": "farcry.core.packages.types.versions",
+      "properties": [...],
+      "plugin": "api",
+      "filePath": "/farcry/plugins/api/packages/types/apiAccessKey.cfc"
+    }
+  ]
+}
+```
+
 ## 📝 **N.B. CFC Documentation Enhancement**
 
 The project includes tools for enhancing ColdFusion Component documentation with comprehensive business context:

@@ -1,115 +1,58 @@
 <#
 .SYNOPSIS
-    Generate all 165 diagrams (33 CFCs × 5 domain options)
+    QUICK TEST: Generate a subset of diagrams for testing (3 CFCs × 2 domains = 6 diagrams)
     
 .DESCRIPTION
-    Generates 165 ER diagrams:
-    - 33 unique CFCs × 5 domain options (provider, participant, pathway, site, all)
+    Generates 6 test diagrams instead of 165:
+    - 3 test CFCs × 2 domain options (provider, participant)
     - Uses JSON output to avoid console capture issues
-    - Saves results to all_diagrams_results.json
+    - Saves results to all_diagrams_results_test.json
+    - Perfect for quick testing of the workflow
     
 .PARAMETER RefreshCFCs
     OPTIONAL: Force fresh CFC cache generation before diagram generation
     
 .EXAMPLE
-    .\generate_all_cfc_diagrams.ps1
+    .\generate_all_cfc_diagrams_test.ps1
     
 .EXAMPLE
-    .\generate_all_cfc_diagrams.ps1 -RefreshCFCs
+    .\generate_all_cfc_diagrams_test.ps1 -RefreshCFCs
 #>
 
 param(
     [switch]$RefreshCFCs = $false
 )
 
-Write-Host "🚀 Generating 165 Diagrams" -ForegroundColor Cyan
-Write-Host "========================" -ForegroundColor Cyan
+# Import the ER generation script
+$erScriptPath = Join-Path $PSScriptRoot "..\src\powershell\generate_erd_enhanced.ps1"
 
-# Load environment variables
-function Load-EnvironmentVariables {
-    $envPath = Join-Path $PSScriptRoot "..\..\.env"
-    
-    if (-not (Test-Path $envPath)) {
-        Write-Host "❌ Environment file not found: $envPath" -ForegroundColor Red
-        throw "Environment file not found: $envPath"
-    }
-    
-    $envContent = Get-Content $envPath
-    $envVars = @{}
-    
-    foreach ($line in $envContent) {
-        if ($line -match '^([^=]+)=(.*)$') {
-            $key = $matches[1]
-            $value = $matches[2]
-            $envVars[$key] = $value
-        }
-    }
-    
-    Write-Host "✅ Loaded $($envVars.Count) environment variables from $envPath" -ForegroundColor Green
-    return $envVars
-}
+# Test CFCs (just 3 for quick testing)
+$testCfcNames = @("member", "activityDef", "progRole")
 
-$envVars = Load-EnvironmentVariables
+# Test domains (just 2 for quick testing)
+$testDomainOptions = @("provider", "participant")
 
-# Path to the ER generation script
-$erScriptPath = Join-Path $PSScriptRoot "generate_erd_enhanced.ps1"
-
-# Load domains.json to get all CFCs
-$domainsPath = Join-Path $PSScriptRoot "..\..\config\domains.json"
-$domains = Get-Content $domainsPath | ConvertFrom-Json
-
-# Collect all unique CFCs
-$allCfcs = @()
-
-foreach ($domainName in $domains.domains.PSObject.Properties.Name) {
-    $domain = $domains.domains.$domainName
-    foreach ($categoryName in $domain.entities.PSObject.Properties.Name) {
-        $cfcs = $domain.entities.$categoryName
-        foreach ($cfc in $cfcs) {
-            # Skip non-CFC properties
-            $skipCfcs = @(
-                "defaultMediaID", "aCuePointActivities", "aMediaIDs", "onEndID", 
-                "aInteract1Activities", "aInteract2Activities", "aInteract3Activities", 
-                "aInteract4Activities", "aInteract5Activities"
-            )
-            if ($cfc -notin $skipCfcs) {
-                $allCfcs += @{
-                    Name = $cfc
-                    Domain = $domainName
-                }
-            }
-        }
-    }
-}
-
-# Get unique CFC names
-$uniqueCfcNames = ($allCfcs | Select-Object -ExpandProperty Name | Sort-Object -Unique)
-
-Write-Host "Found $($uniqueCfcNames.Count) unique CFCs after filtering." -ForegroundColor Green
-
-# Domain options
-$domainOptions = @("provider", "participant", "pathway", "site", "all")
-
+# Initialize results tracking
 $diagramResults = @{
     generated = @{}
     failed = @{}
-    total = ($uniqueCfcNames.Count * $domainOptions.Count)
+    total = ($testCfcNames.Count * $testDomainOptions.Count)
     successCount = 0
     failedCount = 0
     generatedAt = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
 }
 
-Write-Host "`n📊 Generating $($diagramResults.total) diagrams..." -ForegroundColor Yellow
+Write-Host "`n🧪 QUICK TEST: Generating $($diagramResults.total) test diagrams..." -ForegroundColor Yellow
 
 $progress = 0
 
-foreach ($cfcName in $uniqueCfcNames) {
-    foreach ($domainOption in $domainOptions) {
+foreach ($cfcName in $testCfcNames) {
+    foreach ($domainOption in $testDomainOptions) {
         $progress++
         $percent = [math]::Round(($progress / $diagramResults.total) * 100, 1)
         
         $diagramName = "$cfcName-$domainOption"
-        $jsonOutputFile = Join-Path $PSScriptRoot "..\..\exports\pre_generated\json_$diagramName.json"
+        $jsonOutputFile = Join-Path $PSScriptRoot "..\exports\pre_generated\json_$diagramName.json"
         
         Write-Host "`n📊 Progress: $progress/$($diagramResults.total) ($percent%)" -ForegroundColor Magenta
         Write-Host "🔄 Generating: $diagramName" -ForegroundColor Blue
@@ -168,11 +111,11 @@ foreach ($cfcName in $uniqueCfcNames) {
 }
 
 # Save results to JSON file
-$resultsFile = Join-Path $PSScriptRoot "..\..\config\all_diagrams_results.json"
+$resultsFile = Join-Path $PSScriptRoot "..\config\all_diagrams_results_test.json"
 $diagramResults | ConvertTo-Json -Depth 10 | Set-Content -Path $resultsFile
 
 # Summary
-Write-Host "`n📈 Generation Complete!" -ForegroundColor Cyan
+Write-Host "`n📈 Test Generation Complete!" -ForegroundColor Cyan
 Write-Host "=====================" -ForegroundColor Cyan
 Write-Host "Total diagrams: $($diagramResults.total)" -ForegroundColor White
 Write-Host "Successful: $($diagramResults.successCount)" -ForegroundColor Green
@@ -187,14 +130,14 @@ if ($diagramResults.failedCount -gt 0) {
 }
 
 if ($diagramResults.successCount -gt 0) {
-    Write-Host "`n✅ Successfully generated $($diagramResults.successCount) diagrams!" -ForegroundColor Green
-    Write-Host "🎯 Ready for Confluence integration!" -ForegroundColor Green
+    Write-Host "`n✅ Successfully generated $($diagramResults.successCount) test diagrams!" -ForegroundColor Green
+    Write-Host "🎯 Ready for testing!" -ForegroundColor Green
 }
 
 # Cleanup temporary JSON files
 Write-Host "`n🧹 Cleaning up temporary files..." -ForegroundColor Yellow
-$tempFiles = Get-ChildItem -Path (Join-Path $PSScriptRoot "..\..\exports\pre_generated") -Filter "json_*.json"
+$tempFiles = Get-ChildItem -Path (Join-Path $PSScriptRoot "..\exports\pre_generated") -Filter "json_*.json"
 $tempFiles | Remove-Item -Force
 Write-Host "✅ Cleaned up $($tempFiles.Count) temporary files" -ForegroundColor Green
 
-Write-Host "`n🎯 All diagrams generation complete!" -ForegroundColor Cyan 
+Write-Host "`n🎯 Test diagrams generation complete!" -ForegroundColor Cyan 

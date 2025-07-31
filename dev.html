@@ -1016,8 +1016,8 @@
                 <div class="stat-label" title="Total number of architectural domains">Domains</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="layers-count" title="Total number of architectural layers">7</div>
-                <div class="stat-label" title="Total number of architectural layers">Layers</div>
+                <div class="stat-number" id="layers-count" title="Active layers (click to toggle)">7</div>
+                <div class="stat-label" title="Active layers (click to toggle)">Active Layers</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number" id="components-count" title="Number of visible components based on current filters">0</div>
@@ -1399,6 +1399,86 @@
         let domainsData = null;
         let cfcCacheData = null;
         
+        // Smart detection for cache freshness
+        async function checkCacheFreshness() {
+            try {
+                // Get file timestamps
+                const [cacheResponse, domainsResponse, diagramsResponse] = await Promise.all([
+                    fetch('config/cfc_cache.json', { method: 'HEAD' }),
+                    fetch('config/domains.json', { method: 'HEAD' }),
+                    fetch('config/all_diagrams_results.json', { method: 'HEAD' })
+                ]);
+                
+                const cacheLastModified = new Date(cacheResponse.headers.get('last-modified'));
+                const domainsLastModified = new Date(domainsResponse.headers.get('last-modified'));
+                const diagramsLastModified = new Date(diagramsResponse.headers.get('last-modified'));
+                
+                const now = new Date();
+                const cacheAge = now - cacheLastModified;
+                const domainsAge = now - domainsLastModified;
+                const diagramsAge = now - diagramsLastModified;
+                
+                // Check if cache is older than domains.json (suggests CFCs might have changed)
+                if (cacheLastModified < domainsLastModified) {
+                    showWarning('Cache may be outdated', 
+                        'The cache file is older than domains.json. Consider running cache refresh: <code>./generate_cfc_cache.ps1</code>');
+                }
+                
+                // Check if 165 diagrams are older than domains.json
+                if (diagramsLastModified < domainsLastModified) {
+                    showWarning('Diagrams may be outdated', 
+                        'The 165 diagrams file is older than domains.json. Consider regenerating: <code>./generate_all_cfc_diagrams.ps1 -RefreshCFCs</code>');
+                }
+                
+                // Check if cache is very old (more than 1 hour)
+                if (cacheAge > 60 * 60 * 1000) {
+                    showWarning('Cache is old', 
+                        'The cache file is over 1 hour old. Consider refreshing: <code>./generate_cfc_cache.ps1</code>');
+                }
+                
+            } catch (error) {
+                console.warn('Could not check cache freshness:', error);
+            }
+        }
+        
+        // Show warning message
+        function showWarning(title, message) {
+            const warningDiv = document.createElement('div');
+            warningDiv.className = 'cache-warning';
+            warningDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                border-radius: 8px;
+                padding: 15px;
+                max-width: 500px;
+                z-index: 1000;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            `;
+            warningDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <i class="fas fa-exclamation-triangle" style="color: #856404;"></i>
+                    <strong style="color: #856404;">${title}</strong>
+                    <button onclick="this.parentElement.parentElement.remove()" style="margin-left: auto; background: none; border: none; font-size: 18px; cursor: pointer; color: #856404;">×</button>
+                </div>
+                <div style="color: #856404; font-size: 14px; line-height: 1.4;">
+                    ${message}
+                </div>
+            `;
+            document.body.appendChild(warningDiv);
+            
+            // Auto-remove after 30 seconds
+            setTimeout(() => {
+                if (warningDiv.parentElement) {
+                    warningDiv.remove();
+                }
+            }, 30000);
+        }
+        
         // Load all data files
         async function loadAllData() {
             try {
@@ -1408,7 +1488,7 @@
                 // Load all three files
                 const [domainsResponse, diagramsResponse, cacheResponse] = await Promise.all([
                     fetch(`config/domains.json?t=${timestamp}`),
-                    fetch(`config/165_diagrams_results.json?t=${timestamp}`),
+                    fetch(`config/all_diagrams_results.json?t=${timestamp}`),
                     fetch(`config/cfc_cache.json?t=${timestamp}`)
                 ]);
                 
@@ -1428,6 +1508,9 @@
                 
                 // Generate cards once all data is loaded
                 generateCardsFromRealData();
+                
+                // Check cache freshness after loading
+                checkCacheFreshness();
             } catch (error) {
                 console.error('Error loading data files:', error);
                 // No fallback - we want to see the error!
@@ -1594,7 +1677,16 @@
         function getDisplayName(componentName) {
             // Try to get display name from CFC cache data
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
-                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                // Try exact match first
+                let component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
                 if (component && component.displayName) {
                     return component.displayName;
                 }
@@ -1606,7 +1698,16 @@
         function getComponentDescription(componentName) {
             // Try to get hint from CFC cache data FIRST
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
-                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                // Try exact match first
+                let component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
                 if (component && component.hint) {
                     return component.hint;
                 }
@@ -1704,25 +1805,50 @@
                 });
             });
 
-            // Layer filter clicks
+            // Layer filter clicks (now as checkboxes - multiple selection allowed)
             document.querySelectorAll('.strata-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const layer = this.dataset.layer;
                     
-                    // Toggle active state
-                    if (this.classList.contains('active')) {
-                        this.classList.remove('active');
-                        // If this was the last active layer filter, show nothing
-                        const activeLayerItems = document.querySelectorAll('.strata-item.active');
-                        if (activeLayerItems.length === 0) {
+                    // Special handling for "All Layers" button
+                    if (layer === 'all') {
+                        // If "All Layers" is clicked, toggle all layers
+                        const allLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"])');
+                        const isAllActive = this.classList.contains('active');
+                        
+                        if (isAllActive) {
+                            // Deactivate all layers
+                            allLayers.forEach(l => l.classList.remove('active'));
+                            this.classList.remove('active');
                             activeFilters.layer = 'none';
                         } else {
+                            // Activate all layers
+                            allLayers.forEach(l => l.classList.add('active'));
+                            this.classList.add('active');
                             activeFilters.layer = 'all';
                         }
                     } else {
-                        document.querySelectorAll('.strata-item').forEach(i => i.classList.remove('active'));
-                        this.classList.add('active');
-                        activeFilters.layer = layer;
+                        // Toggle individual layer (checkbox behavior)
+                        this.classList.toggle('active');
+                        
+                        // Update "All Layers" button state based on current selection
+                        const allLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"])');
+                        const activeLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"]).active');
+                        const allLayersButton = document.querySelector('.strata-item[data-layer="all"]');
+                        
+                        if (activeLayers.length === 0) {
+                            // No layers active
+                            activeFilters.layer = 'none';
+                            allLayersButton.classList.remove('active');
+                        } else if (activeLayers.length === allLayers.length) {
+                            // All layers active
+                            activeFilters.layer = 'all';
+                            allLayersButton.classList.add('active');
+                        } else {
+                            // Some layers active (checkbox mode)
+                            activeFilters.layer = 'multiple';
+                            allLayersButton.classList.remove('active');
+                        }
                     }
                     
                     // Apply filters
@@ -1773,15 +1899,31 @@
                 const cardDomain = card.closest('.domain-section').dataset.domain;
                 const cardLayer = card.dataset.layer;
                 
-                // If either filter is set to 'none', show nothing
-                if (activeFilters.domain === 'none' || activeFilters.layer === 'none') {
+                // If domain filter is set to 'none', show nothing
+                if (activeFilters.domain === 'none') {
                     card.classList.add('hidden');
                     return;
                 }
                 
-                const shouldShowCard = 
-                    (activeFilters.domain === 'all' || cardDomain === activeFilters.domain) &&
-                    (activeFilters.layer === 'all' || cardLayer === activeFilters.layer);
+                // Check domain filter
+                const domainMatches = activeFilters.domain === 'all' || cardDomain === activeFilters.domain;
+                
+                // Check layer filter (now supports multiple layers)
+                let layerMatches = false;
+                if (activeFilters.layer === 'none') {
+                    layerMatches = false;
+                } else if (activeFilters.layer === 'all') {
+                    layerMatches = true;
+                } else if (activeFilters.layer === 'multiple') {
+                    // Check if this card's layer is one of the active layers
+                    const activeLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"]).active');
+                    layerMatches = Array.from(activeLayers).some(layer => layer.dataset.layer === cardLayer);
+                } else {
+                    // Single layer selected
+                    layerMatches = cardLayer === activeFilters.layer;
+                }
+                
+                const shouldShowCard = domainMatches && layerMatches;
                 
                 if (shouldShowCard) {
                     card.classList.remove('hidden');
@@ -1796,9 +1938,10 @@
             const totalCards = document.querySelectorAll('.diagram-card').length;
             const totalDomains = Object.keys(domainsData?.domains || {}).length;
             const totalLayers = document.querySelectorAll('.strata-item').length - 1; // Subtract "All Layers"
+            const activeLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"]).active').length;
             
             document.getElementById('domains-count').textContent = totalDomains;
-            document.getElementById('layers-count').textContent = totalLayers;
+            document.getElementById('layers-count').textContent = activeLayers;
             document.getElementById('components-count').textContent = visibleCards;
             document.getElementById('diagrams-count').textContent = totalCards;
         }
@@ -1952,7 +2095,7 @@
                 <div class="component-details">
                     <div class="detail-section">
                         <h3>${componentData.displayName}</h3>
-                        <p>${componentData.hint || 'No hint available'}</p>
+                        <p>${componentData.hint || '*No hint/description available from CFC metadata*'}</p>
                     </div>
                     
                     <div class="detail-section">
@@ -1984,7 +2127,7 @@
                     
                     <div class="detail-section">
                         <h3>Description</h3>
-                        <p>${componentData.description || 'No description available'}</p>
+                        <p>${componentData.description || '*No description available from CFC metadata*'}</p>
                     </div>
                 </div>
             `;

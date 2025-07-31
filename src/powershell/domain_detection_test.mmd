@@ -115,6 +115,14 @@ erDiagram
         UUID ObjectID
     }
 
+    "farcrycms_dmFacts" {
+        UUID ObjectID
+    }
+
+    "farcrycms_farFeedback" {
+        UUID ObjectID
+    }
+
     "zfarcrycore_dmFile" {
         UUID ObjectID
     }
@@ -238,6 +246,9 @@ erDiagram
     "pathway_tracker" ||--|| "pathway_trackerDef" : trackerDefID
     "pathway_tracker" ||--|| "pathway_activity" : activityID
     "pathway_trackerDef" ||--|| "pathway_programme" : programmeID
+    "farcrycms_dmFacts" ||--|| "pathway_dmImage" : imageID
+    "pathway_dmNews" ||--|| "pathway_dmImage" : teaserImage
+    "farcrycms_farFeedback" ||--|| "pathway_member" : memberID
     "zfarcrycore_dmFile" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmHTML" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmInclude" ||--|| "pathway_dmImage" : teaserImage
@@ -251,15 +262,15 @@ erDiagram
     "zfarcrycore_farUser" ||--|| "zfarcrycore_dmProfile" : userID_to_userName_userDirectory
     %% End Special Joins
 
-    %% Self-Referencing Relationships for farPermission
-    %% Self-refs include: aRelatedtypes
-    "zfarcrycore_farPermission" ||--|| "zfarcrycore_farPermission" : self_refs
-    %% End Self-Referencing Relationships for farPermission
-
     %% Self-Referencing Relationships for activityDef
     %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
     "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
     %% End Self-Referencing Relationships for activityDef
+
+    %% Self-Referencing Relationships for farPermission
+    %% Self-refs include: aRelatedtypes
+    "zfarcrycore_farPermission" ||--|| "zfarcrycore_farPermission" : self_refs
+    %% End Self-Referencing Relationships for farPermission
 
     %% Join Table Relationships
     "pathway_activityDef" }o--|| "pathway_media" : aMediaIDs
@@ -309,6 +320,8 @@ erDiagram
     style pathway_testimonial fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_tracker fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_trackerDef fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style farcrycms_dmFacts fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style farcrycms_farFeedback fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style zfarcrycore_dmFile fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_dmHTML fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_dmInclude fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff

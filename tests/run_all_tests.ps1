@@ -86,6 +86,16 @@ $testSuite = @(
         Name = "Comprehensive Edge Cases"
         Path = "D:\GIT\farcry\Cursor\FKmermaid\tests\baseline_tests\test_edge_cases.ps1"
         Description = "Tests all 26 edge case baselines for comprehensive validation"
+    },
+    @{
+        Name = "Quick Diagram Generation Test"
+        Path = "D:\GIT\farcry\Cursor\FKmermaid\tests\generate_all_cfc_diagrams_test.ps1"
+        Description = "Tests quick generation of 6 diagrams (3 CFCs × 2 domains)"
+    },
+    @{
+        Name = "CFC Cache Generation"
+        Path = "D:\GIT\farcry\Cursor\FKmermaid\tests\test_cfc_cache_generation.ps1"
+        Description = "Tests CFC cache generation with inheritance support"
     }
 )
 

@@ -335,3 +335,13 @@ $baselineMetadata | ConvertTo-Json -Depth 10 | Out-File "$baselinePath\baseline_
 Write-Host "`n🏁 Baseline Generation Complete" -ForegroundColor Cyan
 Write-Host "📊 Generated $($baselineResults.Count) baselines" -ForegroundColor White
 Write-Host "📁 Baselines stored in: $baselinePath" -ForegroundColor White
+
+# Update test expectations with new entity counts
+Write-Host "`n🔄 Updating test expectations..." -ForegroundColor Yellow
+$updateScriptPath = Join-Path $PSScriptRoot "..\update_test_expectations.ps1"
+if (Test-Path $updateScriptPath) {
+    & $updateScriptPath
+    Write-Host "✅ Test expectations updated" -ForegroundColor Green
+} else {
+    Write-Host "⚠️  Update script not found: $updateScriptPath" -ForegroundColor Yellow
+}

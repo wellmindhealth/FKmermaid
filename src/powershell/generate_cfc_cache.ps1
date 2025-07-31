@@ -141,6 +141,100 @@ function Get-ComponentMetadata {
     return $metadata
 }
 
+# Function to enhance metadata with inheritance information
+function Enhance-MetadataWithInheritance {
+    param(
+        [array]$componentMetadata
+    )
+    
+    Write-Host "Enhancing metadata with inheritance information..." -ForegroundColor Cyan
+    
+    # Create a lookup table for quick access
+    $metadataLookup = @{}
+    foreach ($metadata in $componentMetadata) {
+        $metadataLookup[$metadata.name] = $metadata
+    }
+    
+    # Process each component to enhance with parent metadata
+    foreach ($metadata in $componentMetadata) {
+        if ($metadata.inheritance) {
+            Write-Host "  🔍 Checking inheritance for $($metadata.name): $($metadata.inheritance)" -ForegroundColor Yellow
+            
+            # Traverse inheritance path to find best metadata
+            $currentInheritance = $metadata.inheritance
+            $abstractBaseClasses = @("types", "versions", "fourq", "forms", "security", "lib", "farcry")
+            $bestHint = ""
+            $bestDescription = ""
+            $bestDisplayName = ""
+            $bestFaIcon = ""
+            $visitedComponents = @()  # Prevent infinite loops
+            
+            while ($currentInheritance) {
+                # Extract component name from inheritance path
+                $inheritanceParts = $currentInheritance.Split('.')
+                $componentName = $inheritanceParts[-1]
+                
+                Write-Host "    📋 Checking: $componentName" -ForegroundColor Gray
+                
+                # Stop if we hit an abstract base class
+                if ($abstractBaseClasses -contains $componentName) {
+                    Write-Host "    ⚠️  Stopping at abstract base class: $componentName" -ForegroundColor Yellow
+                    break
+                }
+                
+                # Prevent infinite loops
+                if ($visitedComponents -contains $componentName) {
+                    Write-Host "    ⚠️  Circular reference detected: $componentName" -ForegroundColor Red
+                    break
+                }
+                $visitedComponents += $componentName
+                
+                # Look for this component in cache
+                if ($metadataLookup.ContainsKey($componentName)) {
+                    $parent = $metadataLookup[$componentName]
+                    Write-Host "    ✅ Found: $($parent.name) (plugin: $($parent.plugin))" -ForegroundColor Green
+                    
+                    # Track best metadata found
+                    if ($parent.hint -and -not $bestHint) { $bestHint = $parent.hint }
+                    if ($parent.description -and -not $bestDescription) { $bestDescription = $parent.description }
+                    if ($parent.displayName -and -not $bestDisplayName) { $bestDisplayName = $parent.displayName }
+                    if ($parent.faIcon -and -not $bestFaIcon) { $bestFaIcon = $parent.faIcon }
+                    
+                    # Continue up the inheritance chain
+                    $currentInheritance = $parent.inheritance
+                } else {
+                    Write-Host "    ❌ Component '$componentName' not found in cache" -ForegroundColor Red
+                    break
+                }
+            }
+            
+            # Apply best metadata found
+            if ($bestHint -and [string]::IsNullOrWhiteSpace($metadata.hint)) {
+                $metadata.hint = $bestHint
+                Write-Host "    📋 $($metadata.name) inherited hint: '$bestHint'" -ForegroundColor Gray
+            }
+            
+            if ($bestDescription -and [string]::IsNullOrWhiteSpace($metadata.description)) {
+                $metadata.description = $bestDescription
+                Write-Host "    📋 $($metadata.name) inherited description: '$bestDescription'" -ForegroundColor Gray
+            }
+            
+            if ($bestDisplayName -and [string]::IsNullOrWhiteSpace($metadata.displayName)) {
+                $metadata.displayName = $bestDisplayName
+                Write-Host "    📋 $($metadata.name) inherited displayName: '$bestDisplayName'" -ForegroundColor Gray
+            }
+            
+            if ($bestFaIcon -and [string]::IsNullOrWhiteSpace($metadata.faIcon)) {
+                $metadata.faIcon = $bestFaIcon
+                Write-Host "    📋 $($metadata.name) inherited faIcon: '$bestFaIcon'" -ForegroundColor Gray
+            }
+        }
+    }
+    
+    Write-Host "Inheritance enhancement complete!" -ForegroundColor Green
+    return $componentMetadata
+}
+
 # Function to extract all properties from CFC content
 function Get-AllProperties {
     param(
@@ -244,24 +338,9 @@ $relationships = @{
     $totalFiles = 0
     foreach ($scanDir in $scanDirectories) {
         if (Test-Path $scanDir) {
-            if ($scanDir -like "*zfarcrycore*") {
-                $packagesPath = Join-Path $scanDir "packages"
-                if (Test-Path $packagesPath) {
-                    $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
-                    $matchingFiles = $cfcFiles | Where-Object { $knownTables -contains [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }
-                    $totalFiles += $matchingFiles.Count
-                }
-            } else {
-                $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
-                foreach ($pluginFolder in $pluginFolders) {
-                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
-                    if (Test-Path $packagesPath) {
-                        $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
-                        $matchingFiles = $cfcFiles | Where-Object { $knownTables -contains [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }
-                        $totalFiles += $matchingFiles.Count
-                    }
-                }
-            }
+            $cfcFiles = Get-ChildItem -Path $scanDir -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
+            $matchingFiles = $cfcFiles | Where-Object { $knownTables -contains [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }
+            $totalFiles += $matchingFiles.Count
         }
     }
     
@@ -271,110 +350,64 @@ $relationships = @{
     $processedFiles = 0
     foreach ($scanDir in $scanDirectories) {
         if (Test-Path $scanDir) {
+            # Determine plugin name from path
             if ($scanDir -like "*zfarcrycore*") {
                 $pluginName = "zfarcrycore"
-                $packagesPath = Join-Path $scanDir "packages"
-                if (Test-Path $packagesPath) {
-                    $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
-                    
-                    foreach ($cfcFile in $cfcFiles) {
-                        $entityName = [System.IO.Path]::GetFileNameWithoutExtension($cfcFile.Name)
-                        
-                        if ($knownTables -contains $entityName) {
-                            $processedFiles++
-                            $progress = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
-                            Write-Host "`rProcessing: $entityName [$progress%]   " -NoNewline
-                            
-                            $content = Get-Content $cfcFile.FullName -Raw
-                            
-                            # Extract component metadata
-                            $metadata = Get-ComponentMetadata -content $content -entityName $entityName -pluginName $pluginName -filePath $cfcFile.FullName
-                            
-                            # Extract all properties for this component
-                            $allProperties = Get-AllProperties -content $content -entityName $entityName
-                            $metadata.properties = $allProperties
-                            
-                            # Debug output for components with no properties
-                            if ($allProperties.Count -eq 0) {
-                                Write-Host "  ⚠️  No properties found for $entityName" -ForegroundColor Yellow
-                            }
-                            
-                            $relationships.componentMetadata += $metadata
-                            
-                            # Extract entity info (preserve existing structure)
-                            $relationships.entities += @{
-                                name = $entityName
-                                plugin = $pluginName
-                                file = $cfcFile.FullName
-                            }
-                            
-                            # Use the relationship detection module
-                            $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
-                            
-                            # Merge relationships (match ERD script structure exactly)
-                            $relationships.directFK += $entityRelationships.directFK
-                            $relationships.joinTables += $entityRelationships.joinTables
-                            $relationships.properties += $entityRelationships.properties
-                        }
-                    }
-                }
             } else {
-                $pluginFolders = Get-ChildItem -Path $scanDir -Directory | Where-Object { $excludeFolders -notcontains $_.Name }
+                # Extract plugin name from path (e.g., "D:\GIT\farcry\plugins\pathway" -> "pathway")
+                $pluginName = Split-Path $scanDir -Leaf
+            }
+            
+            $cfcFiles = Get-ChildItem -Path $scanDir -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
+            
+            foreach ($cfcFile in $cfcFiles) {
+                $entityName = [System.IO.Path]::GetFileNameWithoutExtension($cfcFile.Name)
                 
-                foreach ($pluginFolder in $pluginFolders) {
-                    $pluginName = $pluginFolder.Name
-                    $packagesPath = Join-Path $pluginFolder.FullName "packages"
+                if ($knownTables -contains $entityName) {
+                    $processedFiles++
+                    $progress = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
+                    Write-Host "`rProcessing: $entityName [$progress%]   " -NoNewline
                     
-                    if (Test-Path $packagesPath) {
-                        $cfcFiles = Get-ChildItem -Path $packagesPath -Filter "*.cfc" -Recurse | Where-Object { $excludeFiles -notcontains $_.Name }
-                        
-                        foreach ($cfcFile in $cfcFiles) {
-                            $entityName = [System.IO.Path]::GetFileNameWithoutExtension($cfcFile.Name)
-                            
-                            if ($knownTables -contains $entityName) {
-                                $processedFiles++
-                                $progress = [math]::Round(($processedFiles / $totalFiles) * 100, 1)
-                                Write-Host "`rProcessing: $entityName [$progress%]   " -NoNewline
-                                
-                                $content = Get-Content $cfcFile.FullName -Raw
-                                
-                                # Extract component metadata
-                                $metadata = Get-ComponentMetadata -content $content -entityName $entityName -pluginName $pluginName -filePath $cfcFile.FullName
-                                
-                                # Extract all properties for this component
-                                $allProperties = Get-AllProperties -content $content -entityName $entityName
-                                $metadata.properties = $allProperties
-                                
-                                # Debug output for components with no properties
-                                if ($allProperties.Count -eq 0) {
-                                    Write-Host "  ⚠️  No properties found for $entityName" -ForegroundColor Yellow
-                                }
-                                
-                                $relationships.componentMetadata += $metadata
-                                
-                                # Extract entity info (preserve existing structure)
-                                $relationships.entities += @{
-                                    name = $entityName
-                                    plugin = $pluginName
-                                    file = $cfcFile.FullName
-                                }
-                                
-                                # Use the relationship detection module
-                                $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
-                                
-                                # Merge relationships (match ERD script structure exactly)
-                                $relationships.directFK += $entityRelationships.directFK
-                                $relationships.joinTables += $entityRelationships.joinTables
-                                $relationships.properties += $entityRelationships.properties
-                            }
-                        }
+                    $content = Get-Content $cfcFile.FullName -Raw
+                    
+                    # Extract component metadata
+                    $metadata = Get-ComponentMetadata -content $content -entityName $entityName -pluginName $pluginName -filePath $cfcFile.FullName
+                    
+                    # Extract all properties for this component
+                    $allProperties = Get-AllProperties -content $content -entityName $entityName
+                    $metadata.properties = $allProperties
+                    
+                    # Debug output for components with no properties
+                    if ($allProperties.Count -eq 0) {
+                        Write-Host "  ⚠️  No properties found for $entityName" -ForegroundColor Yellow
                     }
+                    
+                    $relationships.componentMetadata += $metadata
+                    
+                    # Extract entity info (preserve existing structure)
+                    $relationships.entities += @{
+                        name = $entityName
+                        plugin = $pluginName
+                        file = $cfcFile.FullName
+                    }
+                    
+                    # Use the relationship detection module
+                    $entityRelationships = Get-RelationshipsFromContent -content $content -entityName $entityName -pluginName $pluginName -config $config
+                    
+                    # Merge relationships (match ERD script structure exactly)
+                    $relationships.directFK += $entityRelationships.directFK
+                    $relationships.joinTables += $entityRelationships.joinTables
+                    $relationships.properties += $entityRelationships.properties
                 }
             }
         }
     }
     
     Write-Host "`nCFC scanning complete!" -ForegroundColor Green
+    
+    # Enhance metadata with inheritance information
+    $relationships.componentMetadata = Enhance-MetadataWithInheritance -componentMetadata $relationships.componentMetadata
+    
     return $relationships
 }
 

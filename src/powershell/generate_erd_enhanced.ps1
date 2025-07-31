@@ -1624,7 +1624,7 @@ Write-Host "🎯 Focus: $lFocus | 📊 Type: $DiagramType | 🌍 Domains: $lDoma
 # Determine whether to use fresh scan or cached data
 if ($RefreshCFCs -or !(Test-Path $cacheFile)) {
     Write-Host "Regenerating cache using dedicated cache generation script..."
-    $cacheScriptPath = Join-Path $PSScriptRoot "regenerate_cache_only.ps1"
+    $cacheScriptPath = Join-Path $PSScriptRoot "generate_cfc_cache.ps1"
     if (Test-Path $cacheScriptPath) {
         & $cacheScriptPath
         Write-Host "Cache regeneration completed via dedicated script"
@@ -1639,7 +1639,7 @@ Write-Host "Loading cached relationships from: $cacheFile"
 $relationships = Load-CachedRelationships -cacheFile $cacheFile
 if ($null -eq $relationships) {
     Write-Host "Cache file corrupted or empty, regenerating..."
-    $cacheScriptPath = Join-Path $PSScriptRoot "regenerate_cache_only.ps1"
+    $cacheScriptPath = Join-Path $PSScriptRoot "generate_cfc_cache.ps1"
     if (Test-Path $cacheScriptPath) {
         & $cacheScriptPath
     } else {
@@ -2011,8 +2011,8 @@ $mermaidLiveHtml = @"
 # COMMENTED OUT: HTML generation for direct Mermaid.live spawn
 # $mermaidLiveHtml | Set-Content -Path $htmlFile
 
-# DANGEROUS: Direct Mermaid.live browser spawn (pako is ALIVE again!)
-Write-Host "🚀 Spawning Mermaid.live directly with content..." -ForegroundColor Yellow
+# Generate compressed Mermaid.live URL
+Write-Host "🔗 Generating Mermaid.live URL..." -ForegroundColor Yellow
 
 # Use the working Node.js tool for proper pako compression
 $nodeScriptPath = Join-Path (Split-Path (Split-Path $PSScriptRoot)) "src\node\generate_url.js"
@@ -2040,7 +2040,7 @@ if (-not $NoBrowser) {
     try {
         # Use Start-Job to make it truly non-blocking
         Start-Job -ScriptBlock { param($url) Start-Process $url -WindowStyle Hidden } -ArgumentList $mermaidLiveUrl | Out-Null
-        Write-Host "🌐 Opened Mermaid.live directly with content" -ForegroundColor Green
+        Write-Host "🌐 Opened Mermaid.live in browser" -ForegroundColor Green
     } catch {
         Write-Host "⚠️  Could not open browser automatically. Please copy this URL:" -ForegroundColor Yellow
         Write-Host $mermaidLiveUrl -ForegroundColor Cyan
