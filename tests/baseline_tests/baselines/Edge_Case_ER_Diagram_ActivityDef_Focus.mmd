@@ -55,6 +55,10 @@ erDiagram
         UUID ObjectID
     }
 
+    "farcrycms_dmFacts" {
+        UUID ObjectID
+    }
+
     "zfarcrycore_dmFile" {
         UUID ObjectID
     }
@@ -97,6 +101,8 @@ erDiagram
     "pathway_testimonial" ||--|| "pathway_member" : memberID
     "pathway_testimonial" ||--|| "pathway_activityDef" : activityDefID
     "pathway_trackerDef" ||--|| "pathway_programme" : programmeID
+    "farcrycms_dmFacts" ||--|| "pathway_dmImage" : imageID
+    "pathway_dmNews" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmFile" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmHTML" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmInclude" ||--|| "pathway_dmImage" : teaserImage
@@ -132,6 +138,7 @@ erDiagram
     style pathway_progRole fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_testimonial fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_trackerDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style farcrycms_dmFacts fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_dmFile fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_dmHTML fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_dmInclude fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff

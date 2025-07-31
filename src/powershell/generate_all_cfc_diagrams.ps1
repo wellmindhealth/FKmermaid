@@ -1,10 +1,11 @@
 <#
 .SYNOPSIS
-    Generate all 165 diagrams (33 CFCs × 5 domain options)
+    Generate diagrams dynamically based on domains.json configuration
     
 .DESCRIPTION
-    Generates 165 ER diagrams:
-    - 33 unique CFCs × 5 domain options (provider, participant, pathway, site, all)
+    Generates ER diagrams for each component in each domain where it exists:
+    - Reads domains.json to determine which components exist in which domains
+    - Only generates diagrams for valid component-domain combinations
     - Uses JSON output to avoid console capture issues
     - Saves results to all_diagrams_results.json
     
@@ -22,8 +23,8 @@ param(
     [switch]$RefreshCFCs = $false
 )
 
-Write-Host "🚀 Generating 165 Diagrams" -ForegroundColor Cyan
-Write-Host "========================" -ForegroundColor Cyan
+Write-Host "🚀 Generating Diagrams Dynamically" -ForegroundColor Cyan
+Write-Host "================================" -ForegroundColor Cyan
 
 # Load environment variables
 function Load-EnvironmentVariables {
@@ -54,12 +55,12 @@ $envVars = Load-EnvironmentVariables
 # Path to the ER generation script
 $erScriptPath = Join-Path $PSScriptRoot "generate_erd_enhanced.ps1"
 
-# Load domains.json to get all CFCs
+# Load domains.json to get all CFCs and their domain mappings
 $domainsPath = Join-Path $PSScriptRoot "..\..\config\domains.json"
 $domains = Get-Content $domainsPath | ConvertFrom-Json
 
-# Collect all unique CFCs
-$allCfcs = @()
+# Build component-domain mapping
+$componentDomainMapping = @{}
 
 foreach ($domainName in $domains.domains.PSObject.Properties.Name) {
     $domain = $domains.domains.$domainName
@@ -73,98 +74,107 @@ foreach ($domainName in $domains.domains.PSObject.Properties.Name) {
                 "aInteract4Activities", "aInteract5Activities"
             )
             if ($cfc -notin $skipCfcs) {
-                $allCfcs += @{
-                    Name = $cfc
-                    Domain = $domainName
+                if (-not $componentDomainMapping.ContainsKey($cfc)) {
+                    $componentDomainMapping[$cfc] = @()
                 }
+                $componentDomainMapping[$cfc] += $domainName
             }
         }
     }
 }
 
-# Get unique CFC names
-$uniqueCfcNames = ($allCfcs | Select-Object -ExpandProperty Name | Sort-Object -Unique)
+# Create list of diagrams to generate
+$diagramsToGenerate = @()
 
-Write-Host "Found $($uniqueCfcNames.Count) unique CFCs after filtering." -ForegroundColor Green
+foreach ($component in $componentDomainMapping.Keys) {
+    $domainsForComponent = $componentDomainMapping[$component]
+    foreach ($domain in $domainsForComponent) {
+        $diagramsToGenerate += @{
+            Component = $component
+            Domain = $domain
+            DiagramName = "$component-$domain"
+        }
+    }
+}
 
-# Domain options
-$domainOptions = @("provider", "participant", "pathway", "site", "all")
+$totalDiagrams = $diagramsToGenerate.Count
+
+Write-Host "Found $($componentDomainMapping.Keys.Count) unique components" -ForegroundColor Green
+Write-Host "Generating $totalDiagrams diagrams (only valid component-domain combinations)" -ForegroundColor Green
 
 $diagramResults = @{
     generated = @{}
     failed = @{}
-    total = ($uniqueCfcNames.Count * $domainOptions.Count)
+    total = $totalDiagrams
     successCount = 0
     failedCount = 0
     generatedAt = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
 }
 
-Write-Host "`n📊 Generating $($diagramResults.total) diagrams..." -ForegroundColor Yellow
+Write-Host "`n📊 Generating $totalDiagrams diagrams..." -ForegroundColor Yellow
 
 $progress = 0
 
-foreach ($cfcName in $uniqueCfcNames) {
-    foreach ($domainOption in $domainOptions) {
-        $progress++
-        $percent = [math]::Round(($progress / $diagramResults.total) * 100, 1)
-        
-        $diagramName = "$cfcName-$domainOption"
-        $jsonOutputFile = Join-Path $PSScriptRoot "..\..\exports\pre_generated\json_$diagramName.json"
-        
-        Write-Host "`n📊 Progress: $progress/$($diagramResults.total) ($percent%)" -ForegroundColor Magenta
-        Write-Host "🔄 Generating: $diagramName" -ForegroundColor Blue
-        
-        $params = @{
-            lFocus = $cfcName
-            lDomains = $domainOption
-            DiagramType = "ER"
-            NoBrowser = $true
-            JsonOutputFile = $jsonOutputFile
-        }
-        
-        # Add RefreshCFCs parameter if specified
-        if ($RefreshCFCs) {
-            $params.RefreshCFCs = $true
-        }
-        
-        try {
-            # Run the ER generation script with JSON output
-            & $erScriptPath @params
-            
-            # Check if JSON file was created and read the URL
-            if (Test-Path $jsonOutputFile) {
-                $jsonContent = Get-Content $jsonOutputFile -Raw | ConvertFrom-Json
-                
-                if ($jsonContent.MermaidUrl) {
-                    $diagramResults.generated[$diagramName] = @{
-                        Focus = $cfcName
-                        Domains = $domainOption
-                        Description = "$cfcName entity in $domainOption domain"
-                        MermaidUrl = $jsonContent.MermaidUrl
-                        Status = "Success"
-                        GeneratedAt = $jsonContent.GeneratedAt
-                    }
-                    $diagramResults.successCount++
-                    Write-Host "✅ Success: $diagramName" -ForegroundColor Green
-                } else {
-                    $diagramResults.failed[$diagramName] = "No Mermaid URL in JSON output"
-                    $diagramResults.failedCount++
-                    Write-Host "❌ Failed: $diagramName - No Mermaid URL in JSON" -ForegroundColor Red
-                }
-            } else {
-                $diagramResults.failed[$diagramName] = "JSON output file not created"
-                $diagramResults.failedCount++
-                Write-Host "❌ Failed: $diagramName - JSON file not created" -ForegroundColor Red
-            }
-        } catch {
-            $diagramResults.failed[$diagramName] = $_.Exception.Message
-            $diagramResults.failedCount++
-            Write-Host "❌ Failed: $diagramName - $($_.Exception.Message)" -ForegroundColor Red
-        }
-        
-        # Small delay to prevent overwhelming the system
-        Start-Sleep -Milliseconds 100
+foreach ($diagram in $diagramsToGenerate) {
+    $progress++
+    $percent = [math]::Round(($progress / $totalDiagrams) * 100, 1)
+    
+    $diagramName = $diagram.DiagramName
+    $jsonOutputFile = Join-Path $PSScriptRoot "..\..\exports\pre_generated\json_$diagramName.json"
+    
+    Write-Host "`n📊 Progress: $progress/$totalDiagrams ($percent%)" -ForegroundColor Magenta
+    Write-Host "🔄 Generating: $diagramName" -ForegroundColor Blue
+    
+    $params = @{
+        lFocus = $diagram.Component
+        lDomains = $diagram.Domain
+        DiagramType = "ER"
+        NoBrowser = $true
+        JsonOutputFile = $jsonOutputFile
     }
+    
+    # Add RefreshCFCs parameter if specified
+    if ($RefreshCFCs) {
+        $params.RefreshCFCs = $true
+    }
+    
+    try {
+        # Run the ER generation script with JSON output
+        & $erScriptPath @params
+        
+        # Check if JSON file was created and read the URL
+        if (Test-Path $jsonOutputFile) {
+            $jsonContent = Get-Content $jsonOutputFile -Raw | ConvertFrom-Json
+            
+            if ($jsonContent.MermaidUrl) {
+                $diagramResults.generated[$diagramName] = @{
+                    Focus = $diagram.Component
+                    Domains = $diagram.Domain
+                    Description = "$($diagram.Component) entity in $($diagram.Domain) domain"
+                    MermaidUrl = $jsonContent.MermaidUrl
+                    Status = "Success"
+                    GeneratedAt = $jsonContent.GeneratedAt
+                }
+                $diagramResults.successCount++
+                Write-Host "✅ Success: $diagramName" -ForegroundColor Green
+            } else {
+                $diagramResults.failed[$diagramName] = "No Mermaid URL in JSON output"
+                $diagramResults.failedCount++
+                Write-Host "❌ Failed: $diagramName - No Mermaid URL in JSON" -ForegroundColor Red
+            }
+        } else {
+            $diagramResults.failed[$diagramName] = "JSON output file not created"
+            $diagramResults.failedCount++
+            Write-Host "❌ Failed: $diagramName - JSON file not created" -ForegroundColor Red
+        }
+    } catch {
+        $diagramResults.failed[$diagramName] = $_.Exception.Message
+        $diagramResults.failedCount++
+        Write-Host "❌ Failed: $diagramName - $($_.Exception.Message)" -ForegroundColor Red
+    }
+    
+    # Small delay to prevent overwhelming the system
+    Start-Sleep -Milliseconds 100
 }
 
 # Save results to JSON file
@@ -174,7 +184,7 @@ $diagramResults | ConvertTo-Json -Depth 10 | Set-Content -Path $resultsFile
 # Summary
 Write-Host "`n📈 Generation Complete!" -ForegroundColor Cyan
 Write-Host "=====================" -ForegroundColor Cyan
-Write-Host "Total diagrams: $($diagramResults.total)" -ForegroundColor White
+Write-Host "Total diagrams: $totalDiagrams" -ForegroundColor White
 Write-Host "Successful: $($diagramResults.successCount)" -ForegroundColor Green
 Write-Host "Failed: $($diagramResults.failedCount)" -ForegroundColor Red
 Write-Host "Results saved to: $resultsFile" -ForegroundColor Green

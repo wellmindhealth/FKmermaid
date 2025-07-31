@@ -26,7 +26,7 @@ param(
 # Import the ER generation script
 $erScriptPath = Join-Path $PSScriptRoot "..\src\powershell\generate_erd_enhanced.ps1"
 
-# Test CFCs (just 3 for quick testing)
+# Test CFCs (just 3 for quick testing - these exist in the test domains)
 $testCfcNames = @("member", "activityDef", "progRole")
 
 # Test domains (just 2 for quick testing)

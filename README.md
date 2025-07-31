@@ -719,7 +719,7 @@ The project uses a unified cache generation system to ensure all scripts work wi
 # 1. Quick testing (6 diagrams)
 .\generate_all_cfc_diagrams_test.ps1 -RefreshCFCs
 
-# 2. Full generation (165 diagrams)
+# 2. Full generation (dynamic diagrams based on domains.json)
 .\generate_all_cfc_diagrams.ps1 -RefreshCFCs
 
 # 3. Update test baselines
@@ -730,7 +730,7 @@ The project uses a unified cache generation system to ensure all scripts work wi
 ```
 
 ### **File Management:**
-- **`all_diagrams_results.json`**: Full 165 diagrams (production)
+- **`all_diagrams_results.json`**: Full diagrams (production)
 - **`all_diagrams_results_test.json`**: 6 test diagrams (development)
 - **Cleanup**: Remove old `165_diagrams_results.json` after migration
 
@@ -790,7 +790,7 @@ This script analyzes generated baseline files and updates:
 # 1. Quick test (6 diagrams)
 .\tests\generate_all_cfc_diagrams_test.ps1 -RefreshCFCs
 
-# 2. Full generation (165 diagrams)
+# 2. Full generation (dynamic diagrams based on domains.json)
 .\generate_all_cfc_diagrams.ps1 -RefreshCFCs
 
 # 3. Regenerate baselines

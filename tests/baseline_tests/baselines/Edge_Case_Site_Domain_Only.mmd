@@ -43,6 +43,18 @@ erDiagram
         UUID ObjectID
     }
 
+    "farcrycms_dmCarouselItem" {
+        UUID ObjectID
+    }
+
+    "farcrycms_dmEvent" {
+        UUID ObjectID
+    }
+
+    "farcrycms_dmFacts" {
+        UUID ObjectID
+    }
+
     "zfarcrycore_dmFile" {
         UUID ObjectID
     }
@@ -82,6 +94,10 @@ erDiagram
     "pathway_referer" ||--|| "pathway_partner" : partnerID
     "pathway_referer" ||--|| "pathway_memberGroup" : memberGroupID
     "pathway_referer" ||--|| "pathway_center" : centerID
+    "farcrycms_dmCarouselItem" ||--|| "pathway_dmImage" : imgSourceID
+    "farcrycms_dmEvent" ||--|| "pathway_dmImage" : teaserImage
+    "farcrycms_dmFacts" ||--|| "pathway_dmImage" : imageID
+    "pathway_dmNews" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmFile" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmHTML" ||--|| "pathway_dmImage" : teaserImage
     "zfarcrycore_dmInclude" ||--|| "pathway_dmImage" : teaserImage
@@ -107,7 +123,7 @@ erDiagram
     %% Entity Styling
     style pathway_dmImage fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
     style pathway_dmNavigation fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
-    style pathway_dmNews fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style pathway_dmNews fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_guide fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
@@ -115,6 +131,9 @@ erDiagram
     style pathway_partner fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_programme fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_referer fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style farcrycms_dmCarouselItem fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style farcrycms_dmEvent fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style farcrycms_dmFacts fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style zfarcrycore_dmFile fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style zfarcrycore_dmHTML fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style zfarcrycore_dmInclude fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff

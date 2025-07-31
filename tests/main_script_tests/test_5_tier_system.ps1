@@ -62,6 +62,7 @@ function Analyze-MermaidDiagram {
                 "#1963d2" { $analysis.Tiers["related"] += $entity }  # Blue tier
                 "#44517f" { $analysis.Tiers["domain_other"] += $entity }  # Gray tier
                 "#1a1a1a" { $analysis.Tiers["secondary"] += $entity }  # Black tier
+                "#8e24aa" { $analysis.Tiers["secondary"] += $entity }  # Purple tier (SSQ entities)
                 default { 
                     Write-Host "⚠️  Unknown color tier for $entity : $color" -ForegroundColor Yellow
                     $analysis.Tiers["secondary"] += $entity  # Default to secondary
@@ -100,7 +101,7 @@ Write-Host "   Tiers found: $($analysis.Tiers.Count)" -ForegroundColor Gray
 $ExpectedTiers = @{
     "focus" = @("pathway_partner", "pathway_member", "pathway_programme")  # Orange tier (#d75500)
     "domain_related" = @("pathway_activityDef", "pathway_center", "pathway_intake", "pathway_media", "pathway_memberGroup", "pathway_progRole", "pathway_referer", "zfarcrycore_dmProfile")  # Gold tier (#693a00)
-    "related" = @("pathway_ruleSelfRegistration", "pathway_dmImage", "pathway_guide", "pathway_journalDef", "pathway_memberType", "pathway_progMember", "pathway_report", "pathway_testimonial", "pathway_trackerDef", "zfarcrycore_dmFile")  # Blue tier (#1963d2)
+    "related" = @("pathway_ruleSelfRegistration", "pathway_dmImage", "pathway_guide", "pathway_journalDef", "pathway_memberType", "pathway_progMember", "pathway_report", "pathway_testimonial", "pathway_trackerDef", "zfarcrycore_dmFile", "farcrycms_farFeedback")  # Blue tier (#1963d2)
     "domain_other" = @("zfarcrycore_farGroup", "zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser")  # Blue-grey tier (#44517f)
     "secondary" = @("pathway_activity", "pathway_journal", "pathway_library", "pathway_tracker")  # Dark grey tier (#1a1a1a) - excludes SSQ entities (purple)
 }

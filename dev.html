@@ -22,22 +22,22 @@
         }
 
         /* DEV MODE INDICATOR */
-        .dev-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ff6b6b;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 0.8em;
-            font-weight: bold;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+                        .dev-indicator {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #ff6b6b;
+                    color: white;
+                    padding: 15px;
+                    border-radius: 8px;
+                    font-size: 0.8em;
+                    font-weight: bold;
+                    z-index: 100;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
 
         .container {
             max-width: 1400px;
@@ -69,7 +69,7 @@
             padding: 8px 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 12px;
+            margin-bottom: 20px;
         }
 
         .section-title {
@@ -86,12 +86,12 @@
             flex-wrap: wrap;
         }
 
-        .domain-card {
-            flex: 1;
-            min-width: 180px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
+                        .domain-card {
+                    flex: 1;
+                    min-width: 180px;
+                    padding: 10px;
+                    background: #f8f9fa;
+                    border-radius: 8px;
             border: 2px solid #e9ecef;
             border-left: 4px solid #007bff;
             cursor: pointer;
@@ -647,7 +647,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .filter-title {
@@ -1032,358 +1032,20 @@
         <!-- Filter by Domain -->
         <div class="filter-section">
             <div class="filter-title">Filter by Domain</div>
-            <div class="domain-info">
-                <div class="domain-card active" data-domain="all">
-                    <h4 title="All Domains&#10;&#10;View all components across all domains"><i class="fas fa-globe"></i>&nbsp;All Domains</h4>
-                    <p title="All Domains&#10;&#10;View all components across all domains">View all components across all domains</p>
-                </div>
-                <div class="domain-card" data-domain="provider">
-                    <h4 title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i>&nbsp;Provider Domain</h4>
-                    <p title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships">Healthcare organizations, business partnerships, and external relationships</p>
-                </div>
-                <div class="domain-card" data-domain="participant">
-                    <h4 title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i>&nbsp;Participant Domain</h4>
-                    <p title="Participant Domain&#10;&#10;User management, profiles, and participant journeys">User management, profiles, and participant journeys</p>
-                </div>
-                <div class="domain-card" data-domain="pathway">
-                    <h4 title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i>&nbsp;Pathway Domain</h4>
-                    <p title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities">Treatment pathways, content delivery, and learning activities</p>
-                </div>
-                <div class="domain-card" data-domain="site">
-                    <h4 title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i>&nbsp;Site Domain</h4>
-                    <p title="Site Domain&#10;&#10;Location management and site-specific configurations">Location management and site-specific configurations</p>
-                </div>
+            <div class="domain-info" id="dynamic-domain-filters">
+                <!-- Dynamic domain filters will be loaded here -->
             </div>
         </div>
 
         <!-- Filter by Layer -->
         <div class="info-section">
             <div class="section-title">Filter by Layer</div>
-            <div class="strata-container">
-                <div class="strata-item active strata-core" data-layer="all">
-                    <div class="strata-name" title="All Layers&#10;&#10;View all architectural layers"><i class="fas fa-th-large"></i>&nbsp;All Layers</div>
-                    <div class="strata-description" title="All Layers&#10;&#10;View all architectural layers">View all architectural layers</div>
-                </div>
-                <div class="strata-item strata-core" data-layer="core">
-                    <div class="strata-name" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</div>
-                    <div class="strata-description" title="Core Layer&#10;&#10;Foundation components and base functionality">Foundation components</div>
-                </div>
-                <div class="strata-item strata-tracking" data-layer="tracking">
-                    <div class="strata-name" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</div>
-                    <div class="strata-description" title="Tracking Layer&#10;&#10;Progress monitoring and analytics">Progress monitoring</div>
-                </div>
-                <div class="strata-item strata-programme" data-layer="programme">
-                    <div class="strata-name" title="Programme Layer&#10;&#10;Content delivery and learning management"><i class="fas fa-graduation-cap"></i>&nbsp;Programme</div>
-                    <div class="strata-description" title="Programme Layer&#10;&#10;Content delivery and learning management">Learning management</div>
-                </div>
-                <div class="strata-item strata-content" data-layer="content">
-                    <div class="strata-name" title="Content Layer&#10;&#10;Media and resource management"><i class="fas fa-file-alt"></i>&nbsp;Content</div>
-                    <div class="strata-description" title="Content Layer&#10;&#10;Media and resource management">Media & resources</div>
-                </div>
-
-                <div class="strata-item strata-admin" data-layer="admin">
-                    <div class="strata-name" title="Admin Layer&#10;&#10;Administrative and configuration tools"><i class="fas fa-cogs"></i>&nbsp;Admin</div>
-                    <div class="strata-description" title="Admin Layer&#10;&#10;Administrative and configuration tools">Configuration tools</div>
-                </div>
-                <div class="strata-item strata-resources" data-layer="resources">
-                    <div class="strata-name" title="Resources Layer&#10;&#10;Asset management and resource allocation"><i class="fas fa-database"></i>&nbsp;Resources</div>
-                    <div class="strata-description" title="Resources Layer&#10;&#10;Asset management and resource allocation">Asset management</div>
-                </div>
+            <div class="strata-container" id="dynamic-layer-filters">
+                <!-- Dynamic layer filters will be loaded here -->
             </div>
         </div>
 
-        <!-- Provider Domain Section -->
-        <div class="domain-section" data-domain="provider">
-            <div class="domain-header">
-                <h2>
-                    <div class="header-content">
-                        <i class="fas fa-hospital"></i>
-                        <span>Provider Domain</span>
-                    </div>
-                    <span class="toggle-icon">▼</span>
-                </h2>
-            </div>
-            <div class="domain-content">
-                <div class="diagrams-grid">
-                    <div class="diagram-card" data-layer="core">
-                        <div class="card-header">
-                            <div class="card-title" title="activityDef&#10;&#10;Treatment step templates defining interaction patterns, media requirements, and progression logic">
-                                activityDef
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Activity Definition</div>
-                            </div>
-                            <div class="card-description" title="activityDef&#10;&#10;Treatment step templates defining interaction patterns, media requirements, and progression logic">Treatment step templates defining interaction patterns, media requirements, and progression logic</div>
-                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('activityDef - Provider Core', 'This would show the actual Mermaid diagram for activityDef in the provider core context...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('activityDef - Provider Core', 'This would show the actual Mermaid diagram for activityDef in the provider core context...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('activityDef', 'Provider', 'Core')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="core">
-                        <div class="card-header">
-                            <div class="card-title" title="partner&#10;&#10;Healthcare organization managing participant access and program delivery across populations">
-                                partner
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Partner Organization</div>
-                            </div>
-                            <div class="card-description" title="partner&#10;&#10;Healthcare organization managing participant access and program delivery across populations">Healthcare organization managing participant access and program delivery across populations</div>
-                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('partner - Provider Core', 'This would show the actual Mermaid diagram for partner relationships...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('partner - Provider Core', 'This would show the actual Mermaid diagram for partner relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('partner', 'Provider', 'Core')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="tracking">
-                        <div class="card-header">
-                            <div class="card-title" title="providerActivity&#10;&#10;Provider activity tracking and engagement monitoring">
-                                providerActivity
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Provider Activity</div>
-                            </div>
-                            <div class="card-description" title="providerActivity&#10;&#10;Provider activity tracking and engagement monitoring">Provider activity tracking and engagement monitoring</div>
-                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('providerActivity - Provider Tracking', 'This would show the actual Mermaid diagram for provider activity tracking...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('providerActivity - Provider Tracking', 'This would show the actual Mermaid diagram for provider activity tracking...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('providerActivity', 'Provider', 'Tracking')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Participant Domain Section -->
-        <div class="domain-section" data-domain="participant">
-            <div class="domain-header">
-                <h2>
-                    <i class="fas fa-users"></i> Participant Domain
-                    <span class="toggle-icon">▼</span>
-                </h2>
-            </div>
-            <div class="domain-content">
-                <div class="diagrams-grid">
-                    <div class="diagram-card" data-layer="core">
-                        <div class="card-header">
-                            <div class="card-title" title="member&#10;&#10;Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships">
-                                member
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Member Profile</div>
-                            </div>
-                            <div class="card-description" title="member&#10;&#10;Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships">Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships</div>
-                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('member - Participant Core', 'This would show the actual Mermaid diagram for member relationships...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('member - Participant Core', 'This would show the actual Mermaid diagram for member relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('member', 'Participant', 'Core')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="tracking">
-                        <div class="card-header">
-                            <div class="card-title" title="memberProgress&#10;&#10;Participant progress tracking and milestone monitoring">
-                                memberProgress
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Member Progress</div>
-                            </div>
-                            <div class="card-description" title="memberProgress&#10;&#10;Participant progress tracking and milestone monitoring">Participant progress tracking and milestone monitoring</div>
-                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('memberProgress - Participant Tracking', 'This would show the actual Mermaid diagram for member progress tracking...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('memberProgress - Participant Tracking', 'This would show the actual Mermaid diagram for member progress tracking...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('memberProgress', 'Participant', 'Tracking')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="programme">
-                        <div class="card-header">
-                            <div class="card-title" title="progMember&#10;&#10;Active enrollment tracking participant's journey through structured treatment programs with progress monitoring">
-                                progMember
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Program Member</div>
-                            </div>
-                            <div class="card-description" title="progMember&#10;&#10;Active enrollment tracking participant's journey through structured treatment programs with progress monitoring">Active enrollment tracking participant's journey through structured treatment programs with progress monitoring</div>
-                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-programme" title="Programme Layer&#10;&#10;Content delivery and learning management"><i class="fas fa-graduation-cap"></i>&nbsp;Programme</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('progMember - Participant Programme', 'This would show the actual Mermaid diagram for progMember relationships...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('progMember - Participant Programme', 'This would show the actual Mermaid diagram for progMember relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('progMember', 'Participant', 'Programme')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pathway Domain Section -->
-        <div class="domain-section" data-domain="pathway">
-            <div class="domain-header">
-                <h2>
-                    <i class="fas fa-clipboard-list"></i> Pathway Domain
-                    <span class="toggle-icon">▼</span>
-                </h2>
-            </div>
-            <div class="domain-content">
-                <div class="diagrams-grid">
-                    <div class="diagram-card" data-layer="programme">
-                        <div class="card-header">
-                            <div class="card-title" title="programme&#10;&#10;Master treatment template containing activity structure, pacing, and lifecycle management">programme</div>
-                            <div class="card-description" title="programme&#10;&#10;Master treatment template containing activity structure, pacing, and lifecycle management">Master treatment template containing activity structure, pacing, and lifecycle management</div>
-                            <div class="domain-badge-top" title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i> Pathway</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-programme" title="Programme Layer&#10;&#10;Content delivery and learning management">Programme</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('programme - Pathway Programme', 'This would show the actual Mermaid diagram for programme structure...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('programme - Pathway Programme', 'This would show the actual Mermaid diagram for programme structure...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('programme', 'Pathway', 'Programme')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="content">
-                        <div class="card-header">
-                            <div class="card-title" title="media&#10;&#10;Therapeutic content delivery system for videos, audio, and educational materials">media</div>
-                            <div class="card-description" title="media&#10;&#10;Therapeutic content delivery system for videos, audio, and educational materials">Therapeutic content delivery system for videos, audio, and educational materials</div>
-                            <div class="domain-badge-top" title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i> Pathway</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-content" title="Content Layer&#10;&#10;Media and resource management">Content</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('media - Pathway Content', 'This would show the actual Mermaid diagram for media relationships...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('media - Pathway Content', 'This would show the actual Mermaid diagram for media relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('media', 'Pathway', 'Content')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Site Domain Section -->
-        <div class="domain-section" data-domain="site">
-            <div class="domain-header">
-                <h2>
-                    <i class="fas fa-map-marker-alt"></i> Site Domain
-                    <span class="toggle-icon">▼</span>
-                </h2>
-            </div>
-            <div class="domain-content">
-                <div class="diagrams-grid">
-                    <div class="diagram-card" data-layer="admin">
-                        <div class="card-header">
-                            <div class="card-title" title="dmNavigation&#10;&#10;Website navigation structure and menu organization for user experience architecture">dmNavigation</div>
-                            <div class="card-description" title="dmNavigation&#10;&#10;Website navigation structure and menu organization for user experience architecture">Website navigation structure and menu organization for user experience architecture</div>
-                            <div class="domain-badge-top" title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i> Site</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-admin" title="Admin Layer&#10;&#10;Administrative and configuration tools">Admin</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('dmNavigation - Site Admin', 'This would show the actual Mermaid diagram for navigation structure...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('dmNavigation - Site Admin', 'This would show the actual Mermaid diagram for navigation structure...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('dmNavigation', 'Site', 'Admin')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="resources">
-                        <div class="card-header">
-                            <div class="card-title" title="dmImage&#10;&#10;Image resource management system for visual assets and graphic content delivery">dmImage</div>
-                            <div class="card-description" title="dmImage&#10;&#10;Image resource management system for visual assets and graphic content delivery">Image resource management system for visual assets and graphic content delivery</div>
-                            <div class="domain-badge-top" title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i> Site</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-resources" title="Resources Layer&#10;&#10;Asset management and resource allocation">Resources</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('dmImage - Site Resources', 'This would show the actual Mermaid diagram for image resources...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('dmImage - Site Resources', 'This would show the actual Mermaid diagram for image resources...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('dmImage', 'Site', 'Resources')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Dynamic content will be loaded here from domains.json -->
     </div>
 
 
@@ -1430,10 +1092,10 @@
                         'The 165 diagrams file is older than domains.json. Consider regenerating: <code>./generate_all_cfc_diagrams.ps1 -RefreshCFCs</code>');
                 }
                 
-                // Check if cache is very old (more than 1 hour)
-                if (cacheAge > 60 * 60 * 1000) {
+                // Check if cache is very old (more than 1 week)
+                if (cacheAge > 7 * 24 * 60 * 60 * 1000) {
                     showWarning('Cache is old', 
-                        'The cache file is over 1 hour old. Consider refreshing: <code>./generate_cfc_cache.ps1</code>');
+                        'The cache file is over 1 week old. Consider refreshing: <code>./generate_cfc_cache.ps1</code>');
                 }
                 
             } catch (error) {
@@ -1545,7 +1207,121 @@
                 mainContainer.appendChild(domainSection);
             });
             
+            // Generate dynamic filters
+            generateDynamicFilters();
+            
             updateStats();
+        }
+        
+        // Generate dynamic domain and layer filters from domains.json data
+        function generateDynamicFilters() {
+            if (!domainsData) return;
+            
+            // Generate domain filters
+            generateDomainFilters();
+            
+            // Generate layer filters
+            generateLayerFilters();
+            
+            // Re-initialize filter event listeners for the new dynamic filters
+            initializeFilters();
+            
+            // Update stats after filters are generated
+            updateStats();
+        }
+        
+        // Generate domain filters dynamically
+        function generateDomainFilters() {
+            const domainFiltersContainer = document.getElementById('dynamic-domain-filters');
+            if (!domainFiltersContainer) return;
+            
+            // Clear existing filters
+            domainFiltersContainer.innerHTML = '';
+            
+            // Add "All Domains" filter
+            const allDomainsCard = document.createElement('div');
+            allDomainsCard.className = 'domain-card active';
+            allDomainsCard.setAttribute('data-domain', 'all');
+            allDomainsCard.innerHTML = `
+                <h4 title="All Domains&#10;&#10;View all components across all domains">
+                    <i class="fas fa-globe" style="margin-right: 8px;"></i>All Domains
+                </h4>
+                <p title="All Domains&#10;&#10;View all components across all domains">View all components across all domains</p>
+            `;
+            domainFiltersContainer.appendChild(allDomainsCard);
+            
+            // Add domain filters for each domain in domains.json
+            Object.entries(domainsData.domains).forEach(([domainKey, domainInfo]) => {
+                const domainCard = document.createElement('div');
+                domainCard.className = 'domain-card';
+                domainCard.setAttribute('data-domain', domainKey);
+                
+                const domainDisplayName = domainKey.charAt(0).toUpperCase() + domainKey.slice(1);
+                const domainIcon = getDomainIcon(domainKey);
+                
+                domainCard.innerHTML = `
+                    <h4 title="${domainDisplayName} Domain&#10;&#10;${domainInfo.description}">
+                        <i class="fas ${domainIcon}" style="margin-right: 8px;"></i>${domainDisplayName} Domain
+                    </h4>
+                    <p title="${domainDisplayName} Domain&#10;&#10;${domainInfo.description}">${domainInfo.description}</p>
+                `;
+                domainFiltersContainer.appendChild(domainCard);
+            });
+        }
+        
+        // Generate layer filters dynamically
+        function generateLayerFilters() {
+            const layerFiltersContainer = document.getElementById('dynamic-layer-filters');
+            if (!layerFiltersContainer) return;
+            
+            // Clear existing filters
+            layerFiltersContainer.innerHTML = '';
+            
+            // Collect all unique layers from all domains
+            const allLayers = new Set();
+            Object.values(domainsData.domains).forEach(domain => {
+                Object.keys(domain.entities).forEach(layer => {
+                    allLayers.add(layer);
+                });
+            });
+            
+            // Add "All Layers" filter
+            const allLayersItem = document.createElement('div');
+            allLayersItem.className = 'strata-item active strata-core';
+            allLayersItem.setAttribute('data-layer', 'all');
+            allLayersItem.innerHTML = `
+                <div class="strata-name" title="All Layers&#10;&#10;View all architectural layers">
+                    <i class="fas fa-th-large" style="margin-right: 8px;"></i>All Layers
+                </div>
+                <div class="strata-description" title="All Layers&#10;&#10;View all architectural layers">View all architectural layers</div>
+            `;
+            layerFiltersContainer.appendChild(allLayersItem);
+            
+            // Add layer filters for each unique layer
+            // Sort layers with 'core' first, then alphabetically
+            const sortedLayers = Array.from(allLayers).sort((a, b) => {
+                if (a === 'core') return -1;
+                if (b === 'core') return 1;
+                return a.localeCompare(b);
+            });
+            
+            sortedLayers.forEach(layerKey => {
+                const layerItem = document.createElement('div');
+                layerItem.className = `strata-item strata-${layerKey}`;
+                layerItem.setAttribute('data-layer', layerKey);
+                
+                const layerDisplayName = layerKey.charAt(0).toUpperCase() + layerKey.slice(1);
+                const layerIcon = getLayerIcon(layerKey);
+                const layerDescription = getLayerDescription(layerKey);
+                
+                layerItem.innerHTML = `
+                    <div class="strata-name" title="${layerDisplayName} Layer&#10;&#10;${layerDescription}">
+                        <i class="fas ${layerIcon}" style="margin-right: 8px;"></i>${layerDisplayName}
+                    </div>
+                    <div class="strata-description" title="${layerDisplayName} Layer&#10;&#10;${layerDescription}">${layerDescription}</div>
+                `;
+                layerFiltersContainer.appendChild(layerItem);
+            });
         }
         
         // Create a domain section with header and content
@@ -1652,10 +1428,10 @@
                         <div class="card-badges">
                             <div class="badge-row">
                                 <span class="badge domain-badge" title="${domainDescription}">
-                                    <i class="fas fa-globe"></i>&nbsp;${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
+                                    <i class="fas fa-globe" style="margin-right: 8px;"></i>${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
                                 </span>
                                 <span class="badge strata-badge strata-${layerKey}" title="${getLayerDescription(layerKey)}">
-                                    <i class="fas ${getLayerIcon(layerKey)}"></i>&nbsp;${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}
+                                    <i class="fas ${getLayerIcon(layerKey)}" style="margin-right: 8px;"></i>${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}
                                 </span>
                             </div>
                         </div>
@@ -1665,10 +1441,10 @@
                     <p class="card-text">${description}</p>
                     <div class="action-buttons">
                         <button class="btn btn-primary btn-sm" onclick="showModal('${componentName}', '', '${componentName}', '${domainKey}', '${layerKey}')">
-                            <i class="fas fa-project-diagram"></i>&nbsp;View Diagram
+                            <i class="fas fa-project-diagram" style="margin-right: 8px;"></i>View Diagram
                         </button>
                                                         <button class="btn btn-outline btn-sm" onclick="showComponentDetails('${componentName}', '${domainKey}', '${layerKey}')">
-                            <i class="fas fa-info-circle"></i>&nbsp;View Details
+                            <i class="fas fa-info-circle" style="margin-right: 8px;"></i>View Details
                         </button>
                     </div>
                 </div>
@@ -1840,22 +1616,25 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadAllData();
             
-            // Initialize filter event listeners and modal listeners after data is loaded
+            // Initialize modal listeners after data is loaded
             setTimeout(() => {
-                initializeFilters();
                 setupModalEventListeners();
             }, 1000);
         });
 
         function initializeFilters() {
-            // Domain filter clicks
-            document.querySelectorAll('.domain-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const domain = this.dataset.domain;
+            // Use event delegation to handle dynamically created elements
+            // This avoids the need to clone/replace elements and prevents duplicate listeners
+            
+            // Use event delegation for domain filter clicks
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.domain-card')) {
+                    const card = e.target.closest('.domain-card');
+                    const domain = card.dataset.domain;
                     
                     // Toggle active state
-                    if (this.classList.contains('active')) {
-                        this.classList.remove('active');
+                    if (card.classList.contains('active')) {
+                        card.classList.remove('active');
                         // If this was the last active domain filter, show nothing
                         const activeDomainCards = document.querySelectorAll('.domain-card.active');
                         if (activeDomainCards.length === 0) {
@@ -1865,40 +1644,56 @@
                         }
                     } else {
                         document.querySelectorAll('.domain-card').forEach(c => c.classList.remove('active'));
-                        this.classList.add('active');
+                        card.classList.add('active');
                         activeFilters.domain = domain;
                     }
                     
                     // Apply filters
                     applyFilters();
-                });
+                    
+                    // Auto-expand the domain section when domain card is clicked
+                    if (domain !== 'all') {
+                        const domainSection = document.querySelector(`[data-domain="${domain}"]`);
+                        if (domainSection) {
+                            const content = domainSection.querySelector('.domain-content');
+                            const header = domainSection.querySelector('.domain-header');
+                            const icon = header.querySelector('.toggle-icon');
+                            
+                            // Always expand the domain section when domain card is clicked
+                            content.classList.remove('collapsed');
+                            header.classList.remove('collapsed');
+                            icon.textContent = '▼';
+                        }
+                    }
+                }
             });
 
-            // Layer filter clicks (now as checkboxes - multiple selection allowed)
-            document.querySelectorAll('.strata-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const layer = this.dataset.layer;
+            // Use event delegation for layer filter clicks
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.strata-item')) {
+                    const item = e.target.closest('.strata-item');
+                    const layer = item.dataset.layer;
                     
                     // Special handling for "All Layers" button
                     if (layer === 'all') {
                         // If "All Layers" is clicked, toggle all layers
                         const allLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"])');
-                        const isAllActive = this.classList.contains('active');
+                        const isAllActive = item.classList.contains('active');
                         
                         if (isAllActive) {
                             // Deactivate all layers
                             allLayers.forEach(l => l.classList.remove('active'));
-                            this.classList.remove('active');
+                            item.classList.remove('active');
                             activeFilters.layer = 'none';
                         } else {
                             // Activate all layers
                             allLayers.forEach(l => l.classList.add('active'));
-                            this.classList.add('active');
+                            item.classList.add('active');
                             activeFilters.layer = 'all';
                         }
                     } else {
                         // Toggle individual layer (checkbox behavior)
-                        this.classList.toggle('active');
+                        item.classList.toggle('active');
                         
                         // Update "All Layers" button state based on current selection
                         const allLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"])');
@@ -1922,50 +1717,36 @@
                     
                     // Apply filters
                     applyFilters();
-                });
+                }
             });
 
-            // Domain header toggles
-            document.querySelectorAll('.domain-header').forEach(header => {
-                header.addEventListener('click', function() {
-                    const content = this.nextElementSibling;
-                    const icon = this.querySelector('.toggle-icon');
+            // Use event delegation for domain header toggles
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.domain-header')) {
+                    const header = e.target.closest('.domain-header');
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('.toggle-icon');
                     
                     content.classList.toggle('collapsed');
-                    this.classList.toggle('collapsed');
+                    header.classList.toggle('collapsed');
                     
                     if (content.classList.contains('collapsed')) {
                         icon.textContent = '▶';
                     } else {
                         icon.textContent = '▼';
                     }
-                });
+                }
             });
 
-            // Auto-expand domains when filtered
-            document.querySelectorAll('.domain-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const domain = this.dataset.domain;
-                    if (domain !== 'all') {
-                        const domainSection = document.querySelector(`[data-domain="${domain}"]`);
-                        const content = domainSection.querySelector('.domain-content');
-                        const header = domainSection.querySelector('.domain-header');
-                        const icon = header.querySelector('.toggle-icon');
-                        
-                        // Always expand the domain section when domain card is clicked
-                        content.classList.remove('collapsed');
-                        header.classList.remove('collapsed');
-                        icon.textContent = '▼';
-                    }
-                });
-            });
+            // Auto-expand domains when filtered (handled by the domain card click event above)
+            // The auto-expand logic is now integrated into the domain card click handler
         }
 
         function applyFilters() {
             const diagramCards = document.querySelectorAll('.diagram-card');
             
             diagramCards.forEach(card => {
-                const cardDomain = card.closest('.domain-section').dataset.domain;
+                const cardDomain = card.dataset.domain;
                 const cardLayer = card.dataset.layer;
                 
                 // If domain filter is set to 'none', show nothing
@@ -2074,6 +1855,56 @@
 
 
 
+        function getDomainIcon(domain) {
+            const domainIcons = {
+                'provider': 'fa-hospital',
+                'participant': 'fa-users', 
+                'pathway': 'fa-clipboard-list',
+                'site': 'fa-map-marker-alt',
+                'all': 'fa-globe'
+            };
+            return domainIcons[domain] || 'fa-question';
+        }
+        
+        function getLayerIcon(layer) {
+            const layerIcons = {
+                'core': 'fa-cube',
+                'tracking': 'fa-chart-line',
+                'programme': 'fa-graduation-cap',
+                'content': 'fa-file-alt',
+                'flow': 'fa-project-diagram',
+                'admin': 'fa-cogs',
+                'resources': 'fa-database',
+                'all': 'fa-th-large'
+            };
+            return layerIcons[layer] || 'fa-question';
+        }
+        
+        function getDomainColor(domain) {
+            const domainColors = {
+                'provider': '#e3f2fd',
+                'participant': '#e3f2fd', 
+                'pathway': '#e3f2fd',
+                'site': '#e3f2fd',
+                'all': '#e3f2fd'
+            };
+            return domainColors[domain] || '#e3f2fd';
+        }
+        
+        function getLayerColor(layer) {
+            const layerColors = {
+                'core': '#6f42c1',
+                'tracking': '#28a745',
+                'programme': '#ffc107',
+                'content': '#dc3545',
+                'flow': '#6f42c1',
+                'admin': '#fd7e14',
+                'resources': '#20c997',
+                'all': '#f3e5f5'
+            };
+            return layerColors[layer] || '#f3e5f5';
+        }
+        
         function showComponentDetails(componentName, domain, layer) {
             // Get component data from diagrams data
             const diagramsData = window.diagramsData;
@@ -2182,7 +2013,15 @@
             
             // Set modal content
             document.getElementById('detailsModalBody').innerHTML = `
-                <div class="component-details">
+                <div class="component-details" style="position: relative;">
+                    <div style="position: absolute; top: 0; right: 0; display: flex; gap: 8px; align-items: center;">
+                        <span style="background: ${getDomainColor(domain)}; color: #1976d2; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                            <i class="fas ${getDomainIcon(domain)}"></i> ${componentData.domain}
+                        </span>
+                        <span style="background: ${getLayerColor(layer)}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                            <i class="fas ${getLayerIcon(layer)}"></i> ${componentData.layer}
+                        </span>
+                    </div>
                     <div class="detail-section">
                         <h3>${componentData.displayName}</h3>
                         <p>${componentData.hint || '*No hint/description available from CFC metadata*'}</p>

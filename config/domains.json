@@ -20,8 +20,7 @@
       "description": "Pathway/Content Domain - Content structure and flow",
       "entities": {
         "core": ["programme", "progRole", "activityDef"],
-        "content": ["media", "defaultMediaID", "aCuePointActivities", "aMediaIDs", "guide"],
-        "flow": ["onEndID", "aCuePointActivities", "aInteract1Activities", "aInteract2Activities", "aInteract3Activities", "aInteract4Activities", "aInteract5Activities"]
+        "content": ["media", "defaultMediaID", "aCuePointActivities", "aMediaIDs", "guide"]
       }
     },
     "site": {
