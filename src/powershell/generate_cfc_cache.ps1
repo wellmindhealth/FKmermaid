@@ -23,6 +23,70 @@ if (Test-Path $configFile) {
     exit 1
 }
 
+# Function to format description with proper line breaks
+function Format-Description {
+    param([string]$rawDescription)
+    
+    # Split by common section headers
+    $sections = @()
+    $currentSection = ""
+    $lines = $rawDescription -split "`n"
+    
+    foreach ($line in $lines) {
+        $trimmedLine = $line.Trim()
+        
+        # Check if this is a section header (ends with colon and is followed by content)
+        if ($trimmedLine -match '^([^:]+):\s*$') {
+            # If we have accumulated content, save the previous section
+            if ($currentSection.Trim()) {
+                $sections += $currentSection.Trim()
+            }
+            # Start new section with the header
+            $currentSection = $trimmedLine + "`n"
+        } else {
+            # Add line to current section
+            $currentSection += $trimmedLine + "`n"
+        }
+    }
+    
+    # Add the last section
+    if ($currentSection.Trim()) {
+        $sections += $currentSection.Trim()
+    }
+    
+    # If no sections found, try to split by common patterns
+    if ($sections.Count -eq 0) {
+        # Look for common section patterns
+        $patterns = @(
+            'Business Context:',
+            'Technical Role:',
+            'Key Relationships:',
+            'Clinical Context:',
+            'Administrative Context:',
+            'Data Management:',
+            'Security Considerations:',
+            'Integration Points:'
+        )
+        
+        $formatted = $rawDescription
+        foreach ($pattern in $patterns) {
+            # Replace pattern with line break + pattern
+            $formatted = $formatted -replace "($pattern)", "`n`n$1"
+        }
+        
+        # Clean up extra whitespace
+        $formatted = $formatted -replace "`n`n`n+", "`n`n"
+        $formatted = $formatted.Trim()
+        
+        return $formatted
+    }
+    
+    # Join sections with double line breaks
+    $formatted = $sections -join "`n`n"
+    
+    return $formatted
+}
+
 # Function to extract component metadata from CFC content
 function Get-ComponentMetadata {
     param(
@@ -64,7 +128,11 @@ function Get-ComponentMetadata {
     
     # Extract @@Description from HTML comments (multi-line)
     if ($content -match '<!---\s*@@Description:\s*([\s\S]*?)--->') {
-        $metadata.description = $matches[1].Trim()
+        $rawDescription = $matches[1].Trim()
+        
+        # Format the description with proper line breaks
+        $formattedDescription = Format-Description -rawDescription $rawDescription
+        $metadata.description = $formattedDescription
     }
     
     # Extract displayname from cfcomponent tag

@@ -22,22 +22,22 @@
         }
 
         /* DEV MODE INDICATOR */
-        .dev-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ff6b6b;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 0.8em;
-            font-weight: bold;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+                        .dev-indicator {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #ff6b6b;
+                    color: white;
+                    padding: 15px;
+                    border-radius: 8px;
+                    font-size: 0.8em;
+                    font-weight: bold;
+                    z-index: 100;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
 
         .container {
             max-width: 1400px;
@@ -69,7 +69,7 @@
             padding: 8px 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 12px;
+            margin-bottom: 25px;
         }
 
         .section-title {
@@ -86,12 +86,12 @@
             flex-wrap: wrap;
         }
 
-        .domain-card {
-            flex: 1;
-            min-width: 180px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
+                        .domain-card {
+                    flex: 1;
+                    min-width: 180px;
+                    padding: 10px;
+                    background: #f8f9fa;
+                    border-radius: 8px;
             border: 2px solid #e9ecef;
             border-left: 4px solid #007bff;
             cursor: pointer;
@@ -118,13 +118,11 @@
             color: #2c3e50;
             margin-bottom: 8px;
             font-size: 1.1em;
-            cursor: help;
         }
 
         .domain-card p {
             color: #6c757d;
             font-size: 0.9em;
-            cursor: help;
         }
 
         .strata-container {
@@ -231,13 +229,11 @@
             font-weight: 600;
             margin-bottom: 3px;
             font-size: 0.9em;
-            cursor: help;
         }
 
         .strata-description {
             font-size: 0.8em;
             color: #6c757d;
-            cursor: help;
         }
 
         .stats {
@@ -264,13 +260,11 @@
             font-size: 1.4em;
             font-weight: 600;
             color: #1976d2;
-            cursor: help;
         }
 
         .stat-label {
             font-size: 0.8em;
             color: #5f6368;
-            cursor: help;
         }
 
         /* Domain-specific sections */
@@ -284,13 +278,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 0;
-            cursor: pointer;
-            transition: all 0.2s;
             border-left: 4px solid #007bff;
-        }
-
-        .domain-header:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
         .domain-header h2 {
@@ -299,7 +287,6 @@
             font-size: 1.2em;
             display: flex;
             align-items: center;
-            justify-content: space-between;
             gap: 12px;
         }
 
@@ -309,32 +296,12 @@
             gap: 8px;
         }
 
-        .domain-header .toggle-icon {
-            font-size: 1.2em;
-            transition: transform 0.2s;
-        }
-
-        .domain-header.collapsed .toggle-icon {
-            transform: rotate(-90deg);
-        }
-
         .domain-content {
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             overflow: hidden;
-            transition: all 0.3s ease;
             margin-top: 0;
-            max-height: 2000px;
-            opacity: 1;
-        }
-
-        .domain-content.collapsed {
-            max-height: 0;
-            opacity: 0;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
         }
 
         .diagrams-grid {
@@ -388,7 +355,6 @@
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 4px;
-            cursor: help;
             line-height: 1.3;
         }
 
@@ -403,7 +369,6 @@
             color: #6c757d;
             font-size: 0.95em;
             line-height: 1.5;
-            cursor: help;
         }
 
         .card-badges {
@@ -425,7 +390,6 @@
             border-radius: 3px;
             font-size: 0.75em;
             font-weight: 500;
-            cursor: help;
             position: relative;
             white-space: nowrap;
         }
@@ -610,48 +574,19 @@
             cursor: help;
         }
 
-        /* Tooltip styles */
-        .badge[title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            max-width: 250px;
-            line-height: 1.4;
-            white-space: pre-line;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            text-align: left;
-        }
 
-        .badge[title]:hover::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-top-color: #333;
-            z-index: 1000;
-        }
 
         /* Filter section */
         .filter-section {
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .filter-title {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #2c3e50;
             font-size: 1.2em;
             font-weight: 600;
@@ -686,12 +621,11 @@
         }
 
         .modal-header {
+            padding: 20px 25px 15px;
+            border-bottom: 1px solid #e9ecef;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #e9ecef;
-            padding-bottom: 12px;
+            align-items: flex-end;
         }
 
         .modal-title {
@@ -746,7 +680,7 @@
         /* Details Modal - Smaller */
         .modal.details-modal .modal-content {
             max-width: 900px;
-            max-height: 80vh;
+            max-height: calc(80vh + 100px);
         }
         
         /* Diagram Modal - As large as possible */
@@ -834,10 +768,14 @@
         }
 
         .long-description p {
-            margin: 0;
+            margin: 0 0 10px 0;
             color: #495057;
-            line-height: 1.6;
+            line-height: 1.4;
             font-size: 0.95em;
+        }
+        
+        .long-description p:last-child {
+            margin-bottom: 0;
         }
 
         /* Modal Styles */
@@ -911,85 +849,7 @@
             flex: 1;
         }
 
-        /* Enhanced tooltip styles */
-        .badge[title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            max-width: 250px;
-            line-height: 1.4;
-            white-space: pre-line;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            text-align: left;
-            pointer-events: none;
-        }
 
-        .badge[title]:hover::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-top-color: #333;
-            z-index: 1000;
-            pointer-events: none;
-        }
-
-        /* General tooltip styles for non-badge elements */
-        .domain-card h4[title]:hover::after,
-        .domain-card p[title]:hover::after,
-        .strata-name[title]:hover::after,
-        .strata-description[title]:hover::after,
-        .card-title[title]:hover::after,
-        .card-description[title]:hover::after,
-        .stat-number[title]:hover::after,
-        .stat-label[title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            max-width: 250px;
-            line-height: 1.4;
-            white-space: pre-line;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            text-align: left;
-            pointer-events: none;
-        }
-
-        .domain-card h4[title]:hover::before,
-        .domain-card p[title]:hover::before,
-        .strata-name[title]:hover::before,
-        .strata-description[title]:hover::before,
-        .card-title[title]:hover::before,
-        .card-description[title]:hover::before,
-        .stat-number[title]:hover::before,
-        .stat-label[title]:hover::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-top-color: #333;
-            z-index: 1000;
-            pointer-events: none;
-        }
 
         /* DEV MODE STYLES - Add your experimental styles here */
         .dev-experiment {
@@ -1012,378 +872,37 @@
                 <div class="stat-label" style="font-size: 0.7em; color: #6c757d; margin-bottom: 15px;">Interactive Entity Relationship Explorer</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="domains-count" title="Total number of architectural domains">4</div>
-                <div class="stat-label" title="Total number of architectural domains">Domains</div>
+                <div class="stat-number" id="domains-count">4</div>
+                <div class="stat-label">Domains</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="layers-count" title="Total number of architectural layers">7</div>
-                <div class="stat-label" title="Total number of architectural layers">Layers</div>
+                <div class="stat-number" id="layers-count">7</div>
+                <div class="stat-label">Active Layers</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="components-count" title="Number of visible components based on current filters">0</div>
-                <div class="stat-label" title="Number of visible components based on current filters">Components</div>
+                <div class="stat-number" id="components-count">0</div>
+                <div class="stat-label">Components</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="diagrams-count" title="Total number of available diagrams">0</div>
-                <div class="stat-label" title="Total number of available diagrams">Diagrams</div>
+                <div class="stat-number" id="diagrams-count">0</div>
+                <div class="stat-label">Diagrams</div>
             </div>
         </div>
 
-        <!-- Filter by Domain -->
+        <!-- Filter Controls -->
         <div class="filter-section">
             <div class="filter-title">Filter by Domain</div>
-            <div class="domain-info">
-                <div class="domain-card active" data-domain="all">
-                    <h4 title="All Domains&#10;&#10;View all components across all domains"><i class="fas fa-globe"></i>&nbsp;All Domains</h4>
-                    <p title="All Domains&#10;&#10;View all components across all domains">View all components across all domains</p>
-                </div>
-                <div class="domain-card" data-domain="provider">
-                    <h4 title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i>&nbsp;Provider Domain</h4>
-                    <p title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships">Healthcare organizations, business partnerships, and external relationships</p>
-                </div>
-                <div class="domain-card" data-domain="participant">
-                    <h4 title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i>&nbsp;Participant Domain</h4>
-                    <p title="Participant Domain&#10;&#10;User management, profiles, and participant journeys">User management, profiles, and participant journeys</p>
-                </div>
-                <div class="domain-card" data-domain="pathway">
-                    <h4 title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i>&nbsp;Pathway Domain</h4>
-                    <p title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities">Treatment pathways, content delivery, and learning activities</p>
-                </div>
-                <div class="domain-card" data-domain="site">
-                    <h4 title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i>&nbsp;Site Domain</h4>
-                    <p title="Site Domain&#10;&#10;Location management and site-specific configurations">Location management and site-specific configurations</p>
-                </div>
+            <div class="domain-info" id="dynamic-domain-filters">
+                <!-- Dynamic domain filters will be loaded here -->
+            </div>
+            
+            <div class="filter-title" style="margin-top: 20px;">Filter by Layer</div>
+            <div class="strata-container" id="dynamic-layer-filters">
+                <!-- Dynamic layer filters will be loaded here -->
             </div>
         </div>
 
-        <!-- Filter by Layer -->
-        <div class="info-section">
-            <div class="section-title">Filter by Layer</div>
-            <div class="strata-container">
-                <div class="strata-item active strata-core" data-layer="all">
-                    <div class="strata-name" title="All Layers&#10;&#10;View all architectural layers"><i class="fas fa-th-large"></i>&nbsp;All Layers</div>
-                    <div class="strata-description" title="All Layers&#10;&#10;View all architectural layers">View all architectural layers</div>
-                </div>
-                <div class="strata-item strata-core" data-layer="core">
-                    <div class="strata-name" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</div>
-                    <div class="strata-description" title="Core Layer&#10;&#10;Foundation components and base functionality">Foundation components</div>
-                </div>
-                <div class="strata-item strata-tracking" data-layer="tracking">
-                    <div class="strata-name" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</div>
-                    <div class="strata-description" title="Tracking Layer&#10;&#10;Progress monitoring and analytics">Progress monitoring</div>
-                </div>
-                <div class="strata-item strata-programme" data-layer="programme">
-                    <div class="strata-name" title="Programme Layer&#10;&#10;Content delivery and learning management"><i class="fas fa-graduation-cap"></i>&nbsp;Programme</div>
-                    <div class="strata-description" title="Programme Layer&#10;&#10;Content delivery and learning management">Learning management</div>
-                </div>
-                <div class="strata-item strata-content" data-layer="content">
-                    <div class="strata-name" title="Content Layer&#10;&#10;Media and resource management"><i class="fas fa-file-alt"></i>&nbsp;Content</div>
-                    <div class="strata-description" title="Content Layer&#10;&#10;Media and resource management">Media & resources</div>
-                </div>
-
-                <div class="strata-item strata-admin" data-layer="admin">
-                    <div class="strata-name" title="Admin Layer&#10;&#10;Administrative and configuration tools"><i class="fas fa-cogs"></i>&nbsp;Admin</div>
-                    <div class="strata-description" title="Admin Layer&#10;&#10;Administrative and configuration tools">Configuration tools</div>
-                </div>
-                <div class="strata-item strata-resources" data-layer="resources">
-                    <div class="strata-name" title="Resources Layer&#10;&#10;Asset management and resource allocation"><i class="fas fa-database"></i>&nbsp;Resources</div>
-                    <div class="strata-description" title="Resources Layer&#10;&#10;Asset management and resource allocation">Asset management</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Provider Domain Section -->
-        <div class="domain-section" data-domain="provider">
-            <div class="domain-header">
-                <h2>
-                    <div class="header-content">
-                        <i class="fas fa-hospital"></i>
-                        <span>Provider Domain</span>
-                    </div>
-                    <span class="toggle-icon">▼</span>
-                </h2>
-            </div>
-            <div class="domain-content">
-                <div class="diagrams-grid">
-                    <div class="diagram-card" data-layer="core">
-                        <div class="card-header">
-                            <div class="card-title" title="activityDef&#10;&#10;Treatment step templates defining interaction patterns, media requirements, and progression logic">
-                                activityDef
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Activity Definition</div>
-                            </div>
-                            <div class="card-description" title="activityDef&#10;&#10;Treatment step templates defining interaction patterns, media requirements, and progression logic">Treatment step templates defining interaction patterns, media requirements, and progression logic</div>
-                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('activityDef - Provider Core', 'This would show the actual Mermaid diagram for activityDef in the provider core context...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('activityDef - Provider Core', 'This would show the actual Mermaid diagram for activityDef in the provider core context...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('activityDef', 'Provider', 'Core')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="core">
-                        <div class="card-header">
-                            <div class="card-title" title="partner&#10;&#10;Healthcare organization managing participant access and program delivery across populations">
-                                partner
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Partner Organization</div>
-                            </div>
-                            <div class="card-description" title="partner&#10;&#10;Healthcare organization managing participant access and program delivery across populations">Healthcare organization managing participant access and program delivery across populations</div>
-                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('partner - Provider Core', 'This would show the actual Mermaid diagram for partner relationships...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('partner - Provider Core', 'This would show the actual Mermaid diagram for partner relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('partner', 'Provider', 'Core')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="tracking">
-                        <div class="card-header">
-                            <div class="card-title" title="providerActivity&#10;&#10;Provider activity tracking and engagement monitoring">
-                                providerActivity
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Provider Activity</div>
-                            </div>
-                            <div class="card-description" title="providerActivity&#10;&#10;Provider activity tracking and engagement monitoring">Provider activity tracking and engagement monitoring</div>
-                            <div class="domain-badge-top" title="Provider Domain&#10;&#10;Healthcare organizations, business partnerships, and external relationships"><i class="fas fa-hospital"></i> Provider</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('providerActivity - Provider Tracking', 'This would show the actual Mermaid diagram for provider activity tracking...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('providerActivity - Provider Tracking', 'This would show the actual Mermaid diagram for provider activity tracking...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('providerActivity', 'Provider', 'Tracking')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Participant Domain Section -->
-        <div class="domain-section" data-domain="participant">
-            <div class="domain-header">
-                <h2>
-                    <i class="fas fa-users"></i> Participant Domain
-                    <span class="toggle-icon">▼</span>
-                </h2>
-            </div>
-            <div class="domain-content">
-                <div class="diagrams-grid">
-                    <div class="diagram-card" data-layer="core">
-                        <div class="card-header">
-                            <div class="card-title" title="member&#10;&#10;Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships">
-                                member
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Member Profile</div>
-                            </div>
-                            <div class="card-description" title="member&#10;&#10;Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships">Central participant record connecting individuals to digital therapeutic ecosystem with HCP hierarchy relationships</div>
-                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-core" title="Core Layer&#10;&#10;Foundation components and base functionality"><i class="fas fa-cube"></i>&nbsp;Core</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('member - Participant Core', 'This would show the actual Mermaid diagram for member relationships...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('member - Participant Core', 'This would show the actual Mermaid diagram for member relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('member', 'Participant', 'Core')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="tracking">
-                        <div class="card-header">
-                            <div class="card-title" title="memberProgress&#10;&#10;Participant progress tracking and milestone monitoring">
-                                memberProgress
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Member Progress</div>
-                            </div>
-                            <div class="card-description" title="memberProgress&#10;&#10;Participant progress tracking and milestone monitoring">Participant progress tracking and milestone monitoring</div>
-                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-tracking" title="Tracking Layer&#10;&#10;Progress monitoring and analytics"><i class="fas fa-chart-line"></i>&nbsp;Tracking</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('memberProgress - Participant Tracking', 'This would show the actual Mermaid diagram for member progress tracking...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('memberProgress - Participant Tracking', 'This would show the actual Mermaid diagram for member progress tracking...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('memberProgress', 'Participant', 'Tracking')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="programme">
-                        <div class="card-header">
-                            <div class="card-title" title="progMember&#10;&#10;Active enrollment tracking participant's journey through structured treatment programs with progress monitoring">
-                                progMember
-                                <div style="font-weight: 600; color: #007bff; font-size: 0.9em; margin-top: 4px;">Program Member</div>
-                            </div>
-                            <div class="card-description" title="progMember&#10;&#10;Active enrollment tracking participant's journey through structured treatment programs with progress monitoring">Active enrollment tracking participant's journey through structured treatment programs with progress monitoring</div>
-                            <div class="domain-badge-top" title="Participant Domain&#10;&#10;User management, profiles, and participant journeys"><i class="fas fa-users"></i> Participant</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-programme" title="Programme Layer&#10;&#10;Content delivery and learning management"><i class="fas fa-graduation-cap"></i>&nbsp;Programme</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('progMember - Participant Programme', 'This would show the actual Mermaid diagram for progMember relationships...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('progMember - Participant Programme', 'This would show the actual Mermaid diagram for progMember relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('progMember', 'Participant', 'Programme')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pathway Domain Section -->
-        <div class="domain-section" data-domain="pathway">
-            <div class="domain-header">
-                <h2>
-                    <i class="fas fa-clipboard-list"></i> Pathway Domain
-                    <span class="toggle-icon">▼</span>
-                </h2>
-            </div>
-            <div class="domain-content">
-                <div class="diagrams-grid">
-                    <div class="diagram-card" data-layer="programme">
-                        <div class="card-header">
-                            <div class="card-title" title="programme&#10;&#10;Master treatment template containing activity structure, pacing, and lifecycle management">programme</div>
-                            <div class="card-description" title="programme&#10;&#10;Master treatment template containing activity structure, pacing, and lifecycle management">Master treatment template containing activity structure, pacing, and lifecycle management</div>
-                            <div class="domain-badge-top" title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i> Pathway</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-programme" title="Programme Layer&#10;&#10;Content delivery and learning management">Programme</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('programme - Pathway Programme', 'This would show the actual Mermaid diagram for programme structure...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('programme - Pathway Programme', 'This would show the actual Mermaid diagram for programme structure...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('programme', 'Pathway', 'Programme')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="content">
-                        <div class="card-header">
-                            <div class="card-title" title="media&#10;&#10;Therapeutic content delivery system for videos, audio, and educational materials">media</div>
-                            <div class="card-description" title="media&#10;&#10;Therapeutic content delivery system for videos, audio, and educational materials">Therapeutic content delivery system for videos, audio, and educational materials</div>
-                            <div class="domain-badge-top" title="Pathway Domain&#10;&#10;Treatment pathways, content delivery, and learning activities"><i class="fas fa-clipboard-list"></i> Pathway</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-content" title="Content Layer&#10;&#10;Media and resource management">Content</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('media - Pathway Content', 'This would show the actual Mermaid diagram for media relationships...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('media - Pathway Content', 'This would show the actual Mermaid diagram for media relationships...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('media', 'Pathway', 'Content')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Site Domain Section -->
-        <div class="domain-section" data-domain="site">
-            <div class="domain-header">
-                <h2>
-                    <i class="fas fa-map-marker-alt"></i> Site Domain
-                    <span class="toggle-icon">▼</span>
-                </h2>
-            </div>
-            <div class="domain-content">
-                <div class="diagrams-grid">
-                    <div class="diagram-card" data-layer="admin">
-                        <div class="card-header">
-                            <div class="card-title" title="dmNavigation&#10;&#10;Website navigation structure and menu organization for user experience architecture">dmNavigation</div>
-                            <div class="card-description" title="dmNavigation&#10;&#10;Website navigation structure and menu organization for user experience architecture">Website navigation structure and menu organization for user experience architecture</div>
-                            <div class="domain-badge-top" title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i> Site</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-admin" title="Admin Layer&#10;&#10;Administrative and configuration tools">Admin</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('dmNavigation - Site Admin', 'This would show the actual Mermaid diagram for navigation structure...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('dmNavigation - Site Admin', 'This would show the actual Mermaid diagram for navigation structure...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('dmNavigation', 'Site', 'Admin')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagram-card" data-layer="resources">
-                        <div class="card-header">
-                            <div class="card-title" title="dmImage&#10;&#10;Image resource management system for visual assets and graphic content delivery">dmImage</div>
-                            <div class="card-description" title="dmImage&#10;&#10;Image resource management system for visual assets and graphic content delivery">Image resource management system for visual assets and graphic content delivery</div>
-                            <div class="domain-badge-top" title="Site Domain&#10;&#10;Location management and site-specific configurations"><i class="fas fa-map-marker-alt"></i> Site</div>
-                            <div class="badges-container">
-                                <span class="badge strata-badge strata-resources" title="Resources Layer&#10;&#10;Asset management and resource allocation">Resources</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="preview-container">
-                                <div class="preview-image" onclick="showModal('dmImage - Site Resources', 'This would show the actual Mermaid diagram for image resources...')">
-                                    <i class="fas fa-chart-network"></i> ER Diagram Preview
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <a href="#" class="btn btn-primary" onclick="showModal('dmImage - Site Resources', 'This would show the actual Mermaid diagram for image resources...')"><i class="fas fa-chart-network"></i> View Diagram</a>
-                                <a href="#" class="btn btn-outline" onclick="showComponentDetails('dmImage', 'Site', 'Resources')"><i class="fas fa-info-circle"></i> View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Dynamic content will be loaded here from domains.json -->
     </div>
 
 
@@ -1399,6 +918,86 @@
         let domainsData = null;
         let cfcCacheData = null;
         
+        // Smart detection for cache freshness
+        async function checkCacheFreshness() {
+            try {
+                // Get file timestamps
+                const [cacheResponse, domainsResponse, diagramsResponse] = await Promise.all([
+                    fetch('config/cfc_cache.json', { method: 'HEAD' }),
+                    fetch('config/domains.json', { method: 'HEAD' }),
+                    fetch('config/all_diagrams_results.json', { method: 'HEAD' })
+                ]);
+                
+                const cacheLastModified = new Date(cacheResponse.headers.get('last-modified'));
+                const domainsLastModified = new Date(domainsResponse.headers.get('last-modified'));
+                const diagramsLastModified = new Date(diagramsResponse.headers.get('last-modified'));
+                
+                const now = new Date();
+                const cacheAge = now - cacheLastModified;
+                const domainsAge = now - domainsLastModified;
+                const diagramsAge = now - diagramsLastModified;
+                
+                // Check if cache is older than domains.json (suggests CFCs might have changed)
+                if (cacheLastModified < domainsLastModified) {
+                    showWarning('Cache may be outdated', 
+                        'The cache file is older than domains.json. Consider running cache refresh: <code>./generate_cfc_cache.ps1</code>');
+                }
+                
+                // Check if 165 diagrams are older than domains.json
+                if (diagramsLastModified < domainsLastModified) {
+                    showWarning('Diagrams may be outdated', 
+                        'The 165 diagrams file is older than domains.json. Consider regenerating: <code>./generate_all_cfc_diagrams.ps1 -RefreshCFCs</code>');
+                }
+                
+                // Check if cache is very old (more than 1 week)
+                if (cacheAge > 7 * 24 * 60 * 60 * 1000) {
+                    showWarning('Cache is old', 
+                        'The cache file is over 1 week old. Consider refreshing: <code>./generate_cfc_cache.ps1</code>');
+                }
+                
+            } catch (error) {
+                console.warn('Could not check cache freshness:', error);
+            }
+        }
+        
+        // Show warning message
+        function showWarning(title, message) {
+            const warningDiv = document.createElement('div');
+            warningDiv.className = 'cache-warning';
+            warningDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                border-radius: 8px;
+                padding: 15px;
+                max-width: 500px;
+                z-index: 1000;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            `;
+            warningDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <i class="fas fa-exclamation-triangle" style="color: #856404;"></i>
+                    <strong style="color: #856404;">${title}</strong>
+                    <button onclick="this.parentElement.parentElement.remove()" style="margin-left: auto; background: none; border: none; font-size: 18px; cursor: pointer; color: #856404;">×</button>
+                </div>
+                <div style="color: #856404; font-size: 14px; line-height: 1.4;">
+                    ${message}
+                </div>
+            `;
+            document.body.appendChild(warningDiv);
+            
+            // Auto-remove after 30 seconds
+            setTimeout(() => {
+                if (warningDiv.parentElement) {
+                    warningDiv.remove();
+                }
+            }, 30000);
+        }
+        
         // Load all data files
         async function loadAllData() {
             try {
@@ -1408,7 +1007,7 @@
                 // Load all three files
                 const [domainsResponse, diagramsResponse, cacheResponse] = await Promise.all([
                     fetch(`config/domains.json?t=${timestamp}`),
-                    fetch(`config/165_diagrams_results.json?t=${timestamp}`),
+                    fetch(`config/all_diagrams_results.json?t=${timestamp}`),
                     fetch(`config/cfc_cache.json?t=${timestamp}`)
                 ]);
                 
@@ -1428,6 +1027,9 @@
                 
                 // Generate cards once all data is loaded
                 generateCardsFromRealData();
+                
+                // Check cache freshness after loading
+                checkCacheFreshness();
             } catch (error) {
                 console.error('Error loading data files:', error);
                 // No fallback - we want to see the error!
@@ -1462,7 +1064,121 @@
                 mainContainer.appendChild(domainSection);
             });
             
+            // Generate dynamic filters
+            generateDynamicFilters();
+            
             updateStats();
+        }
+        
+        // Generate dynamic domain and layer filters from domains.json data
+        function generateDynamicFilters() {
+            if (!domainsData) return;
+            
+            // Generate domain filters
+            generateDomainFilters();
+            
+            // Generate layer filters
+            generateLayerFilters();
+            
+            // Re-initialize filter event listeners for the new dynamic filters
+            initializeFilters();
+            
+            // Update stats after filters are generated
+            updateStats();
+        }
+        
+        // Generate domain filters dynamically
+        function generateDomainFilters() {
+            const domainFiltersContainer = document.getElementById('dynamic-domain-filters');
+            if (!domainFiltersContainer) return;
+            
+            // Clear existing filters
+            domainFiltersContainer.innerHTML = '';
+            
+            // Add "All Domains" filter
+            const allDomainsCard = document.createElement('div');
+            allDomainsCard.className = 'domain-card active';
+            allDomainsCard.setAttribute('data-domain', 'all');
+            allDomainsCard.innerHTML = `
+                <h4>
+                    <i class="fas fa-globe" style="margin-right: 8px;"></i>All Domains
+                </h4>
+                <p>View all components across all domains</p>
+            `;
+            domainFiltersContainer.appendChild(allDomainsCard);
+            
+            // Add domain filters for each domain in domains.json
+            Object.entries(domainsData.domains).forEach(([domainKey, domainInfo]) => {
+                const domainCard = document.createElement('div');
+                domainCard.className = 'domain-card';
+                domainCard.setAttribute('data-domain', domainKey);
+                
+                const domainDisplayName = domainKey.charAt(0).toUpperCase() + domainKey.slice(1);
+                const domainIcon = getDomainIcon(domainKey);
+                
+                domainCard.innerHTML = `
+                    <h4>
+                        <i class="fas ${domainIcon}" style="margin-right: 8px;"></i>${domainDisplayName} Domain
+                    </h4>
+                    <p>${domainInfo.description}</p>
+                `;
+                domainFiltersContainer.appendChild(domainCard);
+            });
+        }
+        
+        // Generate layer filters dynamically
+        function generateLayerFilters() {
+            const layerFiltersContainer = document.getElementById('dynamic-layer-filters');
+            if (!layerFiltersContainer) return;
+            
+            // Clear existing filters
+            layerFiltersContainer.innerHTML = '';
+            
+            // Collect all unique layers from all domains
+            const allLayers = new Set();
+            Object.values(domainsData.domains).forEach(domain => {
+                Object.keys(domain.entities).forEach(layer => {
+                    allLayers.add(layer);
+                });
+            });
+            
+            // Add "All Layers" filter
+            const allLayersItem = document.createElement('div');
+            allLayersItem.className = 'strata-item active strata-core';
+            allLayersItem.setAttribute('data-layer', 'all');
+            allLayersItem.innerHTML = `
+                <div class="strata-name">
+                    <i class="fas fa-th-large" style="margin-right: 8px;"></i>All Layers
+                </div>
+                <div class="strata-description">View all architectural layers</div>
+            `;
+            layerFiltersContainer.appendChild(allLayersItem);
+            
+            // Add layer filters for each unique layer
+            // Sort layers with 'core' first, then alphabetically
+            const sortedLayers = Array.from(allLayers).sort((a, b) => {
+                if (a === 'core') return -1;
+                if (b === 'core') return 1;
+                return a.localeCompare(b);
+            });
+            
+            sortedLayers.forEach(layerKey => {
+                const layerItem = document.createElement('div');
+                layerItem.className = `strata-item strata-${layerKey}`;
+                layerItem.setAttribute('data-layer', layerKey);
+                
+                const layerDisplayName = layerKey.charAt(0).toUpperCase() + layerKey.slice(1);
+                const layerIcon = getLayerIcon(layerKey);
+                const layerDescription = getLayerDescription(layerKey);
+                
+                layerItem.innerHTML = `
+                    <div class="strata-name">
+                        <i class="fas ${layerIcon}" style="margin-right: 8px;"></i>${layerDisplayName}
+                    </div>
+                    <div class="strata-description">${layerDescription}</div>
+                `;
+                layerFiltersContainer.appendChild(layerItem);
+            });
         }
         
         // Create a domain section with header and content
@@ -1480,7 +1196,6 @@
                         <i class="fas ${getDomainIcon(domainKey)}"></i>
                         <span>${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)} Domain</span>
                     </div>
-                    <span class="toggle-icon">▼</span>
                 </h2>
             `;
             
@@ -1550,25 +1265,29 @@
             const cacheKey = `${componentName}-${domainKey}`;
             const cacheData = cfcCacheData?.generated?.[cacheKey];
             
-            // Get display name and description from README or cache
+            // Get display name, description, and icon from cache
             const displayName = getDisplayName(componentName);
             const description = getComponentDescription(componentName);
+            const faIcon = getComponentIcon(componentName);
             const mermaidUrl = cacheData?.MermaidUrl || '#';
             
             card.innerHTML = `
                 <div class="card-header">
                     <div class="card-header-content">
                         <div class="card-title-section">
-                            <h3 class="card-title">${componentName}</h3>
+                            <h3 class="card-title">
+                                ${faIcon ? `<i class="fa ${faIcon}" style="color: #6c757d; margin-right: 8px; font-size: 0.9em;"></i>` : ''}
+                                ${componentName}
+                            </h3>
                             <div class="card-display-name">${displayName}</div>
                         </div>
                         <div class="card-badges">
                             <div class="badge-row">
-                                <span class="badge domain-badge" title="${domainDescription}">
-                                    <i class="fas fa-globe"></i>&nbsp;${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
+                                <span class="badge domain-badge">
+                                    <i class="fas fa-globe" style="margin-right: 8px;"></i>${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
                                 </span>
-                                <span class="badge strata-badge strata-${layerKey}" title="${getLayerDescription(layerKey)}">
-                                    <i class="fas ${getLayerIcon(layerKey)}"></i>&nbsp;${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}
+                                <span class="badge strata-badge strata-${layerKey}">
+                                    <i class="fas ${getLayerIcon(layerKey)}" style="margin-right: 8px;"></i>${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}
                                 </span>
                             </div>
                         </div>
@@ -1578,10 +1297,10 @@
                     <p class="card-text">${description}</p>
                     <div class="action-buttons">
                         <button class="btn btn-primary btn-sm" onclick="showModal('${componentName}', '', '${componentName}', '${domainKey}', '${layerKey}')">
-                            <i class="fas fa-project-diagram"></i>&nbsp;View Diagram
+                            <i class="fas fa-project-diagram" style="margin-right: 8px;"></i>View Diagram
                         </button>
                                                         <button class="btn btn-outline btn-sm" onclick="showComponentDetails('${componentName}', '${domainKey}', '${layerKey}')">
-                            <i class="fas fa-info-circle"></i>&nbsp;View Details
+                            <i class="fas fa-info-circle" style="margin-right: 8px;"></i>View Details
                         </button>
                     </div>
                 </div>
@@ -1594,7 +1313,16 @@
         function getDisplayName(componentName) {
             // Try to get display name from CFC cache data
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
-                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                // Try exact match first
+                let component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
                 if (component && component.displayName) {
                     return component.displayName;
                 }
@@ -1606,7 +1334,16 @@
         function getComponentDescription(componentName) {
             // Try to get hint from CFC cache data FIRST
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
-                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                // Try exact match first
+                let component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
                 if (component && component.hint) {
                     return component.hint;
                 }
@@ -1624,6 +1361,71 @@
             
             // No description available
             return '';
+        }
+        
+        function getComponentIcon(componentName) {
+            // Try to get faIcon from CFC cache data
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                // Try exact match first
+                let component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
+                if (component && component.faIcon) {
+                    return convertFaIcon(component.faIcon);
+                }
+            }
+            
+            // No icon available
+            return '';
+        }
+        
+        function convertFaIcon(oldIcon) {
+            // Convert Font Awesome 4 icon names to Font Awesome 6
+            const iconMap = {
+                'fa-hospital-o': 'fa-hospital',
+                'fa-id-badge': 'fa-id-badge',
+                'fa-building': 'fa-building',
+                'fa-users': 'fa-users',
+                'fa-file': 'fa-file',
+                'fa-file-o': 'fa-file',
+                'fa-file-text': 'fa-file-lines',
+                'fa-calendar': 'fa-calendar',
+                'fa-list': 'fa-list',
+                'fa-key': 'fa-key',
+                'fa-cog': 'fa-gear',
+                'fa-group': 'fa-users',
+                'fa-user': 'fa-user',
+                'fa-comment': 'fa-comment',
+                'fa-cubes': 'fa-cubes',
+                'fa-road': 'fa-road',
+                'fa-puzzle-piece': 'fa-puzzle-piece',
+                'fa-ticket': 'fa-ticket',
+                'fa-laptop-mobile': 'fa-laptop-mobile',
+                'fa-fast-forward': 'fa-forward-fast',
+                'fa-folder-open': 'fa-folder-open',
+                'fa-envelope': 'fa-envelope',
+                'fa-envelope-o': 'fa-envelope',
+                'fa-picture-o': 'fa-image',
+                'fa-hand-o-up': 'fa-hand-point-up',
+                'fa-font': 'fa-font',
+                'fa-rss-square': 'fa-rss',
+                'fa-files-o': 'fa-copy',
+                'fa-step-forward': 'fa-forward-step',
+                'fa-sign-in': 'fa-right-to-bracket',
+                'fa-home': 'fa-house',
+                'fa-ban': 'fa-ban',
+                'fa-cogs': 'fa-gears',
+                'fa-link': 'fa-link',
+                'fa-list ssq': 'fa-list'  // Handle the SSQ special case
+            };
+            
+            return iconMap[oldIcon] || oldIcon;
         }
         
         function getLayerDescription(layerKey) {
@@ -1670,22 +1472,25 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadAllData();
             
-            // Initialize filter event listeners and modal listeners after data is loaded
+            // Initialize modal listeners after data is loaded
             setTimeout(() => {
-                initializeFilters();
                 setupModalEventListeners();
             }, 1000);
         });
 
         function initializeFilters() {
-            // Domain filter clicks
-            document.querySelectorAll('.domain-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const domain = this.dataset.domain;
+            // Use event delegation to handle dynamically created elements
+            // This avoids the need to clone/replace elements and prevents duplicate listeners
+            
+            // Use event delegation for domain filter clicks
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.domain-card')) {
+                    const card = e.target.closest('.domain-card');
+                    const domain = card.dataset.domain;
                     
                     // Toggle active state
-                    if (this.classList.contains('active')) {
-                        this.classList.remove('active');
+                    if (card.classList.contains('active')) {
+                        card.classList.remove('active');
                         // If this was the last active domain filter, show nothing
                         const activeDomainCards = document.querySelectorAll('.domain-card.active');
                         if (activeDomainCards.length === 0) {
@@ -1695,93 +1500,102 @@
                         }
                     } else {
                         document.querySelectorAll('.domain-card').forEach(c => c.classList.remove('active'));
-                        this.classList.add('active');
+                        card.classList.add('active');
                         activeFilters.domain = domain;
                     }
                     
                     // Apply filters
                     applyFilters();
-                });
+                }
             });
 
-            // Layer filter clicks
-            document.querySelectorAll('.strata-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const layer = this.dataset.layer;
+            // Use event delegation for layer filter clicks
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.strata-item')) {
+                    const item = e.target.closest('.strata-item');
+                    const layer = item.dataset.layer;
                     
-                    // Toggle active state
-                    if (this.classList.contains('active')) {
-                        this.classList.remove('active');
-                        // If this was the last active layer filter, show nothing
-                        const activeLayerItems = document.querySelectorAll('.strata-item.active');
-                        if (activeLayerItems.length === 0) {
+                    // Special handling for "All Layers" button
+                    if (layer === 'all') {
+                        // If "All Layers" is clicked, toggle all layers
+                        const allLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"])');
+                        const isAllActive = item.classList.contains('active');
+                        
+                        if (isAllActive) {
+                            // Deactivate all layers
+                            allLayers.forEach(l => l.classList.remove('active'));
+                            item.classList.remove('active');
                             activeFilters.layer = 'none';
                         } else {
+                            // Activate all layers
+                            allLayers.forEach(l => l.classList.add('active'));
+                            item.classList.add('active');
                             activeFilters.layer = 'all';
                         }
                     } else {
-                        document.querySelectorAll('.strata-item').forEach(i => i.classList.remove('active'));
-                        this.classList.add('active');
-                        activeFilters.layer = layer;
+                        // Toggle individual layer (checkbox behavior)
+                        item.classList.toggle('active');
+                        
+                        // Update "All Layers" button state based on current selection
+                        const allLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"])');
+                        const activeLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"]).active');
+                        const allLayersButton = document.querySelector('.strata-item[data-layer="all"]');
+                        
+                        if (activeLayers.length === 0) {
+                            // No layers active
+                            activeFilters.layer = 'none';
+                            allLayersButton.classList.remove('active');
+                        } else if (activeLayers.length === allLayers.length) {
+                            // All layers active
+                            activeFilters.layer = 'all';
+                            allLayersButton.classList.add('active');
+                        } else {
+                            // Some layers active (checkbox mode)
+                            activeFilters.layer = 'multiple';
+                            allLayersButton.classList.remove('active');
+                        }
                     }
                     
                     // Apply filters
                     applyFilters();
-                });
+                }
             });
 
-            // Domain header toggles
-            document.querySelectorAll('.domain-header').forEach(header => {
-                header.addEventListener('click', function() {
-                    const content = this.nextElementSibling;
-                    const icon = this.querySelector('.toggle-icon');
-                    
-                    content.classList.toggle('collapsed');
-                    this.classList.toggle('collapsed');
-                    
-                    if (content.classList.contains('collapsed')) {
-                        icon.textContent = '▶';
-                    } else {
-                        icon.textContent = '▼';
-                    }
-                });
-            });
 
-            // Auto-expand domains when filtered
-            document.querySelectorAll('.domain-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const domain = this.dataset.domain;
-                    if (domain !== 'all') {
-                        const domainSection = document.querySelector(`[data-domain="${domain}"]`);
-                        const content = domainSection.querySelector('.domain-content');
-                        const header = domainSection.querySelector('.domain-header');
-                        const icon = header.querySelector('.toggle-icon');
-                        
-                        // Always expand the domain section when domain card is clicked
-                        content.classList.remove('collapsed');
-                        header.classList.remove('collapsed');
-                        icon.textContent = '▼';
-                    }
-                });
-            });
         }
 
         function applyFilters() {
             const diagramCards = document.querySelectorAll('.diagram-card');
             
             diagramCards.forEach(card => {
-                const cardDomain = card.closest('.domain-section').dataset.domain;
+                const cardDomain = card.dataset.domain;
                 const cardLayer = card.dataset.layer;
                 
-                // If either filter is set to 'none', show nothing
-                if (activeFilters.domain === 'none' || activeFilters.layer === 'none') {
+                // If domain filter is set to 'none', show nothing
+                if (activeFilters.domain === 'none') {
                     card.classList.add('hidden');
                     return;
                 }
                 
-                const shouldShowCard = 
-                    (activeFilters.domain === 'all' || cardDomain === activeFilters.domain) &&
-                    (activeFilters.layer === 'all' || cardLayer === activeFilters.layer);
+                // Check domain filter
+                const domainMatches = activeFilters.domain === 'all' || cardDomain === activeFilters.domain;
+                
+                // Check layer filter (now supports multiple layers)
+                let layerMatches = false;
+                if (activeFilters.layer === 'none') {
+                    layerMatches = false;
+                } else if (activeFilters.layer === 'all') {
+                    layerMatches = true;
+                } else if (activeFilters.layer === 'multiple') {
+                    // Check if this card's layer is one of the active layers
+                    const activeLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"]).active');
+                    layerMatches = Array.from(activeLayers).some(layer => layer.dataset.layer === cardLayer);
+                } else {
+                    // Single layer selected
+                    layerMatches = cardLayer === activeFilters.layer;
+                }
+                
+                const shouldShowCard = domainMatches && layerMatches;
                 
                 if (shouldShowCard) {
                     card.classList.remove('hidden');
@@ -1796,9 +1610,10 @@
             const totalCards = document.querySelectorAll('.diagram-card').length;
             const totalDomains = Object.keys(domainsData?.domains || {}).length;
             const totalLayers = document.querySelectorAll('.strata-item').length - 1; // Subtract "All Layers"
+            const activeLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"]).active').length;
             
             document.getElementById('domains-count').textContent = totalDomains;
-            document.getElementById('layers-count').textContent = totalLayers;
+            document.getElementById('layers-count').textContent = activeLayers;
             document.getElementById('components-count').textContent = visibleCards;
             document.getElementById('diagrams-count').textContent = totalCards;
         }
@@ -1817,13 +1632,39 @@
             }
             
             document.getElementById('diagramModalTitle').innerHTML = `
-                <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        ${faIcon ? `<i class="fas ${faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
-                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName}</span>
-                    </div>
-                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0; margin-left: 20px;">${domainDisplayName} / ${layerDisplayName} Diagram</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    ${faIcon ? `<i class="fas ${faIcon}" style="color: #6c757d; font-size: 1.4em;"></i>` : ''}
+                    <span style="color: #2c3e50; font-size: 1.6em; font-weight: 600;">${componentName}</span>
                 </div>
+            `;
+            
+            // Find the matching diagram from the loaded data to get actual diagram info
+            let diagramSubtitle = `${domainDisplayName} / ${layerDisplayName} Diagram`;
+            let actualFocus = componentName;
+            let actualDomains = domainKey;
+            
+            if (window.diagramsData && window.diagramsData.generated) {
+                // Look for a diagram that matches the component and domain
+                const diagramKey = `${componentName}-${domainKey}`;
+                const diagram = window.diagramsData.generated[diagramKey];
+                
+                if (diagram) {
+                    // Use actual diagram data
+                    actualFocus = diagram.Focus || componentName;
+                    actualDomains = diagram.Domains || domainKey;
+                    diagramSubtitle = diagram.Description || `${domainDisplayName} / ${layerDisplayName} Diagram`;
+                }
+            }
+            
+            // Set the labels in the header
+            document.getElementById('diagramModalLabels').innerHTML = `
+                <!-- invisible subtitle placeholder -->
+                <span style="background: ${getDomainColor(actualDomains)}; color: #1976d2; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                    <i class="fas ${getDomainIcon(actualDomains)}"></i> ${getDomainDisplayName(actualDomains)}
+                </span>
+                <span style="background: ${getLayerColor(layerKey)}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                    <i class="fas ${getLayerIcon(layerKey)}"></i> ${layerDisplayName}
+                </span>
             `;
             
             // Find the matching diagram from the loaded data
@@ -1862,6 +1703,56 @@
 
 
 
+        function getDomainIcon(domain) {
+            const domainIcons = {
+                'provider': 'fa-hospital',
+                'participant': 'fa-users', 
+                'pathway': 'fa-clipboard-list',
+                'site': 'fa-map-marker-alt',
+                'all': 'fa-globe'
+            };
+            return domainIcons[domain] || 'fa-question';
+        }
+        
+        function getLayerIcon(layer) {
+            const layerIcons = {
+                'core': 'fa-cube',
+                'tracking': 'fa-chart-line',
+                'programme': 'fa-graduation-cap',
+                'content': 'fa-file-alt',
+                'flow': 'fa-project-diagram',
+                'admin': 'fa-cogs',
+                'resources': 'fa-database',
+                'all': 'fa-th-large'
+            };
+            return layerIcons[layer] || 'fa-question';
+        }
+        
+        function getDomainColor(domain) {
+            const domainColors = {
+                'provider': '#e3f2fd',
+                'participant': '#e3f2fd', 
+                'pathway': '#e3f2fd',
+                'site': '#e3f2fd',
+                'all': '#e3f2fd'
+            };
+            return domainColors[domain] || '#e3f2fd';
+        }
+        
+        function getLayerColor(layer) {
+            const layerColors = {
+                'core': '#6f42c1',
+                'tracking': '#28a745',
+                'programme': '#ffc107',
+                'content': '#dc3545',
+                'flow': '#6f42c1',
+                'admin': '#fd7e14',
+                'resources': '#20c997',
+                'all': '#f3e5f5'
+            };
+            return layerColors[layer] || '#f3e5f5';
+        }
+        
         function showComponentDetails(componentName, domain, layer) {
             // Get component data from diagrams data
             const diagramsData = window.diagramsData;
@@ -1889,7 +1780,16 @@
             // Get properties from componentMetadata (all properties)
             let properties = [];
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
-                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                // Try exact match first
+                let component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
                 if (component && component.properties && Array.isArray(component.properties)) {
                     properties = component.properties.map(prop => prop.name);
                 }
@@ -1898,8 +1798,10 @@
             // Get dependencies (targets from properties)
             let dependencies = [];
             if (cacheData && cacheData.properties) {
+                // Use case-insensitive matching for dependencies too
+                const entityNameLower = componentName.toLowerCase();
                 dependencies = cacheData.properties
-                    .filter(prop => prop.entity === componentName && prop.target)
+                    .filter(prop => prop.entity && prop.entity.toLowerCase() === entityNameLower && prop.target)
                     .map(prop => prop.target);
             }
             
@@ -1909,14 +1811,24 @@
             let filePath = '';
             let description = '';
             let faIcon = '';
+            let component = null; // Declare component in outer scope
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
-                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                // Try exact match first
+                component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
                 if (component) {
                     if (component.displayName) displayName = component.displayName;
                     if (component.hint) hint = component.hint;
                     if (component.filePath) filePath = component.filePath;
                     if (component.description) description = component.description;
-                    if (component.faIcon) faIcon = component.faIcon;
+                    if (component.faIcon) faIcon = convertFaIcon(component.faIcon);
                 }
             }
             
@@ -1928,7 +1840,7 @@
                 description: description || componentDescription || '',
                 file: componentInfo ? componentInfo.file || '' : '',
                 filePath: filePath,
-                plugin: componentInfo ? componentInfo.plugin || '' : '',
+                plugin: component ? component.plugin || '' : (componentInfo ? componentInfo.plugin || '' : ''),
                 faIcon: faIcon,
                 properties: properties,
                 dependencies: dependencies,
@@ -1938,13 +1850,21 @@
             
             // Set modal title
             document.getElementById('detailsModalTitle').innerHTML = `
-                <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        ${componentData.faIcon ? `<i class="fas ${componentData.faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
-                        <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName}</span>
-                    </div>
-                    <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0; margin-left: 20px;">Component Details</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    ${componentData.faIcon ? `<i class="fa ${componentData.faIcon}" style="color: #6c757d; font-size: 1.4em;"></i>` : ''}
+                    <span style="color: #2c3e50; font-size: 1.6em; font-weight: 600;">${componentName}</span>
                 </div>
+            `;
+            
+            // Set the labels in the header
+            document.getElementById('detailsModalLabels').innerHTML = `
+                <span style="color: #6c757d; font-size: 1.2em; font-weight: 400;">Component Details</span>
+                <span style="background: ${getDomainColor(domain)}; color: #1976d2; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                    <i class="fas ${getDomainIcon(domain)}"></i> ${componentData.domain}
+                </span>
+                <span style="background: ${getLayerColor(layer)}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                    <i class="fas ${getLayerIcon(layer)}"></i> ${componentData.layer}
+                </span>
             `;
             
             // Set modal content
@@ -1952,7 +1872,7 @@
                 <div class="component-details">
                     <div class="detail-section">
                         <h3>${componentData.displayName}</h3>
-                        <p>${componentData.hint || 'No hint available'}</p>
+                        <p>${componentData.hint || '*No hint/description available from CFC metadata*'}</p>
                     </div>
                     
                     <div class="detail-section">
@@ -1984,7 +1904,11 @@
                     
                     <div class="detail-section">
                         <h3>Description</h3>
-                        <p>${componentData.description || 'No description available'}</p>
+                        <div class="long-description">
+                            ${componentData.description ? componentData.description.split('\n\n').map(paragraph => 
+                                paragraph.trim() ? `<p>${paragraph.trim()}</p>` : ''
+                            ).join('') : '<p>*No description available from CFC metadata*</p>'}
+                        </div>
                     </div>
                 </div>
             `;
@@ -2057,6 +1981,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div id="detailsModalTitle"></div>
+                <div id="detailsModalLabels" style="display: flex; align-items: baseline; gap: 12px; margin-right: 15px; margin-left: auto;"></div>
                 <button onclick="hideDetailsModal()" class="modal-close">✕</button>
             </div>
             <div id="detailsModalBody" class="modal-body"></div>
@@ -2068,6 +1993,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div id="diagramModalTitle"></div>
+                <div id="diagramModalLabels" style="display: flex; align-items: baseline; gap: 12px; margin-right: 15px; margin-left: auto;"></div>
                 <button onclick="hideDiagramModal()" class="modal-close">✕</button>
             </div>
             <div id="diagramModalBody" class="modal-body"></div>
