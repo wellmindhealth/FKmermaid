@@ -69,7 +69,7 @@
             padding: 8px 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .section-title {
@@ -118,13 +118,11 @@
             color: #2c3e50;
             margin-bottom: 8px;
             font-size: 1.1em;
-            cursor: help;
         }
 
         .domain-card p {
             color: #6c757d;
             font-size: 0.9em;
-            cursor: help;
         }
 
         .strata-container {
@@ -231,13 +229,11 @@
             font-weight: 600;
             margin-bottom: 3px;
             font-size: 0.9em;
-            cursor: help;
         }
 
         .strata-description {
             font-size: 0.8em;
             color: #6c757d;
-            cursor: help;
         }
 
         .stats {
@@ -264,13 +260,11 @@
             font-size: 1.4em;
             font-weight: 600;
             color: #1976d2;
-            cursor: help;
         }
 
         .stat-label {
             font-size: 0.8em;
             color: #5f6368;
-            cursor: help;
         }
 
         /* Domain-specific sections */
@@ -284,13 +278,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 0;
-            cursor: pointer;
-            transition: all 0.2s;
             border-left: 4px solid #007bff;
-        }
-
-        .domain-header:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
         .domain-header h2 {
@@ -299,7 +287,6 @@
             font-size: 1.2em;
             display: flex;
             align-items: center;
-            justify-content: space-between;
             gap: 12px;
         }
 
@@ -309,32 +296,12 @@
             gap: 8px;
         }
 
-        .domain-header .toggle-icon {
-            font-size: 1.2em;
-            transition: transform 0.2s;
-        }
-
-        .domain-header.collapsed .toggle-icon {
-            transform: rotate(-90deg);
-        }
-
         .domain-content {
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             overflow: hidden;
-            transition: all 0.3s ease;
             margin-top: 0;
-            max-height: 2000px;
-            opacity: 1;
-        }
-
-        .domain-content.collapsed {
-            max-height: 0;
-            opacity: 0;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
         }
 
         .diagrams-grid {
@@ -388,7 +355,6 @@
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 4px;
-            cursor: help;
             line-height: 1.3;
         }
 
@@ -403,7 +369,6 @@
             color: #6c757d;
             font-size: 0.95em;
             line-height: 1.5;
-            cursor: help;
         }
 
         .card-badges {
@@ -425,7 +390,6 @@
             border-radius: 3px;
             font-size: 0.75em;
             font-weight: 500;
-            cursor: help;
             position: relative;
             white-space: nowrap;
         }
@@ -610,48 +574,19 @@
             cursor: help;
         }
 
-        /* Tooltip styles */
-        .badge[title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            max-width: 250px;
-            line-height: 1.4;
-            white-space: pre-line;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            text-align: left;
-        }
 
-        .badge[title]:hover::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-top-color: #333;
-            z-index: 1000;
-        }
 
         /* Filter section */
         .filter-section {
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
 
         .filter-title {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #2c3e50;
             font-size: 1.2em;
             font-weight: 600;
@@ -911,85 +846,7 @@
             flex: 1;
         }
 
-        /* Enhanced tooltip styles */
-        .badge[title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            max-width: 250px;
-            line-height: 1.4;
-            white-space: pre-line;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            text-align: left;
-            pointer-events: none;
-        }
 
-        .badge[title]:hover::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-top-color: #333;
-            z-index: 1000;
-            pointer-events: none;
-        }
-
-        /* General tooltip styles for non-badge elements */
-        .domain-card h4[title]:hover::after,
-        .domain-card p[title]:hover::after,
-        .strata-name[title]:hover::after,
-        .strata-description[title]:hover::after,
-        .card-title[title]:hover::after,
-        .card-description[title]:hover::after,
-        .stat-number[title]:hover::after,
-        .stat-label[title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            max-width: 250px;
-            line-height: 1.4;
-            white-space: pre-line;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            text-align: left;
-            pointer-events: none;
-        }
-
-        .domain-card h4[title]:hover::before,
-        .domain-card p[title]:hover::before,
-        .strata-name[title]:hover::before,
-        .strata-description[title]:hover::before,
-        .card-title[title]:hover::before,
-        .card-description[title]:hover::before,
-        .stat-number[title]:hover::before,
-        .stat-label[title]:hover::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-top-color: #333;
-            z-index: 1000;
-            pointer-events: none;
-        }
 
         /* DEV MODE STYLES - Add your experimental styles here */
         .dev-experiment {
@@ -1012,34 +869,31 @@
                 <div class="stat-label" style="font-size: 0.7em; color: #6c757d; margin-bottom: 15px;">Interactive Entity Relationship Explorer</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="domains-count" title="Total number of architectural domains">4</div>
-                <div class="stat-label" title="Total number of architectural domains">Domains</div>
+                <div class="stat-number" id="domains-count">4</div>
+                <div class="stat-label">Domains</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="layers-count" title="Active layers (click to toggle)">7</div>
-                <div class="stat-label" title="Active layers (click to toggle)">Active Layers</div>
+                <div class="stat-number" id="layers-count">7</div>
+                <div class="stat-label">Active Layers</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="components-count" title="Number of visible components based on current filters">0</div>
-                <div class="stat-label" title="Number of visible components based on current filters">Components</div>
+                <div class="stat-number" id="components-count">0</div>
+                <div class="stat-label">Components</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number" id="diagrams-count" title="Total number of available diagrams">0</div>
-                <div class="stat-label" title="Total number of available diagrams">Diagrams</div>
+                <div class="stat-number" id="diagrams-count">0</div>
+                <div class="stat-label">Diagrams</div>
             </div>
         </div>
 
-        <!-- Filter by Domain -->
+        <!-- Filter Controls -->
         <div class="filter-section">
             <div class="filter-title">Filter by Domain</div>
             <div class="domain-info" id="dynamic-domain-filters">
                 <!-- Dynamic domain filters will be loaded here -->
             </div>
-        </div>
-
-        <!-- Filter by Layer -->
-        <div class="info-section">
-            <div class="section-title">Filter by Layer</div>
+            
+            <div class="filter-title" style="margin-top: 20px;">Filter by Layer</div>
             <div class="strata-container" id="dynamic-layer-filters">
                 <!-- Dynamic layer filters will be loaded here -->
             </div>
@@ -1243,10 +1097,10 @@
             allDomainsCard.className = 'domain-card active';
             allDomainsCard.setAttribute('data-domain', 'all');
             allDomainsCard.innerHTML = `
-                <h4 title="All Domains&#10;&#10;View all components across all domains">
+                <h4>
                     <i class="fas fa-globe" style="margin-right: 8px;"></i>All Domains
                 </h4>
-                <p title="All Domains&#10;&#10;View all components across all domains">View all components across all domains</p>
+                <p>View all components across all domains</p>
             `;
             domainFiltersContainer.appendChild(allDomainsCard);
             
@@ -1260,10 +1114,10 @@
                 const domainIcon = getDomainIcon(domainKey);
                 
                 domainCard.innerHTML = `
-                    <h4 title="${domainDisplayName} Domain&#10;&#10;${domainInfo.description}">
+                    <h4>
                         <i class="fas ${domainIcon}" style="margin-right: 8px;"></i>${domainDisplayName} Domain
                     </h4>
-                    <p title="${domainDisplayName} Domain&#10;&#10;${domainInfo.description}">${domainInfo.description}</p>
+                    <p>${domainInfo.description}</p>
                 `;
                 domainFiltersContainer.appendChild(domainCard);
             });
@@ -1290,10 +1144,10 @@
             allLayersItem.className = 'strata-item active strata-core';
             allLayersItem.setAttribute('data-layer', 'all');
             allLayersItem.innerHTML = `
-                <div class="strata-name" title="All Layers&#10;&#10;View all architectural layers">
+                <div class="strata-name">
                     <i class="fas fa-th-large" style="margin-right: 8px;"></i>All Layers
                 </div>
-                <div class="strata-description" title="All Layers&#10;&#10;View all architectural layers">View all architectural layers</div>
+                <div class="strata-description">View all architectural layers</div>
             `;
             layerFiltersContainer.appendChild(allLayersItem);
             
@@ -1315,10 +1169,10 @@
                 const layerDescription = getLayerDescription(layerKey);
                 
                 layerItem.innerHTML = `
-                    <div class="strata-name" title="${layerDisplayName} Layer&#10;&#10;${layerDescription}">
+                    <div class="strata-name">
                         <i class="fas ${layerIcon}" style="margin-right: 8px;"></i>${layerDisplayName}
                     </div>
-                    <div class="strata-description" title="${layerDisplayName} Layer&#10;&#10;${layerDescription}">${layerDescription}</div>
+                    <div class="strata-description">${layerDescription}</div>
                 `;
                 layerFiltersContainer.appendChild(layerItem);
             });
@@ -1339,7 +1193,6 @@
                         <i class="fas ${getDomainIcon(domainKey)}"></i>
                         <span>${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)} Domain</span>
                     </div>
-                    <span class="toggle-icon">▼</span>
                 </h2>
             `;
             
@@ -1427,10 +1280,10 @@
                         </div>
                         <div class="card-badges">
                             <div class="badge-row">
-                                <span class="badge domain-badge" title="${domainDescription}">
+                                <span class="badge domain-badge">
                                     <i class="fas fa-globe" style="margin-right: 8px;"></i>${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
                                 </span>
-                                <span class="badge strata-badge strata-${layerKey}" title="${getLayerDescription(layerKey)}">
+                                <span class="badge strata-badge strata-${layerKey}">
                                     <i class="fas ${getLayerIcon(layerKey)}" style="margin-right: 8px;"></i>${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}
                                 </span>
                             </div>
@@ -1650,21 +1503,6 @@
                     
                     // Apply filters
                     applyFilters();
-                    
-                    // Auto-expand the domain section when domain card is clicked
-                    if (domain !== 'all') {
-                        const domainSection = document.querySelector(`[data-domain="${domain}"]`);
-                        if (domainSection) {
-                            const content = domainSection.querySelector('.domain-content');
-                            const header = domainSection.querySelector('.domain-header');
-                            const icon = header.querySelector('.toggle-icon');
-                            
-                            // Always expand the domain section when domain card is clicked
-                            content.classList.remove('collapsed');
-                            header.classList.remove('collapsed');
-                            icon.textContent = '▼';
-                        }
-                    }
                 }
             });
 
@@ -1720,26 +1558,7 @@
                 }
             });
 
-            // Use event delegation for domain header toggles
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.domain-header')) {
-                    const header = e.target.closest('.domain-header');
-                    const content = header.nextElementSibling;
-                    const icon = header.querySelector('.toggle-icon');
-                    
-                    content.classList.toggle('collapsed');
-                    header.classList.toggle('collapsed');
-                    
-                    if (content.classList.contains('collapsed')) {
-                        icon.textContent = '▶';
-                    } else {
-                        icon.textContent = '▼';
-                    }
-                }
-            });
 
-            // Auto-expand domains when filtered (handled by the domain card click event above)
-            // The auto-expand logic is now integrated into the domain card click handler
         }
 
         function applyFilters() {
