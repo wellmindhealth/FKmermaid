@@ -1633,16 +1633,20 @@
             const cacheKey = `${componentName}-${domainKey}`;
             const cacheData = cfcCacheData?.generated?.[cacheKey];
             
-            // Get display name and description from README or cache
+            // Get display name, description, and icon from cache
             const displayName = getDisplayName(componentName);
             const description = getComponentDescription(componentName);
+            const faIcon = getComponentIcon(componentName);
             const mermaidUrl = cacheData?.MermaidUrl || '#';
             
             card.innerHTML = `
                 <div class="card-header">
                     <div class="card-header-content">
                         <div class="card-title-section">
-                            <h3 class="card-title">${componentName}</h3>
+                            <h3 class="card-title">
+                                ${faIcon ? `<i class="fa ${faIcon}" style="color: #6c757d; margin-right: 8px; font-size: 0.9em;"></i>` : ''}
+                                ${componentName}
+                            </h3>
                             <div class="card-display-name">${displayName}</div>
                         </div>
                         <div class="card-badges">
@@ -1725,6 +1729,71 @@
             
             // No description available
             return '';
+        }
+        
+        function getComponentIcon(componentName) {
+            // Try to get faIcon from CFC cache data
+            if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
+                // Try exact match first
+                let component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
+                if (component && component.faIcon) {
+                    return convertFaIcon(component.faIcon);
+                }
+            }
+            
+            // No icon available
+            return '';
+        }
+        
+        function convertFaIcon(oldIcon) {
+            // Convert Font Awesome 4 icon names to Font Awesome 6
+            const iconMap = {
+                'fa-hospital-o': 'fa-hospital',
+                'fa-id-badge': 'fa-id-badge',
+                'fa-building': 'fa-building',
+                'fa-users': 'fa-users',
+                'fa-file': 'fa-file',
+                'fa-file-o': 'fa-file',
+                'fa-file-text': 'fa-file-lines',
+                'fa-calendar': 'fa-calendar',
+                'fa-list': 'fa-list',
+                'fa-key': 'fa-key',
+                'fa-cog': 'fa-gear',
+                'fa-group': 'fa-users',
+                'fa-user': 'fa-user',
+                'fa-comment': 'fa-comment',
+                'fa-cubes': 'fa-cubes',
+                'fa-road': 'fa-road',
+                'fa-puzzle-piece': 'fa-puzzle-piece',
+                'fa-ticket': 'fa-ticket',
+                'fa-laptop-mobile': 'fa-laptop-mobile',
+                'fa-fast-forward': 'fa-forward-fast',
+                'fa-folder-open': 'fa-folder-open',
+                'fa-envelope': 'fa-envelope',
+                'fa-envelope-o': 'fa-envelope',
+                'fa-picture-o': 'fa-image',
+                'fa-hand-o-up': 'fa-hand-point-up',
+                'fa-font': 'fa-font',
+                'fa-rss-square': 'fa-rss',
+                'fa-files-o': 'fa-copy',
+                'fa-step-forward': 'fa-forward-step',
+                'fa-sign-in': 'fa-right-to-bracket',
+                'fa-home': 'fa-house',
+                'fa-ban': 'fa-ban',
+                'fa-cogs': 'fa-gears',
+                'fa-link': 'fa-link',
+                'fa-list ssq': 'fa-list'  // Handle the SSQ special case
+            };
+            
+            return iconMap[oldIcon] || oldIcon;
         }
         
         function getLayerDescription(layerKey) {
@@ -2032,7 +2101,16 @@
             // Get properties from componentMetadata (all properties)
             let properties = [];
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
-                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                // Try exact match first
+                let component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
                 if (component && component.properties && Array.isArray(component.properties)) {
                     properties = component.properties.map(prop => prop.name);
                 }
@@ -2041,8 +2119,10 @@
             // Get dependencies (targets from properties)
             let dependencies = [];
             if (cacheData && cacheData.properties) {
+                // Use case-insensitive matching for dependencies too
+                const entityNameLower = componentName.toLowerCase();
                 dependencies = cacheData.properties
-                    .filter(prop => prop.entity === componentName && prop.target)
+                    .filter(prop => prop.entity && prop.entity.toLowerCase() === entityNameLower && prop.target)
                     .map(prop => prop.target);
             }
             
@@ -2052,14 +2132,24 @@
             let filePath = '';
             let description = '';
             let faIcon = '';
+            let component = null; // Declare component in outer scope
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
-                const component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                // Try exact match first
+                component = window.cfcCacheData.componentMetadata.find(c => c.name === componentName);
+                
+                // If not found, try case-insensitive match for SSQ components
+                if (!component && componentName.toLowerCase().startsWith('ssq_')) {
+                    component = window.cfcCacheData.componentMetadata.find(c => 
+                        c.name.toLowerCase() === componentName.toLowerCase()
+                    );
+                }
+                
                 if (component) {
                     if (component.displayName) displayName = component.displayName;
                     if (component.hint) hint = component.hint;
                     if (component.filePath) filePath = component.filePath;
                     if (component.description) description = component.description;
-                    if (component.faIcon) faIcon = component.faIcon;
+                    if (component.faIcon) faIcon = convertFaIcon(component.faIcon);
                 }
             }
             
@@ -2071,7 +2161,7 @@
                 description: description || componentDescription || '',
                 file: componentInfo ? componentInfo.file || '' : '',
                 filePath: filePath,
-                plugin: componentInfo ? componentInfo.plugin || '' : '',
+                plugin: component ? component.plugin || '' : (componentInfo ? componentInfo.plugin || '' : ''),
                 faIcon: faIcon,
                 properties: properties,
                 dependencies: dependencies,
@@ -2083,7 +2173,7 @@
             document.getElementById('detailsModalTitle').innerHTML = `
                 <div style="display: flex; align-items: baseline; justify-content: space-between; max-width: calc(100% - 60px);">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        ${componentData.faIcon ? `<i class="fas ${componentData.faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
+                        ${componentData.faIcon ? `<i class="fa ${componentData.faIcon}" style="color: #6c757d; font-size: 1.2em;"></i>` : ''}
                         <span style="color: #2c3e50; font-size: 1.4em; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${componentName}</span>
                     </div>
                     <span style="color: #6c757d; font-size: 0.9em; flex-shrink: 0; margin-left: 20px;">Component Details</span>
