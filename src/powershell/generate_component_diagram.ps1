@@ -82,9 +82,9 @@ function Validate-Parameters {
             Write-Host $errorMsg -ForegroundColor Red
         }
         Write-Host "`n📖 USAGE EXAMPLES:`n" -ForegroundColor Yellow
-        Write-Host "  .\generate_component_diagram.ps1 -lFocus 'member' -DiagramType 'Component' -lDomains 'participant,partner'" -ForegroundColor Cyan
-        Write-Host "  .\generate_component_diagram.ps1 -lFocus 'activityDef' -DiagramType 'Component' -lDomains 'programme'" -ForegroundColor Cyan
-        Write-Host "  .\generate_component_diagram.ps1 -lFocus 'progRole' -DiagramType 'Component' -lDomains 'programme,participant'" -ForegroundColor Cyan
+        Write-Host "  .\generate_component_diagram.ps1 -lFocus 'member' -DiagramType 'Component' -lDomains 'participant,provider'" -ForegroundColor Cyan
+        Write-Host "  .\generate_component_diagram.ps1 -lFocus 'activityDef' -DiagramType 'Component' -lDomains 'pathway'" -ForegroundColor Cyan
+        Write-Host "  .\generate_component_diagram.ps1 -lFocus 'progRole' -DiagramType 'Component' -lDomains 'pathway,participant'" -ForegroundColor Cyan
         Write-Host "  .\generate_component_diagram.ps1 -lFocus 'farUser' -DiagramType 'Component' -lDomains 'all'" -ForegroundColor Cyan
         Write-Host "  .\generate_component_diagram.ps1 -lFocus 'partner' -DiagramType 'Component'" -ForegroundColor Cyan
         Write-Host "`n📚 See README.md for complete parameter documentation" -ForegroundColor Yellow

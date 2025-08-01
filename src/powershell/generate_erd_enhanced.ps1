@@ -320,9 +320,9 @@ function Validate-Parameters {
             Write-Host $errorMsg -ForegroundColor Red
         }
         Write-Host "`n📖 USAGE EXAMPLES:`n" -ForegroundColor Yellow
-        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'programme'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'pathway'" -ForegroundColor Cyan
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Cyan
-        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'programme,participant'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'pathway,participant'" -ForegroundColor Cyan
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'pathway' -OutputFile 'custom.mmd'" -ForegroundColor Cyan
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Cyan
         Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Cyan
@@ -1065,11 +1065,50 @@ function Generate-MermaidERD {
         # Construct full focus entity name with plugin prefix
         $fullFocusEntity = $lFocus
         if ($lFocus -and $lFocus -ne "") {
-            # Find the plugin for the focus entity
-            $focusEntityInfo = $relationships.entities | Where-Object { $_.name -eq $lFocus } | Select-Object -First 1
-            if ($focusEntityInfo) {
-                $fullFocusEntity = "$($focusEntityInfo.plugin)_$lFocus"
+            # Split focus entities and check each one
+            $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
+            $missingEntities = @()
+            $excludedEntities = @()
+            
+            foreach ($focusEntity in $focusEntities) {
+                # Find the plugin for the focus entity
+                $focusEntityInfo = $relationships.entities | Where-Object { $_.name -eq $focusEntity } | Select-Object -First 1
+                if (-not $focusEntityInfo) {
+                    # Focus entity not found - check if it's excluded
+                    $excludeFiles = @()
+                    $exclusionsFile = "D:\GIT\farcry\Cursor\FKmermaid\config\exclusions.json"
+                    if (Test-Path $exclusionsFile) {
+                        $exclusions = Get-Content $exclusionsFile -Raw | ConvertFrom-Json
+                        $excludeFiles = $exclusions.excludeFiles
+                    }
+                    
+                    $excludedFile = "$focusEntity.cfc"
+                    if ($excludeFiles -contains $excludedFile) {
+                        $excludedEntities += $focusEntity
+                    } else {
+                        $missingEntities += $focusEntity
+                    }
+                }
             }
+            
+            # Report any missing or excluded entities
+            if ($excludedEntities.Count -gt 0) {
+                Write-Host "❌ ERROR: Focus entities are excluded from scanning (found in exclusions.json)" -ForegroundColor Red
+                foreach ($excluded in $excludedEntities) {
+                    Write-Host "   Excluded file: $excluded.cfc" -ForegroundColor Yellow
+                }
+                Write-Host "   Please remove these files from exclusions.json if you want to focus on these entities" -ForegroundColor Yellow
+                exit 1
+            }
+            
+            if ($missingEntities.Count -gt 0) {
+                Write-Host "❌ ERROR: Focus entities not found in cache: $($missingEntities -join ', ')" -ForegroundColor Red
+                Write-Host "   Available entities: $($relationships.entities.name -join ', ')" -ForegroundColor Yellow
+                exit 1
+            }
+            
+            # Pass all focus entities to Get-EntityStyle (it handles comma-separated format)
+            $fullFocusEntity = $focusEntities -join ','
         }
         
         $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $fullFocusEntity -relatedEntities $relatedEntities -cssStyles $cssStyles -validatedDomains $validatedDomains -domainsConfig $domainsConfig
@@ -1079,38 +1118,14 @@ function Generate-MermaidERD {
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
-    # Add styling for special join entities
+    # Add consistent styling for special join entities
     if ($farUserExists -or $dmProfileExists) {
-        # Check if the focused entity is in the same domain as farUser/dmProfile (partner domain)
-        $focusedEntityInProviderDomain = $false
-        if ($lFocus) {
-            $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
-            foreach ($focused in $focusEntities) {
-                if (Entity-BelongsToDomain -entityName $focused -domainName "partner" -domainsConfig $domainsConfig) {
-                    $focusedEntityInProviderDomain = $true
-                    break
-                }
-            }
-        }
-        
-        # Style special join entities based on domain relationship
+        # Style special join entities consistently regardless of domain
         if (-not $farUserExists) {
-            if ($focusedEntityInProviderDomain) {
-                # Same domain - style blue (related entity)
-                $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
-            } else {
-                # Different domain - style grey (unrelated entity)
-                $mermaidContent += "    style zfarcrycore_farUser fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
-            }
+            $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
         }
         if (-not $dmProfileExists) {
-            if ($focusedEntityInProviderDomain) {
-                # Same domain - style blue (related entity)
-                $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
-            } else {
-                # Different domain - style grey (unrelated entity)
-                $mermaidContent += "    style zfarcrycore_dmProfile fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
-            }
+            $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
         }
     }
     
@@ -1495,38 +1510,14 @@ function Generate-MermaidClassDiagram {
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
-    # Add styling for special join entities
+    # Add consistent styling for special join entities
     if ($farUserExists -or $dmProfileExists) {
-        # Check if the focused entity is in the same domain as farUser/dmProfile (partner domain)
-        $focusedEntityInProviderDomain = $false
-        if ($lFocus) {
-            $focusEntities = $lFocus -split ',' | ForEach-Object { $_.Trim() }
-            foreach ($focused in $focusEntities) {
-                if (Entity-BelongsToDomain -entityName $focused -domainName "partner" -domainsConfig $domainsConfig) {
-                    $focusedEntityInProviderDomain = $true
-                    break
-                }
-            }
-        }
-        
-        # Style special join entities based on domain relationship
+        # Style special join entities consistently regardless of domain
         if (-not $farUserExists) {
-            if ($focusedEntityInProviderDomain) {
-                # Same domain - style blue (related entity)
-                $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
-            } else {
-                # Different domain - style grey (unrelated entity)
-                $mermaidContent += "    style zfarcrycore_farUser fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
-            }
+            $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
         }
         if (-not $dmProfileExists) {
-            if ($focusedEntityInProviderDomain) {
-                # Same domain - style blue (related entity)
-                $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
-            } else {
-                # Different domain - style grey (unrelated entity)
-                $mermaidContent += "    style zfarcrycore_dmProfile fill:#9e9e9e,stroke:#fff,stroke-width:1px,color:#fff`n"
-            }
+            $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
         }
     }
     

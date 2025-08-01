@@ -12,19 +12,19 @@ if (-not (Test-Path $baselinesDir)) {
 
 # Test case 1: Partner+Member Focus - 5-Tier Test
 Write-Host "📊 Generating baseline 1: Partner+Member Focus - 5-Tier Test" -ForegroundColor Yellow
-& "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1" -lFocus "partner,member" -DiagramType "ER" -lDomains "partner" -OutputFile "baseline_partner_member_focus_partner_domain_er.mmd"
+& "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1" -lFocus "partner,member" -DiagramType "ER" -lDomains "provider" -OutputFile "baseline_partner_member_focus_provider_domain_er.mmd"
 
 # Test case 2: Programme+Activity Focus - 4-Tier Test  
 Write-Host "📊 Generating baseline 2: Programme+Activity Focus - 4-Tier Test" -ForegroundColor Yellow
-& "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1" -lFocus "programme,activityDef" -DiagramType "ER" -lDomains "programme" -OutputFile "baseline_programme_activity_focus_programme_domain_er.mmd"
+& "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1" -lFocus "programme,activityDef" -DiagramType "ER" -lDomains "pathway" -OutputFile "baseline_programme_activity_focus_pathway_domain_er.mmd"
 
 # Test case 3: Single focus with multiple domains
 Write-Host "📊 Generating baseline 3: Single focus with multiple domains" -ForegroundColor Yellow
-& "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1" -lFocus "partner" -DiagramType "ER" -lDomains "partner,programme" -OutputFile "baseline_partner_focus_partner_programme_domains_er.mmd"
+& "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1" -lFocus "partner" -DiagramType "ER" -lDomains "provider,pathway" -OutputFile "baseline_partner_focus_provider_pathway_domains_er.mmd"
 
 # Test case 4: Class diagram test
 Write-Host "📊 Generating baseline 4: Class diagram test" -ForegroundColor Yellow
-& "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1" -lFocus "partner" -DiagramType "Class" -lDomains "partner" -OutputFile "baseline_partner_focus_partner_domain_class.mmd"
+& "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1" -lFocus "partner" -DiagramType "Class" -lDomains "provider" -OutputFile "baseline_partner_focus_provider_domain_class.mmd"
 
 # Test case 5: All domains test
 Write-Host "📊 Generating baseline 5: All domains test" -ForegroundColor Yellow

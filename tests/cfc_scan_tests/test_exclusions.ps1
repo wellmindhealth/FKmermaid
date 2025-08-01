@@ -78,7 +78,7 @@ Set-Location $scriptPath
 
 # Generate a test diagram
 $testOutput = "test_exclusions.mmd"
-$result = & ".\generate_erd_enhanced.ps1" -lFocus "partner" -DiagramType "ER" -lDomains "partner,participant" -OutputFile $testOutput 2>&1
+$result = & ".\generate_erd_enhanced.ps1" -lFocus "partner" -DiagramType "ER" -lDomains "provider,participant" -OutputFile $testOutput 2>&1
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ Test diagram generated successfully" -ForegroundColor Green

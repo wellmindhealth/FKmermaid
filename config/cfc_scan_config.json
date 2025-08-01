@@ -1,19 +1,5 @@
 {
   "scanSettings": {
-    "excludeFiles": [
-      "participant.cfc",
-      "module.cfc",
-      "moduleDef.cfc",
-      "farFilter.cfc",
-      "farTask.cfc",
-      "ruleActivityDefListing.cfc",
-      "ruleImageGallerySlick.cfc",
-      "shopItem.cfc",
-      "orderItem.cfc",
-      "orderMaster.cfc",
-      "address.cfc",
-      "promotion.cfc"
-    ],
     "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
     "scanDirectories": [
       "D:\\GIT\\farcry\\plugins\\pathway",

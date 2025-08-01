@@ -1,8 +1,20 @@
 erDiagram
     %% Parameters:
 %%   Focus: member
-%%   Domains: participant
+%%   Domains: participant, pathway
 %%   Chart Type: ER
+    "pathway_dmImage" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "pathway_dmNavigation" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "pathway_dmNews" {
+        💧 UTILITIES UUID ObjectID
+    }
+
     "pathway_activity" {
         🔥 CORE UUID ObjectID
     }
@@ -23,8 +35,16 @@ erDiagram
         💧 UTILITIES UUID ObjectID
     }
 
+    "pathway_journalDef" {
+        💧 UTILITIES UUID ObjectID
+    }
+
     "pathway_library" {
         💧 UTILITIES UUID ObjectID
+    }
+
+    "pathway_media" {
+        🔥 CORE UUID ObjectID
     }
 
     "pathway_member" {
@@ -45,6 +65,10 @@ erDiagram
 
     "pathway_progMember" {
         🔥 CORE UUID ObjectID
+    }
+
+    "pathway_programme" {
+        💧 UTILITIES UUID ObjectID
     }
 
     "pathway_progRole" {
@@ -79,8 +103,40 @@ erDiagram
         💧 UTILITIES UUID ObjectID
     }
 
+    "pathway_trackerDef" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "farcrycms_dmEmail" {
+        📞 SERVICES UUID ObjectID
+    }
+
+    "farcrycms_dmFacts" {
+        💧 UTILITIES UUID ObjectID
+    }
+
     "farcrycms_farFeedback" {
         📞 SERVICES UUID ObjectID
+    }
+
+    "zfarcrycore_dmFile" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "zfarcrycore_dmHTML" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "zfarcrycore_dmInclude" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "zfarcrycore_dmProfile" {
+        🛡️ AUTH UUID ObjectID
+    }
+
+    "zfarcrycore_farBarnacle" {
+        🛡️ AUTH UUID ObjectID
     }
 
     "zfarcrycore_farGroup" {
@@ -95,18 +151,42 @@ erDiagram
         🛡️ AUTH UUID ObjectID
     }
 
+    "zfarcrycore_farUser" {
+        🛡️ AUTH UUID ObjectID
+    }
+
     %% Direct FK Relationships
+    "pathway_dmNavigation" ||--|| "pathway_dmImage" : sourceImageID
     "pathway_activity" ||--|| "pathway_progMember" : progMemberID
     "pathway_activity" ||--|| "pathway_activityDef" : activityDefID
+    "pathway_activityDef" ||--|| "pathway_programme" : programmeID
+    "pathway_activityDef" ||--|| "pathway_dmImage" : teaserImage
     "pathway_activityDef" ||--|| "pathway_progRole" : role
+    "pathway_activityDef" ||--|| "pathway_media" : defaultMediaID
+    "pathway_activityDef" ||--|| "pathway_journalDef" : journalID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker01ID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker02ID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker03ID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker04ID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker05ID
+    "pathway_center" ||--|| "pathway_dmImage" : Logo
+    "pathway_center" ||--|| "zfarcrycore_dmProfile" : dmProfileID
     "pathway_center" ||--|| "pathway_partner" : partnerID
     "pathway_center" ||--|| "pathway_memberGroup" : memberGroupID
     "pathway_intake" ||--|| "pathway_memberGroup" : memberGroupID
     "pathway_intake" ||--|| "pathway_center" : centerID
     "pathway_journal" ||--|| "pathway_progMember" : progMemberID
+    "pathway_journal" ||--|| "pathway_journalDef" : journalDefID
     "pathway_journal" ||--|| "pathway_activity" : activityID
+    "pathway_journalDef" ||--|| "pathway_trackerDef" : tracker01ID
+    "pathway_journalDef" ||--|| "pathway_trackerDef" : tracker02ID
+    "pathway_journalDef" ||--|| "pathway_programme" : programmeID
     "pathway_library" ||--|| "pathway_progMember" : progMemberID
     "pathway_library" ||--|| "pathway_activity" : activityID
+    "pathway_library" ||--|| "pathway_media" : mediaID
+    "pathway_media" ||--|| "pathway_partner" : partnerID
+    "pathway_media" ||--|| "pathway_programme" : programmeID
+    "pathway_media" ||--|| "pathway_progRole" : roleID
     "pathway_member" ||--|| "pathway_memberType" : memberTypeID
     "pathway_member" ||--|| "pathway_memberGroup" : memberGroupID
     "pathway_member" ||--|| "pathway_partner" : partnerID
@@ -115,28 +195,60 @@ erDiagram
     "pathway_member" ||--|| "pathway_activityDef" : activityDefID
     "pathway_member" ||--|| "pathway_progRole" : roleID
     "pathway_memberGroup" ||--|| "pathway_partner" : partnerID
+    "pathway_memberGroup" ||--|| "pathway_dmImage" : Logo
+    "pathway_memberGroup" ||--|| "zfarcrycore_dmFile" : resourcePosterID
+    "pathway_memberGroup" ||--|| "zfarcrycore_dmFile" : resourceHandoutID
+    "pathway_memberGroup" ||--|| "zfarcrycore_dmHTML" : supportPage
+    "pathway_memberGroup" ||--|| "pathway_dmNavigation" : selfRegNavID
+    "pathway_memberGroup" ||--|| "zfarcrycore_dmFile" : selfRegQrFileID
+    "pathway_partner" ||--|| "pathway_dmImage" : Logo
+    "pathway_partner" ||--|| "zfarcrycore_dmProfile" : dmProfileID
+    "pathway_partner" ||--|| "zfarcrycore_dmProfile" : seniorSupportID
+    "pathway_progMember" ||--|| "pathway_programme" : programmeID
     "pathway_progMember" ||--|| "pathway_member" : memberID
     "pathway_progMember" ||--|| "pathway_activity" : currActivityID
+    "pathway_programme" ||--|| "pathway_partner" : partnerID
+    "pathway_programme" ||--|| "pathway_dmImage" : Logo
+    "pathway_programme" ||--|| "pathway_activityDef" : firstActivityDefID
+    "pathway_programme" ||--|| "pathway_activityDef" : lastActivityDefID
+    "pathway_progRole" ||--|| "pathway_programme" : programmeID
+    "pathway_referer" ||--|| "pathway_dmImage" : picture
+    "pathway_referer" ||--|| "zfarcrycore_dmProfile" : dmProfileID
     "pathway_referer" ||--|| "pathway_partner" : partnerID
     "pathway_referer" ||--|| "pathway_memberGroup" : memberGroupID
     "pathway_referer" ||--|| "pathway_center" : centerID
+    "pathway_report" ||--|| "pathway_programme" : programmeID
     "pathway_report" ||--|| "pathway_partner" : partnerID
     "pathway_report" ||--|| "pathway_member" : memberID
     "pathway_report" ||--|| "pathway_memberType" : memberTypeID
+    "pathway_SSQ_arthritis01" ||--|| "pathway_programme" : programmeID
     "pathway_SSQ_arthritis01" ||--|| "pathway_progMember" : progMemberID
     "pathway_SSQ_arthritis01" ||--|| "pathway_member" : memberID
+    "pathway_SSQ_pain01" ||--|| "pathway_programme" : programmeID
     "pathway_SSQ_pain01" ||--|| "pathway_progMember" : progMemberID
     "pathway_SSQ_pain01" ||--|| "pathway_member" : memberID
+    "pathway_SSQ_stress01" ||--|| "pathway_programme" : programmeID
     "pathway_SSQ_stress01" ||--|| "pathway_progMember" : progMemberID
     "pathway_SSQ_stress01" ||--|| "pathway_member" : memberID
     "pathway_testimonial" ||--|| "pathway_member" : memberID
     "pathway_testimonial" ||--|| "pathway_activityDef" : activityDefID
     "pathway_tracker" ||--|| "pathway_progMember" : progMemberID
+    "pathway_tracker" ||--|| "pathway_trackerDef" : trackerDefID
     "pathway_tracker" ||--|| "pathway_activity" : activityID
+    "pathway_trackerDef" ||--|| "pathway_programme" : programmeID
+    "farcrycms_dmFacts" ||--|| "pathway_dmImage" : imageID
+    "pathway_dmNews" ||--|| "pathway_dmImage" : teaserImage
     "farcrycms_farFeedback" ||--|| "pathway_member" : memberID
+    "zfarcrycore_dmFile" ||--|| "pathway_dmImage" : teaserImage
+    "zfarcrycore_dmHTML" ||--|| "pathway_dmImage" : teaserImage
+    "zfarcrycore_dmInclude" ||--|| "pathway_dmImage" : teaserImage
+    "zfarcrycore_dmProfile" ||--|| "pathway_memberGroup" : memberGroupID
+    "zfarcrycore_farBarnacle" ||--|| "zfarcrycore_farRole" : roleid
+    "zfarcrycore_farBarnacle" ||--|| "zfarcrycore_farPermission" : permissionid
     %% End Direct FK Relationships
 
     %% Special Joins
+    "zfarcrycore_farUser" ||--|| "zfarcrycore_dmProfile" : userID_to_userName_userDirectory
     %% End Special Joins
 
     %% Self-Referencing Relationships for farPermission
@@ -150,29 +262,44 @@ erDiagram
     %% End Self-Referencing Relationships for activityDef
 
     %% Join Table Relationships
+    "pathway_activityDef" }o--|| "pathway_media" : aMediaIDs
+    "pathway_center" }o--|| "zfarcrycore_dmProfile" : aUsers
     "pathway_center" }o--|| "pathway_referer" : aReferers
     "pathway_intake" }o--|| "pathway_member" : aMembers
     "pathway_member" }o--|| "zfarcrycore_farGroup" : aGroups
+    "pathway_memberGroup" }o--|| "zfarcrycore_farUser" : aFarcryUsers
     "pathway_partner" }o--|| "pathway_center" : aCenters
     "pathway_partner" }o--|| "pathway_referer" : aReferers
+    "pathway_programme" }o--|| "pathway_activityDef" : aFollowupActivityDefIDs
+    "pathway_programme" }o--|| "pathway_trackerDef" : aTrackerIDs
+    "pathway_programme" }o--|| "zfarcrycore_dmFile" : aObjectIDs
     "pathway_report" }o--|| "pathway_memberGroup" : aMemberGroupID
+    "farcrycms_dmEmail" }o--|| "pathway_memberGroup" : aGroups
+    "zfarcrycore_dmProfile" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farPermission" : aPermissions
+    "zfarcrycore_farUser" }o--|| "zfarcrycore_farGroup" : aGroups
     %% End Join Table Relationships
 
 
     %% Entity Styling
+    style pathway_dmImage fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_dmNavigation fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_dmNews fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_activity fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
     style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_intake fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_journal fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style pathway_journalDef fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_library fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style pathway_media fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_member fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
     style pathway_memberGroup fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_memberType fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_partner fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_progMember fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style pathway_programme fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_progRole fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_referer fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_report fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
@@ -181,8 +308,17 @@ erDiagram
     style pathway_SSQ_stress01 fill:#8e24aa,stroke:#6a1b9a,stroke-width:2px,color:#fff
     style pathway_testimonial fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style pathway_tracker fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style pathway_trackerDef fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style farcrycms_dmEmail fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style farcrycms_dmFacts fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style farcrycms_farFeedback fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style zfarcrycore_dmFile fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_dmHTML fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_dmInclude fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_dmProfile fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farBarnacle fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_farGroup fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style zfarcrycore_farPermission fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
     style zfarcrycore_farRole fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_farUser fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
 

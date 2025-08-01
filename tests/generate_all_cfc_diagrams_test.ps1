@@ -71,8 +71,15 @@ foreach ($cfcName in $testCfcNames) {
         }
         
         try {
+            # Change to the PowerShell directory before running the ER script
+            $originalLocation = Get-Location
+            Set-Location (Join-Path $PSScriptRoot "..\src\powershell")
+            
             # Run the ER generation script with JSON output
             & $erScriptPath @params
+            
+            # Return to original location
+            Set-Location $originalLocation
             
             # Check if JSON file was created and read the URL
             if (Test-Path $jsonOutputFile) {

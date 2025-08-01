@@ -33,11 +33,6 @@ classDiagram
         +string name
     }
 
-    class pathway_guide {
-        +UUID ObjectID
-        +string name
-    }
-
     class pathway_intake {
         +UUID ObjectID
         +string name
@@ -145,15 +140,11 @@ classDiagram
     pathway_dmNavigation --> pathway_dmImage : sourceImageID
     pathway_activityDef --> pathway_programme : programmeID
     pathway_activityDef --> pathway_dmImage : teaserImage
-    pathway_activityDef --> pathway_guide : guideID
     pathway_activityDef --> pathway_progRole : role
     pathway_center --> pathway_dmImage : Logo
     pathway_center --> zfarcrycore_dmProfile : dmProfileID
     pathway_center --> pathway_partner : partnerID
     pathway_center --> pathway_memberGroup : memberGroupID
-    pathway_guide --> pathway_dmImage : picture
-    pathway_guide --> pathway_partner : partnerID
-    pathway_guide --> pathway_center : centerID
     pathway_intake --> pathway_memberGroup : memberGroupID
     pathway_intake --> pathway_center : centerID
     pathway_memberGroup --> pathway_partner : partnerID
@@ -200,9 +191,9 @@ classDiagram
     zfarcrycore_farRole --> zfarcrycore_farPermission : aPermissions
     zfarcrycore_farUser --> zfarcrycore_farGroup : aGroups
     zfarcrycore_farWebtopDashboard --> zfarcrycore_farRole : aRoles
+    pathway_dmNavigation --> pathway_dmNavigation : internalRedirectID, ExternalLink
     zfarcrycore_farPermission --> zfarcrycore_farPermission : aRelatedtypes
     pathway_activityDef --> pathway_activityDef : onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
-    pathway_dmNavigation --> pathway_dmNavigation : internalRedirectID, ExternalLink
 
     %% Special Joins
     zfarcrycore_farUser --> zfarcrycore_dmProfile : userID_to_userName_userDirectory
@@ -216,7 +207,6 @@ classDiagram
     style pathway_dmNews fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
-    style pathway_guide fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_intake fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_memberGroup fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_partner fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff

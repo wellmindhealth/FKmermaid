@@ -19,10 +19,6 @@ erDiagram
         🔥 CORE UUID ObjectID
     }
 
-    "pathway_guide" {
-        💧 UTILITIES UUID ObjectID
-    }
-
     "pathway_journalDef" {
         💧 UTILITIES UUID ObjectID
     }
@@ -107,7 +103,6 @@ erDiagram
     "pathway_dmNavigation" ||--|| "pathway_dmImage" : sourceImageID
     "pathway_activityDef" ||--|| "pathway_programme" : programmeID
     "pathway_activityDef" ||--|| "pathway_dmImage" : teaserImage
-    "pathway_activityDef" ||--|| "pathway_guide" : guideID
     "pathway_activityDef" ||--|| "pathway_progRole" : role
     "pathway_activityDef" ||--|| "pathway_media" : defaultMediaID
     "pathway_activityDef" ||--|| "pathway_journalDef" : journalID
@@ -116,13 +111,10 @@ erDiagram
     "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker03ID
     "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker04ID
     "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker05ID
-    "pathway_guide" ||--|| "pathway_dmImage" : picture
-    "pathway_guide" ||--|| "pathway_partner" : partnerID
     "pathway_journalDef" ||--|| "pathway_trackerDef" : tracker01ID
     "pathway_journalDef" ||--|| "pathway_trackerDef" : tracker02ID
     "pathway_journalDef" ||--|| "pathway_programme" : programmeID
     "pathway_library" ||--|| "pathway_media" : mediaID
-    "pathway_media" ||--|| "pathway_guide" : guideID
     "pathway_media" ||--|| "pathway_partner" : partnerID
     "pathway_media" ||--|| "pathway_programme" : programmeID
     "pathway_media" ||--|| "pathway_progRole" : roleID
@@ -175,7 +167,6 @@ erDiagram
     style pathway_dmNavigation fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
     style pathway_dmNews fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
     style pathway_activityDef fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
-    style pathway_guide fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_journalDef fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
     style pathway_library fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_media fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff

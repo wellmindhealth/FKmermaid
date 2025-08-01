@@ -64,31 +64,31 @@ $testCases = @(
     @{
         Name = "Partner Focus - Single Domain"
         Focus = "partner"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
     },
     @{
         Name = "Partner+Member Focus - Single Domain"
         Focus = "partner,member"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
     },
     @{
         Name = "Partner Focus - Multi Domain"
         Focus = "partner"
-        Domains = "partner,participant"
+        Domains = "provider,participant"
         DiagramType = "ER"
     },
     @{
-        Name = "Member Focus - Programme Domain"
+        Name = "Member Focus - Pathway Domain"
         Focus = "member"
-        Domains = "programme"
+        Domains = "pathway"
         DiagramType = "ER"
     },
     @{
-        Name = "Center Focus - Partner Domain"
+        Name = "Center Focus - Provider Domain"
         Focus = "center"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
     }
 )

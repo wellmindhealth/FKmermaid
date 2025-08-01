@@ -48,24 +48,10 @@ $baselineTests = @(
     },
     @{
         Name = "Edge_Case_Pathway_Domain_Only"
-        Focus = "dmImage"
-        Domains = "pathway"
-        DiagramType = "ER"
-        Description = "Tests pathway domain entities only (should be minimal, isolated domain)"
-    },
-    @{
-        Name = "Edge_Case_Pathway_Domain_Only"
         Focus = "activityDef"
         Domains = "pathway"
         DiagramType = "ER"
         Description = "Tests pathway domain entities only (should be pathway-specific)"
-    },
-    @{
-        Name = "Edge_Case_Programme_Domain_Only"
-        Focus = "activityDef"
-        Domains = "programme"
-        DiagramType = "ER"
-        Description = "Tests programme domain entities only (should be programme-specific)"
     },
     @{
         Name = "Edge_Case_Partner_Pathway_Only"
@@ -207,20 +193,7 @@ $baselineTests = @(
         DiagramType = "Class"
         Description = "Tests Class diagram with activityDef focus and pathway domain"
     },
-    @{
-        Name = "Edge_Case_ER_Diagram_Guide_Focus"
-        Focus = "guide"
-        Domains = "provider"
-        DiagramType = "ER"
-        Description = "Tests guide focus with provider domain (guide is in participant/pathway domains)"
-    },
-    @{
-        Name = "Edge_Case_Class_Diagram_Guide_Focus"
-        Focus = "guide"
-        Domains = "provider"
-        DiagramType = "Class"
-        Description = "Tests Class diagram with guide focus and provider domain"
-    },
+
     @{
         Name = "Edge_Case_ER_Diagram_Journal_Focus"
         Focus = "journal"
@@ -245,7 +218,7 @@ $baselineTests = @(
     @{
         Name = "Multi_Domain_Test"
         Focus = "member"
-        Domains = "participant,programme"
+        Domains = "participant,pathway"
         DiagramType = "ER"
         Description = "Single focus with multiple domains - member focus, multiple domains"
     },

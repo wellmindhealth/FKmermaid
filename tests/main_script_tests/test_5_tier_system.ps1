@@ -101,7 +101,7 @@ Write-Host "   Tiers found: $($analysis.Tiers.Count)" -ForegroundColor Gray
 $ExpectedTiers = @{
     "focus" = @("pathway_partner", "pathway_member", "pathway_programme")  # Orange tier (#d75500)
     "domain_related" = @("pathway_center", "pathway_intake", "pathway_memberGroup", "pathway_progRole", "pathway_referer", "pathway_ruleSelfRegistration", "pathway_report", "pathway_testimonial", "zfarcrycore_dmProfile", "zfarcrycore_farGroup")  # Gold tier (#693a00)
-    "related" = @("pathway_activityDef", "pathway_media", "pathway_dmImage", "pathway_guide", "pathway_journalDef", "pathway_memberType", "pathway_progMember", "pathway_trackerDef", "zfarcrycore_dmFile", "farcrycms_farFeedback")  # Blue tier (#1963d2)
+    "related" = @("pathway_activityDef", "pathway_media", "pathway_dmImage", "pathway_journalDef", "pathway_memberType", "pathway_progMember", "pathway_trackerDef", "zfarcrycore_dmFile", "farcrycms_farFeedback")  # Blue tier (#1963d2)
     "domain_other" = @("zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser", "zfarcrycore_farWebtopDashboard")  # Blue-grey tier (#44517f)
     "secondary" = @("pathway_activity", "pathway_journal", "pathway_library", "pathway_tracker", "pathway_dmNavigation", "pathway_dmNews", "farcrycms_dmEmail", "farcrycms_dmFacts", "zfarcrycore_dmHTML", "zfarcrycore_dmInclude", "zfarcrycore_farBarnacle")  # Dark grey tier (#1a1a1a) - excludes SSQ entities (purple)
 }

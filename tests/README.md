@@ -61,7 +61,7 @@ This directory contains comprehensive tests for the FKmermaid ER diagram generat
 
 ### Expected Results
 - **CFC Scan**: 168 entities, comprehensive direct FK relationships
-- **5-Tier System**: Orange (focus), Blue (related), Blue-grey (same domain), Dark grey (other domains), Green (inheritance)
+- **5-Tier System**: Orange (focus), Gold (same domain + directly related), Blue (directly related but different domain), Blue-grey (same domain but not directly related), Dark grey (different domain + not directly related)
 - **Exclusions**: `farFilter`, `farTask`, `address` should not appear in outputs
 - **Parameter Combinations**: Various combinations should produce predictable entity counts
 - **Quick Test**: 6 diagrams (member, activityDef, progRole × provider, participant)

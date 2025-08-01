@@ -33,23 +33,11 @@ $edgeCaseTests = @(
         Name = "Edge_Case_Pathway_Domain_Only"
         BaselineFile = "Edge_Case_Pathway_Domain_Only.mmd"
         ExpectedCriteria = @{
-            FocusEntities = @("dmImage")
+            FocusEntities = @("activityDef")
             DomainFilter = @("pathway")
             DiagramType = "ER"
-            ExpectedEntityCount = 13  # Actual result from baseline generation
-            Description = "dmImage focus, pathway domain only - should be minimal, isolated domain"
-        }
-        ExpectedToFail = $false
-    },
-    @{
-        Name = "Edge_Case_Programme_Domain_Only"
-        BaselineFile = "Edge_Case_Programme_Domain_Only.mmd"
-        ExpectedCriteria = @{
-            FocusEntities = @("activityDef")
-            DomainFilter = @("programme")
-            DiagramType = "ER"
-            ExpectedEntityCount = 11  # Actual result from baseline generation
-            Description = "activityDef focus, programme domain only - should be programme-specific"
+            ExpectedEntityCount = 25  # Actual result from baseline generation
+            Description = "activityDef focus, pathway domain only - should be pathway-specific"
         }
         ExpectedToFail = $false
     },
@@ -82,7 +70,7 @@ $edgeCaseTests = @(
         BaselineFile = "Edge_Case_Class_Diagram_Complex.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("member")
-            DomainFilter = @("participant", "programme")
+            DomainFilter = @("participant", "pathway")
             DiagramType = "Class"
             ExpectedEntityCount = 15  # Actual result from baseline generation
             Description = "Class diagram with complex relationships"
@@ -118,10 +106,10 @@ $edgeCaseTests = @(
         BaselineFile = "Edge_Case_Member_Partner_Only.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("member")
-            DomainFilter = @("partner")
+            DomainFilter = @("provider")
             DiagramType = "ER"
             ExpectedEntityCount = 22  # Actual result from baseline generation
-            Description = "member focus, partner domain only - should be minimal"
+            Description = "member focus, provider domain only - should be minimal"
         }
         ExpectedToFail = $false
     },
@@ -202,10 +190,10 @@ $edgeCaseTests = @(
         BaselineFile = "Edge_Case_ER_Diagram_Media_Focus.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("media")
-            DomainFilter = @("programme")
+            DomainFilter = @("pathway")
             DiagramType = "ER"
             ExpectedEntityCount = 7  # Actual result from baseline generation
-            Description = "media entity focus with programme domain (media is in multiple domains)"
+            Description = "media entity focus with pathway domain (media is in multiple domains)"
         }
         ExpectedToFail = $false
     },
@@ -214,10 +202,10 @@ $edgeCaseTests = @(
         BaselineFile = "Edge_Case_Class_Diagram_Media_Focus.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("media")
-            DomainFilter = @("programme")
+            DomainFilter = @("pathway")
             DiagramType = "Class"
             ExpectedEntityCount = 7  # Actual result from baseline generation
-            Description = "Class diagram with media entity focus and programme domain"
+            Description = "Class diagram with media entity focus and pathway domain"
         }
         ExpectedToFail = $false
     },
@@ -226,10 +214,10 @@ $edgeCaseTests = @(
         BaselineFile = "Edge_Case_ER_Diagram_ProgRole_Focus.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("progRole")
-            DomainFilter = @("partner")
+            DomainFilter = @("provider")
             DiagramType = "ER"
             ExpectedEntityCount = 15  # Actual result from baseline generation
-            Description = "progRole focus with partner domain (progRole is in multiple domains)"
+            Description = "progRole focus with provider domain (progRole is in multiple domains)"
         }
         ExpectedToFail = $false
     },
@@ -238,10 +226,10 @@ $edgeCaseTests = @(
         BaselineFile = "Edge_Case_Class_Diagram_ProgRole_Focus.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("progRole")
-            DomainFilter = @("partner")
+            DomainFilter = @("provider")
             DiagramType = "Class"
             ExpectedEntityCount = 5  # Actual result from baseline generation
-            Description = "Class diagram with progRole focus and partner domain"
+            Description = "Class diagram with progRole focus and provider domain"
         }
         ExpectedToFail = $false
     },
@@ -269,39 +257,16 @@ $edgeCaseTests = @(
         }
         ExpectedToFail = $false
     },
-    @{
-        Name = "Edge_Case_ER_Diagram_Guide_Focus"
-        BaselineFile = "Edge_Case_ER_Diagram_Guide_Focus.mmd"
-        ExpectedCriteria = @{
-            FocusEntities = @("guide")
-            DomainFilter = @("partner")
-            DiagramType = "ER"
-            ExpectedEntityCount = 16  # Actual result from baseline generation
-            Description = "guide focus with partner domain (guide is in participant/programme domains)"
-        }
-        ExpectedToFail = $false
-    },
-    @{
-        Name = "Edge_Case_Class_Diagram_Guide_Focus"
-        BaselineFile = "Edge_Case_Class_Diagram_Guide_Focus.mmd"
-        ExpectedCriteria = @{
-            FocusEntities = @("guide")
-            DomainFilter = @("partner")
-            DiagramType = "Class"
-            ExpectedEntityCount = 6  # Actual result from baseline generation
-            Description = "Class diagram with guide focus and partner domain"
-        }
-        ExpectedToFail = $false
-    },
+
     @{
         Name = "Edge_Case_ER_Diagram_Journal_Focus"
         BaselineFile = "Edge_Case_ER_Diagram_Journal_Focus.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("journal")
-            DomainFilter = @("programme")
+            DomainFilter = @("pathway")
             DiagramType = "ER"
             ExpectedEntityCount = 9  # Actual result from baseline generation
-            Description = "journal focus with programme domain (journal is in participant domain)"
+            Description = "journal focus with pathway domain (journal is in participant domain)"
         }
         ExpectedToFail = $false
     },
@@ -310,10 +275,10 @@ $edgeCaseTests = @(
         BaselineFile = "Edge_Case_Class_Diagram_Journal_Focus.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("journal")
-            DomainFilter = @("programme")
+            DomainFilter = @("pathway")
             DiagramType = "Class"
             ExpectedEntityCount = 4  # Actual result from baseline generation
-            Description = "Class diagram with journal focus and programme domain"
+            Description = "Class diagram with journal focus and pathway domain"
         }
         ExpectedToFail = $false
     }

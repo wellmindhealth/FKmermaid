@@ -8,18 +8,28 @@ param(
 )
 
 # Import the relationship detection module
-. ".\relationship_detection.ps1"
+. "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\relationship_detection.ps1"
 
 # Load configuration
 $configFile = "D:\GIT\farcry\Cursor\FKmermaid\config\cfc_scan_config.json"
+$exclusionsFile = "D:\GIT\farcry\Cursor\FKmermaid\config\exclusions.json"
+
 if (Test-Path $configFile) {
     $config = Get-Content $configFile -Raw | ConvertFrom-Json
     $knownTables = $config.entityConstraints.knownTables
-    $excludeFiles = $config.scanSettings.excludeFiles
-    $excludeFolders = $config.scanSettings.excludeFolders
     Write-Host "Loaded $($knownTables.Count) known tables" -ForegroundColor Cyan
 } else {
     Write-Host "❌ Configuration file not found: $configFile" -ForegroundColor Red
+    exit 1
+}
+
+# Load exclusions from the dedicated exclusions file
+if (Test-Path $exclusionsFile) {
+    $exclusions = Get-Content $exclusionsFile -Raw | ConvertFrom-Json
+    $excludeFiles = $exclusions.excludeFiles
+    Write-Host "Loaded $($excludeFiles.Count) excluded files" -ForegroundColor Cyan
+} else {
+    Write-Host "❌ Exclusions file not found: $exclusionsFile" -ForegroundColor Red
     exit 1
 }
 

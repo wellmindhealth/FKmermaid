@@ -114,7 +114,7 @@ $testCases = @(
     @{
         Name = "Partner+Member Focus - 5-Tier Test"
         Focus = "partner,member"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
         Description = "Test 5-tier semantic styling system"
         ExpectedTiers = @{

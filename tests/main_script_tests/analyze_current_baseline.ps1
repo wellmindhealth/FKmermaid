@@ -102,7 +102,7 @@ if (Test-Path $generatedFile) {
         TestName = "Partner+Member Focus - Gold Tier Issue"
         Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
         Focus = "partner,member"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
         Description = "This test captures the current gold tier issue where entities that should be gold (same domain AND directly related) are appearing as blue"
         ActualTiers = $actualTiers

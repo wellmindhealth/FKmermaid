@@ -160,7 +160,7 @@ if (Test-Path $generatedFile) {
         TestName = "Partner+Member Focus - Comprehensive Analysis"
         Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
         Focus = "partner,member"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
         Description = "Comprehensive analysis of current output including entities, relationships, and styling"
         ExpectedGoldEntities = $expectedGoldEntities

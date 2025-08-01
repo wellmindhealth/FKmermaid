@@ -1,42 +1,100 @@
 {
-  "TestPassed": false,
-  "TestName": "Partner+Member Focus - 5-Tier Test",
-  "Focus": "partner,member",
+  "Domains": "provider",
   "GeneratedFile": "domain_detection_test.mmd",
-  "ExpectedTiers": {
-    "BlueTier": [
+  "Description": "Test 5-tier semantic styling system",
+  "Analysis": {
+    "Tiers": {
+      "DarkGreyTier": [],
+      "GoldTier": [
+        "pathway_ruleSelfRegistration",
+        "pathway_center",
+        "pathway_intake",
+        "pathway_memberGroup",
+        "pathway_programme",
+        "pathway_progRole",
+        "pathway_referer",
+        "pathway_report",
+        "pathway_testimonial",
+        "zfarcrycore_dmProfile",
+        "zfarcrycore_farGroup"
+      ],
+      "BlueTier": [
+        "pathway_dmImage",
+        "pathway_activityDef",
+        "pathway_media",
+        "pathway_memberType",
+        "pathway_progMember",
+        "farcrycms_farFeedback"
+      ],
+      "BlueGreyTier": [
+        "zfarcrycore_farPermission",
+        "zfarcrycore_farRole",
+        "zfarcrycore_farUser",
+        "zfarcrycore_farWebtopDashboard"
+      ],
+      "Focus": [
+        "pathway_member",
+        "pathway_partner"
+      ]
+    },
+    "Styling": {
+      "pathway_memberGroup": "#693a00",
+      "pathway_ruleSelfRegistration": "#693a00",
+      "pathway_intake": "#693a00",
+      "pathway_dmImage": "#1963d2",
+      "pathway_media": "#1963d2",
+      "zfarcrycore_farRole": "#44517f",
+      "zfarcrycore_farGroup": "#693a00",
+      "pathway_report": "#693a00",
+      "pathway_SSQ_pain01": "#8e24aa",
+      "pathway_SSQ_stress01": "#8e24aa",
+      "pathway_memberType": "#1963d2",
+      "pathway_progMember": "#1963d2",
+      "zfarcrycore_farWebtopDashboard": "#44517f",
+      "pathway_partner": "#d75500",
+      "pathway_activityDef": "#1963d2",
+      "pathway_programme": "#693a00",
+      "pathway_testimonial": "#693a00",
+      "zfarcrycore_farUser": "#44517f",
+      "zfarcrycore_farPermission": "#44517f",
+      "pathway_referer": "#693a00",
+      "zfarcrycore_dmProfile": "#693a00",
+      "pathway_member": "#d75500",
+      "pathway_center": "#693a00",
+      "farcrycms_farFeedback": "#1963d2",
+      "pathway_SSQ_arthritis01": "#8e24aa",
+      "pathway_progRole": "#693a00"
+    },
+    "RelationshipCount": 62,
+    "Entities": [
       "pathway_ruleSelfRegistration",
       "pathway_dmImage",
-      "pathway_guide",
-      "pathway_memberType",
-      "pathway_progMember",
-      "pathway_report",
-      "pathway_testimonial"
-    ],
-    "Focus": [
-      "pathway_partner",
-      "pathway_member"
-    ],
-    "DarkGreyTier": [],
-    "BlueGreyTier": [
-      "zfarcrycore_farGroup",
-      "zfarcrycore_farPermission",
-      "zfarcrycore_farRole",
-      "zfarcrycore_farUser"
-    ],
-    "GoldTier": [
       "pathway_activityDef",
       "pathway_center",
       "pathway_intake",
       "pathway_media",
+      "pathway_member",
       "pathway_memberGroup",
+      "pathway_memberType",
+      "pathway_partner",
+      "pathway_progMember",
       "pathway_programme",
       "pathway_progRole",
       "pathway_referer",
-      "zfarcrycore_dmProfile"
-    ]
-  },
-  "Analysis": {
+      "pathway_report",
+      "pathway_SSQ_arthritis01",
+      "pathway_SSQ_pain01",
+      "pathway_SSQ_stress01",
+      "pathway_testimonial",
+      "farcrycms_farFeedback",
+      "zfarcrycore_dmProfile",
+      "zfarcrycore_farGroup",
+      "zfarcrycore_farPermission",
+      "zfarcrycore_farRole",
+      "zfarcrycore_farUser",
+      "zfarcrycore_farWebtopDashboard"
+    ],
+    "EntityCount": 26,
     "Relationships": [
       {
         "From": "pathway_ruleSelfRegistration",
@@ -64,21 +122,6 @@
         "Type": "refererID"
       },
       {
-        "From": "pathway_dmNavigation",
-        "To": "pathway_dmImage",
-        "Type": "sourceImageID"
-      },
-      {
-        "From": "pathway_activity",
-        "To": "pathway_progMember",
-        "Type": "progMemberID"
-      },
-      {
-        "From": "pathway_activity",
-        "To": "pathway_activityDef",
-        "Type": "activityDefID"
-      },
-      {
         "From": "pathway_activityDef",
         "To": "pathway_programme",
         "Type": "programmeID"
@@ -90,11 +133,6 @@
       },
       {
         "From": "pathway_activityDef",
-        "To": "pathway_guide",
-        "Type": "guideID"
-      },
-      {
-        "From": "pathway_activityDef",
         "To": "pathway_progRole",
         "Type": "role"
       },
@@ -102,36 +140,6 @@
         "From": "pathway_activityDef",
         "To": "pathway_media",
         "Type": "defaultMediaID"
-      },
-      {
-        "From": "pathway_activityDef",
-        "To": "pathway_journalDef",
-        "Type": "journalID"
-      },
-      {
-        "From": "pathway_activityDef",
-        "To": "pathway_trackerDef",
-        "Type": "tracker01ID"
-      },
-      {
-        "From": "pathway_activityDef",
-        "To": "pathway_trackerDef",
-        "Type": "tracker02ID"
-      },
-      {
-        "From": "pathway_activityDef",
-        "To": "pathway_trackerDef",
-        "Type": "tracker03ID"
-      },
-      {
-        "From": "pathway_activityDef",
-        "To": "pathway_trackerDef",
-        "Type": "tracker04ID"
-      },
-      {
-        "From": "pathway_activityDef",
-        "To": "pathway_trackerDef",
-        "Type": "tracker05ID"
       },
       {
         "From": "pathway_center",
@@ -154,21 +162,6 @@
         "Type": "memberGroupID"
       },
       {
-        "From": "pathway_guide",
-        "To": "pathway_dmImage",
-        "Type": "picture"
-      },
-      {
-        "From": "pathway_guide",
-        "To": "pathway_partner",
-        "Type": "partnerID"
-      },
-      {
-        "From": "pathway_guide",
-        "To": "pathway_center",
-        "Type": "centerID"
-      },
-      {
         "From": "pathway_intake",
         "To": "pathway_memberGroup",
         "Type": "memberGroupID"
@@ -177,56 +170,6 @@
         "From": "pathway_intake",
         "To": "pathway_center",
         "Type": "centerID"
-      },
-      {
-        "From": "pathway_journal",
-        "To": "pathway_progMember",
-        "Type": "progMemberID"
-      },
-      {
-        "From": "pathway_journal",
-        "To": "pathway_journalDef",
-        "Type": "journalDefID"
-      },
-      {
-        "From": "pathway_journal",
-        "To": "pathway_activity",
-        "Type": "activityID"
-      },
-      {
-        "From": "pathway_journalDef",
-        "To": "pathway_trackerDef",
-        "Type": "tracker01ID"
-      },
-      {
-        "From": "pathway_journalDef",
-        "To": "pathway_trackerDef",
-        "Type": "tracker02ID"
-      },
-      {
-        "From": "pathway_journalDef",
-        "To": "pathway_programme",
-        "Type": "programmeID"
-      },
-      {
-        "From": "pathway_library",
-        "To": "pathway_progMember",
-        "Type": "progMemberID"
-      },
-      {
-        "From": "pathway_library",
-        "To": "pathway_activity",
-        "Type": "activityID"
-      },
-      {
-        "From": "pathway_library",
-        "To": "pathway_media",
-        "Type": "mediaID"
-      },
-      {
-        "From": "pathway_media",
-        "To": "pathway_guide",
-        "Type": "guideID"
       },
       {
         "From": "pathway_media",
@@ -289,31 +232,6 @@
         "Type": "Logo"
       },
       {
-        "From": "pathway_memberGroup",
-        "To": "zfarcrycore_dmFile",
-        "Type": "resourcePosterID"
-      },
-      {
-        "From": "pathway_memberGroup",
-        "To": "zfarcrycore_dmFile",
-        "Type": "resourceHandoutID"
-      },
-      {
-        "From": "pathway_memberGroup",
-        "To": "zfarcrycore_dmHTML",
-        "Type": "supportPage"
-      },
-      {
-        "From": "pathway_memberGroup",
-        "To": "pathway_dmNavigation",
-        "Type": "selfRegNavID"
-      },
-      {
-        "From": "pathway_memberGroup",
-        "To": "zfarcrycore_dmFile",
-        "Type": "selfRegQrFileID"
-      },
-      {
         "From": "pathway_partner",
         "To": "pathway_dmImage",
         "Type": "Logo"
@@ -337,11 +255,6 @@
         "From": "pathway_progMember",
         "To": "pathway_member",
         "Type": "memberID"
-      },
-      {
-        "From": "pathway_progMember",
-        "To": "pathway_activity",
-        "Type": "currActivityID"
       },
       {
         "From": "pathway_programme",
@@ -469,69 +382,14 @@
         "Type": "activityDefID"
       },
       {
-        "From": "pathway_tracker",
-        "To": "pathway_progMember",
-        "Type": "progMemberID"
-      },
-      {
-        "From": "pathway_tracker",
-        "To": "pathway_trackerDef",
-        "Type": "trackerDefID"
-      },
-      {
-        "From": "pathway_tracker",
-        "To": "pathway_activity",
-        "Type": "activityID"
-      },
-      {
-        "From": "pathway_trackerDef",
-        "To": "pathway_programme",
-        "Type": "programmeID"
-      },
-      {
-        "From": "farcrycms_dmFacts",
-        "To": "pathway_dmImage",
-        "Type": "imageID"
-      },
-      {
-        "From": "pathway_dmNews",
-        "To": "pathway_dmImage",
-        "Type": "teaserImage"
-      },
-      {
         "From": "farcrycms_farFeedback",
         "To": "pathway_member",
         "Type": "memberID"
       },
       {
-        "From": "zfarcrycore_dmFile",
-        "To": "pathway_dmImage",
-        "Type": "teaserImage"
-      },
-      {
-        "From": "zfarcrycore_dmHTML",
-        "To": "pathway_dmImage",
-        "Type": "teaserImage"
-      },
-      {
-        "From": "zfarcrycore_dmInclude",
-        "To": "pathway_dmImage",
-        "Type": "teaserImage"
-      },
-      {
         "From": "zfarcrycore_dmProfile",
         "To": "pathway_memberGroup",
         "Type": "memberGroupID"
-      },
-      {
-        "From": "zfarcrycore_farBarnacle",
-        "To": "zfarcrycore_farRole",
-        "Type": "roleid"
-      },
-      {
-        "From": "zfarcrycore_farBarnacle",
-        "To": "zfarcrycore_farPermission",
-        "Type": "permissionid"
       },
       {
         "From": "zfarcrycore_farUser",
@@ -548,158 +406,53 @@
         "To": "pathway_activityDef",
         "Type": "self_refs"
       }
-    ],
-    "EntityCount": 41,
-    "Tiers": {
-      "BlueGreyTier": [
-        "zfarcrycore_farPermission",
-        "zfarcrycore_farRole",
-        "zfarcrycore_farUser",
-        "zfarcrycore_farWebtopDashboard"
-      ],
-      "Focus": [
-        "pathway_member",
-        "pathway_partner"
-      ],
-      "GoldTier": [
-        "pathway_ruleSelfRegistration",
-        "pathway_center",
-        "pathway_intake",
-        "pathway_memberGroup",
-        "pathway_programme",
-        "pathway_progRole",
-        "pathway_referer",
-        "pathway_report",
-        "pathway_testimonial",
-        "zfarcrycore_dmProfile",
-        "zfarcrycore_farGroup"
-      ],
-      "DarkGreyTier": [
-        "pathway_dmNavigation",
-        "pathway_dmNews",
-        "pathway_activity",
-        "pathway_journal",
-        "pathway_journalDef",
-        "pathway_library",
-        "pathway_tracker",
-        "pathway_trackerDef",
-        "farcrycms_dmEmail",
-        "farcrycms_dmFacts",
-        "zfarcrycore_dmFile",
-        "zfarcrycore_dmHTML",
-        "zfarcrycore_dmInclude",
-        "zfarcrycore_farBarnacle"
-      ],
-      "BlueTier": [
-        "pathway_dmImage",
-        "pathway_activityDef",
-        "pathway_guide",
-        "pathway_media",
-        "pathway_memberType",
-        "pathway_progMember",
-        "farcrycms_farFeedback"
-      ]
-    },
-    "Styling": {
-      "zfarcrycore_dmProfile": "#693a00",
-      "farcrycms_dmEmail": "#1a1a1a",
-      "pathway_report": "#693a00",
-      "zfarcrycore_farWebtopDashboard": "#44517f",
-      "pathway_testimonial": "#693a00",
-      "pathway_referer": "#693a00",
-      "pathway_trackerDef": "#1a1a1a",
-      "zfarcrycore_farGroup": "#693a00",
-      "zfarcrycore_dmHTML": "#1a1a1a",
-      "pathway_progRole": "#693a00",
-      "zfarcrycore_farUser": "#44517f",
-      "pathway_activityDef": "#1963d2",
-      "pathway_journal": "#1a1a1a",
-      "pathway_programme": "#693a00",
-      "pathway_member": "#d75500",
-      "pathway_tracker": "#1a1a1a",
-      "pathway_dmNavigation": "#1a1a1a",
-      "farcrycms_dmFacts": "#1a1a1a",
-      "zfarcrycore_farPermission": "#44517f",
-      "pathway_dmNews": "#1a1a1a",
-      "pathway_SSQ_arthritis01": "#8e24aa",
-      "pathway_progMember": "#1963d2",
-      "pathway_library": "#1a1a1a",
-      "pathway_activity": "#1a1a1a",
-      "pathway_SSQ_pain01": "#8e24aa",
-      "pathway_memberGroup": "#693a00",
-      "farcrycms_farFeedback": "#1963d2",
-      "pathway_guide": "#1963d2",
-      "pathway_memberType": "#1963d2",
-      "pathway_ruleSelfRegistration": "#693a00",
-      "pathway_SSQ_stress01": "#8e24aa",
-      "zfarcrycore_dmInclude": "#1a1a1a",
-      "pathway_center": "#693a00",
-      "pathway_partner": "#d75500",
-      "pathway_dmImage": "#1963d2",
-      "pathway_journalDef": "#1a1a1a",
-      "pathway_intake": "#693a00",
-      "pathway_media": "#1963d2",
-      "zfarcrycore_farBarnacle": "#1a1a1a",
-      "zfarcrycore_dmFile": "#1a1a1a",
-      "zfarcrycore_farRole": "#44517f"
-    },
-    "Entities": [
-      "pathway_ruleSelfRegistration",
-      "pathway_dmImage",
-      "pathway_dmNavigation",
-      "pathway_dmNews",
-      "pathway_activity",
+    ]
+  },
+  "ExpectedTiers": {
+    "GoldTier": [
       "pathway_activityDef",
       "pathway_center",
-      "pathway_guide",
       "pathway_intake",
-      "pathway_journal",
-      "pathway_journalDef",
-      "pathway_library",
       "pathway_media",
-      "pathway_member",
       "pathway_memberGroup",
-      "pathway_memberType",
-      "pathway_partner",
-      "pathway_progMember",
       "pathway_programme",
       "pathway_progRole",
       "pathway_referer",
-      "pathway_report",
-      "pathway_SSQ_arthritis01",
-      "pathway_SSQ_pain01",
-      "pathway_SSQ_stress01",
-      "pathway_testimonial",
-      "pathway_tracker",
-      "pathway_trackerDef",
-      "farcrycms_dmEmail",
-      "farcrycms_dmFacts",
-      "farcrycms_farFeedback",
-      "zfarcrycore_dmFile",
-      "zfarcrycore_dmHTML",
-      "zfarcrycore_dmInclude",
-      "zfarcrycore_dmProfile",
-      "zfarcrycore_farBarnacle",
+      "zfarcrycore_dmProfile"
+    ],
+    "BlueGreyTier": [
       "zfarcrycore_farGroup",
       "zfarcrycore_farPermission",
       "zfarcrycore_farRole",
-      "zfarcrycore_farUser",
-      "zfarcrycore_farWebtopDashboard"
+      "zfarcrycore_farUser"
     ],
-    "RelationshipCount": 102
+    "Focus": [
+      "pathway_partner",
+      "pathway_member"
+    ],
+    "BlueTier": [
+      "pathway_ruleSelfRegistration",
+      "pathway_dmImage",
+      "pathway_guide",
+      "pathway_memberType",
+      "pathway_progMember",
+      "pathway_report",
+      "pathway_testimonial"
+    ],
+    "DarkGreyTier": []
   },
+  "Timestamp": "2025-08-01 18:52:56",
+  "TestPassed": false,
+  "TestName": "Partner+Member Focus - 5-Tier Test",
+  "Focus": "partner,member",
+  "Status": "COMPREHENSIVE 5-TIER TEST",
+  "DiagramType": "ER",
   "ValidationIssues": [
     "Missing from GoldTier: pathway_activityDef, pathway_media",
     "Unexpected in GoldTier: pathway_ruleSelfRegistration, pathway_report, pathway_testimonial, zfarcrycore_farGroup",
-    "Missing from BlueTier: pathway_ruleSelfRegistration, pathway_report, pathway_testimonial",
+    "Missing from BlueTier: pathway_ruleSelfRegistration, pathway_guide, pathway_report, pathway_testimonial",
     "Unexpected in BlueTier: pathway_activityDef, pathway_media, farcrycms_farFeedback",
     "Missing from BlueGreyTier: zfarcrycore_farGroup",
-    "Unexpected in BlueGreyTier: zfarcrycore_farWebtopDashboard",
-    "Unexpected in DarkGreyTier: pathway_dmNavigation, pathway_dmNews, pathway_activity, pathway_journal, pathway_journalDef, pathway_library, pathway_tracker, pathway_trackerDef, farcrycms_dmEmail, farcrycms_dmFacts, zfarcrycore_dmFile, zfarcrycore_dmHTML, zfarcrycore_dmInclude, zfarcrycore_farBarnacle"
-  ],
-  "Domains": "partner",
-  "Timestamp": "2025-08-01 07:54:20",
-  "Status": "COMPREHENSIVE 5-TIER TEST",
-  "Description": "Test 5-tier semantic styling system",
-  "DiagramType": "ER"
+    "Unexpected in BlueGreyTier: zfarcrycore_farWebtopDashboard"
+  ]
 }

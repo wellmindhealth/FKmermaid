@@ -927,10 +927,19 @@
                         'The cache file is older than domains.json. Consider running cache refresh: <code>./generate_cfc_cache.ps1</code>');
                 }
                 
-                // Check if 165 diagrams are older than domains.json
+                // Check if diagrams are older than domains.json
                 if (diagramsLastModified < domainsLastModified) {
-                    showWarning('Diagrams may be outdated', 
-                        'The 165 diagrams file is older than domains.json. Consider regenerating: <code>./generate_all_cfc_diagrams.ps1 -RefreshCFCs</code>');
+                    // Check if we've already shown this warning for this domains.json timestamp
+                    const warningCacheKey = `diagram_warning_${domainsLastModified}`;
+                    const lastWarningTime = localStorage.getItem(warningCacheKey);
+                    
+                    if (!lastWarningTime || (Date.now() - parseInt(lastWarningTime)) > 300000) { // 5 minutes
+                        showWarning('Diagrams may be outdated', 
+                            'The diagrams file is older than domains.json. This may be due to cfc_cache generation auto-updating the catchall section. Consider regenerating: <code>./generate_all_cfc_diagrams.ps1 -RefreshCFCs</code>');
+                        
+                        // Cache this warning
+                        localStorage.setItem(warningCacheKey, Date.now().toString());
+                    }
                 }
                 
                 // Check if cache is very old (more than 1 week)

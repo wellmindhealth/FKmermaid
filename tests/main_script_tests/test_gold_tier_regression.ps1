@@ -62,14 +62,14 @@ $testCases = @(
     @{
         Name = "Partner Focus - Should Show Gold Tier"
         Focus = "partner"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
         ExpectedGoldEntities = @("pathway_center", "pathway_media", "pathway_memberGroup", "pathway_programme", "pathway_referer", "zfarcrycore_dmProfile")
     },
     @{
         Name = "Partner+Member Focus - Should Show Gold Tier"
         Focus = "partner,member"
-        Domains = "partner"
+        Domains = "provider"
         DiagramType = "ER"
         ExpectedGoldEntities = @("pathway_center", "pathway_media", "pathway_memberGroup", "pathway_programme", "pathway_referer", "zfarcrycore_dmProfile")
     }

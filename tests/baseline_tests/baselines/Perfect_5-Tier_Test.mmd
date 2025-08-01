@@ -31,10 +31,6 @@ erDiagram
         🔥 CORE UUID ObjectID
     }
 
-    "pathway_guide" {
-        💧 UTILITIES UUID ObjectID
-    }
-
     "pathway_intake" {
         💧 UTILITIES UUID ObjectID
     }
@@ -178,7 +174,6 @@ erDiagram
     "pathway_activity" ||--|| "pathway_activityDef" : activityDefID
     "pathway_activityDef" ||--|| "pathway_programme" : programmeID
     "pathway_activityDef" ||--|| "pathway_dmImage" : teaserImage
-    "pathway_activityDef" ||--|| "pathway_guide" : guideID
     "pathway_activityDef" ||--|| "pathway_progRole" : role
     "pathway_activityDef" ||--|| "pathway_media" : defaultMediaID
     "pathway_activityDef" ||--|| "pathway_journalDef" : journalID
@@ -191,9 +186,6 @@ erDiagram
     "pathway_center" ||--|| "zfarcrycore_dmProfile" : dmProfileID
     "pathway_center" ||--|| "pathway_partner" : partnerID
     "pathway_center" ||--|| "pathway_memberGroup" : memberGroupID
-    "pathway_guide" ||--|| "pathway_dmImage" : picture
-    "pathway_guide" ||--|| "pathway_partner" : partnerID
-    "pathway_guide" ||--|| "pathway_center" : centerID
     "pathway_intake" ||--|| "pathway_memberGroup" : memberGroupID
     "pathway_intake" ||--|| "pathway_center" : centerID
     "pathway_journal" ||--|| "pathway_progMember" : progMemberID
@@ -205,7 +197,6 @@ erDiagram
     "pathway_library" ||--|| "pathway_progMember" : progMemberID
     "pathway_library" ||--|| "pathway_activity" : activityID
     "pathway_library" ||--|| "pathway_media" : mediaID
-    "pathway_media" ||--|| "pathway_guide" : guideID
     "pathway_media" ||--|| "pathway_partner" : partnerID
     "pathway_media" ||--|| "pathway_programme" : programmeID
     "pathway_media" ||--|| "pathway_progRole" : roleID
@@ -313,7 +304,6 @@ erDiagram
     style pathway_activity fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_center fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
-    style pathway_guide fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_intake fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
     style pathway_journal fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_journalDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
