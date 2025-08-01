@@ -439,6 +439,9 @@ Success Rate: 100%
 
 # Custom output file
 .\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "pathway" -OutputFile "custom_diagram.mmd"
+
+# Deep relationship exploration (depth 3)
+.\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "ER" -lDomains "participant" -ApplyDomainFilterAt 3
 ```
 
 ### **Component Diagram Generation**

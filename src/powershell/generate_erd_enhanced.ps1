@@ -118,6 +118,7 @@ function Show-Help {
     Write-Host "  -Debug                   # Enable debug mode" -ForegroundColor White
     Write-Host "  -MermaidMode 'edit|view' # Mermaid.live mode ('edit' or 'view')" -ForegroundColor White
     Write-Host "  -NoBrowser              # Suppress browser opening (for automation)" -ForegroundColor White
+    Write-Host "  -ApplyDomainFilterAt N   # Apply domain filtering at relationship level N (default: 2)" -ForegroundColor White
     Write-Host ""
     Write-Host "💡 USAGE EXAMPLES:" -ForegroundColor Cyan
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'pathway'" -ForegroundColor Green
@@ -127,15 +128,13 @@ function Show-Help {
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Green
     Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'ER' -MermaidMode 'view'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'ER' -lDomains 'participant' -ApplyDomainFilterAt 3" -ForegroundColor Green
     Write-Host ""
     Write-Host "📖 For complete documentation, see: README.md" -ForegroundColor Yellow
     exit 0
 }
 
-# Check for help parameter first
-if ($Help) {
-    Show-Help
-}
+
 
 # Node.js tools are available for Mermaid.live URL generation
 
@@ -328,6 +327,11 @@ function Validate-Parameters {
         Write-Host "`n📚 See README.md for complete parameter documentation" -ForegroundColor Yellow
         exit 1
     }
+}
+
+# Check for help parameter first (before validation)
+if ($Help) {
+    Show-Help
 }
 
 # Debug mode - just check directories (bypass validation)

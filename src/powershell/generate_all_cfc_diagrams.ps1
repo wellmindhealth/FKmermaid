@@ -111,6 +111,19 @@ $diagramResults = @{
     generatedAt = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
 }
 
+# Regenerate cache once at the beginning if RefreshCFCs is specified
+if ($RefreshCFCs) {
+    Write-Host "`n🔄 Regenerating CFC cache once at the beginning..." -ForegroundColor Yellow
+    $cacheScriptPath = Join-Path $PSScriptRoot "generate_cfc_cache.ps1"
+    if (Test-Path $cacheScriptPath) {
+        & $cacheScriptPath
+        Write-Host "✅ Cache regeneration completed" -ForegroundColor Green
+    } else {
+        Write-Host "❌ Cache generation script not found: $cacheScriptPath" -ForegroundColor Red
+        exit 1
+    }
+}
+
 Write-Host "`n📊 Generating $totalDiagrams diagrams..." -ForegroundColor Yellow
 
 $progress = 0
@@ -131,11 +144,6 @@ foreach ($diagram in $diagramsToGenerate) {
         DiagramType = "ER"
         NoBrowser = $true
         JsonOutputFile = $jsonOutputFile
-    }
-    
-    # Add RefreshCFCs parameter if specified
-    if ($RefreshCFCs) {
-        $params.RefreshCFCs = $true
     }
     
     try {
