@@ -1,7 +1,67 @@
 {
-  "Results": [],
-  "ValidBaselines": 0,
-  "CrossCheckedAt": "2025-07-31 21:28:35",
-  "TotalBaselines": 0,
-  "TotalIssues": 0
+  "TotalIssues": 0,
+  "ValidBaselines": 3,
+  "CrossCheckedAt": "2025-08-01 07:39:29",
+  "TotalBaselines": 3,
+  "Results": [
+    {
+      "Issues": [],
+      "TestName": "Edge_Case_Programme_Domain_Only",
+      "HasIssues": false,
+      "Analysis": {
+        "EntityCount": 41,
+        "StyleCount": 41,
+        "ColorDistribution": {
+          "#8e24aa": 3,
+          "#44517f": 15,
+          "#693a00": 5,
+          "#1a1a1a": 12,
+          "#d75500": 1,
+          "#1963d2": 5
+        },
+        "Errors": [],
+        "SyntaxValid": true,
+        "RelationshipCount": 102
+      },
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Programme_Domain_Only.mmd"
+    },
+    {
+      "Issues": [],
+      "TestName": "Edge_Case_Partner_Pathway_Only",
+      "HasIssues": false,
+      "Analysis": {
+        "EntityCount": 29,
+        "StyleCount": 29,
+        "ColorDistribution": {
+          "#1963d2": 11,
+          "#d75500": 1,
+          "#1a1a1a": 17
+        },
+        "Errors": [],
+        "SyntaxValid": true,
+        "RelationshipCount": 71
+      },
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Partner_Pathway_Only.mmd"
+    },
+    {
+      "Issues": [],
+      "TestName": "Edge_Case_Programme_Pathway_Only",
+      "HasIssues": false,
+      "Analysis": {
+        "EntityCount": 28,
+        "StyleCount": 28,
+        "ColorDistribution": {
+          "#8e24aa": 3,
+          "#44517f": 14,
+          "#693a00": 6,
+          "#d75500": 1,
+          "#1963d2": 4
+        },
+        "Errors": [],
+        "SyntaxValid": true,
+        "RelationshipCount": 46
+      },
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Programme_Pathway_Only.mmd"
+    }
+  ]
 }

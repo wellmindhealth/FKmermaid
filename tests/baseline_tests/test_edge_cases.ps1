@@ -30,14 +30,14 @@ $edgeCaseTests = @(
         ExpectedToFail = $false
     },
     @{
-        Name = "Edge_Case_Site_Domain_Only"
-        BaselineFile = "Edge_Case_Site_Domain_Only.mmd"
+        Name = "Edge_Case_Pathway_Domain_Only"
+        BaselineFile = "Edge_Case_Pathway_Domain_Only.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("dmImage")
-            DomainFilter = @("site")
+            DomainFilter = @("pathway")
             DiagramType = "ER"
             ExpectedEntityCount = 13  # Actual result from baseline generation
-            Description = "dmImage focus, site domain only - should be minimal, isolated domain"
+            Description = "dmImage focus, pathway domain only - should be minimal, isolated domain"
         }
         ExpectedToFail = $false
     },
@@ -90,26 +90,26 @@ $edgeCaseTests = @(
         ExpectedToFail = $false
     },
     @{
-        Name = "Edge_Case_Partner_Site_Only"
-        BaselineFile = "Edge_Case_Partner_Site_Only.mmd"
+        Name = "Edge_Case_Partner_Pathway_Only"
+        BaselineFile = "Edge_Case_Partner_Pathway_Only.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("partner")
-            DomainFilter = @("site")
+            DomainFilter = @("pathway")
             DiagramType = "ER"
             ExpectedEntityCount = 18  # Actual result from baseline generation
-            Description = "partner focus, site domain only - should be minimal"
+            Description = "partner focus, pathway domain only - should be minimal"
         }
         ExpectedToFail = $false
     },
     @{
-        Name = "Edge_Case_Programme_Site_Only"
-        BaselineFile = "Edge_Case_Programme_Site_Only.mmd"
+        Name = "Edge_Case_Programme_Pathway_Only"
+        BaselineFile = "Edge_Case_Programme_Pathway_Only.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("programme")
-            DomainFilter = @("site")
+            DomainFilter = @("pathway")
             DiagramType = "ER"
             ExpectedEntityCount = 18  # Actual result from baseline generation
-            Description = "programme focus, site domain only - should be minimal"
+            Description = "programme focus, pathway domain only - should be pathway-specific"
         }
         ExpectedToFail = $false
     },
@@ -138,14 +138,14 @@ $edgeCaseTests = @(
         ExpectedToFail = $false
     },
     @{
-        Name = "Edge_Case_Class_Diagram_Site_Only"
-        BaselineFile = "Edge_Case_Class_Diagram_Site_Only.mmd"
+        Name = "Edge_Case_Class_Diagram_Pathway_Only"
+        BaselineFile = "Edge_Case_Class_Diagram_Pathway_Only.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("dmImage")
-            DomainFilter = @("site")
+            DomainFilter = @("pathway")
             DiagramType = "Class"
             ExpectedEntityCount = 12  # Actual result from baseline generation
-            Description = "Class diagram with site domain only - uncommon combination"
+            Description = "Class diagram with pathway domain only - uncommon combination"
         }
         ExpectedToFail = $false
     },
@@ -250,10 +250,10 @@ $edgeCaseTests = @(
         BaselineFile = "Edge_Case_ER_Diagram_ActivityDef_Focus.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("activityDef")
-            DomainFilter = @("site")
+            DomainFilter = @("pathway")
             DiagramType = "ER"
             ExpectedEntityCount = 16  # Actual result from baseline generation
-            Description = "activityDef focus with site domain (activityDef not in site domain)"
+            Description = "activityDef focus with pathway domain (activityDef is in pathway domain)"
         }
         ExpectedToFail = $false
     },
@@ -262,10 +262,10 @@ $edgeCaseTests = @(
         BaselineFile = "Edge_Case_Class_Diagram_ActivityDef_Focus.mmd"
         ExpectedCriteria = @{
             FocusEntities = @("activityDef")
-            DomainFilter = @("site")
+            DomainFilter = @("pathway")
             DiagramType = "Class"
             ExpectedEntityCount = 11  # Actual result from baseline generation
-            Description = "Class diagram with activityDef focus and site domain"
+            Description = "Class diagram with activityDef focus and pathway domain"
         }
         ExpectedToFail = $false
     },

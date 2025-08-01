@@ -12,7 +12,8 @@
     "orderItem.cfc",
     "orderMaster.cfc",
     "address.cfc",
-    "promotion.cfc"
+    "promotion.cfc",
+    "guide.cfc"
   ],
   "scanDirectories": [
     "D:\\GIT\\farcry\\plugins\\pathway",

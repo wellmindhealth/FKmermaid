@@ -1651,23 +1651,6 @@ function Get-EntityLayerIcon {
         }
     }
     
-    # Check catchall if not found in domains
-    if ($domainsData.catchall) {
-        foreach ($layer in $domainsData.catchall.entities.PSObject.Properties) {
-            if ($layer.Value -contains $baseEntityName) {
-                $layerKey = $layer.Name
-                $icon = $layerIcons[$layerKey]
-                if ($icon) {
-                    return @{
-                        Layer = $layerKey
-                        Icon = $icon
-                        Display = "$icon $($layerKey.ToUpper())"
-                    }
-                }
-            }
-        }
-    }
-    
     # Default fallback
     return @{
         Layer = 'unknown'

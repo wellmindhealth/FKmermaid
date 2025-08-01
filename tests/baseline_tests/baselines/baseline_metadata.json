@@ -1,6 +1,61 @@
 {
+  "GeneratedAt": "2025-08-01 07:39:29",
   "BaselinePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines",
-  "Baselines": [],
-  "TotalBaselines": 0,
-  "GeneratedAt": "2025-07-31 21:28:35"
+  "TotalBaselines": 3,
+  "Baselines": [
+    {
+      "TestName": "Edge_Case_Programme_Domain_Only",
+      "ColorDistribution": {
+        "Orange": 0,
+        "BlueGrey": 0,
+        "Blue": 0,
+        "DarkGrey": 12
+      },
+      "Focus": "activityDef",
+      "EntityCount": 41,
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Programme_Domain_Only.mmd",
+      "FileSize": 14939,
+      "Domains": "programme",
+      "Timestamp": "2025-08-01 07:39:28",
+      "StyleCount": 41,
+      "Description": "Tests programme domain entities only (should be programme-specific)",
+      "DiagramType": "ER"
+    },
+    {
+      "TestName": "Edge_Case_Partner_Pathway_Only",
+      "ColorDistribution": {
+        "Orange": 0,
+        "BlueGrey": 0,
+        "Blue": 0,
+        "DarkGrey": 17
+      },
+      "Focus": "partner",
+      "EntityCount": 29,
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Partner_Pathway_Only.mmd",
+      "FileSize": 10888,
+      "Domains": "pathway",
+      "Timestamp": "2025-08-01 07:39:28",
+      "StyleCount": 29,
+      "Description": "Tests partner focus with pathway domain only (should be minimal - partner not in pathway domain)",
+      "DiagramType": "ER"
+    },
+    {
+      "TestName": "Edge_Case_Programme_Pathway_Only",
+      "ColorDistribution": {
+        "Orange": 0,
+        "BlueGrey": 0,
+        "Blue": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "programme",
+      "EntityCount": 28,
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Programme_Pathway_Only.mmd",
+      "FileSize": 8735,
+      "Domains": "pathway",
+      "Timestamp": "2025-08-01 07:39:29",
+      "StyleCount": 28,
+      "Description": "Tests programme focus with pathway domain only (should be pathway-specific - programme is in pathway domain)",
+      "DiagramType": "ER"
+    }
+  ]
 }

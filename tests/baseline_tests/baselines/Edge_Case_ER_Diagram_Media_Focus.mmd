@@ -3,53 +3,155 @@ erDiagram
 %%   Focus: media
 %%   Domains: pathway
 %%   Chart Type: ER
+    "pathway_dmImage" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "pathway_dmNavigation" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "pathway_dmNews" {
+        💧 UTILITIES UUID ObjectID
+    }
+
     "pathway_activityDef" {
-        UUID ObjectID
+        🔥 CORE UUID ObjectID
     }
 
     "pathway_guide" {
-        UUID ObjectID
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "pathway_journalDef" {
+        💧 UTILITIES UUID ObjectID
     }
 
     "pathway_library" {
-        UUID ObjectID
+        💧 UTILITIES UUID ObjectID
     }
 
     "pathway_media" {
-        UUID ObjectID
+        🔥 CORE UUID ObjectID
+    }
+
+    "pathway_memberType" {
+        💧 UTILITIES UUID ObjectID
     }
 
     "pathway_partner" {
-        UUID ObjectID
+        🔥 CORE UUID ObjectID
     }
 
     "pathway_programme" {
-        UUID ObjectID
+        💧 UTILITIES UUID ObjectID
     }
 
     "pathway_progRole" {
-        UUID ObjectID
+        📞 SERVICES UUID ObjectID
+    }
+
+    "pathway_trackerDef" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "farcrycms_dmEmail" {
+        📞 SERVICES UUID ObjectID
+    }
+
+    "farcrycms_dmFacts" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "farcrycms_farFeedback" {
+        📞 SERVICES UUID ObjectID
+    }
+
+    "zfarcrycore_dmFile" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "zfarcrycore_dmHTML" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "zfarcrycore_dmInclude" {
+        💧 UTILITIES UUID ObjectID
+    }
+
+    "zfarcrycore_dmProfile" {
+        🛡️ AUTH UUID ObjectID
+    }
+
+    "zfarcrycore_farBarnacle" {
+        🛡️ AUTH UUID ObjectID
+    }
+
+    "zfarcrycore_farGroup" {
+        🛡️ AUTH UUID ObjectID
+    }
+
+    "zfarcrycore_farPermission" {
+        🛡️ AUTH UUID ObjectID
+    }
+
+    "zfarcrycore_farRole" {
+        🛡️ AUTH UUID ObjectID
+    }
+
+    "zfarcrycore_farUser" {
+        🛡️ AUTH UUID ObjectID
     }
 
     %% Direct FK Relationships
+    "pathway_dmNavigation" ||--|| "pathway_dmImage" : sourceImageID
     "pathway_activityDef" ||--|| "pathway_programme" : programmeID
+    "pathway_activityDef" ||--|| "pathway_dmImage" : teaserImage
     "pathway_activityDef" ||--|| "pathway_guide" : guideID
     "pathway_activityDef" ||--|| "pathway_progRole" : role
     "pathway_activityDef" ||--|| "pathway_media" : defaultMediaID
+    "pathway_activityDef" ||--|| "pathway_journalDef" : journalID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker01ID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker02ID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker03ID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker04ID
+    "pathway_activityDef" ||--|| "pathway_trackerDef" : tracker05ID
+    "pathway_guide" ||--|| "pathway_dmImage" : picture
     "pathway_guide" ||--|| "pathway_partner" : partnerID
+    "pathway_journalDef" ||--|| "pathway_trackerDef" : tracker01ID
+    "pathway_journalDef" ||--|| "pathway_trackerDef" : tracker02ID
+    "pathway_journalDef" ||--|| "pathway_programme" : programmeID
     "pathway_library" ||--|| "pathway_media" : mediaID
     "pathway_media" ||--|| "pathway_guide" : guideID
     "pathway_media" ||--|| "pathway_partner" : partnerID
     "pathway_media" ||--|| "pathway_programme" : programmeID
     "pathway_media" ||--|| "pathway_progRole" : roleID
+    "pathway_partner" ||--|| "pathway_dmImage" : Logo
+    "pathway_partner" ||--|| "zfarcrycore_dmProfile" : dmProfileID
+    "pathway_partner" ||--|| "zfarcrycore_dmProfile" : seniorSupportID
     "pathway_programme" ||--|| "pathway_partner" : partnerID
+    "pathway_programme" ||--|| "pathway_dmImage" : Logo
     "pathway_programme" ||--|| "pathway_activityDef" : firstActivityDefID
     "pathway_programme" ||--|| "pathway_activityDef" : lastActivityDefID
     "pathway_progRole" ||--|| "pathway_programme" : programmeID
+    "pathway_trackerDef" ||--|| "pathway_programme" : programmeID
+    "farcrycms_dmFacts" ||--|| "pathway_dmImage" : imageID
+    "pathway_dmNews" ||--|| "pathway_dmImage" : teaserImage
+    "zfarcrycore_dmFile" ||--|| "pathway_dmImage" : teaserImage
+    "zfarcrycore_dmHTML" ||--|| "pathway_dmImage" : teaserImage
+    "zfarcrycore_dmInclude" ||--|| "pathway_dmImage" : teaserImage
+    "zfarcrycore_farBarnacle" ||--|| "zfarcrycore_farRole" : roleid
+    "zfarcrycore_farBarnacle" ||--|| "zfarcrycore_farPermission" : permissionid
     %% End Direct FK Relationships
 
     %% Special Joins
+    "zfarcrycore_farUser" ||--|| "zfarcrycore_dmProfile" : userID_to_userName_userDirectory
     %% End Special Joins
+
+    %% Self-Referencing Relationships for farPermission
+    %% Self-refs include: aRelatedtypes
+    "zfarcrycore_farPermission" ||--|| "zfarcrycore_farPermission" : self_refs
+    %% End Self-Referencing Relationships for farPermission
 
     %% Self-Referencing Relationships for activityDef
     %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
@@ -59,15 +161,39 @@ erDiagram
     %% Join Table Relationships
     "pathway_activityDef" }o--|| "pathway_media" : aMediaIDs
     "pathway_programme" }o--|| "pathway_activityDef" : aFollowupActivityDefIDs
+    "pathway_programme" }o--|| "pathway_trackerDef" : aTrackerIDs
+    "pathway_programme" }o--|| "zfarcrycore_dmFile" : aObjectIDs
+    "zfarcrycore_dmProfile" }o--|| "zfarcrycore_farGroup" : aGroups
+    "zfarcrycore_farRole" }o--|| "zfarcrycore_farGroup" : aGroups
+    "zfarcrycore_farRole" }o--|| "zfarcrycore_farPermission" : aPermissions
+    "zfarcrycore_farUser" }o--|| "zfarcrycore_farGroup" : aGroups
     %% End Join Table Relationships
 
 
     %% Entity Styling
+    style pathway_dmImage fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style pathway_dmNavigation fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style pathway_dmNews fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
     style pathway_activityDef fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
-    style pathway_guide fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style pathway_guide fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_journalDef fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
     style pathway_library fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_media fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
+    style pathway_memberType fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
     style pathway_partner fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_programme fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
-    style pathway_progRole fill:#693a00,stroke:#5d2e00,stroke-width:4px,color:#fff
+    style pathway_progRole fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_trackerDef fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style farcrycms_dmEmail fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style farcrycms_dmFacts fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style farcrycms_farFeedback fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_dmFile fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_dmHTML fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_dmInclude fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_dmProfile fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_farBarnacle fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_farGroup fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_farPermission fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_farRole fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
+    style zfarcrycore_farUser fill:#44517f,stroke:#37474f,stroke-width:2px,color:#eceff1
 

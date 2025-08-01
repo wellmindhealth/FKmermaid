@@ -47,11 +47,11 @@ $baselineTests = @(
         Description = "Tests behavior with dmImage focus and no domains (should be all entities)"
     },
     @{
-        Name = "Edge_Case_Site_Domain_Only"
+        Name = "Edge_Case_Pathway_Domain_Only"
         Focus = "dmImage"
-        Domains = "site"
+        Domains = "pathway"
         DiagramType = "ER"
-        Description = "Tests site domain entities only (should be minimal, isolated domain)"
+        Description = "Tests pathway domain entities only (should be minimal, isolated domain)"
     },
     @{
         Name = "Edge_Case_Pathway_Domain_Only"
@@ -59,6 +59,27 @@ $baselineTests = @(
         Domains = "pathway"
         DiagramType = "ER"
         Description = "Tests pathway domain entities only (should be pathway-specific)"
+    },
+    @{
+        Name = "Edge_Case_Programme_Domain_Only"
+        Focus = "activityDef"
+        Domains = "programme"
+        DiagramType = "ER"
+        Description = "Tests programme domain entities only (should be programme-specific)"
+    },
+    @{
+        Name = "Edge_Case_Partner_Pathway_Only"
+        Focus = "partner"
+        Domains = "pathway"
+        DiagramType = "ER"
+        Description = "Tests partner focus with pathway domain only (should be minimal - partner not in pathway domain)"
+    },
+    @{
+        Name = "Edge_Case_Programme_Pathway_Only"
+        Focus = "programme"
+        Domains = "pathway"
+        DiagramType = "ER"
+        Description = "Tests programme focus with pathway domain only (should be pathway-specific - programme is in pathway domain)"
     },
     @{
         Name = "Edge_Case_Invalid_Domain"
@@ -82,18 +103,18 @@ $baselineTests = @(
         Description = "Tests Class diagram with complex relationships (different diagram type)"
     },
     @{
-        Name = "Edge_Case_Provider_Site_Only"
+        Name = "Edge_Case_Provider_Pathway_Only"
         Focus = "partner"
-        Domains = "site"
+        Domains = "pathway"
         DiagramType = "ER"
-        Description = "Tests partner focus with site domain only (should be minimal - partner not in site domain)"
+        Description = "Tests partner focus with pathway domain only (should be minimal - partner not in pathway domain)"
     },
     @{
-        Name = "Edge_Case_Pathway_Site_Only"
+        Name = "Edge_Case_Pathway_Pathway_Only"
         Focus = "programme"
-        Domains = "site"
+        Domains = "pathway"
         DiagramType = "ER"
-        Description = "Tests programme focus with site domain only (should be minimal - programme not in site domain)"
+        Description = "Tests programme focus with pathway domain only (should be pathway-specific - programme is in pathway domain)"
     },
     @{
         Name = "Edge_Case_Member_Partner_Only"
@@ -110,11 +131,11 @@ $baselineTests = @(
         Description = "Tests multiple focus entities (comma-separated) - uncommon parameter"
     },
     @{
-        Name = "Edge_Case_Class_Diagram_Site_Only"
+        Name = "Edge_Case_Class_Diagram_Pathway_Only"
         Focus = "dmImage"
-        Domains = "site"
+        Domains = "pathway"
         DiagramType = "Class"
-        Description = "Tests Class diagram with site domain only (uncommon combination)"
+        Description = "Tests Class diagram with pathway domain only (uncommon combination)"
     },
     @{
         Name = "Edge_Case_ER_Diagram_All_Domains"
@@ -175,16 +196,16 @@ $baselineTests = @(
     @{
         Name = "Edge_Case_ER_Diagram_ActivityDef_Focus"
         Focus = "activityDef"
-        Domains = "site"
+        Domains = "pathway"
         DiagramType = "ER"
-        Description = "Tests activityDef focus with site domain (activityDef not in site domain)"
+        Description = "Tests activityDef focus with pathway domain (activityDef is in pathway domain)"
     },
     @{
         Name = "Edge_Case_Class_Diagram_ActivityDef_Focus"
         Focus = "activityDef"
-        Domains = "site"
+        Domains = "pathway"
         DiagramType = "Class"
-        Description = "Tests Class diagram with activityDef focus and site domain"
+        Description = "Tests Class diagram with activityDef focus and pathway domain"
     },
     @{
         Name = "Edge_Case_ER_Diagram_Guide_Focus"

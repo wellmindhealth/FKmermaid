@@ -3,71 +3,91 @@ erDiagram
 %%   Focus: guide
 %%   Domains: provider
 %%   Chart Type: ER
+    "pathway_ruleSelfRegistration" {
+        📞 SERVICES UUID ObjectID
+    }
+
     "pathway_dmImage" {
-        UUID ObjectID
+        💧 UTILITIES UUID ObjectID
     }
 
     "pathway_activityDef" {
-        UUID ObjectID
+        🔥 CORE UUID ObjectID
     }
 
     "pathway_center" {
-        UUID ObjectID
+        🔥 CORE UUID ObjectID
     }
 
     "pathway_guide" {
-        UUID ObjectID
+        💧 UTILITIES UUID ObjectID
     }
 
     "pathway_intake" {
-        UUID ObjectID
+        💧 UTILITIES UUID ObjectID
     }
 
     "pathway_media" {
-        UUID ObjectID
+        🔥 CORE UUID ObjectID
     }
 
     "pathway_memberGroup" {
-        UUID ObjectID
+        🔥 CORE UUID ObjectID
     }
 
     "pathway_partner" {
-        UUID ObjectID
+        🔥 CORE UUID ObjectID
     }
 
     "pathway_programme" {
-        UUID ObjectID
+        💧 UTILITIES UUID ObjectID
     }
 
     "pathway_progRole" {
-        UUID ObjectID
+        📞 SERVICES UUID ObjectID
     }
 
     "pathway_referer" {
-        UUID ObjectID
+        🔥 CORE UUID ObjectID
+    }
+
+    "pathway_report" {
+        📞 SERVICES UUID ObjectID
+    }
+
+    "pathway_testimonial" {
+        📞 SERVICES UUID ObjectID
     }
 
     "zfarcrycore_dmProfile" {
-        UUID ObjectID
+        🛡️ AUTH UUID ObjectID
     }
 
     "zfarcrycore_farGroup" {
-        UUID ObjectID
+        🛡️ AUTH UUID ObjectID
     }
 
     "zfarcrycore_farPermission" {
-        UUID ObjectID
+        🛡️ AUTH UUID ObjectID
     }
 
     "zfarcrycore_farRole" {
-        UUID ObjectID
+        🛡️ AUTH UUID ObjectID
     }
 
     "zfarcrycore_farUser" {
-        UUID ObjectID
+        🛡️ AUTH UUID ObjectID
+    }
+
+    "zfarcrycore_farWebtopDashboard" {
+        💧 UTILITIES UUID ObjectID
     }
 
     %% Direct FK Relationships
+    "pathway_ruleSelfRegistration" ||--|| "pathway_memberGroup" : memberGroupID
+    "pathway_ruleSelfRegistration" ||--|| "pathway_partner" : partnerID
+    "pathway_ruleSelfRegistration" ||--|| "pathway_center" : centerID
+    "pathway_ruleSelfRegistration" ||--|| "pathway_referer" : refererID
     "pathway_activityDef" ||--|| "pathway_programme" : programmeID
     "pathway_activityDef" ||--|| "pathway_dmImage" : teaserImage
     "pathway_activityDef" ||--|| "pathway_guide" : guideID
@@ -101,25 +121,25 @@ erDiagram
     "pathway_referer" ||--|| "pathway_partner" : partnerID
     "pathway_referer" ||--|| "pathway_memberGroup" : memberGroupID
     "pathway_referer" ||--|| "pathway_center" : centerID
+    "pathway_report" ||--|| "pathway_programme" : programmeID
+    "pathway_report" ||--|| "pathway_partner" : partnerID
+    "pathway_testimonial" ||--|| "pathway_activityDef" : activityDefID
     "zfarcrycore_dmProfile" ||--|| "pathway_memberGroup" : memberGroupID
-    "zfarcrycore_dmProfile" ||--|| "zfarcrycore_farGroup" : lGroups
-    "zfarcrycore_farPermission" ||--|| "zfarcrycore_farRole" : aRoles
-    "zfarcrycore_farUser" ||--|| "zfarcrycore_farGroup" : lGroups
     %% End Direct FK Relationships
 
     %% Special Joins
     "zfarcrycore_farUser" ||--|| "zfarcrycore_dmProfile" : userID_to_userName_userDirectory
     %% End Special Joins
 
-    %% Self-Referencing Relationships for activityDef
-    %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
-    "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
-    %% End Self-Referencing Relationships for activityDef
-
     %% Self-Referencing Relationships for farPermission
     %% Self-refs include: aRelatedtypes
     "zfarcrycore_farPermission" ||--|| "zfarcrycore_farPermission" : self_refs
     %% End Self-Referencing Relationships for farPermission
+
+    %% Self-Referencing Relationships for activityDef
+    %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
+    "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
+    %% End Self-Referencing Relationships for activityDef
 
     %% Join Table Relationships
     "pathway_activityDef" }o--|| "pathway_media" : aMediaIDs
@@ -129,14 +149,17 @@ erDiagram
     "pathway_partner" }o--|| "pathway_center" : aCenters
     "pathway_partner" }o--|| "pathway_referer" : aReferers
     "pathway_programme" }o--|| "pathway_activityDef" : aFollowupActivityDefIDs
+    "pathway_report" }o--|| "pathway_memberGroup" : aMemberGroupID
     "zfarcrycore_dmProfile" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farGroup" : aGroups
     "zfarcrycore_farRole" }o--|| "zfarcrycore_farPermission" : aPermissions
     "zfarcrycore_farUser" }o--|| "zfarcrycore_farGroup" : aGroups
+    "zfarcrycore_farWebtopDashboard" }o--|| "zfarcrycore_farRole" : aRoles
     %% End Join Table Relationships
 
 
     %% Entity Styling
+    style pathway_ruleSelfRegistration fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_dmImage fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
@@ -148,9 +171,12 @@ erDiagram
     style pathway_programme fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_progRole fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_referer fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_report fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_testimonial fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_dmProfile fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_farGroup fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_farPermission fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_farRole fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style zfarcrycore_farUser fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farWebtopDashboard fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
 

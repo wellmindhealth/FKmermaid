@@ -18,7 +18,7 @@ A comprehensive PowerShell-based tool for analyzing ColdFusion Components (CFCs)
 - **ER Diagrams**: Entity-Relationship diagrams with 5-tier semantic styling
 - **Component Diagrams**: Class diagrams showing inheritance and relationships
 - **Dynamic CFC Scanning**: Real-time analysis of ColdFusion Components
-- **Domain-Based Filtering**: Focus on specific business domains (provider, participant, pathway, site)
+- **Domain-Based Filtering**: Focus on specific business domains (provider, participant, pathway)
 
 ### ✅ **Advanced Features**
 - **5-Tier Semantic Styling**: Color-coded relationship prioritization
@@ -118,7 +118,7 @@ The system uses **4 domains** for diagram generation to preserve cross-domain re
 - **Content**: media, defaultMediaID, aCuePointActivities, aMediaIDs, guide
 - **Flow**: onEndID, aCuePointActivities, aInteract1Activities, etc.
 
-#### **`site`** - Website content and structure
+
 - **Core**: dmNavigation, dmHTML, dmFacts, dmNews, dmInclude
 - **Resources**: dmImage, dmFile
 
@@ -270,42 +270,7 @@ This section provides detailed descriptions of all components, organized by busi
 
 **Detailed:** dmProfile represents the user profile management system that extends beyond basic authentication to provide personalized user experiences, administrative configurations, and operational preferences for healthcare staff and administrators. dmProfile manages the complete lifecycle of user-specific settings, preferences, and administrative configurations that customize the user experience and operational capabilities. The system implements advanced profile management including preference persistence and cross-device synchronization.
 
-### **🌐 Website Content**
 
-#### **dmNavigation** - Website Structure Management
-**Snappy:** Website navigation structure and menu organization for user experience architecture
-
-**Detailed:** dmNavigation represents the website navigation structure and user experience architecture that guides users through the platform's features, content, and functionality. This system manages the user interface structure, menu hierarchies, and navigation pathways. dmNavigation manages the hierarchical structure of website navigation including menu organization, page relationships, user interface flow, and information architecture optimization. The system implements navigation management including responsive design support and accessibility compliance.
-
-#### **dmHTML** - Dynamic Content Management
-**Snappy:** HTML content management system for dynamic web page creation and delivery
-
-**Detailed:** dmHTML represents the HTML content management system for website pages and content delivery that supports the platform's information architecture and user communication needs. This system manages the creation, editing, versioning, and delivery of web content. dmHTML manages the complete lifecycle of web content including creation, editing, versioning, delivery, and integration with user experience frameworks. The system implements content management including responsive design support and accessibility compliance.
-
-#### **dmFacts** - Information Resource Management
-**Snappy:** Factual content management system for educational information and reference materials
-
-**Detailed:** dmFacts represents the factual content management system for website information and educational material that supports user understanding, platform navigation, and organizational communication objectives. This system includes static information, educational content, and reference materials. dmFacts manages the complete lifecycle of factual and educational content including content creation, organization, delivery, and integration with user experience frameworks. The system implements content management including version control and accessibility compliance.
-
-#### **dmNews** - Communication Management
-**Snappy:** News content management system for announcements, updates, and organizational communications
-
-**Detailed:** dmNews represents the news content management system for website updates and announcements that supports organizational communication, user engagement, and platform transparency. This system manages platform communications, updates, and organizational information. dmNews manages the complete lifecycle of news content and announcements including content creation, publication, delivery, and integration with organizational communication frameworks.
-
-#### **dmInclude** - Component Content Management
-**Snappy:** Include content management system for reusable website components and modular elements
-
-**Detailed:** dmInclude represents the include content management system for website components and reusable elements that supports content consistency, development efficiency, and user experience optimization. This system manages modular content components that can be reused across different pages and contexts. dmInclude manages the complete lifecycle of reusable content components including creation, versioning, delivery, and integration with content management frameworks. The system implements component management including version control and dependency management.
-
-#### **dmImage** - Visual Resource Management
-**Snappy:** Image resource management system for visual assets and graphic content delivery
-
-**Detailed:** dmImage represents the image resource management system for website graphics and visual content that supports the platform's visual design, user experience, and content delivery requirements. This system manages the storage, organization, optimization, and delivery of visual assets. dmImage manages the complete lifecycle of visual assets including upload, storage, optimization, delivery, and integration with content management frameworks. The system implements asset management including responsive image delivery and accessibility compliance.
-
-#### **dmFile** - Document Resource Management
-**Snappy:** File resource management system for downloadable documents and secure digital asset storage
-
-**Detailed:** dmFile represents the file resource management system for downloadable documents and secure digital asset storage that supports bulk data access, user needs, platform functionality, and organizational communication requirements. This system manages the storage, organization, versioning, and delivery of downloadable documents and resources. dmFile manages the complete lifecycle of document resources including upload, storage, versioning, delivery, and integration with content management frameworks. The system implements asset management including secure file delivery and version control.
 
 ---
 

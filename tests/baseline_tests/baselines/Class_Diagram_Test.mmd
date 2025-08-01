@@ -3,6 +3,11 @@ classDiagram
 %%   Focus: dmImage
 %%   Domains: provider
 %%   Chart Type: Class
+    class pathway_ruleSelfRegistration {
+        +UUID ObjectID
+        +string name
+    }
+
     class pathway_dmImage {
         +UUID ObjectID
         +string name
@@ -33,6 +38,11 @@ classDiagram
         +string name
     }
 
+    class pathway_intake {
+        +UUID ObjectID
+        +string name
+    }
+
     class pathway_memberGroup {
         +UUID ObjectID
         +string name
@@ -48,7 +58,22 @@ classDiagram
         +string name
     }
 
+    class pathway_progRole {
+        +UUID ObjectID
+        +string name
+    }
+
     class pathway_referer {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_report {
+        +UUID ObjectID
+        +string name
+    }
+
+    class pathway_testimonial {
         +UUID ObjectID
         +string name
     }
@@ -83,16 +108,54 @@ classDiagram
         +string name
     }
 
+    class zfarcrycore_dmProfile {
+        +UUID ObjectID
+        +string name
+    }
+
+    class zfarcrycore_farGroup {
+        +UUID ObjectID
+        +string name
+    }
+
+    class zfarcrycore_farPermission {
+        +UUID ObjectID
+        +string name
+    }
+
+    class zfarcrycore_farRole {
+        +UUID ObjectID
+        +string name
+    }
+
+    class zfarcrycore_farUser {
+        +UUID ObjectID
+        +string name
+    }
+
+    class zfarcrycore_farWebtopDashboard {
+        +UUID ObjectID
+        +string name
+    }
+
+    pathway_ruleSelfRegistration --> pathway_memberGroup : memberGroupID
+    pathway_ruleSelfRegistration --> pathway_partner : partnerID
+    pathway_ruleSelfRegistration --> pathway_center : centerID
+    pathway_ruleSelfRegistration --> pathway_referer : refererID
     pathway_dmNavigation --> pathway_dmImage : sourceImageID
     pathway_activityDef --> pathway_programme : programmeID
     pathway_activityDef --> pathway_dmImage : teaserImage
     pathway_activityDef --> pathway_guide : guideID
+    pathway_activityDef --> pathway_progRole : role
     pathway_center --> pathway_dmImage : Logo
+    pathway_center --> zfarcrycore_dmProfile : dmProfileID
     pathway_center --> pathway_partner : partnerID
     pathway_center --> pathway_memberGroup : memberGroupID
     pathway_guide --> pathway_dmImage : picture
     pathway_guide --> pathway_partner : partnerID
     pathway_guide --> pathway_center : centerID
+    pathway_intake --> pathway_memberGroup : memberGroupID
+    pathway_intake --> pathway_center : centerID
     pathway_memberGroup --> pathway_partner : partnerID
     pathway_memberGroup --> pathway_dmImage : Logo
     pathway_memberGroup --> zfarcrycore_dmFile : resourcePosterID
@@ -101,14 +164,21 @@ classDiagram
     pathway_memberGroup --> pathway_dmNavigation : selfRegNavID
     pathway_memberGroup --> zfarcrycore_dmFile : selfRegQrFileID
     pathway_partner --> pathway_dmImage : Logo
+    pathway_partner --> zfarcrycore_dmProfile : dmProfileID
+    pathway_partner --> zfarcrycore_dmProfile : seniorSupportID
     pathway_programme --> pathway_partner : partnerID
     pathway_programme --> pathway_dmImage : Logo
     pathway_programme --> pathway_activityDef : firstActivityDefID
     pathway_programme --> pathway_activityDef : lastActivityDefID
+    pathway_progRole --> pathway_programme : programmeID
     pathway_referer --> pathway_dmImage : picture
+    pathway_referer --> zfarcrycore_dmProfile : dmProfileID
     pathway_referer --> pathway_partner : partnerID
     pathway_referer --> pathway_memberGroup : memberGroupID
     pathway_referer --> pathway_center : centerID
+    pathway_report --> pathway_programme : programmeID
+    pathway_report --> pathway_partner : partnerID
+    pathway_testimonial --> pathway_activityDef : activityDefID
     farcrycms_dmCarouselItem --> pathway_dmImage : imgSourceID
     farcrycms_dmEvent --> pathway_dmImage : teaserImage
     farcrycms_dmFacts --> pathway_dmImage : imageID
@@ -116,33 +186,55 @@ classDiagram
     zfarcrycore_dmFile --> pathway_dmImage : teaserImage
     zfarcrycore_dmHTML --> pathway_dmImage : teaserImage
     zfarcrycore_dmInclude --> pathway_dmImage : teaserImage
+    zfarcrycore_dmProfile --> pathway_memberGroup : memberGroupID
+    pathway_center --> zfarcrycore_dmProfile : aUsers
     pathway_center --> pathway_referer : aReferers
+    pathway_memberGroup --> zfarcrycore_farUser : aFarcryUsers
     pathway_partner --> pathway_center : aCenters
     pathway_partner --> pathway_referer : aReferers
     pathway_programme --> pathway_activityDef : aFollowupActivityDefIDs
     pathway_programme --> zfarcrycore_dmFile : aObjectIDs
+    pathway_report --> pathway_memberGroup : aMemberGroupID
+    zfarcrycore_dmProfile --> zfarcrycore_farGroup : aGroups
+    zfarcrycore_farRole --> zfarcrycore_farGroup : aGroups
+    zfarcrycore_farRole --> zfarcrycore_farPermission : aPermissions
+    zfarcrycore_farUser --> zfarcrycore_farGroup : aGroups
+    zfarcrycore_farWebtopDashboard --> zfarcrycore_farRole : aRoles
+    zfarcrycore_farPermission --> zfarcrycore_farPermission : aRelatedtypes
     pathway_activityDef --> pathway_activityDef : onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
     pathway_dmNavigation --> pathway_dmNavigation : internalRedirectID, ExternalLink
 
     %% Special Joins
+    zfarcrycore_farUser --> zfarcrycore_dmProfile : userID_to_userName_userDirectory
     %% End Special Joins
 
 
     %% Entity Styling
+    style pathway_ruleSelfRegistration fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_dmImage fill:#d75500,stroke:#f57c00,stroke-width:4px,color:#fff
     style pathway_dmNavigation fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_dmNews fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_activityDef fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_center fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_guide fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_intake fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_memberGroup fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_partner fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style pathway_programme fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_progRole fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style pathway_referer fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style pathway_report fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style pathway_testimonial fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
     style farcrycms_dmCarouselItem fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style farcrycms_dmEvent fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style farcrycms_dmFacts fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style zfarcrycore_dmFile fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style zfarcrycore_dmHTML fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
     style zfarcrycore_dmInclude fill:#1963d2,stroke:#1565c0,stroke-width:4px,color:#fff
+    style zfarcrycore_dmProfile fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farGroup fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farPermission fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farRole fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farUser fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
+    style zfarcrycore_farWebtopDashboard fill:#1a1a1a,stroke:#0d0d0d,stroke-width:1px,color:#fff
 
