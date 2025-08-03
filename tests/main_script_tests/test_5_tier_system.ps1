@@ -11,6 +11,7 @@ function Analyze-MermaidDiagram {
         Entities = @()
         Relationships = @()
         Styling = @{}
+        StyleNames = @{}
         EntityCount = 0
         RelationshipCount = 0
         Tiers = @{
@@ -44,32 +45,32 @@ function Analyze-MermaidDiagram {
     }
     $analysis.RelationshipCount = $analysis.Relationships.Count
     
-    # Parse styling
-    $styleMatches = [regex]::Matches($content, 'style\s+(\w+)\s+fill:(#[0-9a-fA-F]+)')
-    foreach ($match in $styleMatches) {
-        $entity = $match.Groups[1].Value
-        $color = $match.Groups[2].Value
-        $analysis.Styling[$entity] = $color
-    }
+                    # Parse styling with style name comments (separate lines)
+                $styleMatches = [regex]::Matches($content, '%%\s*(\w+)\s*tier\s*\n\s*style\s+(\w+)')
+                foreach ($match in $styleMatches) {
+                    $styleName = $match.Groups[1].Value
+                    $entity = $match.Groups[2].Value
+                    $analysis.StyleNames[$entity] = $styleName
+                }
     
-    # Categorize entities into tiers based on colors
+    # Categorize entities into tiers based on style names
     foreach ($entity in $analysis.Entities) {
-        if ($analysis.Styling.ContainsKey($entity)) {
-            $color = $analysis.Styling[$entity]
-            switch ($color) {
-                "#d75500" { $analysis.Tiers["focus"] += $entity }  # Gold tier
-                "#693a00" { $analysis.Tiers["domain_related"] += $entity }  # Bronze tier
-                "#1963d2" { $analysis.Tiers["related"] += $entity }  # Blue tier
-                "#44517f" { $analysis.Tiers["domain_other"] += $entity }  # Gray tier
-                "#1a1a1a" { $analysis.Tiers["secondary"] += $entity }  # Black tier
-                "#8e24aa" { $analysis.Tiers["secondary"] += $entity }  # Purple tier (SSQ entities)
+        if ($analysis.StyleNames.ContainsKey($entity)) {
+            $styleName = $analysis.StyleNames[$entity]
+            switch ($styleName) {
+                "focus" { $analysis.Tiers["focus"] += $entity }
+                "domain_related" { $analysis.Tiers["domain_related"] += $entity }
+                "related" { $analysis.Tiers["related"] += $entity }
+                "domain_other" { $analysis.Tiers["domain_other"] += $entity }
+                "secondary" { $analysis.Tiers["secondary"] += $entity }
+
                 default { 
-                    Write-Host "⚠️  Unknown color tier for $entity : $color" -ForegroundColor Yellow
+                    Write-Host "⚠️  Unknown style tier for $entity : $styleName" -ForegroundColor Yellow
                     $analysis.Tiers["secondary"] += $entity  # Default to secondary
                 }
             }
         } else {
-            Write-Host "⚠️  No styling found for $entity" -ForegroundColor Yellow
+            Write-Host "⚠️  No style name found for $entity" -ForegroundColor Yellow
             $analysis.Tiers["secondary"] += $entity  # Default to secondary
         }
     }
@@ -100,10 +101,10 @@ Write-Host "   Tiers found: $($analysis.Tiers.Count)" -ForegroundColor Gray
 # Expected tiers for 5-tier system (partner,member,programme focus with partner,participant,programme domains)
 $ExpectedTiers = @{
     "focus" = @("pathway_partner", "pathway_member", "pathway_programme")  # Orange tier (#d75500)
-    "domain_related" = @("pathway_center", "pathway_intake", "pathway_memberGroup", "pathway_progRole", "pathway_referer", "pathway_ruleSelfRegistration", "pathway_report", "pathway_testimonial", "zfarcrycore_dmProfile", "zfarcrycore_farGroup")  # Gold tier (#693a00)
-    "related" = @("pathway_activityDef", "pathway_media", "pathway_dmImage", "pathway_journalDef", "pathway_memberType", "pathway_progMember", "pathway_trackerDef", "zfarcrycore_dmFile", "farcrycms_farFeedback")  # Blue tier (#1963d2)
-    "domain_other" = @("zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser", "zfarcrycore_farWebtopDashboard")  # Blue-grey tier (#44517f)
-    "secondary" = @("pathway_activity", "pathway_journal", "pathway_library", "pathway_tracker", "pathway_dmNavigation", "pathway_dmNews", "farcrycms_dmEmail", "farcrycms_dmFacts", "zfarcrycore_dmHTML", "zfarcrycore_dmInclude", "zfarcrycore_farBarnacle")  # Dark grey tier (#1a1a1a) - excludes SSQ entities (purple)
+    "domain_related" = @("pathway_center", "pathway_intake", "pathway_memberGroup", "pathway_progRole", "pathway_referer", "pathway_ruleSelfRegistration", "pathway_report", "pathway_testimonial", "zfarcrycore_dmProfile", "zfarcrycore_farGroup")  # Rust tier (#9d3100)
+    "related" = @("pathway_activityDef", "pathway_media", "pathway_dmImage", "pathway_journalDef", "pathway_memberType", "pathway_progMember", "pathway_trackerDef", "zfarcrycore_dmFile", "farcrycms_farFeedback", "pathway_SSQ_arthritis01", "pathway_SSQ_pain01", "pathway_SSQ_stress01")  # Magenta tier (#883583)
+    "domain_other" = @("zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser", "zfarcrycore_farWebtopDashboard")  # Coffee tier (#7e4f2b)
+    "secondary" = @("pathway_activity", "pathway_journal", "pathway_library", "pathway_tracker", "pathway_dmNavigation", "pathway_dmNews", "farcrycms_dmEmail", "farcrycms_dmFacts", "zfarcrycore_dmHTML", "zfarcrycore_dmInclude", "zfarcrycore_farBarnacle")  # Dark grey tier (#1a1a1a)
 }
 
 # Validate tiers
@@ -123,10 +124,6 @@ foreach ($tier in $ExpectedTiers.Keys) {
         }
         
         foreach ($entity in $actualEntities) {
-            # For secondary tier, exclude SSQ entities since they have their own purple styling
-            if ($tier -eq "secondary" -and $entity -like "*SSQ_*") {
-                continue
-            }
             if ($entity -notin $expectedEntities) {
                 $extra += $entity
             }

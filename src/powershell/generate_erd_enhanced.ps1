@@ -792,7 +792,10 @@ function Generate-MermaidERD {
     if ($lFocus) { Write-Host "   Focus: $lFocus" -ForegroundColor Yellow }
     if ($domainList.Count -gt 0) { Write-Host "   Domains: $($domainList -join ', ')" -ForegroundColor Yellow }
     
-
+    Write-Host "🔍 DEBUG: Filtered entities:" -ForegroundColor Magenta
+    foreach ($entity in $filteredEntities) {
+        Write-Host "  - $($entity.name) (plugin: $($entity.plugin))" -ForegroundColor Cyan
+    }
     
     # Add entities with proper attributes
     foreach ($entity in $filteredEntities) {
@@ -1113,8 +1116,18 @@ function Generate-MermaidERD {
         
         $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $fullFocusEntity -relatedEntities $relatedEntities -cssStyles $cssStyles -validatedDomains $validatedDomains -domainsConfig $domainsConfig
         
+        # Determine style name by finding which CSS style this matches
+        $styleName = "secondary"  # default
+        foreach ($cssKey in $cssStyles.Keys) {
+            if ($style -eq $cssStyles[$cssKey]) {
+                $styleName = $cssKey
+                break
+            }
+        }
+        
         # Use sanitized entity name for style definition (no spaces, hyphens, or quotes)
         $sanitizedEntityName = Get-SanitizedEntityName -entityName $entityDisplayName
+        $mermaidContent += "    %% $styleName tier`n"
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
@@ -1610,20 +1623,10 @@ function Get-EntityLayerIcon {
         'audit' = '🔎'
     }
     
-    # Extract base entity name (remove plugin prefix if present)
+    # Entity name is already the base entity name, no prefix stripping needed
     $baseEntityName = $entityName
-    
-    # Special handling for SSQ entities - they come in as SSQ_entityName
-    if ($entityName -like "SSQ_*") {
-        $baseEntityName = $entityName  # Keep the full SSQ_ name
-    } else {
-        # For other entities, remove plugin prefix if present
-        if ($entityName -match '^[^_]+_(.+)$') {
-            $baseEntityName = $matches[1]
-        }
-    }
-    
-
+    Write-Host "🔍 DEBUG: Get-EntityLayerIcon called for entityName='$entityName'" -ForegroundColor Yellow
+    Write-Host "🔍 DEBUG: entityName='$entityName', baseEntityName='$baseEntityName'" -ForegroundColor Magenta
     
     # Find which layer this entity belongs to
     foreach ($domain in $domainsConfig.PSObject.Properties) {
@@ -1632,6 +1635,7 @@ function Get-EntityLayerIcon {
                 $layerKey = $layer.Name
                 $icon = $layerIcons[$layerKey]
                 if ($icon) {
+                    Write-Host "🔍 DEBUG: Found $baseEntityName in $($domain.Name).$($layer.Name)" -ForegroundColor Green
                     return @{
                         Layer = $layerKey
                         Icon = $icon
@@ -1642,22 +1646,7 @@ function Get-EntityLayerIcon {
         }
     }
     
-    # Check catchall if not found in domains
-    if ($domainsData.catchall) {
-        foreach ($layer in $domainsData.catchall.entities.PSObject.Properties) {
-            if ($layer.Value -contains $baseEntityName) {
-                $layerKey = $layer.Name
-                $icon = $layerIcons[$layerKey]
-                if ($icon) {
-                    return @{
-                        Layer = $layerKey
-                        Icon = $icon
-                        Display = "$icon $($layerKey.ToUpper())"
-                    }
-                }
-            }
-        }
-    }
+    # No catchall section exists in domains.json, so we skip this check
     
     # Default fallback
     return @{
@@ -1674,7 +1663,7 @@ function Get-EntityStyle {
     # Construct full entity name for comparison with relatedEntities
     $fullEntityName = "${pluginName}_$entityName"
     
-    # Check for exact match first (SSQ entities)
+    # Check for exact match first
     if ($cssStyles.ContainsKey($entityName)) {
         return $cssStyles[$entityName]
     }
@@ -1692,26 +1681,22 @@ function Get-EntityStyle {
     # Extract base entity name from focus entities for comparison
     $baseFocusEntities = @()
     foreach ($focus in $focusEntities) {
+        # Focus entities are already base entity names, don't strip prefixes
         $baseFocus = $focus
-        if ($focus -match '^[^_]+_(.+)$') {
-            $baseFocus = $matches[1]
-        }
-        $baseFocusEntities += $baseFocus
-    }
-    
-    if ($baseFocusEntities -contains $entityName) {
+                      $baseFocusEntities += $baseFocus
+          }
+          
+          # Entity name is already the base entity name, no prefix stripping needed
+          $baseEntityName = $entityName
+          
+          if ($baseFocusEntities -contains $baseEntityName) {
         if ($cssStyles.ContainsKey("focus")) {
             return $cssStyles["focus"]
         }
         return "fill:#ff9800,stroke:#f57c00,stroke-width:4px,color:#fff"
     }
     
-    # Check for SSQ entities FIRST (before related entities)
-    if ($entityName -like "SSQ_*") {
-        if ($cssStyles.ContainsKey("ssq_group")) {
-            return $cssStyles["ssq_group"]
-        }
-    }
+
     
     # Check if entity is in the same domain as ANY of the focus entities
     $isInSameDomainAsFocus = $false
@@ -1726,11 +1711,8 @@ function Get-EntityStyle {
                         $domainEntities += $category.Value
                     }
                     
-                    # Extract base entity name from focus entity name (remove plugin prefix)
+                    # Focus entities are already base entity names, don't strip prefixes
                     $baseFocusEntity = $focus
-                    if ($focus -match '^[^_]+_(.+)$') {
-                        $baseFocusEntity = $matches[1]
-                    }
                     
                     if ($domainEntities -contains $baseFocusEntity) {
                         $focusDomain = $domain
@@ -1750,11 +1732,8 @@ function Get-EntityStyle {
                 $focusDomainEntities += $category.Value
             }
             
-            # Extract base entity name from full entity name (remove plugin prefix)
+            # Entity name is already the base entity name, no prefix stripping needed
             $baseEntityName = $entityName
-            if ($entityName -match '^[^_]+_(.+)$') {
-                $baseEntityName = $matches[1]
-            }
             
             if ($focusDomainEntities -contains $baseEntityName) {
                 $isInSameDomainAsFocus = $true
@@ -2310,3 +2289,4 @@ if (Test-Path $loggerPath) {
         DiagramType = $DiagramType
     }
 }
+
