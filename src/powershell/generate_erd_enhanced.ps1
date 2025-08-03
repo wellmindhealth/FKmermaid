@@ -792,10 +792,10 @@ function Generate-MermaidERD {
     if ($lFocus) { Write-Host "   Focus: $lFocus" -ForegroundColor Yellow }
     if ($domainList.Count -gt 0) { Write-Host "   Domains: $($domainList -join ', ')" -ForegroundColor Yellow }
     
-    Write-Host "🔍 DEBUG: Filtered entities:" -ForegroundColor Magenta
-    foreach ($entity in $filteredEntities) {
-        Write-Host "  - $($entity.name) (plugin: $($entity.plugin))" -ForegroundColor Cyan
-    }
+    # Write-Host "🔍 DEBUG: Filtered entities:" -ForegroundColor Magenta
+    # foreach ($entity in $filteredEntities) {
+    #     Write-Host "  - $($entity.name) (plugin: $($entity.plugin))" -ForegroundColor Cyan
+    # }
     
     # Add entities with proper attributes
     foreach ($entity in $filteredEntities) {
@@ -1131,16 +1131,13 @@ function Generate-MermaidERD {
         $mermaidContent += "    style $sanitizedEntityName $style`n"
     }
     
-    # Add consistent styling for special join entities
-    if ($farUserExists -or $dmProfileExists) {
-        # Style special join entities consistently regardless of domain
-        if (-not $farUserExists) {
-            $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
-        }
-        if (-not $dmProfileExists) {
-            $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
-        }
-    }
+                        # Add consistent styling for special join entities
+                    if ($farUserExists -or $dmProfileExists) {
+                        # Style special join entities consistently regardless of domain
+                        $mermaidContent += "    %% special join entity`n"
+                        # $mermaidContent += "    style zfarcrycore_farUser $($cssStyles["special_join"])`n"
+                        # $mermaidContent += "    style zfarcrycore_dmProfile $($cssStyles["special_join"])`n"
+                    }
     
     return $mermaidContent
 }
@@ -1526,12 +1523,8 @@ function Generate-MermaidClassDiagram {
     # Add consistent styling for special join entities
     if ($farUserExists -or $dmProfileExists) {
         # Style special join entities consistently regardless of domain
-        if (-not $farUserExists) {
-            $mermaidContent += "    style zfarcrycore_farUser fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
-        }
-        if (-not $dmProfileExists) {
-            $mermaidContent += "    style zfarcrycore_dmProfile fill:#2196f3,stroke:#1976d2,stroke-width:1px,color:#fff`n"
-        }
+        # $mermaidContent += "    style zfarcrycore_farUser $($cssStyles["special_join"])`n"
+        # $mermaidContent += "    style zfarcrycore_dmProfile $($cssStyles["special_join"])`n"
     }
     
     return $mermaidContent
@@ -1625,8 +1618,8 @@ function Get-EntityLayerIcon {
     
     # Entity name is already the base entity name, no prefix stripping needed
     $baseEntityName = $entityName
-    Write-Host "🔍 DEBUG: Get-EntityLayerIcon called for entityName='$entityName'" -ForegroundColor Yellow
-    Write-Host "🔍 DEBUG: entityName='$entityName', baseEntityName='$baseEntityName'" -ForegroundColor Magenta
+    # Write-Host "🔍 DEBUG: Get-EntityLayerIcon called for entityName='$entityName'" -ForegroundColor Yellow
+    # Write-Host "🔍 DEBUG: entityName='$entityName', baseEntityName='$baseEntityName'" -ForegroundColor Magenta
     
     # Find which layer this entity belongs to
     foreach ($domain in $domainsConfig.PSObject.Properties) {
@@ -1635,7 +1628,7 @@ function Get-EntityLayerIcon {
                 $layerKey = $layer.Name
                 $icon = $layerIcons[$layerKey]
                 if ($icon) {
-                    Write-Host "🔍 DEBUG: Found $baseEntityName in $($domain.Name).$($layer.Name)" -ForegroundColor Green
+                    # Write-Host "🔍 DEBUG: Found $baseEntityName in $($domain.Name).$($layer.Name)" -ForegroundColor Green
                     return @{
                         Layer = $layerKey
                         Icon = $icon
@@ -1693,7 +1686,7 @@ function Get-EntityStyle {
         if ($cssStyles.ContainsKey("focus")) {
             return $cssStyles["focus"]
         }
-        return "fill:#ff9800,stroke:#f57c00,stroke-width:4px,color:#fff"
+        return $cssStyles["error"]  # Fallback to error style if focus not found
     }
     
 
@@ -1746,7 +1739,7 @@ function Get-EntityStyle {
         if ($cssStyles.ContainsKey("domain_related")) {
             return $cssStyles["domain_related"]
         }
-        return "fill:#ffc107,stroke:#ff8f00,stroke-width:4px,color:#000"
+        return $cssStyles["error"]  # Fallback to error style if domain_related not found
     }
     
     # Directly related (but not same domain) - BLUE tier
@@ -1754,7 +1747,7 @@ function Get-EntityStyle {
         if ($cssStyles.ContainsKey("related")) {
             return $cssStyles["related"]
         }
-        return "fill:#1565c0,stroke:#0d47a1,stroke-width:1px,color:#fff"
+        return $cssStyles["error"]  # Fallback to error style if related not found
     }
     
     # Same domain but NOT directly related - BLUE-GREY tier
@@ -1762,14 +1755,14 @@ function Get-EntityStyle {
         if ($cssStyles.ContainsKey("domain_other")) {
             return $cssStyles["domain_other"]
         }
-        return "fill:#37474f,stroke:#263238,stroke-width:2px,color:#b0bec5"
+        return $cssStyles["error"]  # Fallback to error style if domain_other not found
     }
     
     # Default styling for all other entities - DARK GREY tier
     if ($cssStyles.ContainsKey("secondary")) {
         return $cssStyles["secondary"]
     }
-    return "fill:#424242,stroke:#212121,stroke-width:1px,color:#fff"
+    return $cssStyles["error"]  # Fallback to error style if secondary not found
 }
 
 # Main execution

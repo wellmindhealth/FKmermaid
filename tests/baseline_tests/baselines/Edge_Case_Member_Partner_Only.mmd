@@ -155,15 +155,15 @@ erDiagram
     "zfarcrycore_farUser" ||--|| "zfarcrycore_dmProfile" : userID_to_userName_userDirectory
     %% End Special Joins
 
-    %% Self-Referencing Relationships for farPermission
-    %% Self-refs include: aRelatedtypes
-    "zfarcrycore_farPermission" ||--|| "zfarcrycore_farPermission" : self_refs
-    %% End Self-Referencing Relationships for farPermission
-
     %% Self-Referencing Relationships for activityDef
     %% Self-refs include: onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
     "pathway_activityDef" ||--|| "pathway_activityDef" : self_refs
     %% End Self-Referencing Relationships for activityDef
+
+    %% Self-Referencing Relationships for farPermission
+    %% Self-refs include: aRelatedtypes
+    "zfarcrycore_farPermission" ||--|| "zfarcrycore_farPermission" : self_refs
+    %% End Self-Referencing Relationships for farPermission
 
     %% Join Table Relationships
     "pathway_center" }o--|| "zfarcrycore_dmProfile" : aUsers
@@ -184,28 +184,53 @@ erDiagram
 
 
     %% Entity Styling
+    %% secondary tier
     style pathway_ruleSelfRegistration fill:#1a1a1a,stroke:#0d0d0d,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_activityDef fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_center fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_intake fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
-    style pathway_member fill:#d75500,stroke:#b34d00,stroke-width:2px,color:#fff
+    %% focus tier
+    style pathway_member fill:#d76400,stroke:#b34d00,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_memberGroup fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_memberType fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_partner fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_progMember fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% secondary tier
     style pathway_programme fill:#1a1a1a,stroke:#0d0d0d,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_progRole fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_referer fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_report fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_SSQ_arthritis01 fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_SSQ_pain01 fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_SSQ_stress01 fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style pathway_testimonial fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% related tier
     style farcrycms_farFeedback fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% secondary tier
     style zfarcrycore_dmProfile fill:#1a1a1a,stroke:#0d0d0d,stroke-width:2px,color:#fff
+    %% related tier
     style zfarcrycore_farGroup fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
+    %% secondary tier
     style zfarcrycore_farPermission fill:#1a1a1a,stroke:#0d0d0d,stroke-width:2px,color:#fff
+    %% secondary tier
     style zfarcrycore_farRole fill:#1a1a1a,stroke:#0d0d0d,stroke-width:2px,color:#fff
+    %% secondary tier
     style zfarcrycore_farUser fill:#1a1a1a,stroke:#0d0d0d,stroke-width:2px,color:#fff
+    %% secondary tier
     style zfarcrycore_farWebtopDashboard fill:#1a1a1a,stroke:#0d0d0d,stroke-width:2px,color:#fff
+    %% special join entity
 

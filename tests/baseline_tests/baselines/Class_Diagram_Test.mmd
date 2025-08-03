@@ -191,8 +191,8 @@ classDiagram
     zfarcrycore_farRole --> zfarcrycore_farPermission : aPermissions
     zfarcrycore_farUser --> zfarcrycore_farGroup : aGroups
     zfarcrycore_farWebtopDashboard --> zfarcrycore_farRole : aRoles
-    zfarcrycore_farPermission --> zfarcrycore_farPermission : aRelatedtypes
     pathway_dmNavigation --> pathway_dmNavigation : internalRedirectID, ExternalLink
+    zfarcrycore_farPermission --> zfarcrycore_farPermission : aRelatedtypes
     pathway_activityDef --> pathway_activityDef : onEndID, aCuePointActivities, aInteract1Activities, aInteract2Activities, aInteract3Activities, aInteract4Activities, aInteract5Activities
 
     %% Special Joins
@@ -202,7 +202,7 @@ classDiagram
 
     %% Entity Styling
     style pathway_ruleSelfRegistration fill:#1a1a1a,stroke:#0d0d0d,stroke-width:2px,color:#fff
-    style pathway_dmImage fill:#d75500,stroke:#b34d00,stroke-width:2px,color:#fff
+    style pathway_dmImage fill:#1a1a1a,stroke:#0d0d0d,stroke-width:2px,color:#fff
     style pathway_dmNavigation fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
     style pathway_dmNews fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff
     style pathway_activityDef fill:#883583,stroke:#6a2a6a,stroke-width:2px,color:#fff

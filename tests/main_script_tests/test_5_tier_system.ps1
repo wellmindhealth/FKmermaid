@@ -14,13 +14,14 @@ function Analyze-MermaidDiagram {
         StyleNames = @{}
         EntityCount = 0
         RelationshipCount = 0
-        Tiers = @{
-            "focus" = @()
-            "domain_related" = @()
-            "related" = @()
-            "domain_other" = @()
-            "secondary" = @()
-        }
+            Tiers = @{
+        "focus" = @()
+        "domain_related" = @()
+        "related" = @()
+        "domain_other" = @()
+        "secondary" = @()
+        "error" = @()
+    }
     }
     
     # Parse entities
@@ -66,12 +67,12 @@ function Analyze-MermaidDiagram {
 
                 default { 
                     Write-Host "⚠️  Unknown style tier for $entity : $styleName" -ForegroundColor Yellow
-                    $analysis.Tiers["secondary"] += $entity  # Default to secondary
+                    $analysis.Tiers["error"] += $entity  # Default to error for visibility
                 }
             }
         } else {
             Write-Host "⚠️  No style name found for $entity" -ForegroundColor Yellow
-            $analysis.Tiers["secondary"] += $entity  # Default to secondary
+            $analysis.Tiers["error"] += $entity  # Default to error for visibility
         }
     }
     
