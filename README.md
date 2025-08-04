@@ -142,15 +142,15 @@ The FKmermaid system uses a sophisticated **5-tier semantic styling system** tha
 - **Example**: If journal is in pathway domain, other pathway entities with direct FK relationships to journal get domain_related styling
 - **Logic**: `Same Domain` + `Direct Relationship` = Domain Related
 
-#### **RELATED** - **DIRECTLY RELATED BUT DIFFERENT DOMAIN**
-- **What**: Entities from other domains that have direct relationships to the focus
-- **Example**: If journal is pathway domain, but dmFile (from zfarcrycore) has direct relationship to journal, dmFile gets related styling
-- **Logic**: `Different Domain` + `Direct Relationship` = Related
-
 #### **DOMAIN_OTHER** - **SAME DOMAIN BUT NOT DIRECTLY RELATED**
 - **What**: Entities in the same domain as focus but without direct relationships
 - **Example**: Other pathway domain entities that don't directly relate to journal
 - **Logic**: `Same Domain` + `No Direct Relationship` = Domain Other
+
+#### **RELATED** - **DIRECTLY RELATED BUT DIFFERENT DOMAIN**
+- **What**: Entities from other domains that have direct relationships to the focus
+- **Example**: If journal is pathway domain, but dmFile (from zfarcrycore) has direct relationship to journal, dmFile gets related styling
+- **Logic**: `Different Domain` + `Direct Relationship` = Related
 
 #### **OTHER** - **DEFAULT/OTHERS**
 - **What**: All other entities (different domain + no direct relationship)
