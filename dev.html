@@ -86,12 +86,12 @@
             flex-wrap: wrap;
         }
 
-                        .domain-card {
-                    flex: 1;
-                    min-width: 180px;
-                    padding: 10px;
-                    background: #f8f9fa;
-                    border-radius: 8px;
+                                .domain-card {
+            flex: 1;
+            min-width: 180px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
             border: 2px solid #e9ecef;
             border-left: 4px solid #007bff;
             cursor: pointer;
@@ -99,18 +99,67 @@
             text-align: center;
         }
 
+        /* Domain-specific styling */
+        .domain-card[data-domain="provider"] {
+            border-left-color: #9b59b6; /* Provider focus color */
+        }
+        .domain-card[data-domain="provider"]:hover {
+            border-left-color: #7d4a8a; /* Provider border color */
+            background: #f3e5f5; /* Pale version of provider color */
+        }
+        .domain-card[data-domain="provider"].active {
+            border-color: #9b59b6;
+            border-left-color: #9b59b6;
+            background: #f3e5f5;
+        }
+
+        .domain-card[data-domain="participant"] {
+            border-left-color: #d77a00; /* Participant focus color */
+        }
+        .domain-card[data-domain="participant"]:hover {
+            border-left-color: #b35a00; /* Participant border color */
+            background: #fff3e0; /* Pale version of participant color */
+        }
+        .domain-card[data-domain="participant"].active {
+            border-color: #d77a00;
+            border-left-color: #d77a00;
+            background: #fff3e0;
+        }
+
+        .domain-card[data-domain="pathway"] {
+            border-left-color: #058bab; /* Pathway focus color */
+        }
+        .domain-card[data-domain="pathway"]:hover {
+            border-left-color: #046a8a; /* Pathway border color */
+            background: #e0f7fa; /* Pale version of pathway color */
+        }
+        .domain-card[data-domain="pathway"].active {
+            border-color: #058bab;
+            border-left-color: #058bab;
+            background: #e0f7fa;
+        }
+
+        /* All Domains card - grey like All Layers */
+        .domain-card[data-domain="all"] {
+            border-left-color: #495057; /* Grey color like All Layers */
+        }
+        .domain-card[data-domain="all"]:hover {
+            border-left-color: #343a40; /* Darker grey */
+            background: #f8f9fa; /* Light grey background */
+        }
+        .domain-card[data-domain="all"].active {
+            border-color: #495057;
+            border-left-color: #495057;
+            background: #e9ecef; /* Grey background */
+        }
+
         .domain-card:hover {
             border-color: #dee2e6;
-            border-left-color: #0056b3;
-            background: #e3f2fd;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
         .domain-card.active {
-            border-color: #007bff;
-            border-left-color: #007bff;
-            background: #e3f2fd;
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
@@ -389,6 +438,38 @@
         .domain-badge {
             background: #e3f2fd;
             color: #1976d2;
+        }
+
+        /* Domain-specific badge styling */
+        .domain-badge[data-domain="provider"] {
+            background: #9b59b6; /* Provider focus color */
+            color: white;
+        }
+        .domain-badge[data-domain="participant"] {
+            background: #d77a00; /* Participant focus color */
+            color: white;
+        }
+        .domain-badge[data-domain="pathway"] {
+            background: #058bab; /* Pathway focus color */
+            color: white;
+        }
+        .domain-badge[data-domain="all"] {
+            background: #495057; /* Grey color like All Layers */
+            color: white;
+        }
+
+        /* Domain-header styling */
+        .domain-header[data-domain="provider"] {
+            border-left-color: #9b59b6; /* Provider focus color */
+        }
+        .domain-header[data-domain="participant"] {
+            border-left-color: #d77a00; /* Participant focus color */
+        }
+        .domain-header[data-domain="pathway"] {
+            border-left-color: #058bab; /* Pathway focus color */
+        }
+        .domain-header[data-domain="all"] {
+            border-left-color: #495057; /* Grey color like All Layers */
         }
 
         .strata-badge {
@@ -1224,6 +1305,7 @@
             // Create domain header
             const domainHeader = document.createElement('div');
             domainHeader.className = 'domain-header';
+            domainHeader.setAttribute('data-domain', domainKey);
             domainHeader.innerHTML = `
                 <h2>
                     <div class="header-content">
@@ -1318,8 +1400,8 @@
                         </div>
                         <div class="card-badges">
                             <div class="badge-row">
-                                <span class="badge domain-badge">
-                                    <i class="fas fa-globe" style="margin-right: 8px;"></i>${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
+                                <span class="badge domain-badge" data-domain="${domainKey}">
+                                    <i class="fas ${getDomainIcon(domainKey)}" style="margin-right: 8px;"></i>${domainKey.charAt(0).toUpperCase() + domainKey.slice(1)}
                                 </span>
                                 <span class="badge strata-badge strata-${layerKey}">
                                     <span style="margin-right: 8px; font-size: 1.2em; color: ${getLayerUnicodeIcon(layerKey).color};">${getLayerUnicodeIcon(layerKey).icon}</span>${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}
@@ -1707,10 +1789,10 @@
             // Set the labels in the header
             document.getElementById('diagramModalLabels').innerHTML = `
                 <!-- invisible subtitle placeholder -->
-                <span style="background: ${getDomainColor(actualDomains)}; color: #1976d2; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                <span class="badge domain-badge" data-domain="${actualDomains}">
                     <i class="fas ${getDomainIcon(actualDomains)}"></i> ${getDomainDisplayName(actualDomains)}
                 </span>
-                <span style="background: ${getLayerColor(layerKey)}; color: ${getLayerTextColor(layerKey)}; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                <span class="badge strata-badge strata-${layerKey}">
                     <span style="margin-right: 4px; font-size: 1.1em; color: ${getLayerUnicodeIcon(layerKey).color};">${getLayerUnicodeIcon(layerKey).icon}</span> ${layerDisplayName}
                 </span>
             `;
@@ -1776,13 +1858,12 @@
         
         function getDomainColor(domain) {
             const domainColors = {
-                'provider': '#e3f2fd',
-                'participant': '#e3f2fd', 
-                'pathway': '#e3f2fd',
-        
-                'all': '#e3f2fd'
+                'provider': '#9b59b6', /* Provider focus color */
+                'participant': '#d77a00', /* Participant focus color */
+                'pathway': '#058bab', /* Pathway focus color */
+                'all': '#495057' /* Grey color like All Layers */
             };
-            return domainColors[domain] || '#e3f2fd';
+            return domainColors[domain] || '#495057';
         }
         
         function getLayerColor(layer) {
@@ -1914,10 +1995,10 @@
             // Set the labels in the header
             document.getElementById('detailsModalLabels').innerHTML = `
                 <span style="color: #6c757d; font-size: 1.2em; font-weight: 400;">Component Details</span>
-                <span style="background: ${getDomainColor(domain)}; color: #1976d2; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                <span class="badge domain-badge" data-domain="${domain}">
                     <i class="fas ${getDomainIcon(domain)}"></i> ${componentData.domain}
                 </span>
-                <span style="background: ${getLayerColor(layer)}; color: ${getLayerTextColor(layer)}; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                <span class="badge strata-badge strata-${layer}">
                     <span style="margin-right: 4px; font-size: 1.1em; color: ${getLayerUnicodeIcon(layer).color};">${getLayerUnicodeIcon(layer).icon}</span> ${componentData.layer}
                 </span>
             `;

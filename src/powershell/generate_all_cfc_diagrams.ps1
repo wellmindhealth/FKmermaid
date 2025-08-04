@@ -53,7 +53,7 @@ function Load-EnvironmentVariables {
 $envVars = Load-EnvironmentVariables
 
 # Path to the ER generation script
-$erScriptPath = Join-Path $PSScriptRoot "generate_erd_enhanced.ps1"
+$erScriptPath = Join-Path $PSScriptRoot "generate_erd_domain_colors.ps1"
 
 # Load domains.json to get all CFCs and their domain mappings
 $domainsPath = Join-Path $PSScriptRoot "..\..\config\domains.json"

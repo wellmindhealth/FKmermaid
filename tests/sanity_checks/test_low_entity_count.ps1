@@ -59,7 +59,7 @@ foreach ($scenario in $testScenarios) {
         $focusParam = $scenario.Focus
         $domainsParam = if ($scenario.Domains) { "-lDomains `"$($scenario.Domains)`"" } else { "" }
         
-        $command = "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1 -lFocus `"$focusParam`" -DiagramType `"ER`" $domainsParam -OutputFile `"$outputFile`""
+        $command = "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_domain_colors.ps1 -lFocus `"$focusParam`" -DiagramType `"ER`" $domainsParam -OutputFile `"$outputFile`""
         
         Write-Host "   Running: $command" -ForegroundColor Gray
         $result = Invoke-Expression $command

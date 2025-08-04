@@ -104,7 +104,7 @@ foreach ($baseline in $baselines) {
     Write-Host "   Used by: $($baseline.UsedBy -join ', ')" -ForegroundColor Gray
     
     # Build command string
-    $command = "& 'D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1' -lFocus '$($baseline.Focus)' -DiagramType '$($baseline.DiagramType)' -lDomains '$($baseline.Domains)' -OutputFile '$outputPath'"
+            $command = "& 'D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_domain_colors.ps1' -lFocus '$($baseline.Focus)' -DiagramType '$($baseline.DiagramType)' -lDomains '$($baseline.Domains)' -OutputFile '$outputPath'"
     
     # Execute command
     $result = Invoke-Expression $command 2>&1

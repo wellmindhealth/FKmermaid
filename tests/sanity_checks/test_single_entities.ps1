@@ -20,7 +20,7 @@ foreach ($entity in $problematicEntities) {
     try {
         # Generate a diagram for this single entity
         $outputFile = "test_single_${entity}.mmd"
-        $command = "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_enhanced.ps1 -lFocus `"$entity`" -DiagramType `"ER`" -OutputFile `"$outputFile`""
+        $command = "D:\GIT\farcry\Cursor\FKmermaid\src\powershell\generate_erd_domain_colors.ps1 -lFocus `"$entity`" -DiagramType `"ER`" -OutputFile `"$outputFile`""
         
         Write-Host "   Running: $command" -ForegroundColor Gray
         $result = Invoke-Expression $command

@@ -24,7 +24,7 @@ param(
 )
 
 # Import the ER generation script
-$erScriptPath = Join-Path $PSScriptRoot "..\src\powershell\generate_erd_enhanced.ps1"
+$erScriptPath = Join-Path $PSScriptRoot "..\src\powershell\generate_erd_domain_colors.ps1"
 
 # Test CFCs (just 3 for quick testing - these exist in the test domains)
 $testCfcNames = @("member", "activityDef", "progRole")

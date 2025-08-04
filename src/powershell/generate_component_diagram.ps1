@@ -1,7 +1,7 @@
 # Generate Component Diagrams for FarCry Pathway Plugin
 # Dynamically scans CFC files and extracts properties, inheritance, and relationships
 # 
-# ⚠️  IMPORTANT: This script shares the cache file with generate_erd_enhanced.ps1
+# ⚠️  IMPORTANT: This script shares the cache file with generate_erd_domain_colors.ps1
 #     DO NOT overwrite the cache structure - always preserve existing data!
 #     The ER script expects: directFK, joinTables, entities, properties
 #     This script adds: components
@@ -510,7 +510,7 @@ if (-not $RefreshCFCs -and (Test-Path $cachePath)) {
         }
     }
     
-    # ⚠️  CACHE PRESERVATION: This script shares cache with generate_erd_enhanced.ps1
+    # ⚠️  CACHE PRESERVATION: This script shares cache with generate_erd_domain_colors.ps1
     #     DO NOT overwrite the cache structure - always preserve existing data!
     #     The ER script expects: directFK, joinTables, entities, properties
     #     This script adds: components

@@ -400,7 +400,7 @@ function Get-AllProperties {
 function Get-CFCRelationships {
     param([string]$basePath)
     
-    # Match the exact structure that generate_erd_enhanced.ps1 expects
+    # Match the exact structure that generate_erd_domain_colors.ps1 expects
 $relationships = @{
     directFK = @()
     joinTables = @()

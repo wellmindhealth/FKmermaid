@@ -262,7 +262,7 @@ foreach ($test in $baselineTests) {
     }
     
     # Generate baseline
-    $result = & ".\generate_erd_enhanced.ps1" -lFocus $test.Focus -DiagramType $test.DiagramType -lDomains $test.Domains -OutputFile $baselineFile -NoBrowser 2>&1
+                $result = & ".\generate_erd_domain_colors.ps1" -lFocus $test.Focus -DiagramType $test.DiagramType -lDomains $test.Domains -OutputFile $baselineFile -NoBrowser 2>&1
     
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✅ Baseline generated: $baselineFile" -ForegroundColor Green

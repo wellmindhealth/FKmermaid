@@ -4,7 +4,7 @@
     "module.cfc", 
     "moduleDef.cfc",
     "farFilter.cfc",
-        "farTask.cfc", 
+    "farTask.cfc", 
     "farTaskDef.cfc",
     "ruleActivityDefListing.cfc",
     "ruleImageGallerySlick.cfc",
@@ -13,7 +13,9 @@
     "orderMaster.cfc",
     "address.cfc",
     "promotion.cfc",
-    "guide.cfc"
+    "guide.cfc",
+    "device.cfc",
+    "token.cfc"
   ],
   "scanDirectories": [
     "D:\\GIT\\farcry\\plugins\\pathway",

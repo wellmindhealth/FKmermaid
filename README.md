@@ -101,7 +101,7 @@ Show ColdFusion Component inheritance and relationships:
 
 ### **How We Organize Components**
 
-The system uses **4 domains** for diagram generation to preserve cross-domain relationships:
+The system uses **3 primary domains** for diagram generation to preserve cross-domain relationships:
 
 #### **`provider`** - Business relationships and organizational structure
 - **Core**: partner, referer, intake, center, memberGroup
@@ -118,13 +118,51 @@ The system uses **4 domains** for diagram generation to preserve cross-domain re
 - **Content**: media, defaultMediaID, aCuePointActivities, aMediaIDs, guide
 - **Flow**: onEndID, aCuePointActivities, aInteract1Activities, etc.
 
+**Why 3 domains?** Because real components connect across boundaries. For example, `member` (participant) connects to `partner` (healthcare organization) - these cross-domain relationships are crucial for understanding the complete system.
 
-- **Core**: dmNavigation, dmHTML, dmFacts, dmNews, dmInclude
-- **Resources**: dmImage, dmFile
+### **🎨 Domain-Based Color System**
 
+The system now features a **domain-based color system** that assigns distinct color palettes to each domain, making it easy to visually identify which domain an entity belongs to:
 
+#### **Visual Color Swatches**
+- **Provider Domain**: Purple palette for business/organizational entities
+- **Participant Domain**: Orange palette for user/personal data entities  
+- **Pathway Domain**: Petrol palette for content/flow entities
 
-**Why 4 domains?** Because real components connect across boundaries. For example, `member` (participant) connects to `partner` (healthcare organization) - these cross-domain relationships are crucial for understanding the complete system.
+#### **Three-Tier Styling Within Each Domain**
+Each domain uses a consistent three-tier styling approach:
+- **Focus**: Brightest color for the primary focus entity
+- **Related**: Medium brightness for entities with direct relationships
+- **Other**: Darkest color for entities in the same domain without direct relationships
+
+This creates a clear visual hierarchy that shows both domain membership and relationship proximity to the focus entity.
+
+### **🔄 Two Styling Approaches**
+
+The system offers two different styling approaches for different use cases:
+
+#### **Domain-Based Styling** (`generate_erd_domain_colors.ps1`)
+- **Best for**: Multi-domain analysis and domain-focused diagrams
+- **Approach**: Domain-first with relationship as secondary factor
+- **Visual**: Each domain has its own color palette (Purple/Orange/Petrol)
+- **Use when**: You want to clearly see which domain entities belong to
+
+#### **5-Tier Semantic Styling** (`generate_erd_enhanced.ps1`) 
+- **Best for**: Complex relationship analysis and proximity-focused diagrams
+- **Approach**: Relationship-first with domain as secondary factor
+- **Visual**: 5-tier hierarchy based on relationship proximity to focus
+- **Use when**: You want to understand relationship strength and entity proximity
+
+### **🎨 Visual Color Swatches System**
+
+The domain-based system includes a **visual color swatches system** for easy color editing:
+
+- **CSS-based editing**: Colors are defined in `styles/mermaid_colors.css` for easy modification
+- **HTML preview**: `styles/color_swatches.html` provides a visual preview of all color palettes
+- **Live editing**: Use the web server on port 8000 to view and edit colors in real-time
+- **Domain palettes**: Each domain (Provider/Participant/Pathway) has its own three-tier color palette
+
+This system makes it easy to adjust colors visually and see the impact immediately in your diagrams.
 
 ## 🎨 **The Oracle of the 5-Tier Styling System**
 

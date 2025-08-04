@@ -1,0 +1,185 @@
+/* 
+ * Mermaid Color Palette - Domain-Based Styling System
+ * 
+ * This CSS file contains all the color definitions used in the mermaid diagrams.
+ * Each color has a visual swatch and can be easily edited with color pickers.
+ * 
+ * Usage: Edit the hex values below, then run the script to update mermaid_styles.mmd
+ */
+
+/* ========================================
+ * LEGACY STYLES (for backward compatibility)
+ * ======================================== */
+
+/* Focus - Orange */
+.focus {
+    background-color: #d76400; /* 🟠 Orange */
+    border-color: #b34d00;     /* 🟠 Dark Orange */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Domain Related - Rust */
+.domain_related {
+    background-color: #9d3100; /* 🟫 Rust */
+    border-color: #7a2600;     /* 🟫 Dark Rust */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Domain Other - Coffee */
+.domain_other {
+    background-color: #7e4f2b; /* 🟤 Coffee */
+    border-color: #5d3d1f;     /* 🟤 Dark Coffee */
+    color: #eceff1;            /* ⚪ Light grey text */
+}
+
+/* Related - Magenta */
+.related {
+    background-color: #883583; /* 🟣 Magenta */
+    border-color: #6a2a6a;     /* 🟣 Dark Magenta */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Other - Dark Grey */
+.other {
+    background-color: #1a1a1a; /* ⚫ Dark Grey */
+    border-color: #0d0d0d;     /* ⚫ Very Dark Grey */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* ========================================
+ * PROVIDER DOMAIN (Purple Palette)
+ * ======================================== */
+
+/* Provider Focus - Purple */
+.provider_focus {
+    background-color: #9b59b6; /* 🟣 Bright Purple */
+    border-color: #7d4a8a;     /* 🟣 Darker Purple */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Provider Related - Purple */
+.provider_related {
+    background-color: #99327b; /* 🟣 Purple */
+    border-color: #7a2862;     /* 🟣 Darker Purple */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Provider Other - Grey-Purple */
+.provider_other {
+    background-color: #616184; /* 🟣 Grey-Purple */
+    border-color: #4d4e6a;     /* 🟣 Darker Grey-Purple */
+    color: #eceff1;            /* ⚪ Light grey text */
+}
+
+/* ========================================
+ * PARTICIPANT DOMAIN (Orange Palette)
+ * ======================================== */
+
+/* Participant Focus - Orange */
+.participant_focus {
+    background-color: #d77a00; /* 🟠 Bright Orange */
+    border-color: #b35a00;     /* 🟠 Darker Orange */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Participant Related - Rust */
+.participant_related {
+    background-color: #9d4800; /* 🟫 Rust */
+    border-color: #7e3a00;     /* 🟫 Darker Rust */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Participant Other - Coffee */
+.participant_other {
+    background-color: #866337; /* 🟤 Coffee */
+    border-color: #6b4f2b;     /* 🟤 Darker Coffee */
+    color: #eceff1;            /* ⚪ Light grey text */
+}
+
+/* ========================================
+ * PATHWAY DOMAIN (Petrol Palette)
+ * ======================================== */
+
+/* Pathway Focus - Petrol */
+.pathway_focus {
+    background-color: #058bab; /* 🟢 Bright Petrol */
+    border-color: #046a8a;     /* 🟢 Darker Petrol */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Pathway Related - Petrol */
+.pathway_related {
+    background-color: #2d7d7b; /* 🟢 Petrol */
+    border-color: #246462;     /* 🟢 Darker Petrol */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Pathway Other - Grey-Petrol */
+.pathway_other {
+    background-color: #55785e; /* 🟢 Grey-Petrol */
+    border-color: #44604a;     /* 🟢 Darker Grey-Petrol */
+    color: #eceff1;            /* ⚪ Light grey text */
+}
+
+/* ========================================
+ * SPECIAL STYLES
+ * ======================================== */
+
+/* Error - Red */
+.error {
+    background-color: #ff0000; /* 🔴 Red */
+    border-color: #cc0000;     /* 🔴 Dark Red */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* Special Join - Blue */
+.special_join {
+    background-color: #2196f3; /* 🔵 Blue */
+    border-color: #1976d2;     /* 🔵 Dark Blue */
+    color: #ffffff;            /* ⚪ White text */
+}
+
+/* ========================================
+ * COLOR SWATCHES FOR VISUAL REFERENCE
+ * ======================================== */
+
+/* Provider Domain Swatches */
+.swatch-provider-focus { background-color: #9b59b6; border: 4px solid #7d4a8a; }      /* Bright Purple */
+.swatch-provider-related { background-color: #99327b; border: 4px solid #7a2862; }    /* Purple */
+.swatch-provider-other { background-color: #616184; border: 4px solid #4d4e6a; }      /* Grey-Purple */
+
+/* Participant Domain Swatches */
+.swatch-participant-focus { background-color: #d77a00; border: 4px solid #b35a00; }   /* Bright Orange */
+.swatch-participant-related { background-color: #9d4800; border: 4px solid #7e3a00; } /* Rust */
+.swatch-participant-other { background-color: #866337; border: 4px solid #6b4f2b; }  /* Coffee */
+
+/* Pathway Domain Swatches */
+.swatch-pathway-focus { background-color: #058bab; border: 4px solid #046a8a; }       /* Bright Petrol */
+.swatch-pathway-related { background-color: #2d7d7b; border: 4px solid #246462; }     /* Petrol */
+.swatch-pathway-other { background-color: #55785e; border: 4px solid #44604a; }       /* Grey-Petrol */
+
+/* Legacy Swatches */
+.swatch-focus { background-color: #d76400; }               /* Orange */
+.swatch-domain-related { background-color: #9d3100; }      /* Rust */
+.swatch-domain-other { background-color: #7e4f2b; }       /* Coffee */
+.swatch-related { background-color: #883583; }             /* Magenta */
+.swatch-other { background-color: #1a1a1a; }              /* Dark Grey */
+
+/* ========================================
+ * USAGE NOTES
+ * ======================================== 
+ * 
+ * To update colors:
+ * 1. Edit the hex values in the CSS classes above
+ * 2. Run the script to convert CSS back to mermaid format
+ * 3. The visual swatches help you see the colors while editing
+ * 
+ * Color relationships:
+ * - Focus: Brightest color in each domain
+ * - Related: Medium brightness, good contrast
+ * - Other: Darkest color, with lighter text for readability
+ * 
+ * Text colors:
+ * - White (#ffffff) for dark backgrounds
+ * - Light grey (#eceff1) for very dark backgrounds
+ */ 

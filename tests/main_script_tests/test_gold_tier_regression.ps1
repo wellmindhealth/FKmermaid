@@ -85,7 +85,7 @@ foreach ($testCase in $testCases) {
     
     # Generate test diagram
     $testOutput = "test_gold_$($testCase.Name -replace '\s+', '_').mmd"
-    $result = & ".\generate_erd_enhanced.ps1" -lFocus $testCase.Focus -DiagramType $testCase.DiagramType -lDomains $testCase.Domains -OutputFile $testOutput 2>&1
+            $result = & ".\generate_erd_domain_colors.ps1" -lFocus $testCase.Focus -DiagramType $testCase.DiagramType -lDomains $testCase.Domains -OutputFile $testOutput 2>&1
     
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✅ Diagram generated successfully" -ForegroundColor Green

@@ -36,22 +36,22 @@
     OPTIONAL: Switch to enable debug mode
     
 .EXAMPLE
-    .\generate_erd_enhanced.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "pathway"
+    .\generate_erd_domain_colors.ps1 -lFocus "activityDef" -DiagramType "ER" -lDomains "pathway"
     
 .EXAMPLE
-    .\generate_erd_enhanced.ps1 -lFocus "member" -DiagramType "Class" -lDomains "participant" -RefreshCFCs
+    .\generate_erd_domain_colors.ps1 -lFocus "member" -DiagramType "Class" -lDomains "participant" -RefreshCFCs
     
 .EXAMPLE
-    .\generate_erd_enhanced.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "pathway,participant" -OutputFile "custom.mmd"
+    .\generate_erd_domain_colors.ps1 -lFocus "progRole" -DiagramType "ER" -lDomains "pathway,participant" -OutputFile "custom.mmd"
     
 .EXAMPLE
-    .\generate_erd_enhanced.ps1 -lFocus "dmImage" -DiagramType "ER" -lDomains "pathway" -OutputFile "custom.mmd"
+    .\generate_erd_domain_colors.ps1 -lFocus "dmImage" -DiagramType "ER" -lDomains "pathway" -OutputFile "custom.mmd"
     
 .EXAMPLE
-    .\generate_erd_enhanced.ps1 -lFocus "farUser" -DiagramType "ER" -lDomains "all"
+    .\generate_erd_domain_colors.ps1 -lFocus "farUser" -DiagramType "ER" -lDomains "all"
     
 .EXAMPLE
-    .\generate_erd_enhanced.ps1 -lFocus "partner" -DiagramType "ER"
+    .\generate_erd_domain_colors.ps1 -lFocus "partner" -DiagramType "ER"
     
 .NOTES
     - All parameters are validated before execution
@@ -123,14 +123,14 @@ function Show-Help {
     Write-Host "  -ApplyDomainFilterAt N   # Apply domain filtering at relationship level N (default: 2)" -ForegroundColor White
     Write-Host ""
     Write-Host "💡 USAGE EXAMPLES:" -ForegroundColor Cyan
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'pathway'" -ForegroundColor Green
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Green
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'pathway,participant'" -ForegroundColor Green
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'pathway' -OutputFile 'custom.mmd'" -ForegroundColor Green
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Green
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Green
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'ER' -MermaidMode 'view'" -ForegroundColor Green
-    Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'ER' -lDomains 'participant' -ApplyDomainFilterAt 3" -ForegroundColor Green
+    Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'pathway'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Green
+    Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'pathway,participant'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'pathway' -OutputFile 'custom.mmd'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'member' -DiagramType 'ER' -MermaidMode 'view'" -ForegroundColor Green
+    Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'member' -DiagramType 'ER' -lDomains 'participant' -ApplyDomainFilterAt 3" -ForegroundColor Green
     Write-Host ""
     Write-Host "📖 For complete documentation, see: README.md" -ForegroundColor Yellow
     exit 0
@@ -320,12 +320,12 @@ function Validate-Parameters {
             Write-Host $errorMsg -ForegroundColor Red
         }
         Write-Host "`n📖 USAGE EXAMPLES:`n" -ForegroundColor Yellow
-        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'pathway'" -ForegroundColor Cyan
-        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Cyan
-        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'pathway,participant'" -ForegroundColor Cyan
-        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'pathway' -OutputFile 'custom.mmd'" -ForegroundColor Cyan
-        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Cyan
-        Write-Host "  .\generate_erd_enhanced.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'activityDef' -DiagramType 'ER' -lDomains 'pathway'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'member' -DiagramType 'Class' -lDomains 'participant' -RefreshCFCs" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'progRole' -DiagramType 'ER' -lDomains 'pathway,participant'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'dmImage' -DiagramType 'ER' -lDomains 'pathway' -OutputFile 'custom.mmd'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'farUser' -DiagramType 'ER' -lDomains 'all'" -ForegroundColor Cyan
+        Write-Host "  .\generate_erd_domain_colors.ps1 -lFocus 'partner' -DiagramType 'ER'" -ForegroundColor Cyan
         Write-Host "`n📚 See README.md for complete parameter documentation" -ForegroundColor Yellow
         exit 1
     }
@@ -1121,8 +1121,7 @@ function Generate-MermaidERD {
         # Single focus entity approach (simplified)
         $focusEntity = if ($lFocus) { $lFocus.Trim() } else { "" }
         
-        # DEBUG: Check what we're passing
-        Write-Host "DEBUG: lFocus='$lFocus', focusEntity='$focusEntity'" -ForegroundColor Magenta
+
         
         # Get domain-based style name
         $styleName = Get-DomainStyleName -entityName $entityName -focusEntity $focusEntity -domainsConfig $domainsConfig -domainPalettes $domainPalettes -catchallConfig $catchallConfig -relatedEntities $relatedEntities
@@ -1795,8 +1794,7 @@ function Get-DomainStyleName {
     # Get focus entity's domain
     $focusDomain = Get-EntityDomain -entityName $focusEntity -domainsConfig $domainsConfig -catchallConfig $catchallConfig -focusEntity ""
     
-    # DEBUG: Log what domains we found
-    Write-Host "DEBUG: Entity '$entityName' domain: $entityDomain, Focus '$focusEntity' domain: $focusDomain" -ForegroundColor Yellow
+
     
     # If either domain is unknown or catchall, fall back to old system
     if ($entityDomain -eq "unknown" -or $entityDomain -eq "catchall" -or 

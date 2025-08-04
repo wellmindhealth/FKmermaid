@@ -1,6 +1,6 @@
 # Relationship Detection Module
 # This module handles CFC relationship detection using attribute parsing
-# to be called from the main generate_erd_enhanced.ps1 script
+# to be called from the main generate_erd_domain_colors.ps1 script
 
 # Function to parse cfproperty attributes
 function Parse-CFPropertyAttributes {

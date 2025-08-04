@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Color Palette - Visual Swatches</title>
+    <link rel="stylesheet" href="mermaid_colors.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .domain-section {
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .domain-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .color-item {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .color-swatch {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 6px;
+        }
+        .color-info {
+            padding: 15px;
+            background: #f9f9f9;
+        }
+        .color-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .color-hex {
+            font-family: monospace;
+            color: #666;
+        }
+        .usage-note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        .legacy-section {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Mermaid Color Palette - Visual Swatches</h1>
+        <p>Use this page to visualize and edit the color palette for the domain-based styling system.</p>
+
+        <!-- Provider Domain -->
+        <div class="domain-section">
+            <div class="domain-title">🟣 Provider Domain (Purple Palette)</div>
+            <div class="color-grid">
+                <div class="color-item">
+                    <div class="color-swatch swatch-provider-focus">Provider Focus</div>
+                    <div class="color-info">
+                        <div class="color-name">Provider Focus</div>
+                        <div class="color-hex">Background: #9b59b6 | Border: #7d4a8a</div>
+                        <div>Used for: Primary focus entities in provider domain</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-provider-related">Provider Related</div>
+                    <div class="color-info">
+                        <div class="color-name">Provider Related</div>
+                        <div class="color-hex">Background: #99327b | Border: #7a2862</div>
+                        <div>Used for: Related entities in provider domain</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-provider-other">Provider Other</div>
+                    <div class="color-info">
+                        <div class="color-name">Provider Other</div>
+                        <div class="color-hex">Background: #616184 | Border: #4d4e6a</div>
+                        <div>Used for: Other entities in provider domain</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Participant Domain -->
+        <div class="domain-section">
+            <div class="domain-title">🟠 Participant Domain (Orange Palette)</div>
+            <div class="color-grid">
+                <div class="color-item">
+                    <div class="color-swatch swatch-participant-focus">Participant Focus</div>
+                    <div class="color-info">
+                        <div class="color-name">Participant Focus</div>
+                        <div class="color-hex">Background: #d77a00 | Border: #b35a00</div>
+                        <div>Used for: Primary focus entities in participant domain</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-participant-related">Participant Related</div>
+                    <div class="color-info">
+                        <div class="color-name">Participant Related</div>
+                        <div class="color-hex">Background: #9d4800 | Border: #7e3a00</div>
+                        <div>Used for: Related entities in participant domain</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-participant-other">Participant Other</div>
+                    <div class="color-info">
+                        <div class="color-name">Participant Other</div>
+                        <div class="color-hex">Background: #866337 | Border: #6b4f2b</div>
+                        <div>Used for: Other entities in participant domain</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pathway Domain -->
+        <div class="domain-section">
+            <div class="domain-title">🟢 Pathway Domain (Petrol Palette)</div>
+            <div class="color-grid">
+                <div class="color-item">
+                    <div class="color-swatch swatch-pathway-focus">Pathway Focus</div>
+                    <div class="color-info">
+                        <div class="color-name">Pathway Focus</div>
+                        <div class="color-hex">Background: #058bab | Border: #046a8a</div>
+                        <div>Used for: Primary focus entities in pathway domain</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-pathway-related">Pathway Related</div>
+                    <div class="color-info">
+                        <div class="color-name">Pathway Related</div>
+                        <div class="color-hex">Background: #2d7d7b | Border: #246462</div>
+                        <div>Used for: Related entities in pathway domain</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-pathway-other">Pathway Other</div>
+                    <div class="color-info">
+                        <div class="color-name">Pathway Other</div>
+                        <div class="color-hex">Background: #55785e | Border: #44604a</div>
+                        <div>Used for: Other entities in pathway domain</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legacy Styles -->
+        <div class="domain-section legacy-section">
+            <div class="domain-title">📚 Legacy Styles (Backward Compatibility)</div>
+            <div class="color-grid">
+                <div class="color-item">
+                    <div class="color-swatch swatch-focus">Focus</div>
+                    <div class="color-info">
+                        <div class="color-name">Focus</div>
+                        <div class="color-hex">Background: #d76400 | Border: #b34d00</div>
+                        <div>Used for: Legacy focus styling</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-domain-related">Domain Related</div>
+                    <div class="color-info">
+                        <div class="color-name">Domain Related</div>
+                        <div class="color-hex">Background: #9d3100 | Border: #7a2600</div>
+                        <div>Used for: Legacy domain related styling</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-domain-other">Domain Other</div>
+                    <div class="color-info">
+                        <div class="color-name">Domain Other</div>
+                        <div class="color-hex">Background: #7e4f2b | Border: #5d3d1f</div>
+                        <div>Used for: Legacy domain other styling</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-related">Related</div>
+                    <div class="color-info">
+                        <div class="color-name">Related</div>
+                        <div class="color-hex">Background: #883583 | Border: #6a2a6a</div>
+                        <div>Used for: Legacy related styling</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch swatch-other">Other</div>
+                    <div class="color-info">
+                        <div class="color-name">Other</div>
+                        <div class="color-hex">Background: #1a1a1a | Border: #0d0d0d</div>
+                        <div>Used for: Legacy other styling</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Notes -->
+        <div class="usage-note">
+            <h3>📝 How to Edit Colors:</h3>
+            <ol>
+                <li><strong>Edit the CSS file:</strong> Open <code>mermaid_colors.css</code> and modify the hex values</li>
+                <li><strong>Use this page:</strong> Open this HTML file in your browser to see the visual swatches</li>
+                <li><strong>Test changes:</strong> Refresh this page after editing the CSS to see your changes</li>
+                <li><strong>Apply to mermaid:</strong> Run the script to convert CSS changes back to mermaid format</li>
+            </ol>
+            
+            <h3>🎯 Color Guidelines:</h3>
+            <ul>
+                <li><strong>Focus colors:</strong> Brightest in each domain, high contrast</li>
+                <li><strong>Related colors:</strong> Medium brightness, good readability</li>
+                <li><strong>Other colors:</strong> Darkest, with lighter text for readability</li>
+                <li><strong>Text colors:</strong> White (#ffffff) for dark backgrounds, Light grey (#eceff1) for very dark backgrounds</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 
