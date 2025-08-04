@@ -1,561 +1,561 @@
 {
-  "CrossCheckedAt": "2025-08-03 14:32:46",
+  "ValidBaselines": 30,
   "Results": [
     {
+      "Issues": [],
+      "TestName": "Edge_Case_No_Focus_All_Domains",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_No_Focus_All_Domains.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_No_Focus_All_Domains",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#d76400": 1,
-          "#7e4f2b": 12,
-          "#9d3100": 3,
-          "#1a1a1a": 24
-        },
-        "EntityCount": 40,
         "SyntaxValid": true,
-        "RelationshipCount": 97,
         "Errors": [],
-        "StyleCount": 40
+        "StyleCount": 40,
+        "EntityCount": 40,
+        "ColorDistribution": {
+          "#1a1a1a": 24,
+          "#d76400": 1,
+          "#9d3100": 3,
+          "#7e4f2b": 12
+        },
+        "RelationshipCount": 97
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_No_Focus_No_Domains",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_No_Focus_No_Domains.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_No_Focus_No_Domains",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#d76400": 1,
-          "#1a1a1a": 15,
-          "#883583": 6,
-          "#7e4f2b": 12,
-          "#9d3100": 8
-        },
-        "EntityCount": 42,
         "SyntaxValid": true,
-        "RelationshipCount": 99,
         "Errors": [],
-        "StyleCount": 42
+        "StyleCount": 42,
+        "EntityCount": 42,
+        "ColorDistribution": {
+          "#883583": 6,
+          "#1a1a1a": 15,
+          "#d76400": 1,
+          "#9d3100": 8,
+          "#7e4f2b": 12
+        },
+        "RelationshipCount": 99
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Pathway_Domain_Only",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Pathway_Domain_Only.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Pathway_Domain_Only",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 4,
-          "#7e4f2b": 15,
-          "#9d3100": 5,
-          "#d76400": 1
-        },
-        "EntityCount": 25,
         "SyntaxValid": true,
-        "RelationshipCount": 38,
         "Errors": [],
-        "StyleCount": 25
+        "StyleCount": 25,
+        "EntityCount": 25,
+        "ColorDistribution": {
+          "#d76400": 1,
+          "#9d3100": 5,
+          "#883583": 4,
+          "#7e4f2b": 15
+        },
+        "RelationshipCount": 38
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Partner_Pathway_Only",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Partner_Pathway_Only.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Partner_Pathway_Only",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 10,
-          "#1a1a1a": 17,
-          "#d76400": 1
-        },
-        "EntityCount": 28,
         "SyntaxValid": true,
-        "RelationshipCount": 66,
         "Errors": [],
-        "StyleCount": 28
+        "StyleCount": 28,
+        "EntityCount": 28,
+        "ColorDistribution": {
+          "#1a1a1a": 17,
+          "#d76400": 1,
+          "#883583": 10
+        },
+        "RelationshipCount": 66
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Programme_Pathway_Only",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Programme_Pathway_Only.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Programme_Pathway_Only",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 7,
-          "#7e4f2b": 14,
-          "#9d3100": 6,
-          "#d76400": 1
-        },
-        "EntityCount": 28,
         "SyntaxValid": true,
-        "RelationshipCount": 46,
         "Errors": [],
-        "StyleCount": 28
+        "StyleCount": 28,
+        "EntityCount": 28,
+        "ColorDistribution": {
+          "#d76400": 1,
+          "#9d3100": 6,
+          "#883583": 7,
+          "#7e4f2b": 14
+        },
+        "RelationshipCount": 46
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Invalid_Domain",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Invalid_Domain.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Invalid_Domain",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#d76400": 1,
-          "#1a1a1a": 21,
-          "#883583": 3,
-          "#7e4f2b": 8,
-          "#9d3100": 7
-        },
-        "EntityCount": 40,
         "SyntaxValid": true,
-        "RelationshipCount": 97,
         "Errors": [],
-        "StyleCount": 40
+        "StyleCount": 40,
+        "EntityCount": 40,
+        "ColorDistribution": {
+          "#883583": 3,
+          "#1a1a1a": 21,
+          "#d76400": 1,
+          "#9d3100": 7,
+          "#7e4f2b": 8
+        },
+        "RelationshipCount": 97
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Empty_Focus_Invalid_Domain",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Empty_Focus_Invalid_Domain.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Empty_Focus_Invalid_Domain",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#d76400": 1,
-          "#7e4f2b": 12,
-          "#9d3100": 3,
-          "#1a1a1a": 24
-        },
-        "EntityCount": 40,
         "SyntaxValid": true,
-        "RelationshipCount": 97,
         "Errors": [],
-        "StyleCount": 40
+        "StyleCount": 40,
+        "EntityCount": 40,
+        "ColorDistribution": {
+          "#1a1a1a": 24,
+          "#d76400": 1,
+          "#9d3100": 3,
+          "#7e4f2b": 12
+        },
+        "RelationshipCount": 97
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Class_Diagram_Complex",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Complex.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Class_Diagram_Complex",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 16,
-          "#1a1a1a": 22
-        },
-        "EntityCount": 38,
         "SyntaxValid": true,
-        "RelationshipCount": 110,
         "Errors": [],
-        "StyleCount": 38
+        "StyleCount": 38,
+        "EntityCount": 38,
+        "ColorDistribution": {
+          "#1a1a1a": 22,
+          "#883583": 16
+        },
+        "RelationshipCount": 110
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Provider_Pathway_Only",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Provider_Pathway_Only.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Provider_Pathway_Only",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 10,
-          "#1a1a1a": 17,
-          "#d76400": 1
-        },
-        "EntityCount": 28,
         "SyntaxValid": true,
-        "RelationshipCount": 66,
         "Errors": [],
-        "StyleCount": 28
+        "StyleCount": 28,
+        "EntityCount": 28,
+        "ColorDistribution": {
+          "#1a1a1a": 17,
+          "#d76400": 1,
+          "#883583": 10
+        },
+        "RelationshipCount": 66
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Pathway_Pathway_Only",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Pathway_Pathway_Only.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Pathway_Pathway_Only",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 7,
-          "#7e4f2b": 14,
-          "#9d3100": 6,
-          "#d76400": 1
-        },
-        "EntityCount": 28,
         "SyntaxValid": true,
-        "RelationshipCount": 46,
         "Errors": [],
-        "StyleCount": 28
+        "StyleCount": 28,
+        "EntityCount": 28,
+        "ColorDistribution": {
+          "#d76400": 1,
+          "#9d3100": 6,
+          "#883583": 7,
+          "#7e4f2b": 14
+        },
+        "RelationshipCount": 46
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Member_Partner_Only",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Member_Partner_Only.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Member_Partner_Only",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 16,
-          "#1a1a1a": 7,
-          "#d76400": 1
-        },
-        "EntityCount": 24,
         "SyntaxValid": true,
-        "RelationshipCount": 52,
         "Errors": [],
-        "StyleCount": 24
+        "StyleCount": 24,
+        "EntityCount": 24,
+        "ColorDistribution": {
+          "#1a1a1a": 7,
+          "#d76400": 1,
+          "#883583": 16
+        },
+        "RelationshipCount": 52
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Multiple_Focus_Entities",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Multiple_Focus_Entities.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Multiple_Focus_Entities",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#d76400": 3,
-          "#1a1a1a": 11,
-          "#883583": 12,
-          "#7e4f2b": 4,
-          "#9d3100": 10
-        },
-        "EntityCount": 40,
         "SyntaxValid": true,
-        "RelationshipCount": 97,
         "Errors": [],
-        "StyleCount": 40
+        "StyleCount": 40,
+        "EntityCount": 40,
+        "ColorDistribution": {
+          "#883583": 12,
+          "#1a1a1a": 11,
+          "#d76400": 3,
+          "#9d3100": 10,
+          "#7e4f2b": 4
+        },
+        "RelationshipCount": 97
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Class_Diagram_Pathway_Only",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Pathway_Only.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Class_Diagram_Pathway_Only",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 14,
-          "#1a1a1a": 13
-        },
-        "EntityCount": 27,
         "SyntaxValid": true,
-        "RelationshipCount": 67,
         "Errors": [],
-        "StyleCount": 27
+        "StyleCount": 27,
+        "EntityCount": 27,
+        "ColorDistribution": {
+          "#1a1a1a": 13,
+          "#883583": 14
+        },
+        "RelationshipCount": 67
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_ER_Diagram_All_Domains",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_All_Domains.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_ER_Diagram_All_Domains",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#d76400": 1,
-          "#7e4f2b": 12,
-          "#9d3100": 3,
-          "#1a1a1a": 24
-        },
-        "EntityCount": 40,
         "SyntaxValid": true,
-        "RelationshipCount": 97,
         "Errors": [],
-        "StyleCount": 40
+        "StyleCount": 40,
+        "EntityCount": 40,
+        "ColorDistribution": {
+          "#1a1a1a": 24,
+          "#d76400": 1,
+          "#9d3100": 3,
+          "#7e4f2b": 12
+        },
+        "RelationshipCount": 97
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Class_Diagram_All_Domains",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_All_Domains.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Class_Diagram_All_Domains",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 2,
-          "#1a1a1a": 38
-        },
-        "EntityCount": 40,
         "SyntaxValid": true,
-        "RelationshipCount": 116,
         "Errors": [],
-        "StyleCount": 40
+        "StyleCount": 40,
+        "EntityCount": 40,
+        "ColorDistribution": {
+          "#1a1a1a": 38,
+          "#883583": 2
+        },
+        "RelationshipCount": 116
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_ER_Diagram_Cross_Domain_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_Cross_Domain_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_ER_Diagram_Cross_Domain_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 5,
-          "#1a1a1a": 13,
-          "#d76400": 1
-        },
-        "EntityCount": 20,
         "SyntaxValid": true,
-        "RelationshipCount": 34,
         "Errors": [],
-        "StyleCount": 19
+        "StyleCount": 19,
+        "EntityCount": 20,
+        "ColorDistribution": {
+          "#1a1a1a": 13,
+          "#d76400": 1,
+          "#883583": 5
+        },
+        "RelationshipCount": 34
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Class_Diagram_Cross_Domain_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Cross_Domain_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Class_Diagram_Cross_Domain_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 5,
-          "#1a1a1a": 14
-        },
-        "EntityCount": 20,
         "SyntaxValid": true,
-        "RelationshipCount": 42,
         "Errors": [],
-        "StyleCount": 19
+        "StyleCount": 19,
+        "EntityCount": 20,
+        "ColorDistribution": {
+          "#1a1a1a": 14,
+          "#883583": 5
+        },
+        "RelationshipCount": 42
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_ER_Diagram_Media_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_Media_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_ER_Diagram_Media_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 3,
-          "#7e4f2b": 18,
-          "#9d3100": 2,
-          "#d76400": 1
-        },
-        "EntityCount": 24,
         "SyntaxValid": true,
-        "RelationshipCount": 37,
         "Errors": [],
-        "StyleCount": 24
+        "StyleCount": 24,
+        "EntityCount": 24,
+        "ColorDistribution": {
+          "#d76400": 1,
+          "#9d3100": 2,
+          "#883583": 3,
+          "#7e4f2b": 18
+        },
+        "RelationshipCount": 37
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Class_Diagram_Media_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Media_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Class_Diagram_Media_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 5,
-          "#1a1a1a": 19
-        },
-        "EntityCount": 24,
         "SyntaxValid": true,
-        "RelationshipCount": 46,
         "Errors": [],
-        "StyleCount": 24
+        "StyleCount": 24,
+        "EntityCount": 24,
+        "ColorDistribution": {
+          "#1a1a1a": 19,
+          "#883583": 5
+        },
+        "RelationshipCount": 46
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_ER_Diagram_ProgRole_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_ProgRole_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_ER_Diagram_ProgRole_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 3,
-          "#7e4f2b": 14,
-          "#9d3100": 1,
-          "#d76400": 1
-        },
-        "EntityCount": 19,
         "SyntaxValid": true,
-        "RelationshipCount": 41,
         "Errors": [],
-        "StyleCount": 19
+        "StyleCount": 19,
+        "EntityCount": 19,
+        "ColorDistribution": {
+          "#d76400": 1,
+          "#9d3100": 1,
+          "#883583": 3,
+          "#7e4f2b": 14
+        },
+        "RelationshipCount": 41
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Class_Diagram_ProgRole_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_ProgRole_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Class_Diagram_ProgRole_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 4,
-          "#1a1a1a": 15
-        },
-        "EntityCount": 19,
         "SyntaxValid": true,
-        "RelationshipCount": 56,
         "Errors": [],
-        "StyleCount": 19
+        "StyleCount": 19,
+        "EntityCount": 19,
+        "ColorDistribution": {
+          "#1a1a1a": 15,
+          "#883583": 4
+        },
+        "RelationshipCount": 56
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_ER_Diagram_ActivityDef_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_ActivityDef_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_ER_Diagram_ActivityDef_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 4,
-          "#7e4f2b": 15,
-          "#9d3100": 5,
-          "#d76400": 1
-        },
-        "EntityCount": 25,
         "SyntaxValid": true,
-        "RelationshipCount": 38,
         "Errors": [],
-        "StyleCount": 25
+        "StyleCount": 25,
+        "EntityCount": 25,
+        "ColorDistribution": {
+          "#d76400": 1,
+          "#9d3100": 5,
+          "#883583": 4,
+          "#7e4f2b": 15
+        },
+        "RelationshipCount": 38
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Class_Diagram_ActivityDef_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_ActivityDef_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Class_Diagram_ActivityDef_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 10,
-          "#1a1a1a": 15
-        },
-        "EntityCount": 25,
         "SyntaxValid": true,
-        "RelationshipCount": 48,
         "Errors": [],
-        "StyleCount": 25
+        "StyleCount": 25,
+        "EntityCount": 25,
+        "ColorDistribution": {
+          "#1a1a1a": 15,
+          "#883583": 10
+        },
+        "RelationshipCount": 48
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_ER_Diagram_Journal_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_Journal_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_ER_Diagram_Journal_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 3,
-          "#1a1a1a": 20,
-          "#d76400": 1
-        },
-        "EntityCount": 24,
         "SyntaxValid": true,
-        "RelationshipCount": 35,
         "Errors": [],
-        "StyleCount": 24
+        "StyleCount": 24,
+        "EntityCount": 24,
+        "ColorDistribution": {
+          "#1a1a1a": 20,
+          "#d76400": 1,
+          "#883583": 3
+        },
+        "RelationshipCount": 35
       }
     },
     {
+      "Issues": [],
+      "TestName": "Edge_Case_Class_Diagram_Journal_Focus",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Journal_Focus.mmd",
       "HasIssues": false,
-      "TestName": "Edge_Case_Class_Diagram_Journal_Focus",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 3,
-          "#1a1a1a": 21
-        },
-        "EntityCount": 24,
         "SyntaxValid": true,
-        "RelationshipCount": 44,
         "Errors": [],
-        "StyleCount": 24
+        "StyleCount": 24,
+        "EntityCount": 24,
+        "ColorDistribution": {
+          "#1a1a1a": 21,
+          "#883583": 3
+        },
+        "RelationshipCount": 44
       }
     },
     {
+      "Issues": [],
+      "TestName": "Single_Domain_Test",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Single_Domain_Test.mmd",
       "HasIssues": false,
-      "TestName": "Single_Domain_Test",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 9,
-          "#7e4f2b": 6,
-          "#9d3100": 7,
-          "#d76400": 1
-        },
-        "EntityCount": 23,
         "SyntaxValid": true,
-        "RelationshipCount": 40,
         "Errors": [],
-        "StyleCount": 23
+        "StyleCount": 23,
+        "EntityCount": 23,
+        "ColorDistribution": {
+          "#9d3100": 7,
+          "#d76400": 1,
+          "#883583": 9,
+          "#7e4f2b": 6
+        },
+        "RelationshipCount": 40
       }
     },
     {
+      "Issues": [],
+      "TestName": "Multi_Domain_Test",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Multi_Domain_Test.mmd",
       "HasIssues": false,
-      "TestName": "Multi_Domain_Test",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#d76400": 1,
-          "#883583": 9,
-          "#9d3100": 7,
-          "#7e4f2b": 6,
-          "#1a1a1a": 15
-        },
-        "EntityCount": 38,
         "SyntaxValid": true,
-        "RelationshipCount": 92,
         "Errors": [],
-        "StyleCount": 38
+        "StyleCount": 38,
+        "EntityCount": 38,
+        "ColorDistribution": {
+          "#883583": 9,
+          "#1a1a1a": 15,
+          "#d76400": 1,
+          "#9d3100": 7,
+          "#7e4f2b": 6
+        },
+        "RelationshipCount": 92
       }
     },
     {
+      "Issues": [],
+      "TestName": "Programme_Focus_Test",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Programme_Focus_Test.mmd",
       "HasIssues": false,
-      "TestName": "Programme_Focus_Test",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#d76400": 1,
-          "#883583": 10,
-          "#9d3100": 3,
-          "#7e4f2b": 12,
-          "#1a1a1a": 14
-        },
-        "EntityCount": 40,
         "SyntaxValid": true,
-        "RelationshipCount": 97,
         "Errors": [],
-        "StyleCount": 40
+        "StyleCount": 40,
+        "EntityCount": 40,
+        "ColorDistribution": {
+          "#883583": 10,
+          "#1a1a1a": 14,
+          "#d76400": 1,
+          "#9d3100": 3,
+          "#7e4f2b": 12
+        },
+        "RelationshipCount": 97
       }
     },
     {
+      "Issues": [],
+      "TestName": "Class_Diagram_Test",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Class_Diagram_Test.mmd",
       "HasIssues": false,
-      "TestName": "Class_Diagram_Test",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#883583": 14,
-          "#1a1a1a": 12
-        },
-        "EntityCount": 26,
         "SyntaxValid": true,
-        "RelationshipCount": 62,
         "Errors": [],
-        "StyleCount": 26
+        "StyleCount": 26,
+        "EntityCount": 26,
+        "ColorDistribution": {
+          "#1a1a1a": 12,
+          "#883583": 14
+        },
+        "RelationshipCount": 62
       }
     },
     {
+      "Issues": [],
+      "TestName": "Perfect_5-Tier_Test",
       "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Perfect_5-Tier_Test.mmd",
       "HasIssues": false,
-      "TestName": "Perfect_5-Tier_Test",
-      "Issues": [],
       "Analysis": {
-        "ColorDistribution": {
-          "#d76400": 3,
-          "#1a1a1a": 11,
-          "#883583": 12,
-          "#7e4f2b": 4,
-          "#9d3100": 10
-        },
-        "EntityCount": 40,
         "SyntaxValid": true,
-        "RelationshipCount": 97,
         "Errors": [],
-        "StyleCount": 40
+        "StyleCount": 40,
+        "EntityCount": 40,
+        "ColorDistribution": {
+          "#883583": 12,
+          "#1a1a1a": 11,
+          "#d76400": 3,
+          "#9d3100": 10,
+          "#7e4f2b": 4
+        },
+        "RelationshipCount": 97
       }
     }
   ],
-  "TotalBaselines": 30,
+  "CrossCheckedAt": "2025-08-04 01:26:22",
   "TotalIssues": 0,
-  "ValidBaselines": 30
+  "TotalBaselines": 30
 }

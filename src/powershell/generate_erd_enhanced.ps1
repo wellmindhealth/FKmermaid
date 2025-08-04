@@ -812,7 +812,7 @@ function Generate-MermaidERD {
             $sanitizedEntityName = $sanitizedEntityName.Trim('_')
             
             # Get layer icon for this entity
-            $layerInfo = Get-EntityLayerIcon -entityName $entityName -domainsConfig $domainsConfig
+            $layerInfo = Get-EntityLayerIcon -entityName $entityName -domainsConfig $domainsConfig -catchallConfig $catchallConfig
             
             $mermaidContent += "    `"$sanitizedEntityName`" {`n"
             $mermaidContent += "        $($layerInfo.Display) UUID ObjectID`n"
@@ -901,13 +901,13 @@ function Generate-MermaidERD {
     # Add missing entities that are referenced in special joins but not in filtered entities
     if ($farUserExists -or $dmProfileExists) {
         if (-not $farUserExists) {
-            $farUserLayerInfo = Get-EntityLayerIcon -entityName "farUser" -domainsConfig $domainsConfig
+            $farUserLayerInfo = Get-EntityLayerIcon -entityName "farUser" -domainsConfig $domainsConfig -catchallConfig $catchallConfig
             $mermaidContent += "    `"zfarcrycore_farUser`" {`n"
             $mermaidContent += "        $($farUserLayerInfo.Display) UUID ObjectID`n"
             $mermaidContent += "    }`n`n"
         }
         if (-not $dmProfileExists) {
-            $dmProfileLayerInfo = Get-EntityLayerIcon -entityName "dmProfile" -domainsConfig $domainsConfig
+            $dmProfileLayerInfo = Get-EntityLayerIcon -entityName "dmProfile" -domainsConfig $domainsConfig -catchallConfig $catchallConfig
             $mermaidContent += "    `"zfarcrycore_dmProfile`" {`n"
             $mermaidContent += "        $($dmProfileLayerInfo.Display) UUID ObjectID`n"
             $mermaidContent += "    }`n`n"
@@ -1603,7 +1603,7 @@ function Get-MermaidStyles {
 
 # Function to get Unicode icon and layer for an entity
 function Get-EntityLayerIcon {
-    param([string]$entityName, [object]$domainsConfig)
+    param([string]$entityName, [object]$domainsConfig, [object]$catchallConfig)
     
 
     
@@ -1639,7 +1639,23 @@ function Get-EntityLayerIcon {
         }
     }
     
-    # No catchall section exists in domains.json, so we skip this check
+    # Check catchall section if it exists
+    if ($catchallConfig -and $catchallConfig.entities) {
+        foreach ($layer in $catchallConfig.entities.PSObject.Properties) {
+            if ($layer.Value -contains $baseEntityName) {
+                $layerKey = $layer.Name
+                $icon = $layerIcons[$layerKey]
+                if ($icon) {
+                    # Write-Host "🔍 DEBUG: Found $baseEntityName in catchall.$($layer.Name)" -ForegroundColor Green
+                    return @{
+                        Layer = $layerKey
+                        Icon = $icon
+                        Display = "$icon $($layerKey.ToUpper())"
+                    }
+                }
+            }
+        }
+    }
     
     # Default fallback
     return @{
@@ -1778,15 +1794,19 @@ if (Test-Path $domainsFile) {
     try {
         $domainsData = Get-Content $domainsFile -Raw | ConvertFrom-Json
         $domainsConfig = $domainsData.domains
+        $catchallConfig = $domainsData.catchall
         Write-Host "📋 Loaded domains configuration from: $domainsFile" -ForegroundColor Green
         Write-Host "   Available domains: $($domainsConfig.PSObject.Properties.Name -join ', ')" -ForegroundColor Cyan
+        Write-Host "   Catchall config loaded: $($catchallConfig -ne $null)" -ForegroundColor Cyan
     } catch {
         Write-Host "⚠️  Error loading domains config: $($_.Exception.Message)" -ForegroundColor Yellow
         $domainsConfig = @{}
+        $catchallConfig = $null
     }
 } else {
     Write-Host "⚠️  Domains config file not found: $domainsFile" -ForegroundColor Yellow
     $domainsConfig = @{}
+    $catchallConfig = $null
 }
 
 # Set validated domains based on lDomains parameter
