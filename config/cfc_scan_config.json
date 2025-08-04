@@ -469,23 +469,6 @@
     "farcryPath": "D:\\GIT\\farcry",
     "outputFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\exports\\plugins_full_erd.mmd",
     "cacheFile": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\config\\cfc_cache.json",
-    "excludeFiles": [
-      "participant.cfc",
-      "module.cfc",
-      "moduleDef.cfc",
-      "farFilter.cfc",
-      "farTask.cfc",
-      "farTaskDef.cfc",
-      "ruleActivityDefListing.cfc",
-      "ruleImageGallerySlick.cfc",
-      "shopItem.cfc",
-      "orderItem.cfc",
-      "orderMaster.cfc",
-      "address.cfc",
-      "promotion.cfc",
-      "guide.cfc",
-      "device.cfc",
-      "token.cfc"
-    ]
+
   }
 }
