@@ -163,7 +163,7 @@ foreach ($testCase in $testCases) {
                         $styleColors["domain_related"] { $analysis.Tiers.GoldTier += $entity }
                         $styleColors["related"] { $analysis.Tiers.BlueTier += $entity }
                         $styleColors["domain_other"] { $analysis.Tiers.BlueGreyTier += $entity }
-                        $styleColors["secondary"] { $analysis.Tiers.DarkGreyTier += $entity }
+                        $styleColors["other"] { $analysis.Tiers.DarkGreyTier += $entity }
                     }
                 }
             }

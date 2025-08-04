@@ -21,7 +21,7 @@ A comprehensive PowerShell-based tool for analyzing ColdFusion Components (CFCs)
 - **Domain-Based Filtering**: Focus on specific business domains (provider, participant, pathway)
 
 ### ✅ **Advanced Features**
-- **5-Tier Semantic Styling**: Color-coded relationship prioritization
+- **5-Tier Semantic Styling**: Styling-based relationship prioritization
 - **Inheritance Visualization**: FarCry CMS inheritance chain (schema → fourq → types → versions)
 - **Relationship Detection**: Automatic FK and array relationship extraction
 - **Exclusion System**: Two-level exclusion for complete entity removal
@@ -81,7 +81,7 @@ Show ColdFusion Component inheritance and relationships:
 ### **2. Diagram Generation**
 - **ER Diagrams**: Database-focused relationship visualization
 - **Component Diagrams**: Code-focused inheritance and relationship visualization
-- **Semantic Styling**: 5-tier color-coded relationship prioritization
+- **Semantic Styling**: 5-tier styling-based relationship prioritization
 - **Focus Prioritization**: Primary entities highlighted for clarity
 
 ### **3. Documentation Automation**
@@ -126,51 +126,51 @@ The system uses **4 domains** for diagram generation to preserve cross-domain re
 
 **Why 4 domains?** Because real components connect across boundaries. For example, `member` (participant) connects to `partner` (healthcare organization) - these cross-domain relationships are crucial for understanding the complete system.
 
-## 🎨 **The Oracle of the 5-Tier Color System**
+## 🎨 **The Oracle of the 5-Tier Styling System**
 
 The FKmermaid system uses a sophisticated **5-tier semantic styling system** that creates visual hierarchy based on **domain membership** and **relationship proximity** to the focus entity.
 
-### **🧠 The Color Oracle:**
+### **🧠 The Styling Oracle:**
 
-#### **ORANGE** (`#d75500`) - **FOCUS TIER**
+#### **FOCUS** - **FOCUS TIER**
 - **What**: The primary focus entity(ies) specified in the `-lFocus` parameter
-- **Example**: When you focus on "journal", the journal entity gets orange styling
+- **Example**: When you focus on "journal", the journal entity gets focus styling
 - **Logic**: Direct focus assignment
 
-#### **GOLD** (`#693a00`) - **DOMAIN + DIRECTLY RELATED**
+#### **DOMAIN_RELATED** - **DOMAIN + DIRECTLY RELATED**
 - **What**: Entities that are BOTH in the same domain as focus AND have direct relationships
-- **Example**: If journal is in pathway domain, other pathway entities with direct FK relationships to journal get gold
-- **Logic**: `Same Domain` + `Direct Relationship` = Gold
+- **Example**: If journal is in pathway domain, other pathway entities with direct FK relationships to journal get domain_related styling
+- **Logic**: `Same Domain` + `Direct Relationship` = Domain Related
 
-#### **BLUE** (`#1963d2`) - **DIRECTLY RELATED BUT DIFFERENT DOMAIN**
+#### **RELATED** - **DIRECTLY RELATED BUT DIFFERENT DOMAIN**
 - **What**: Entities from other domains that have direct relationships to the focus
-- **Example**: If journal is pathway domain, but dmFile (from zfarcrycore) has direct relationship to journal, dmFile gets blue
-- **Logic**: `Different Domain` + `Direct Relationship` = Blue
+- **Example**: If journal is pathway domain, but dmFile (from zfarcrycore) has direct relationship to journal, dmFile gets related styling
+- **Logic**: `Different Domain` + `Direct Relationship` = Related
 
-#### **BLUE-GREY** (`#44517f`) - **SAME DOMAIN BUT NOT DIRECTLY RELATED**
+#### **DOMAIN_OTHER** - **SAME DOMAIN BUT NOT DIRECTLY RELATED**
 - **What**: Entities in the same domain as focus but without direct relationships
 - **Example**: Other pathway domain entities that don't directly relate to journal
-- **Logic**: `Same Domain` + `No Direct Relationship` = Blue-Grey
+- **Logic**: `Same Domain` + `No Direct Relationship` = Domain Other
 
-#### **DARK GREY** (`#1a1a1a`) - **DEFAULT/OTHERS**
+#### **OTHER** - **DEFAULT/OTHERS**
 - **What**: All other entities (different domain + no direct relationship)
 - **Example**: Entities from other domains with no direct relationships to focus
-- **Logic**: `Different Domain` + `No Direct Relationship` = Dark Grey
+- **Logic**: `Different Domain` + `No Direct Relationship` = Other
 
 ### **🎯 The Oracle's Wisdom:**
 
-**Proximity Logic**: Colors represent **relationship proximity** to the focus entity:
-- **Orange**: You ARE the focus
-- **Gold**: You're in the same "family" (domain) AND directly connected
-- **Blue**: You're directly connected but from a different "family" 
-- **Blue-Grey**: You're in the same "family" but not directly connected
-- **Dark Grey**: You're neither in the same family nor directly connected
+**Proximity Logic**: Styles represent **relationship proximity** to the focus entity:
+- **Focus**: You ARE the focus
+- **Domain Related**: You're in the same "family" (domain) AND directly connected
+- **Related**: You're directly connected but from a different "family" 
+- **Domain Other**: You're in the same "family" but not directly connected
+- **Other**: You're neither in the same family nor directly connected
 
 **Domain + Relationship Matrix**:
 ```
                     | Direct Relationship | No Direct Relationship
-Same Domain         | GOLD              | BLUE-GREY
-Different Domain    | BLUE              | DARK GREY
+Same Domain         | DOMAIN_RELATED    | DOMAIN_OTHER
+Different Domain    | RELATED           | OTHER
 ```
 
 This creates a visual hierarchy showing how "close" each entity is to the focus entity in terms of both domain membership and relationship strength!

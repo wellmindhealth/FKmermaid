@@ -107,7 +107,7 @@ if ($LASTEXITCODE -eq 0) {
                     $styleColors["domain_related"] { $actualTiers.GoldTier += $entity }
                     $styleColors["related"] { $actualTiers.BlueTier += $entity }
                     $styleColors["domain_other"] { $actualTiers.BlueGreyTier += $entity }
-                    $styleColors["secondary"] { $actualTiers.DarkGreyTier += $entity }
+                                            $styleColors["other"] { $actualTiers.DarkGreyTier += $entity }
                 }
             }
         }

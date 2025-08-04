@@ -19,7 +19,7 @@ function Analyze-MermaidDiagram {
         "domain_related" = @()
         "related" = @()
         "domain_other" = @()
-        "secondary" = @()
+        "other" = @()
         "error" = @()
     }
     }
@@ -63,7 +63,7 @@ function Analyze-MermaidDiagram {
                 "domain_related" { $analysis.Tiers["domain_related"] += $entity }
                 "related" { $analysis.Tiers["related"] += $entity }
                 "domain_other" { $analysis.Tiers["domain_other"] += $entity }
-                "secondary" { $analysis.Tiers["secondary"] += $entity }
+                "other" { $analysis.Tiers["other"] += $entity }
 
                 default { 
                     Write-Host "⚠️  Unknown style tier for $entity : $styleName" -ForegroundColor Yellow
@@ -105,7 +105,7 @@ $ExpectedTiers = @{
     "domain_related" = @("pathway_center", "pathway_intake", "pathway_memberGroup", "pathway_progRole", "pathway_referer", "pathway_ruleSelfRegistration", "pathway_report", "pathway_testimonial", "zfarcrycore_dmProfile", "zfarcrycore_farGroup")  # Rust tier (#9d3100)
     "related" = @("pathway_activityDef", "pathway_media", "pathway_dmImage", "pathway_journalDef", "pathway_memberType", "pathway_progMember", "pathway_trackerDef", "zfarcrycore_dmFile", "farcrycms_farFeedback", "pathway_SSQ_arthritis01", "pathway_SSQ_pain01", "pathway_SSQ_stress01")  # Magenta tier (#883583)
     "domain_other" = @("zfarcrycore_farPermission", "zfarcrycore_farRole", "zfarcrycore_farUser", "zfarcrycore_farWebtopDashboard")  # Coffee tier (#7e4f2b)
-    "secondary" = @("pathway_activity", "pathway_journal", "pathway_library", "pathway_tracker", "pathway_dmNavigation", "pathway_dmNews", "farcrycms_dmEmail", "farcrycms_dmFacts", "zfarcrycore_dmHTML", "zfarcrycore_dmInclude", "zfarcrycore_farBarnacle")  # Dark grey tier (#1a1a1a)
+    "other" = @("pathway_activity", "pathway_journal", "pathway_library", "pathway_tracker", "pathway_dmNavigation", "pathway_dmNews", "farcrycms_dmEmail", "farcrycms_dmFacts", "zfarcrycore_dmHTML", "zfarcrycore_dmInclude", "zfarcrycore_farBarnacle")  # Dark grey tier (#1a1a1a)
 }
 
 # Validate tiers

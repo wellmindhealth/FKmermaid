@@ -1117,7 +1117,7 @@ function Generate-MermaidERD {
         $style = Get-EntityStyle -entityName $entityName -pluginName $pluginName -focusEntity $fullFocusEntity -relatedEntities $relatedEntities -cssStyles $cssStyles -validatedDomains $validatedDomains -domainsConfig $domainsConfig
         
         # Determine style name by finding which CSS style this matches
-        $styleName = "secondary"  # default
+        $styleName = "other"  # default
         foreach ($cssKey in $cssStyles.Keys) {
             if ($style -eq $cssStyles[$cssKey]) {
                 $styleName = $cssKey
@@ -1758,13 +1758,13 @@ function Get-EntityStyle {
         return $cssStyles["error"]  # Fallback to error style if domain_related not found
     }
     
-    # Directly related (but not same domain) - BLUE tier
-    if ($relatedEntities -and $relatedEntities.Contains($fullEntityName)) {
-        if ($cssStyles.ContainsKey("related")) {
-            return $cssStyles["related"]
-        }
-        return $cssStyles["error"]  # Fallback to error style if related not found
-    }
+                    # Directly related (but not same domain) - BLUE tier
+                if ($relatedEntities -and $relatedEntities.Contains($fullEntityName)) {
+                    if ($cssStyles.ContainsKey("related")) {
+                        return $cssStyles["related"]
+                    }
+                    return $cssStyles["error"]  # Fallback to error style if related not found
+                }
     
     # Same domain but NOT directly related - BLUE-GREY tier
     if ($isInSameDomainAsFocus) {
@@ -1775,10 +1775,10 @@ function Get-EntityStyle {
     }
     
     # Default styling for all other entities - DARK GREY tier
-    if ($cssStyles.ContainsKey("secondary")) {
-        return $cssStyles["secondary"]
+    if ($cssStyles.ContainsKey("other")) {
+        return $cssStyles["other"]
     }
-    return $cssStyles["error"]  # Fallback to error style if secondary not found
+    return $cssStyles["error"]  # Fallback to error style if other not found
 }
 
 # Main execution

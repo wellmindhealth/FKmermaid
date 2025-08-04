@@ -57,7 +57,7 @@ Write-Host "  Focus: $($styleColors['focus'])" -ForegroundColor Gray
 Write-Host "  Domain Related (Gold): $($styleColors['domain_related'])" -ForegroundColor Gray
 Write-Host "  Related (Blue): $($styleColors['related'])" -ForegroundColor Gray
 Write-Host "  Domain Other (Blue-Grey): $($styleColors['domain_other'])" -ForegroundColor Gray
-Write-Host "  Secondary (Dark Grey): $($styleColors['secondary'])" -ForegroundColor Gray
+        Write-Host "  Other (Dark Grey): $($styleColors['other'])" -ForegroundColor Gray
 
 # Define test cases to capture baseline
 $testCases = @(
@@ -136,7 +136,7 @@ foreach ($testCase in $testCases) {
                         $styleColors["domain_related"] { $actualTiers.GoldTier += $entity }
                         $styleColors["related"] { $actualTiers.BlueTier += $entity }
                         $styleColors["domain_other"] { $actualTiers.BlueGreyTier += $entity }
-                        $styleColors["secondary"] { $actualTiers.DarkGreyTier += $entity }
+                        $styleColors["other"] { $actualTiers.DarkGreyTier += $entity }
                     }
                 }
             }
