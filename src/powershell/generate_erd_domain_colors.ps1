@@ -815,7 +815,7 @@ function Generate-MermaidERD {
             $layerInfo = Get-EntityLayerIcon -entityName $entityName -domainsConfig $domainsConfig -catchallConfig $catchallConfig
             
             # Get entity's domain
-            $entityDomain = Get-EntityDomain -entityName $entityName -domainsConfig $domainsConfig -catchallConfig $catchallConfig
+            $entityDomain = Get-EntityDomain -entityName $entityName -domainsConfig $domainsConfig -catchallConfig $catchallConfig -validatedDomains $validatedDomains
             
             $mermaidContent += "    `"$sanitizedEntityName`" {`n"
             $mermaidContent += "        $($layerInfo.Display) UUID ObjectID Domain $entityDomain`n"
@@ -1124,7 +1124,7 @@ function Generate-MermaidERD {
 
         
         # Get domain-based style name
-        $styleName = Get-DomainStyleName -entityName $entityName -focusEntity $focusEntity -domainsConfig $domainsConfig -domainPalettes $domainPalettes -catchallConfig $catchallConfig -relatedEntities $relatedEntities
+        $styleName = Get-DomainStyleName -entityName $entityName -focusEntity $focusEntity -domainsConfig $domainsConfig -domainPalettes $domainPalettes -catchallConfig $catchallConfig -relatedEntities $relatedEntities -validatedDomains $validatedDomains
         
         # Look up the actual CSS definition from the styles hashtable
         $style = if ($cssStyles.ContainsKey($styleName)) { $cssStyles[$styleName] } else { $cssStyles["other"] }
@@ -1314,7 +1314,7 @@ function Generate-MermaidClassDiagram {
             $sanitizedClassName = $sanitizedClassName.Trim('_')
             
             # Get entity's domain
-            $entityDomain = Get-EntityDomain -entityName $entityName -domainsConfig $domainsConfig -catchallConfig $catchallConfig
+            $entityDomain = Get-EntityDomain -entityName $entityName -domainsConfig $domainsConfig -catchallConfig $catchallConfig -validatedDomains $validatedDomains
             
             $mermaidContent += "    class $sanitizedClassName {`n"
             $mermaidContent += "        +UUID ObjectID`n"
@@ -1675,7 +1675,7 @@ function Get-EntityLayerIcon {
 
 # Function to get entity styling based on importance and type
 function Get-EntityStyle {
-    param([string]$entityName, [string]$pluginName, [string]$focusEntity, [string[]]$relatedEntities, [hashtable]$cssStyles, [string[]]$validatedDomains, [object]$domainsConfig)
+    param([string]$entityName, [string]$pluginName, [string]$focusEntity, [string[]]$relatedEntities, [hashtable]$cssStyles, [string[]]$validatedDomains, [object]$domainsConfig, [hashtable]$domainPalettes, [object]$catchallConfig)
     
     # Construct full entity name for comparison with relatedEntities
     $fullEntityName = "${pluginName}_$entityName"
@@ -1698,51 +1698,92 @@ function Get-EntityStyle {
     # Use first focus entity for domain-based styling
     $primaryFocusEntity = $focusEntities[0]
     
-                    # Get domain-based style name
-                $styleName = Get-DomainStyleName -entityName $entityName -focusEntity $primaryFocusEntity -domainsConfig $domainsConfig -domainPalettes $domainPalettes -catchallConfig $catchallConfig -relatedEntities $relatedEntities
-                
-                # Generate CSS style from domain palette instead of looking up in CSS styles
-                $style = ""
-                if ($styleName -like "*_focus") {
-                    $domain = $styleName -replace "_focus", ""
-                    if ($domainPalettes.ContainsKey($domain)) {
-                        $style = "fill:#2196f3,stroke:#1976d2,stroke-width:3px,color:#fff"  # Blue focus
-                    }
-                } elseif ($styleName -like "*_related") {
-                    $domain = $styleName -replace "_related", ""
-                    if ($domain -eq "participant") {
-                        $style = "fill:#9d3100,stroke:#d76400,stroke-width:2px,color:#fff"  # Rust for participant related
-                    } elseif ($domain -eq "provider") {
-                        $style = "fill:#1976d2,stroke:#2196f3,stroke-width:2px,color:#fff"  # Blue for provider related
-                    } elseif ($domain -eq "pathway") {
-                        $style = "fill:#008ba3,stroke:#00bcd4,stroke-width:2px,color:#fff"  # Teal for pathway related
-                    }
-                } elseif ($styleName -like "*_other") {
-                    $domain = $styleName -replace "_other", ""
-                    if ($domain -eq "participant") {
-                        $style = "fill:#6a2a6a,stroke:#1976d2,stroke-width:2px,color:#fff"  # Purple for participant other
-                    } elseif ($domain -eq "provider") {
-                        $style = "fill:#7e4f2b,stroke:#9d3100,stroke-width:2px,color:#fff"  # Coffee for provider other
-                    } elseif ($domain -eq "pathway") {
-                        $style = "fill:#004d40,stroke:#008ba3,stroke-width:2px,color:#fff"  # Petrol for pathway other
-                    }
-                }
-                
-                # Fallback to CSS styles if domain style not found
-                if (-not $style) {
-                    $style = if ($cssStyles.ContainsKey($styleName)) { $cssStyles[$styleName] } else { $cssStyles["error"] }
-                }
-                
-                return $style
+    # Get domain-based style name
+    $styleName = Get-DomainStyleName -entityName $entityName -focusEntity $primaryFocusEntity -domainsConfig $domainsConfig -domainPalettes $domainPalettes -catchallConfig $catchallConfig -relatedEntities $relatedEntities -validatedDomains $validatedDomains
+    
+    # Generate CSS style from domain palette instead of looking up in CSS styles
+    $style = ""
+    if ($styleName -like "*_focus") {
+        $domain = $styleName -replace "_focus", ""
+        if ($domainPalettes.ContainsKey($domain)) {
+            $style = $cssStyles[$styleName]
+        }
+    } elseif ($styleName -like "*_related") {
+        $domain = $styleName -replace "_related", ""
+        if ($domainPalettes.ContainsKey($domain)) {
+            $style = $cssStyles[$styleName]
+        }
+    } elseif ($styleName -like "*_other") {
+        $domain = $styleName -replace "_other", ""
+        if ($domainPalettes.ContainsKey($domain)) {
+            $style = $cssStyles[$styleName]
+        }
+    }
+    
+    # Fallback to CSS styles if domain style not found
+    if (-not $style) {
+        $style = if ($cssStyles.ContainsKey($styleName)) { $cssStyles[$styleName] } else { $cssStyles["error"] }
+    }
+    
+    return $style
 }
 
 # NEW: Domain-based color system functions
 function Get-EntityDomain {
-    param([string]$entityName, [object]$domainsConfig, [object]$catchallConfig, [string]$focusEntity = "")
+    param([string]$entityName, [object]$domainsConfig, [object]$catchallConfig, [string]$focusEntity = "", [string[]]$validatedDomains = @())
+    
+    
+    # Special case: If the entity is the focus entity and we have validated domains, prioritize those domains
+    if ($entityName -eq $focusEntity -and $validatedDomains.Count -gt 0) {
+        foreach ($domainName in $validatedDomains) {
+            if ($domainsConfig.$domainName) {
+                foreach ($layer in $domainsConfig.$domainName.entities.PSObject.Properties) {
+                    if ($layer.Value -contains $entityName) {
+                        return $domainName
+                    }
+                }
+            }
+        }
+    }
     
     # If we have a focus entity, check if the target entity exists in the same domain
     if ($focusEntity -and $focusEntity -ne "") {
-        $focusDomain = Get-EntityDomain -entityName $focusEntity -domainsConfig $domainsConfig -catchallConfig $catchallConfig -focusEntity ""
+        
+        # Get focus entity's domain, prioritizing validated domains
+        $focusDomain = "unknown"
+        
+        # Always prioritize validated domains when determining focus entity domain
+        if ($validatedDomains.Count -gt 0) {
+            # First check if focus entity is in validated domains
+            foreach ($domainName in $validatedDomains) {
+                if ($domainsConfig.$domainName) {
+                    foreach ($layer in $domainsConfig.$domainName.entities.PSObject.Properties) {
+                        if ($layer.Value -contains $focusEntity) {
+                            $focusDomain = $domainName
+                            break
+                        }
+                    }
+                    if ($focusDomain -ne "unknown") { break }
+                }
+            }
+            
+            # If focus entity was found in validated domains, don't check other domains
+        }
+        
+        # Only check other domains if focus entity was not found in validated domains
+        if ($focusDomain -eq "unknown") {
+            foreach ($domain in $domainsConfig.PSObject.Properties) {
+                if ($validatedDomains.Count -eq 0 -or $validatedDomains -notcontains $domain.Name) {
+                    foreach ($layer in $domain.Value.entities.PSObject.Properties) {
+                        if ($layer.Value -contains $focusEntity) {
+                            $focusDomain = $domain.Name
+                            break
+                        }
+                    }
+                    if ($focusDomain -ne "unknown") { break }
+                }
+            }
+        }
         
         # Check if the target entity exists in the focus domain
         if ($focusDomain -ne "unknown" -and $focusDomain -ne "catchall") {
@@ -1754,11 +1795,51 @@ function Get-EntityDomain {
         }
     }
     
-    # Find which domain this entity belongs to (first match)
-    foreach ($domain in $domainsConfig.PSObject.Properties) {
-        foreach ($layer in $domain.Value.entities.PSObject.Properties) {
-            if ($layer.Value -contains $entityName) {
-                return $domain.Name
+    # If we have validated domains, prioritize them in the search order
+    if ($validatedDomains.Count -gt 0) {
+        # First, search in validated domains (prioritized order)
+        foreach ($domainName in $validatedDomains) {
+            if ($domainsConfig.$domainName) {
+                foreach ($layer in $domainsConfig.$domainName.entities.PSObject.Properties) {
+                    if ($layer.Value -contains $entityName) {
+                        return $domainName
+                    }
+                }
+            }
+        }
+        
+        # Then search in other domains
+        foreach ($domain in $domainsConfig.PSObject.Properties) {
+            if ($validatedDomains -notcontains $domain.Name) {
+                foreach ($layer in $domain.Value.entities.PSObject.Properties) {
+                    if ($layer.Value -contains $entityName) {
+                        return $domain.Name
+                    }
+                }
+            }
+        }
+    } else {
+        # If we have a focus entity, prioritize its domain when searching
+        if ($focusEntity -and $focusEntity -ne "") {
+            # Get focus entity's domain first
+            $focusDomain = Get-EntityDomain -entityName $focusEntity -domainsConfig $domainsConfig -catchallConfig $catchallConfig -focusEntity "" -validatedDomains $validatedDomains
+            
+            # If focus domain is known and not catchall, check if target entity exists there first
+            if ($focusDomain -ne "unknown" -and $focusDomain -ne "catchall") {
+                foreach ($layer in $domainsConfig.$focusDomain.entities.PSObject.Properties) {
+                                    if ($layer.Value -contains $entityName) {
+                    return $focusDomain
+                }
+                }
+            }
+        }
+        
+        # Original behavior: Find which domain this entity belongs to (first match)
+        foreach ($domain in $domainsConfig.PSObject.Properties) {
+            foreach ($layer in $domain.Value.entities.PSObject.Properties) {
+                if ($layer.Value -contains $entityName) {
+                    return $domain.Name
+                }
             }
         }
     }
@@ -1777,29 +1858,46 @@ function Get-EntityDomain {
 }
 
 function Get-DomainStyleName {
-    param([string]$entityName, [string]$focusEntity, [object]$domainsConfig, [hashtable]$domainPalettes, [object]$catchallConfig, [string[]]$relatedEntities = @())
+    param([string]$entityName, [string]$focusEntity, [object]$domainsConfig, [hashtable]$domainPalettes, [object]$catchallConfig, [string[]]$relatedEntities = @(), [string[]]$validatedDomains = @())
     
     # Get entity's domain (pass focus entity to prioritize same domain)
-    $entityDomain = Get-EntityDomain -entityName $entityName -domainsConfig $domainsConfig -catchallConfig $catchallConfig -focusEntity $focusEntity
+    $entityDomain = Get-EntityDomain -entityName $entityName -domainsConfig $domainsConfig -catchallConfig $catchallConfig -validatedDomains $validatedDomains -focusEntity $focusEntity
+    
     
     # If no focus entity, use "other" style
     if (-not $focusEntity -or $focusEntity -eq "") {
-        Write-Host "DEBUG: No focus entity, using 'other' for entity '$entityName'" -ForegroundColor Red
         return "other"
     }
     
     # Check if this entity is the focus entity
     $isFocusEntity = $entityName -eq $focusEntity
     
-    # Get focus entity's domain
-    $focusDomain = Get-EntityDomain -entityName $focusEntity -domainsConfig $domainsConfig -catchallConfig $catchallConfig -focusEntity ""
+    # Get focus entity's domain - always prioritize validated domains
+    # When determining the focus entity's own domain, we need to prioritize validated domains
+    $focusDomain = "unknown"
+    if ($validatedDomains.Count -gt 0) {
+        # First check if focus entity is in validated domains
+        foreach ($domainName in $validatedDomains) {
+            if ($domainsConfig.$domainName) {
+                foreach ($layer in $domainsConfig.$domainName.entities.PSObject.Properties) {
+                    if ($layer.Value -contains $focusEntity) {
+                        $focusDomain = $domainName
+                        break
+                    }
+                }
+                if ($focusDomain -ne "unknown") { break }
+            }
+        }
+    }
     
-
+    # If not found in validated domains, fall back to Get-EntityDomain
+    if ($focusDomain -eq "unknown") {
+        $focusDomain = Get-EntityDomain -entityName $focusEntity -domainsConfig $domainsConfig -catchallConfig $catchallConfig -focusEntity "" -validatedDomains $validatedDomains
+    }
     
     # If either domain is unknown or catchall, fall back to old system
     if ($entityDomain -eq "unknown" -or $entityDomain -eq "catchall" -or 
         $focusDomain -eq "unknown" -or $focusDomain -eq "catchall") {
-        Write-Host "DEBUG: Using fallback 'other' for entity '$entityName'" -ForegroundColor Red
         return "other"  # Fallback to existing system
     }
     

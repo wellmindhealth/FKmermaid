@@ -1,0 +1,547 @@
+{
+  "GeneratedAt": "2025-08-04 07:10:01",
+  "BaselinePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines",
+  "Baselines": [
+    {
+      "StyleCount": 40,
+      "Timestamp": "2025-08-04 07:09:43",
+      "EntityCount": 40,
+      "FileSize": 16162,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_No_Focus_All_Domains",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "farUser",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_No_Focus_All_Domains.mmd",
+      "Description": "Tests behavior with farUser focus and all domains (should be comprehensive)",
+      "Domains": "all"
+    },
+    {
+      "StyleCount": 42,
+      "Timestamp": "2025-08-04 07:09:43",
+      "EntityCount": 42,
+      "FileSize": 16656,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_No_Focus_No_Domains",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 2
+      },
+      "Focus": "dmImage",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_No_Focus_No_Domains.mmd",
+      "Description": "Tests behavior with dmImage focus and no domains (should be all entities)",
+      "Domains": ""
+    },
+    {
+      "StyleCount": 25,
+      "Timestamp": "2025-08-04 07:09:44",
+      "EntityCount": 25,
+      "FileSize": 8765,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_Pathway_Domain_Only",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "activityDef",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Pathway_Domain_Only.mmd",
+      "Description": "Tests pathway domain entities only (should be pathway-specific)",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 28,
+      "Timestamp": "2025-08-04 07:09:45",
+      "EntityCount": 28,
+      "FileSize": 11599,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_Partner_Pathway_Only",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "partner",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Partner_Pathway_Only.mmd",
+      "Description": "Tests partner focus with pathway domain only (should be minimal - partner not in pathway domain)",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 28,
+      "Timestamp": "2025-08-04 07:09:46",
+      "EntityCount": 28,
+      "FileSize": 9838,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_Programme_Pathway_Only",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "programme",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Programme_Pathway_Only.mmd",
+      "Description": "Tests programme focus with pathway domain only (should be pathway-specific - programme is in pathway domain)",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 40,
+      "Timestamp": "2025-08-04 07:09:46",
+      "EntityCount": 40,
+      "FileSize": 16155,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_Invalid_Domain",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "partner",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Invalid_Domain.mmd",
+      "Description": "Tests behavior with non-existent domain (should be minimal)",
+      "Domains": "nonexistent"
+    },
+    {
+      "StyleCount": 40,
+      "Timestamp": "2025-08-04 07:09:47",
+      "EntityCount": 40,
+      "FileSize": 16162,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_Empty_Focus_Invalid_Domain",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "farUser",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Empty_Focus_Invalid_Domain.mmd",
+      "Description": "Tests farUser focus with invalid domain (should be minimal)",
+      "Domains": "nonexistent"
+    },
+    {
+      "StyleCount": 38,
+      "Timestamp": "2025-08-04 07:09:48",
+      "EntityCount": 38,
+      "FileSize": 13900,
+      "DiagramType": "Class",
+      "TestName": "Edge_Case_Class_Diagram_Complex",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 38
+      },
+      "Focus": "member",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Complex.mmd",
+      "Description": "Tests Class diagram with complex relationships (different diagram type)",
+      "Domains": "participant,pathway"
+    },
+    {
+      "StyleCount": 28,
+      "Timestamp": "2025-08-04 07:09:48",
+      "EntityCount": 28,
+      "FileSize": 11599,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_Provider_Pathway_Only",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "partner",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Provider_Pathway_Only.mmd",
+      "Description": "Tests partner focus with pathway domain only (should be minimal - partner not in pathway domain)",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 28,
+      "Timestamp": "2025-08-04 07:09:49",
+      "EntityCount": 28,
+      "FileSize": 9838,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_Pathway_Pathway_Only",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "programme",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Pathway_Pathway_Only.mmd",
+      "Description": "Tests programme focus with pathway domain only (should be pathway-specific - programme is in pathway domain)",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 24,
+      "Timestamp": "2025-08-04 07:09:50",
+      "EntityCount": 24,
+      "FileSize": 9867,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_Member_Partner_Only",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "member",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Member_Partner_Only.mmd",
+      "Description": "Tests member focus with provider domain only (should be minimal - member not in provider domain)",
+      "Domains": "provider"
+    },
+    {
+      "StyleCount": 40,
+      "Timestamp": "2025-08-04 07:09:50",
+      "EntityCount": 40,
+      "FileSize": 15688,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_Multiple_Focus_Entities",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 40
+      },
+      "Focus": "partner,member,programme",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Multiple_Focus_Entities.mmd",
+      "Description": "Tests multiple focus entities (comma-separated) - uncommon parameter",
+      "Domains": "all"
+    },
+    {
+      "StyleCount": 27,
+      "Timestamp": "2025-08-04 07:09:51",
+      "EntityCount": 27,
+      "FileSize": 9439,
+      "DiagramType": "Class",
+      "TestName": "Edge_Case_Class_Diagram_Pathway_Only",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 27
+      },
+      "Focus": "dmImage",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Pathway_Only.mmd",
+      "Description": "Tests Class diagram with pathway domain only (uncommon combination)",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 40,
+      "Timestamp": "2025-08-04 07:09:52",
+      "EntityCount": 40,
+      "FileSize": 16162,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_ER_Diagram_All_Domains",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "farUser",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_All_Domains.mmd",
+      "Description": "Tests ER diagram with all domains and admin entity focus",
+      "Domains": "all"
+    },
+    {
+      "StyleCount": 40,
+      "Timestamp": "2025-08-04 07:09:52",
+      "EntityCount": 40,
+      "FileSize": 14740,
+      "DiagramType": "Class",
+      "TestName": "Edge_Case_Class_Diagram_All_Domains",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 40
+      },
+      "Focus": "farUser",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_All_Domains.mmd",
+      "Description": "Tests Class diagram with all domains and admin entity focus",
+      "Domains": "all"
+    },
+    {
+      "StyleCount": 19,
+      "Timestamp": "2025-08-04 07:09:53",
+      "EntityCount": 20,
+      "FileSize": 7048,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_ER_Diagram_Cross_Domain_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "dmProfile",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_Cross_Domain_Focus.mmd",
+      "Description": "Tests admin entity focus with participant domain (cross-domain)",
+      "Domains": "participant"
+    },
+    {
+      "StyleCount": 19,
+      "Timestamp": "2025-08-04 07:09:53",
+      "EntityCount": 20,
+      "FileSize": 6305,
+      "DiagramType": "Class",
+      "TestName": "Edge_Case_Class_Diagram_Cross_Domain_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 19
+      },
+      "Focus": "dmProfile",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Cross_Domain_Focus.mmd",
+      "Description": "Tests Class diagram with admin entity focus and participant domain",
+      "Domains": "participant"
+    },
+    {
+      "StyleCount": 24,
+      "Timestamp": "2025-08-04 07:09:54",
+      "EntityCount": 24,
+      "FileSize": 8419,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_ER_Diagram_Media_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "media",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_Media_Focus.mmd",
+      "Description": "Tests media entity focus with pathway domain (media is in multiple domains)",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 24,
+      "Timestamp": "2025-08-04 07:09:55",
+      "EntityCount": 24,
+      "FileSize": 7636,
+      "DiagramType": "Class",
+      "TestName": "Edge_Case_Class_Diagram_Media_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 24
+      },
+      "Focus": "media",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Media_Focus.mmd",
+      "Description": "Tests Class diagram with media entity focus and pathway domain",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 19,
+      "Timestamp": "2025-08-04 07:09:55",
+      "EntityCount": 19,
+      "FileSize": 8127,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_ER_Diagram_ProgRole_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "progRole",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_ProgRole_Focus.mmd",
+      "Description": "Tests progRole focus with provider domain (progRole is in multiple domains)",
+      "Domains": "provider"
+    },
+    {
+      "StyleCount": 19,
+      "Timestamp": "2025-08-04 07:09:56",
+      "EntityCount": 19,
+      "FileSize": 7197,
+      "DiagramType": "Class",
+      "TestName": "Edge_Case_Class_Diagram_ProgRole_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 19
+      },
+      "Focus": "progRole",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_ProgRole_Focus.mmd",
+      "Description": "Tests Class diagram with progRole focus and provider domain",
+      "Domains": "provider"
+    },
+    {
+      "StyleCount": 25,
+      "Timestamp": "2025-08-04 07:09:56",
+      "EntityCount": 25,
+      "FileSize": 8765,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_ER_Diagram_ActivityDef_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "activityDef",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_ActivityDef_Focus.mmd",
+      "Description": "Tests activityDef focus with pathway domain (activityDef is in pathway domain)",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 25,
+      "Timestamp": "2025-08-04 07:09:57",
+      "EntityCount": 25,
+      "FileSize": 7965,
+      "DiagramType": "Class",
+      "TestName": "Edge_Case_Class_Diagram_ActivityDef_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 25
+      },
+      "Focus": "activityDef",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_ActivityDef_Focus.mmd",
+      "Description": "Tests Class diagram with activityDef focus and pathway domain",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 24,
+      "Timestamp": "2025-08-04 07:09:57",
+      "EntityCount": 24,
+      "FileSize": 8369,
+      "DiagramType": "ER",
+      "TestName": "Edge_Case_ER_Diagram_Journal_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "journal",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_ER_Diagram_Journal_Focus.mmd",
+      "Description": "Tests journal focus with pathway domain (journal is in participant domain)",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 24,
+      "Timestamp": "2025-08-04 07:09:58",
+      "EntityCount": 24,
+      "FileSize": 7574,
+      "DiagramType": "Class",
+      "TestName": "Edge_Case_Class_Diagram_Journal_Focus",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 24
+      },
+      "Focus": "journal",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Edge_Case_Class_Diagram_Journal_Focus.mmd",
+      "Description": "Tests Class diagram with journal focus and pathway domain",
+      "Domains": "pathway"
+    },
+    {
+      "StyleCount": 23,
+      "Timestamp": "2025-08-04 07:09:58",
+      "EntityCount": 23,
+      "FileSize": 8291,
+      "DiagramType": "ER",
+      "TestName": "Single_Domain_Test",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "member",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Single_Domain_Test.mmd",
+      "Description": "Single focus with single domain - member focus, participant domain",
+      "Domains": "participant"
+    },
+    {
+      "StyleCount": 38,
+      "Timestamp": "2025-08-04 07:09:59",
+      "EntityCount": 38,
+      "FileSize": 15272,
+      "DiagramType": "ER",
+      "TestName": "Multi_Domain_Test",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "member",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Multi_Domain_Test.mmd",
+      "Description": "Single focus with multiple domains - member focus, multiple domains",
+      "Domains": "participant,pathway"
+    },
+    {
+      "StyleCount": 40,
+      "Timestamp": "2025-08-04 07:10:00",
+      "EntityCount": 40,
+      "FileSize": 16154,
+      "DiagramType": "ER",
+      "TestName": "Programme_Focus_Test",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 0
+      },
+      "Focus": "programme",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Programme_Focus_Test.mmd",
+      "Description": "Programme focus test - programme focus, all domains",
+      "Domains": "all"
+    },
+    {
+      "StyleCount": 26,
+      "Timestamp": "2025-08-04 07:10:00",
+      "EntityCount": 26,
+      "FileSize": 8985,
+      "DiagramType": "Class",
+      "TestName": "Class_Diagram_Test",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 26
+      },
+      "Focus": "dmImage",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Class_Diagram_Test.mmd",
+      "Description": "Class diagram test - dmImage focus, provider domain, Class type",
+      "Domains": "provider"
+    },
+    {
+      "StyleCount": 40,
+      "Timestamp": "2025-08-04 07:10:01",
+      "EntityCount": 40,
+      "FileSize": 15688,
+      "DiagramType": "ER",
+      "TestName": "Perfect_5-Tier_Test",
+      "ColorDistribution": {
+        "Blue": 0,
+        "BlueGrey": 0,
+        "Orange": 0,
+        "DarkGrey": 40
+      },
+      "Focus": "partner,member,programme",
+      "FilePath": "D:\\GIT\\farcry\\Cursor\\FKmermaid\\tests\\baseline_tests\\baselines\\Perfect_5-Tier_Test.mmd",
+      "Description": "Perfect 5-tier semantic styling test - multiple focus entities across domains",
+      "Domains": "provider,participant,pathway"
+    }
+  ],
+  "TotalBaselines": 30
+}

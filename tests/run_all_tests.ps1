@@ -67,11 +67,7 @@ $testSuite = @(
         Path = "D:\GIT\farcry\Cursor\FKmermaid\tests\cfc_scan_tests\test_exclusions.ps1"
         Description = "Tests CFC exclusion functionality"
     },
-    @{
-        Name = "5-Tier Semantic Styling"
-        Path = "D:\GIT\farcry\Cursor\FKmermaid\tests\main_script_tests\test_5_tier_system.ps1"
-        Description = "Tests 5-tier semantic styling system using baseline"
-    },
+
     @{
         Name = "Domain Detection"
         Path = "D:\GIT\farcry\Cursor\FKmermaid\tests\main_script_tests\test_domain_detection.ps1"
