@@ -954,7 +954,7 @@
             </div>
             <div class="stat-item">
                 <div class="stat-number" id="domains-count">4</div>
-                <div class="stat-label">Domains</div>
+                <div class="stat-label">Active Domains</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number" id="layers-count">7</div>
@@ -1878,6 +1878,13 @@
                 <span class="badge strata-badge strata-${layerKey}">
                     <span style="margin-right: 4px; font-size: 1.1em; color: ${getLayerUnicodeIcon(layerKey).color};">${getLayerUnicodeIcon(layerKey).icon}</span> ${layerDisplayName}
                 </span>
+                <button onclick="event.stopPropagation(); showComponentDetails('${componentName}', '${domainKey}', '${layerKey}')" 
+                        title="Component Detail" 
+                        style="background: none; border: none; color: #6c757d; font-size: 1.2em; cursor: pointer; padding: 4px; margin-left: 8px; border-radius: 4px; transition: all 0.2s;"
+                        onmouseover="this.style.color='#007bff'; this.style.background='#f8f9fa';"
+                        onmouseout="this.style.color='#6c757d'; this.style.background='transparent';">
+                    <i class="fas fa-list"></i>
+                </button>
                 <button onclick="openDiagramInNewTab()" 
                         title="Popout in new tab" 
                         style="background: none; border: none; color: #6c757d; font-size: 1.2em; cursor: pointer; padding: 4px; margin-left: 8px; border-radius: 4px; transition: all 0.2s;"
@@ -1907,7 +1914,14 @@
                 `;
             }
             
-            document.getElementById('diagramModal').classList.add('show');
+            // Ensure diagram modal is topmost when launched from nested modals
+            const diagramModal = document.getElementById('diagramModal');
+            diagramModal.classList.add('show');
+            
+            // Get current highest z-index and increment for diagram modal
+            const currentHighestZIndex = getCurrentHighestZIndex();
+            const newZIndex = currentHighestZIndex + 1;
+            diagramModal.style.zIndex = newZIndex;
         }
 
         function openDiagramInNewTab() {
@@ -2106,8 +2120,13 @@
         }
         
         function showComponentDetails(componentName, domain, layer) {
+            console.log('showComponentDetails called:', componentName, domain, layer);
             // Create a unique modal ID for this component
             const modalId = `detailsModal_${componentName}_${domain}_${layer}`;
+            
+            // Get current highest z-index and increment
+            const currentHighestZIndex = getCurrentHighestZIndex();
+            const newZIndex = currentHighestZIndex + 1;
             
             // Check if modal already exists
             let modal = document.getElementById(modalId);
@@ -2310,6 +2329,9 @@
             `;
             
             modal.classList.add('show');
+            
+            // Set dynamic z-index to ensure it's on top of all existing modals
+            modal.style.zIndex = newZIndex;
         }
 
         function createDetailsModal(modalId) {
@@ -2354,6 +2376,21 @@
         
         function hideDiagramModal() {
             document.getElementById('diagramModal').classList.remove('show');
+        }
+        
+        // Helper function to get the current highest z-index among visible modals
+        function getCurrentHighestZIndex() {
+            const visibleModals = document.querySelectorAll('.modal.show');
+            let highestZIndex = 1000; // Base z-index for modals
+            
+            visibleModals.forEach(modal => {
+                const zIndex = parseInt(modal.style.zIndex) || 1000;
+                if (zIndex > highestZIndex) {
+                    highestZIndex = zIndex;
+                }
+            });
+            
+            return highestZIndex;
         }
 
         // Set up modal event listeners
