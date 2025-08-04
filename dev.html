@@ -32,7 +32,7 @@
                     border-radius: 8px;
                     font-size: 0.8em;
                     font-weight: bold;
-                    z-index: 100;
+                    z-index: -1;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                     display: flex;
                     flex-direction: column;
@@ -288,7 +288,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            z-index: 100;
+            z-index: -1;
             min-width: 200px;
             max-width: 180px;
         }
@@ -855,6 +855,22 @@
             z-index: 1000;
             overflow-y: auto;
         }
+        
+        /* Stack multiple modals with increasing z-index */
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.show + .modal.show {
+            z-index: 1001;
+        }
+        
+        .modal.show + .modal.show + .modal.show {
+            z-index: 1002;
+        }
 
         .modal.show {
             display: flex;
@@ -948,10 +964,7 @@
                 <div class="stat-number" id="components-count">0</div>
                 <div class="stat-label">Components</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number" id="diagrams-count">0</div>
-                <div class="stat-label">Diagrams</div>
-            </div>
+
         </div>
 
         <!-- Filter Controls -->
@@ -1561,13 +1574,51 @@
         }
         
         function getDomainDisplayName(domainKey) {
-            // Convert domain key to display name (e.g., "provider" -> "Provider")
+            // Get domain display name from domains.json data
+            if (window.domainsData && window.domainsData.domains && window.domainsData.domains[domainKey]) {
+                const domain = window.domainsData.domains[domainKey];
+                if (domain.description) {
+                    // Extract the domain name from the description (e.g., "Provider Domain - ..." -> "Provider")
+                    const match = domain.description.match(/^([^-]+) Domain/);
+                    if (match) {
+                        return match[1].trim();
+                    }
+                }
+            }
+            // Fallback to capitalized key
             return domainKey.charAt(0).toUpperCase() + domainKey.slice(1);
         }
         
         function getLayerDisplayName(layerKey) {
             // Convert layer key to display name (e.g., "core" -> "Core")
             return layerKey.charAt(0).toUpperCase() + layerKey.slice(1);
+        }
+        
+        function findBestDomainForComponent(componentName, currentDomain) {
+            // First, check if the component exists in the current domain
+            if (window.domainsData && window.domainsData.domains && window.domainsData.domains[currentDomain]) {
+                const currentDomainData = window.domainsData.domains[currentDomain];
+                for (const layerKey in currentDomainData.entities) {
+                    if (currentDomainData.entities[layerKey].includes(componentName)) {
+                        return { domain: currentDomain, layer: layerKey };
+                    }
+                }
+            }
+            
+            // If not in current domain, find it in any domain
+            if (window.domainsData && window.domainsData.domains) {
+                for (const domainKey in window.domainsData.domains) {
+                    const domainData = window.domainsData.domains[domainKey];
+                    for (const layerKey in domainData.entities) {
+                        if (domainData.entities[layerKey].includes(componentName)) {
+                            return { domain: domainKey, layer: layerKey };
+                        }
+                    }
+                }
+            }
+            
+            // Fallback to current domain if not found anywhere
+            return { domain: currentDomain, layer: 'core' };
         }
         
         function getLayerIcon(layerKey) {
@@ -1733,19 +1784,34 @@
                     card.classList.add('hidden');
                 }
             });
+            
+            // Update stats to reflect current filter state
+            updateStats();
         }
 
         function updateStats() {
             const visibleCards = document.querySelectorAll('.diagram-card:not(.hidden)').length;
             const totalCards = document.querySelectorAll('.diagram-card').length;
-            const totalDomains = Object.keys(domainsData?.domains || {}).length;
+            const activeDomainCards = document.querySelectorAll('.domain-card.active');
             const totalLayers = document.querySelectorAll('.strata-item').length - 1; // Subtract "All Layers"
             const activeLayers = document.querySelectorAll('.strata-item[data-layer]:not([data-layer="all"]).active').length;
             
-            document.getElementById('domains-count').textContent = totalDomains;
+            // Check if "All Domains" is selected
+            const allDomainsSelected = activeDomainCards.length === 1 && 
+                activeDomainCards[0].getAttribute('data-domain') === 'all';
+            
+            let domainsCount;
+            if (allDomainsSelected) {
+                // If "All Domains" is selected, show total number of domains (excluding "all")
+                domainsCount = document.querySelectorAll('.domain-card[data-domain]:not([data-domain="all"])').length;
+            } else {
+                // Otherwise show the number of active domain filters
+                domainsCount = activeDomainCards.length;
+            }
+            
+            document.getElementById('domains-count').textContent = domainsCount;
             document.getElementById('layers-count').textContent = activeLayers;
             document.getElementById('components-count').textContent = visibleCards;
-            document.getElementById('diagrams-count').textContent = totalCards;
         }
 
         function showModal(title, content, componentName, domainKey, layerKey) {
@@ -1772,6 +1838,7 @@
             let diagramSubtitle = `${domainDisplayName} / ${layerDisplayName} Diagram`;
             let actualFocus = componentName;
             let actualDomains = domainKey;
+            let mermaidUrl = '';
             
             if (window.diagramsData && window.diagramsData.generated) {
                 // Look for a diagram that matches the component and domain
@@ -1783,8 +1850,24 @@
                     actualFocus = diagram.Focus || componentName;
                     actualDomains = diagram.Domains || domainKey;
                     diagramSubtitle = diagram.Description || `${domainDisplayName} / ${layerDisplayName} Diagram`;
+                    
+                    if (diagram.MermaidUrl) {
+                        mermaidUrl = diagram.MermaidUrl.replace('/edit', '/view');
+                    }
                 }
             }
+            
+            // Store current diagram info for popout functionality
+            window.currentDiagramInfo = {
+                componentName: componentName,
+                domainKey: domainKey,
+                layerKey: layerKey,
+                domainDisplayName: domainDisplayName,
+                layerDisplayName: layerDisplayName,
+                actualDomains: actualDomains,
+                faIcon: faIcon,
+                mermaidUrl: mermaidUrl
+            };
             
             // Set the labels in the header
             document.getElementById('diagramModalLabels').innerHTML = `
@@ -1795,21 +1878,17 @@
                 <span class="badge strata-badge strata-${layerKey}">
                     <span style="margin-right: 4px; font-size: 1.1em; color: ${getLayerUnicodeIcon(layerKey).color};">${getLayerUnicodeIcon(layerKey).icon}</span> ${layerDisplayName}
                 </span>
+                <button onclick="openDiagramInNewTab()" 
+                        title="Popout in new tab" 
+                        style="background: none; border: none; color: #6c757d; font-size: 1.2em; cursor: pointer; padding: 4px; margin-left: 8px; border-radius: 4px; transition: all 0.2s;"
+                        onmouseover="this.style.color='#007bff'; this.style.background='#f8f9fa';"
+                        onmouseout="this.style.color='#6c757d'; this.style.background='transparent';">
+                    <i class="fas fa-external-link-alt"></i>
+                </button>
             `;
             
             // Find the matching diagram from the loaded data
             const diagramsData = window.diagramsData;
-            let mermaidUrl = '';
-            
-            if (diagramsData && diagramsData.generated) {
-                // Look for a diagram that matches the component and domain
-                const diagramKey = `${componentName}-${domainKey}`;
-                const diagram = diagramsData.generated[diagramKey];
-                
-                if (diagram && diagram.MermaidUrl) {
-                    mermaidUrl = diagram.MermaidUrl.replace('/edit', '/view');
-                }
-            }
             
             if (mermaidUrl) {
                 // Use the real Mermaid URL
@@ -1829,6 +1908,143 @@
             }
             
             document.getElementById('diagramModal').classList.add('show');
+        }
+
+        function openDiagramInNewTab() {
+            if (!window.currentDiagramInfo || !window.currentDiagramInfo.mermaidUrl) {
+                alert('No diagram available to open');
+                return;
+            }
+            
+            const info = window.currentDiagramInfo;
+            
+            // Create the template HTML for the new tab
+            const templateHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${info.componentName} - ${info.domainDisplayName} / ${info.layerDisplayName} Diagram</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .component-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+        
+        .component-icon {
+            color: #6c757d;
+            font-size: 1.8em;
+        }
+        
+        .component-title {
+            color: #2c3e50;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+        
+        .badges {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .domain-badge {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .strata-badge {
+            background: #f3e5f5;
+            color: #495057;
+        }
+        
+        .diagram-container {
+            height: calc(100vh - 100px);
+            background: white;
+        }
+        
+        .diagram-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="component-info">
+                ${info.faIcon ? `<i class="fas ${info.faIcon} component-icon"></i>` : ''}
+                <span class="component-title">${info.componentName}</span>
+            </div>
+            <div class="badges">
+                <span class="badge domain-badge">
+                    <i class="fas ${getDomainIcon(info.actualDomains)}"></i>
+                    ${getDomainDisplayName(info.actualDomains)}
+                </span>
+                <span class="badge strata-badge">
+                    <span style="font-size: 1.1em; color: ${getLayerUnicodeIcon(info.layerKey).color};">${getLayerUnicodeIcon(info.layerKey).icon}</span>
+                    ${info.layerDisplayName}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="diagram-container">
+        <iframe src="${info.mermaidUrl}" 
+                class="diagram-iframe"
+                title="Mermaid Diagram">
+        </iframe>
+    </div>
+</body>
+</html>`;
+            
+            // Open in new tab
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(templateHTML);
+            newWindow.document.close();
         }
 
 
@@ -1890,6 +2106,16 @@
         }
         
         function showComponentDetails(componentName, domain, layer) {
+            // Create a unique modal ID for this component
+            const modalId = `detailsModal_${componentName}_${domain}_${layer}`;
+            
+            // Check if modal already exists
+            let modal = document.getElementById(modalId);
+            if (!modal) {
+                // Create new modal
+                modal = createDetailsModal(modalId);
+            }
+            
             // Get component data from diagrams data
             const diagramsData = window.diagramsData;
             let componentDescription = '';
@@ -1941,12 +2167,13 @@
                     .map(prop => prop.target);
             }
             
-            // Get display name, hint, filePath, description, and faIcon from CFC cache
+            // Get display name, hint, filePath, description, faIcon, and inheritance from CFC cache
             let displayName = componentName;
             let hint = '';
             let filePath = '';
             let description = '';
             let faIcon = '';
+            let inheritance = '';
             let component = null; // Declare component in outer scope
             if (window.cfcCacheData && window.cfcCacheData.componentMetadata) {
                 // Try exact match first
@@ -1965,6 +2192,7 @@
                     if (component.filePath) filePath = component.filePath;
                     if (component.description) description = component.description;
                     if (component.faIcon) faIcon = convertFaIcon(component.faIcon);
+                    if (component.inheritance) inheritance = component.inheritance;
                 }
             }
             
@@ -1978,6 +2206,7 @@
                 filePath: filePath,
                 plugin: component ? component.plugin || '' : (componentInfo ? componentInfo.plugin || '' : ''),
                 faIcon: faIcon,
+                inheritance: inheritance,
                 properties: properties,
                 dependencies: dependencies,
                 domain: getDomainDisplayName(domain),
@@ -1985,7 +2214,7 @@
             };
             
             // Set modal title
-            document.getElementById('detailsModalTitle').innerHTML = `
+            modal.querySelector('.modal-title').innerHTML = `
                 <div style="display: flex; align-items: center; gap: 8px;">
                     ${componentData.faIcon ? `<i class="fa ${componentData.faIcon}" style="color: #6c757d; font-size: 1.4em;"></i>` : ''}
                     <span style="color: #2c3e50; font-size: 1.6em; font-weight: 600;">${componentName}</span>
@@ -1993,7 +2222,7 @@
             `;
             
             // Set the labels in the header
-            document.getElementById('detailsModalLabels').innerHTML = `
+            modal.querySelector('.modal-labels').innerHTML = `
                 <span style="color: #6c757d; font-size: 1.2em; font-weight: 400;">Component Details</span>
                 <span class="badge domain-badge" data-domain="${domain}">
                     <i class="fas ${getDomainIcon(domain)}"></i> ${componentData.domain}
@@ -2004,16 +2233,19 @@
             `;
             
             // Set modal content
-            document.getElementById('detailsModalBody').innerHTML = `
+            modal.querySelector('.modal-body').innerHTML = `
                 <div class="component-details">
                     <div class="detail-section">
                         <h3>${componentData.displayName}</h3>
                         <p>${componentData.hint || '*No hint/description available from CFC metadata*'}</p>
                     </div>
                     
+
+                    
                     <div class="detail-section">
-                        <h3>Domain / Layer</h3>
-                        <p>${componentData.domain} / ${componentData.layer}</p>
+                        <button class="btn btn-primary" onclick="showModal('', '', '${componentName}', '${domain}', '${layer}')" style="margin-top: 8px;">
+                            <i class="fas fa-project-diagram" style="margin-right: 8px;"></i>View Diagram
+                        </button>
                     </div>
                     
                     <div class="detail-section">
@@ -2025,12 +2257,40 @@
                     
                     <div class="detail-section">
                         <h3>Dependencies (${componentData.dependencies.length})</h3>
-                        <p>${componentData.dependencies.length > 0 ? componentData.dependencies.join(', ') : 'No dependencies found'}</p>
+                        ${componentData.dependencies.length > 0 ? 
+                            `<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                ${componentData.dependencies.map(dep => {
+                                    const bestLocation = findBestDomainForComponent(dep, domain);
+                                    const isCurrentDomain = bestLocation.domain === domain;
+                                    const domainBadge = `<span class="badge domain-badge" data-domain="${bestLocation.domain}" style="font-size: 0.8em; padding: 2px 6px;">
+                                        <i class="fas ${getDomainIcon(bestLocation.domain)}"></i> ${getDomainDisplayName(bestLocation.domain)}
+                                    </span>`;
+                                    const layerBadge = `<span class="badge strata-badge strata-${bestLocation.layer}" style="font-size: 0.8em; padding: 2px 6px;">
+                                        <span style="margin-right: 2px; font-size: 0.9em; color: ${getLayerUnicodeIcon(bestLocation.layer).color};">${getLayerUnicodeIcon(bestLocation.layer).icon}</span> ${getLayerDisplayName(bestLocation.layer)}
+                                    </span>`;
+                                    
+                                    return `<button onclick="showComponentDetails('${dep}', '${bestLocation.domain}', '${bestLocation.layer}')" 
+                                            style="background: none; border: 1px solid #dee2e6; border-radius: 4px; padding: 6px 10px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.9em; color: #495057; transition: all 0.2s;"
+                                            onmouseover="this.style.borderColor='#007bff'; this.style.color='#007bff';"
+                                            onmouseout="this.style.borderColor='#dee2e6'; this.style.color='#495057';">
+                                        <span style="font-weight: 500;">${dep}</span>
+                                        ${domainBadge}
+                                        ${layerBadge}
+                                    </button>`;
+                                }).join('')}
+                            </div>` : 
+                            '<p>No dependencies found</p>'
+                        }
                     </div>
                     
                     <div class="detail-section">
                         <h3>Plugin</h3>
                         <p>${componentData.plugin}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Inheritance</h3>
+                        <p>${componentData.inheritance || 'No inheritance information available'}</p>
                     </div>
                     
                     <div class="detail-section">
@@ -2049,11 +2309,47 @@
                 </div>
             `;
             
-            document.getElementById('detailsModal').classList.add('show');
+            modal.classList.add('show');
         }
 
-        function hideDetailsModal() {
-            document.getElementById('detailsModal').classList.remove('show');
+        function createDetailsModal(modalId) {
+            const modal = document.createElement('div');
+            modal.id = modalId;
+            modal.className = 'modal details-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title"></div>
+                        <div class="modal-labels" style="display: flex; align-items: baseline; gap: 12px; margin-right: 15px; margin-left: auto;"></div>
+                        <button onclick="hideDetailsModal('${modalId}')" class="modal-close">✕</button>
+                    </div>
+                    <div class="modal-body"></div>
+                </div>
+            `;
+            
+            // Add event listener for outside click
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideDetailsModal(modalId);
+                }
+            });
+            
+            document.body.appendChild(modal);
+            return modal;
+        }
+        
+        function hideDetailsModal(modalId = null) {
+            if (modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.remove('show');
+                }
+            } else {
+                // Hide all details modals (fallback)
+                document.querySelectorAll('.details-modal').forEach(modal => {
+                    modal.classList.remove('show');
+                });
+            }
         }
         
         function hideDiagramModal() {
@@ -2062,17 +2358,7 @@
 
         // Set up modal event listeners
         function setupModalEventListeners() {
-            const detailsModal = document.getElementById('detailsModal');
             const diagramModal = document.getElementById('diagramModal');
-            
-            if (detailsModal) {
-                // Close details modal on outside click
-                detailsModal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        hideDetailsModal();
-                    }
-                });
-            }
             
             if (diagramModal) {
                 // Close diagram modal on outside click
@@ -2086,7 +2372,7 @@
             // Close modals on Escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
-                    hideDetailsModal();
+                    hideDetailsModal(); // This will close all details modals
                     hideDiagramModal();
                 }
             });
