@@ -1,4 +1,11 @@
 {
+  "name": "fkmermaid",
+  "version": "1.0.0",
+  "description": "FarCry Codebase Documentation System with Mermaid diagrams",
+  "scripts": {
+    "mmdc": "mmdc",
+    "postinstall": "echo 'Node modules are located at d:/farcry/node_modules'"
+  },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^11.9.0"
   },

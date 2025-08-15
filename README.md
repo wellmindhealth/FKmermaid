@@ -20,6 +20,11 @@ A comprehensive PowerShell-based tool for analyzing ColdFusion Components (CFCs)
 - **Dynamic CFC Scanning**: Real-time analysis of ColdFusion Components
 - **Domain-Based Filtering**: Focus on specific business domains (provider, participant, pathway)
 
+### ✅ **Project Setup & Dependencies**
+- **Custom Node Modules Location**: Configured to use `d:/farcry/node_modules`
+- **Environment Configuration**: PowerShell scripts for setting NODE_PATH
+- **Dependency Management**: Uses .npmrc for custom prefix configuration
+
 ### ✅ **Advanced Features**
 - **5-Tier Semantic Styling**: Styling-based relationship prioritization
 - **Inheritance Visualization**: FarCry CMS inheritance chain (schema → fourq → types → versions)
@@ -71,6 +76,11 @@ Show ColdFusion Component inheritance and relationships:
 - Dynamic CFC scanning with exclusions
 
 ## 🏗️ Architecture & Workflow
+
+### **0. Project Setup & Dependencies**
+- **Node Modules**: Located at `d:/farcry/node_modules` (shared across projects)
+- **Environment Setup**: Run `.\set_node_path.ps1` to configure NODE_PATH
+- **Dependencies**: Mermaid CLI and other tools available via npx commands
 
 ### **1. Codebase Analysis**
 - **CFC Scanning**: Dynamic analysis of ColdFusion Components
@@ -993,6 +1003,29 @@ Different Domain                | MAGENTA           | DARK GREY
 ```
 
 This creates a visual hierarchy showing how "close" each entity is to the focus entity in terms of both domain membership and relationship strength!
+
+## 🚀 Quick Start
+
+### **1. Environment Setup**
+```powershell
+# Set NODE_PATH to use the moved node_modules
+.\set_node_path.ps1
+
+# Verify Mermaid CLI is available
+npx mmdc --version
+```
+
+### **2. Generate Your First Diagram**
+```powershell
+# Generate ER diagram with domain colors
+.\src\powershell\generate_erd_domain_colors.ps1 -lFocus "member" -lDomains "participant,provider"
+```
+
+### **3. Check Dependencies**
+```powershell
+# Verify all dependencies are accessible
+.\scripts\check_script_references.ps1
+```
 
 ## 🤝 Contributing
 
