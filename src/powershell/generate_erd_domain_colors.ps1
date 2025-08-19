@@ -672,6 +672,9 @@ function Generate-MermaidERD {
     
     $mermaidContent = "erDiagram`n"
     
+    # Add dark mode styling
+    $mermaidContent += "    %%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1e1e1e', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#404040', 'lineColor': '#404040', 'secondaryColor': '#2d2d2d', 'tertiaryColor': '#3d3d3d' }}}%%`n"
+    
                 # Add parameters as a comment since ER diagrams may not support notes properly
         $paramComment = @"
 %% Parameters:
@@ -1182,6 +1185,9 @@ function Generate-MermaidClassDiagram {
     param($relationships, $knownTables, [string]$lFocus = "", [array]$validatedDomains = @(), [object]$domainsConfig = @{}, [hashtable]$cssStyles = @{}, [int]$ApplyDomainFilterAt = 2)
     
     $mermaidContent = "classDiagram`n"
+    
+    # Add dark mode styling
+    $mermaidContent += "    %%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1e1e1e', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#404040', 'lineColor': '#404040', 'secondaryColor': '#2d2d2d', 'tertiaryColor': '#3d3d3d' }}}%%`n"
     
     # Add parameters as a comment since Class diagrams may not support notes properly
     $paramComment = @"
