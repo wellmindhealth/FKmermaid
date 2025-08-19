@@ -3,46 +3,153 @@
     "provider": {
       "description": "Provider Domain - Business relationships and organizational structure",
       "colors": {
-        "focus": { "name": "Blue", "style": "provider_focus" },
-        "related": { "name": "Dark Blue", "style": "provider_related" },
-        "other": { "name": "Purple", "style": "provider_other" }
+        "focus": {
+          "name": "Blue",
+          "style": "provider_focus"
+        },
+        "related": {
+          "name": "Dark Blue",
+          "style": "provider_related"
+        },
+        "other": {
+          "name": "Purple",
+          "style": "provider_other"
+        }
       },
       "entities": {
-        "core": [ "partner", "referer", "center", "memberGroup" ],
-        "utilities": [ "intake", "farWebtopDashboard", "programme" ],
-        "services": [ "report", "ruleSelfRegistration", "testimonial", "nhs", "progRole" ],
-        "auth": [ "farUser", "dmProfile", "farGroup", "farRole", "farPermission", "apiAccessKey" ],
-        "audit": [ "dmArchive", "farLog" ]
+        "core": [
+          "partner",
+          "referer",
+          "center",
+          "memberGroup"
+        ],
+        "utilities": [
+          "intake",
+          "farWebtopDashboard",
+          "programme"
+        ],
+        "services": [
+          "report",
+          "ruleSelfRegistration",
+          "testimonial",
+          "nhs",
+          "progRole"
+        ],
+        "auth": [
+          "farUser",
+          "dmProfile",
+          "farGroup",
+          "farRole",
+          "farPermission",
+          "apiAccessKey"
+        ],
+        "audit": [
+          "dmArchive",
+          "farLog"
+        ]
       }
     },
     "participant": {
       "description": "Participant Domain - User journeys and personal data",
       "colors": {
-        "focus": { "name": "Orange", "style": "participant_focus" },
-        "related": { "name": "Rust", "style": "participant_related" },
-        "other": { "name": "Coffee", "style": "participant_other" }
+        "focus": {
+          "name": "Orange",
+          "style": "participant_focus"
+        },
+        "related": {
+          "name": "Rust",
+          "style": "participant_related"
+        },
+        "other": {
+          "name": "Coffee",
+          "style": "participant_other"
+        }
       },
       "entities": {
-        "core": [ "member", "progMember", "activity" ],
-        "utilities": [ "SSQ_stress01", "SSQ_pain01", "SSQ_arthritis01", "tracker", "journal", "library" ],
-        "services": [ "farFeedback", "testimonial" ],
-        "auth": [ "farGroup", "farRole", "farPermission" ],
-        "audit": [ "dmArchive", "farLog" ]
+        "core": [
+          "member",
+          "progMember",
+          "activity"
+        ],
+        "utilities": [
+          "SSQ_stress01",
+          "SSQ_pain01",
+          "SSQ_arthritis01",
+          "tracker",
+          "journal",
+          "library"
+        ],
+        "services": [
+          "farFeedback",
+          "testimonial"
+        ],
+        "auth": [
+          "farGroup",
+          "farRole",
+          "farPermission"
+        ],
+        "audit": [
+          "dmArchive",
+          "farLog"
+        ]
       }
     },
     "pathway": {
       "description": "Pathway Domain - Content structure and flow",
       "colors": {
-        "focus": { "name": "Teal", "style": "pathway_focus" },
-        "related": { "name": "Dark Teal", "style": "pathway_related" },
-        "other": { "name": "Petrol", "style": "pathway_other" }
+        "focus": {
+          "name": "Teal",
+          "style": "pathway_focus"
+        },
+        "related": {
+          "name": "Dark Teal",
+          "style": "pathway_related"
+        },
+        "other": {
+          "name": "Petrol",
+          "style": "pathway_other"
+        }
       },
       "entities": {
-        "core": [ "programme", "activityDef", "media" ],
-        "utilities": [ "memberType", "farFeedback", "category", "farConfig", "trackerDef", "journalDef", "dmNavigation", "dmHTML", "dmFacts", "dmNews", "dmInclude", "dmImage", "dmFile" ],
-        "services": [ "farFU", "dmWizard", "dmEmail" ],
-        "auth": [ "farUser", "dmProfile", "farGroup", "farRole", "farPermission", "JWTapp", "FarcryUD", "farBarnacle" ],
-        "audit": [ "dmArchive", "farLog" ]
+        "core": [
+          "programme",
+          "activityDef",
+          "media"
+        ],
+        "utilities": [
+          "memberType",
+          "farFeedback",
+          "category",
+          "farConfig",
+          "trackerDef",
+          "journalDef",
+          "dmNavigation",
+          "dmHTML",
+          "dmFacts",
+          "dmNews",
+          "dmInclude",
+          "dmImage",
+          "dmFile"
+        ],
+        "services": [
+          "farFU",
+          "dmWizard",
+          "dmEmail"
+        ],
+        "auth": [
+          "farUser",
+          "dmProfile",
+          "farGroup",
+          "farRole",
+          "farPermission",
+          "JWTapp",
+          "FarcryUD",
+          "farBarnacle"
+        ],
+        "audit": [
+          "dmArchive",
+          "farLog"
+        ]
       }
     }
   },
@@ -50,7 +157,178 @@
     "description": "Auto-generated catch-all for uncategorized entities",
     "entities": {
       "core": [],
-      "utilities": [ "manifest", "myRater", "mySlider", "xealth", "bitbucket", "bitly", "dropbox", "esri", "facebook", "freeagent", "freshbooks", "github", "gitlab", "google", "instagram", "jira", "linkedIn", "microsoft", "monzo", "oauth2", "oauth2AWSCognito", "oauth2Xealth", "quickbooks", "salesforce", "slack", "soundcloud", "spotify", "strava", "streamlabs", "twitch", "vend", "xero", "authStringBuilder", "ruleDidYouKnowFact", "ruleFacts", "ruleFileListing", "ruleLatesttestimonial", "ruleRandomFact", "ruleRelated", "ruleReviewsAndRatingsSchemaFromTestimonials", "dont_use___member_aAddresses", "oAuth2service", "test", "xealth_notification", "xealth_order", "xealth_patient", "base", "v1", "configAPI", "api", "swagger", "Application", "manifest", "ruleChildLinks", "ruleEventsCalendar", "ruleFeedback", "ruleFeedbackAndRate", "ruleHandpicked", "ruleNews", "ruleRichText", "ruleXMLFeed", "dmCarouselItem", "dmEvent", "dmEventListing", "dmNewsListing", "dmTout", "landingPage", "arrayTable", "dmCategory", "dmCron", "dmCSS", "dmFlash", "dmWebskinAncestor", "farCoapi", "farFilterProperty", "farQueueResult", "farQueueTask", "farWebfeed", "farWorkflow", "farWorkflowDef", "types", "versions", "alterType", "cache", "email", "file", "form", "formtools", "geoLocator", "gregorianCalendar", "i18nUtil", "jtidy", "locking", "objectadmin", "rbJava", "reporting", "rss", "sysinfo", "tree", "typeadmin", "UrlUtility", "utils", "versioning", "webtop", "workflow", "zip", "combine", "JsonWebTokens", "JsonWebTokensClient", "Base64urlEncoder", "JsonEncoder", "HmacSigner", "RSASigner", "cdn", "db", "diff", "email", "error", "esapi", "events", "fapi", "jwt", "jwtEncodingUtils", "lib", "objectBroker", "objectBrokerStats", "postprocess", "QRCode", "registerLibraries", "seo", "session", "system", "tasks", "timezone", "Barcode", "QRCode", "diff_match_patch", "auditUserOverTime", "bulkFileUpload", "configDevice", "configEnvironment", "configFormProtect", "configFormTheme", "configGeneral", "configRepositories", "configSecurity", "configTaskQueue", "configTinyMCE", "dashboard", "farLogin", "farPagination", "farQueueJob", "farSkeleton", "fixRefObjects", "forms", "formTheme", "formThemeBootstrap", "formThemeUniform", "richtextSnippet", "UpdateApp", "bcryptHash", "cryptLib", "md5ThenBcryptHash", "nullHash", "PasswordHash", "scryptHash", "security", "unsaltedMD5Hash", "user", "UserDirectory","device","token" ],
+      "utilities": [
+        "manifest",
+        "myRater",
+        "mySlider",
+        "xealth",
+        "bitbucket",
+        "bitly",
+        "dropbox",
+        "esri",
+        "facebook",
+        "freeagent",
+        "freshbooks",
+        "github",
+        "gitlab",
+        "google",
+        "instagram",
+        "jira",
+        "linkedIn",
+        "microsoft",
+        "monzo",
+        "oauth2",
+        "oauth2AWSCognito",
+        "oauth2Xealth",
+        "quickbooks",
+        "salesforce",
+        "slack",
+        "soundcloud",
+        "spotify",
+        "strava",
+        "streamlabs",
+        "twitch",
+        "vend",
+        "xero",
+        "authStringBuilder",
+        "ruleDidYouKnowFact",
+        "ruleFacts",
+        "ruleFileListing",
+        "ruleLatesttestimonial",
+        "ruleRandomFact",
+        "ruleRelated",
+        "ruleReviewsAndRatingsSchemaFromTestimonials",
+        "dont_use___member_aAddresses",
+        "oAuth2service",
+        "test",
+        "xealth_notification",
+        "xealth_order",
+        "xealth_patient",
+        "base",
+        "v1",
+        "configAPI",
+        "api",
+        "swagger",
+        "Application",
+        "manifest",
+        "ruleChildLinks",
+        "ruleEventsCalendar",
+        "ruleFeedback",
+        "ruleFeedbackAndRate",
+        "ruleHandpicked",
+        "ruleNews",
+        "ruleRichText",
+        "ruleXMLFeed",
+        "dmCarouselItem",
+        "dmEvent",
+        "dmEventListing",
+        "dmNewsListing",
+        "dmTout",
+        "landingPage",
+        "arrayTable",
+        "dmCategory",
+        "dmCron",
+        "dmCSS",
+        "dmFlash",
+        "dmWebskinAncestor",
+        "farCoapi",
+        "farFilterProperty",
+        "farQueueResult",
+        "farQueueTask",
+        "farWebfeed",
+        "farWorkflow",
+        "farWorkflowDef",
+        "types",
+        "versions",
+        "alterType",
+        "cache",
+        "email",
+        "file",
+        "form",
+        "formtools",
+        "geoLocator",
+        "gregorianCalendar",
+        "i18nUtil",
+        "jtidy",
+        "locking",
+        "objectadmin",
+        "rbJava",
+        "reporting",
+        "rss",
+        "sysinfo",
+        "tree",
+        "typeadmin",
+        "UrlUtility",
+        "utils",
+        "versioning",
+        "webtop",
+        "workflow",
+        "zip",
+        "combine",
+        "JsonWebTokens",
+        "JsonWebTokensClient",
+        "Base64urlEncoder",
+        "JsonEncoder",
+        "HmacSigner",
+        "RSASigner",
+        "cdn",
+        "db",
+        "diff",
+        "email",
+        "error",
+        "esapi",
+        "events",
+        "fapi",
+        "jwt",
+        "jwtEncodingUtils",
+        "lib",
+        "objectBroker",
+        "objectBrokerStats",
+        "postprocess",
+        "QRCode",
+        "registerLibraries",
+        "seo",
+        "session",
+        "system",
+        "tasks",
+        "timezone",
+        "Barcode",
+        "QRCode",
+        "diff_match_patch",
+        "auditUserOverTime",
+        "bulkFileUpload",
+        "configDevice",
+        "configEnvironment",
+        "configFormProtect",
+        "configFormTheme",
+        "configGeneral",
+        "configRepositories",
+        "configSecurity",
+        "configTaskQueue",
+        "configTinyMCE",
+        "dashboard",
+        "farLogin",
+        "farPagination",
+        "farQueueJob",
+        "farSkeleton",
+        "fixRefObjects",
+        "forms",
+        "formTheme",
+        "formThemeBootstrap",
+        "formThemeUniform",
+        "richtextSnippet",
+        "UpdateApp",
+        "bcryptHash",
+        "cryptLib",
+        "md5ThenBcryptHash",
+        "nullHash",
+        "PasswordHash",
+        "scryptHash",
+        "security",
+        "unsaltedMD5Hash",
+        "user",
+        "UserDirectory"
+      ],
       "services": [],
       "auth": [],
       "audit": []
